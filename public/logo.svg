@@ -1,0 +1,71 @@
+<svg width="320" height="120" viewBox="0 0 320 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 조황이 캐릭터 - 미니멀하고 세련된 버전 -->
+  <g transform="translate(10, 5)">
+    <!-- 몸통 -->
+    <ellipse cx="55" cy="72" rx="32" ry="35" fill="#D4894A"/>
+    
+    <!-- 머리 -->
+    <circle cx="55" cy="38" r="30" fill="#D4894A"/>
+    
+    <!-- 뿔 왼쪽 -->
+    <path d="M28 22 Q20 8 28 3 Q34 12 36 22" fill="#FFF8E7"/>
+    
+    <!-- 뿔 오른쪽 -->
+    <path d="M82 22 Q90 8 82 3 Q76 12 74 22" fill="#FFF8E7"/>
+    
+    <!-- 귀 왼쪽 -->
+    <ellipse cx="22" cy="35" rx="9" ry="6" fill="#D4894A" transform="rotate(-20 22 35)"/>
+    <ellipse cx="22" cy="35" rx="5" ry="3.5" fill="#C07A3E" transform="rotate(-20 22 35)"/>
+    
+    <!-- 귀 오른쪽 -->
+    <ellipse cx="88" cy="35" rx="9" ry="6" fill="#D4894A" transform="rotate(20 88 35)"/>
+    <ellipse cx="88" cy="35" rx="5" ry="3.5" fill="#C07A3E" transform="rotate(20 88 35)"/>
+    
+    <!-- 얼굴 (크림색 영역) -->
+    <ellipse cx="55" cy="50" rx="16" ry="14" fill="#FFF8E7"/>
+    
+    <!-- 눈 왼쪽 -->
+    <circle cx="44" cy="35" r="3.5" fill="#2D2D2D"/>
+    <circle cx="45" cy="34" r="1.2" fill="white"/>
+    
+    <!-- 눈 오른쪽 -->
+    <circle cx="66" cy="35" r="3.5" fill="#2D2D2D"/>
+    <circle cx="67" cy="34" r="1.2" fill="white"/>
+    
+    <!-- 코 -->
+    <ellipse cx="55" cy="52" rx="10" ry="7" fill="#EADCC8"/>
+    
+    <!-- 콧구멍 -->
+    <circle cx="51" cy="52" r="2" fill="#2D2D2D"/>
+    <circle cx="59" cy="52" r="2" fill="#2D2D2D"/>
+    
+    <!-- 미소 -->
+    <path d="M47 60 Q55 67 63 60" stroke="#2D2D2D" stroke-width="2" stroke-linecap="round" fill="none"/>
+    
+    <!-- 왼쪽 팔 (손 흔드는) -->
+    <ellipse cx="22" cy="62" rx="10" ry="8" fill="#D4894A" transform="rotate(-35 22 62)"/>
+    <circle cx="14" cy="54" r="7" fill="#3D3D3D"/>
+    
+    <!-- 오른쪽 팔 -->
+    <ellipse cx="88" cy="68" rx="10" ry="8" fill="#D4894A" transform="rotate(25 88 68)"/>
+    <circle cx="95" cy="72" r="7" fill="#3D3D3D"/>
+    
+    <!-- 다리들 -->
+    <ellipse cx="38" cy="102" rx="9" ry="13" fill="#D4894A"/>
+    <ellipse cx="38" cy="112" rx="7" ry="5" fill="#3D3D3D"/>
+    
+    <ellipse cx="72" cy="102" rx="9" ry="13" fill="#D4894A"/>
+    <ellipse cx="72" cy="112" rx="7" ry="5" fill="#3D3D3D"/>
+    
+    <!-- 꼬리 -->
+    <path d="M87 75 Q100 72 97 88" stroke="#D4894A" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <circle cx="97" cy="91" r="4" fill="#3D3D3D"/>
+    
+    <!-- 손 흔드는 효과선 -->
+    <path d="M5 48 Q2 44 6 40" stroke="#D4894A" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+    <path d="M2 52 Q-1 48 3 44" stroke="#D4894A" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+  </g>
+  
+  <!-- SLOX 텍스트 - 모던한 폰트 스타일 -->
+  <text x="135" y="75" font-family="system-ui, -apple-system, sans-serif" font-size="52" font-weight="800" fill="#1A1A1A" letter-spacing="-2">SLOX</text>
+</svg>
