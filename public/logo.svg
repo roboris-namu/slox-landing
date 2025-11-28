@@ -67,5 +67,5 @@
   </g>
   
   <!-- SLOX 텍스트 - 모던한 폰트 스타일 -->
-  <text x="135" y="75" font-family="system-ui, -apple-system, sans-serif" font-size="52" font-weight="800" fill="#1A1A1A" letter-spacing="-2">SLOX</text>
+  <text x="135" y="75" font-family="system-ui, -apple-system, sans-serif" font-size="52" font-weight="800" fill="#FFFFFF" letter-spacing="-2">SLOX</text>
 </svg>
