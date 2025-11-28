@@ -109,8 +109,8 @@ function Footer() {
             <h4 className="font-semibold text-sm mb-4 text-dark-300 uppercase tracking-wider">연락처</h4>
             <ul className="space-y-3">
               <li>
-                <a href="mailto:contact@slox.kr" className="text-sm text-dark-400 hover:text-cyan-400 transition-colors duration-300">
-                  contact@slox.kr
+                <a href="mailto:hyoincho9123@gmail.com" className="text-sm text-dark-400 hover:text-cyan-400 transition-colors duration-300">
+                  hyoincho9123@gmail.com
                 </a>
               </li>
               <li>
@@ -133,7 +133,7 @@ function Footer() {
                 <path d="M12 3C6.48 3 2 6.48 2 10.5c0 2.52 1.64 4.74 4.12 6.04-.18.64-.65 2.33-.75 2.69-.12.44.16.43.34.31.14-.09 2.19-1.48 3.08-2.08.39.04.79.06 1.21.06 5.52 0 10-3.48 10-7.02S17.52 3 12 3z" />
               </svg>
             </a>
-            <a href="mailto:contact@slox.kr" className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center hover:bg-cyan-500/20 hover:border-cyan-500/30 transition-all duration-300 group">
+            <a href="mailto:hyoincho9123@gmail.com" className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center hover:bg-cyan-500/20 hover:border-cyan-500/30 transition-all duration-300 group">
               <svg className="w-4 h-4 text-dark-400 group-hover:text-cyan-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>

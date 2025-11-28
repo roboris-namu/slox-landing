@@ -192,13 +192,13 @@ export default function Contact() {
           </a>
           
           <a 
-            href="mailto:contact@slox.kr" 
+            href="mailto:hyoincho9123@gmail.com" 
             className="group flex items-center gap-3 px-6 py-4 rounded-2xl bg-white/5 border border-white/10 text-white font-semibold hover:bg-white/10 hover:border-white/20 hover:-translate-y-0.5 transition-all duration-300"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            contact@slox.kr
+            hyoincho9123@gmail.com
           </a>
         </div>
       </div>
