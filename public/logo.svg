@@ -88,6 +88,4 @@
     <text x="135" y="72" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="56" font-weight="900" fill="url(#textGradient)" letter-spacing="-1">SLOX</text>
   </g>
   
-  <!-- 악센트 도트 -->
-  <circle cx="305" cy="55" r="4" fill="#8B5CF6" opacity="0.8"/>
 </svg>
