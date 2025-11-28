@@ -200,7 +200,9 @@ export default function Contact() {
         {/* 빠른 연락처 */}
         <div className="animate-on-scroll mt-12 flex flex-col sm:flex-row justify-center items-center gap-6" style={{ animationDelay: "0.35s" }}>
           <a 
-            href="#" 
+            href="https://pf.kakao.com/_tixaYn/chat"
+            target="_blank"
+            rel="noopener noreferrer"
             className="group flex items-center gap-3 px-6 py-4 rounded-2xl bg-[#FEE500] text-[#1A1A1A] font-semibold hover:shadow-lg hover:shadow-yellow-500/20 hover:-translate-y-0.5 transition-all duration-300"
           >
             <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">

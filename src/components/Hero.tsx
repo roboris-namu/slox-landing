@@ -135,7 +135,9 @@ export default function Hero() {
             </button>
 
             <a 
-              href="#" 
+              href="https://pf.kakao.com/_tixaYn/chat"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group px-8 py-4 bg-[#FEE500] text-[#1A1A1A] font-semibold rounded-2xl transition-all duration-300 hover:bg-[#FFE94A] hover:shadow-[0_0_30px_rgba(254,229,0,0.3)] hover:-translate-y-1 active:scale-[0.98]"
             >
               <span className="flex items-center gap-2 justify-center">
