@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
+import TechStack from "@/components/TechStack";
 import Pricing from "@/components/Pricing";
 import Portfolio from "@/components/Portfolio";
 import Contact from "@/components/Contact";
@@ -14,6 +15,7 @@ export default function Home() {
       <Navigation />
       <Hero />
       <Services />
+      <TechStack />
       <Pricing />
       <Portfolio />
       <Contact />
