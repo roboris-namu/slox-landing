@@ -34,7 +34,7 @@ function Navigation() {
         <div className="max-w-6xl mx-auto bg-dark-900/60 backdrop-blur-2xl rounded-2xl border border-white/[0.08] shadow-glass">
           <div className="flex items-center justify-between h-16 px-6">
             {/* 로고 */}
-            <a href="#" className="flex items-center gap-3 group">
+            <a href="/" className="flex items-center gap-3 group">
               <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 via-accent-500 to-cyan-500 flex items-center justify-center shadow-glow-sm group-hover:shadow-glow-md transition-shadow duration-300">
                 <span className="text-white font-bold text-sm">S</span>
               </div>
