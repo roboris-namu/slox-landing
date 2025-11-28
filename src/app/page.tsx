@@ -116,7 +116,7 @@ function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-dark-400 hover:text-cyan-400 transition-colors duration-300">
+                <a href="https://pf.kakao.com/_tixaYn/chat" target="_blank" rel="noopener noreferrer" className="text-sm text-dark-400 hover:text-cyan-400 transition-colors duration-300">
                   카카오톡 채널
                 </a>
               </li>
@@ -130,7 +130,7 @@ function Footer() {
             © {new Date().getFullYear()} SLOX. All rights reserved.
           </p>
           <div className="flex gap-3">
-            <a href="#" className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center hover:bg-accent-500/20 hover:border-accent-500/30 transition-all duration-300 group">
+            <a href="https://pf.kakao.com/_tixaYn/chat" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center hover:bg-accent-500/20 hover:border-accent-500/30 transition-all duration-300 group">
               <svg className="w-4 h-4 text-dark-400 group-hover:text-accent-400 transition-colors" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 3C6.48 3 2 6.48 2 10.5c0 2.52 1.64 4.74 4.12 6.04-.18.64-.65 2.33-.75 2.69-.12.44.16.43.34.31.14-.09 2.19-1.48 3.08-2.08.39.04.79.06 1.21.06 5.52 0 10-3.48 10-7.02S17.52 3 12 3z" />
               </svg>
