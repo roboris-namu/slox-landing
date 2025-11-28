@@ -1,0 +1,41 @@
+<svg width="640" height="640" viewBox="0 0 640 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 프리미엄 그라데이션 -->
+    <linearGradient id="premium-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <!-- 배경 그라데이션 -->
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f0f14"/>
+      <stop offset="100%" stop-color="#1a1a24"/>
+    </linearGradient>
+    <!-- 글로우 효과 -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="15" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 배경 -->
+  <rect width="640" height="640" rx="128" fill="url(#bg-gradient)"/>
+  
+  <!-- S 심볼 - 기하학적 모던 디자인 -->
+  <g filter="url(#glow)" transform="translate(320, 320)">
+    <!-- S의 상단 곡선 -->
+    <path d="M100 -140C100 -140 50 -180 -40 -180C-110 -180 -160 -140 -160 -100C-160 -50 -120 -20 -80 -10L60 30" 
+          stroke="url(#premium-gradient)" stroke-width="48" stroke-linecap="round" fill="none"/>
+    <!-- S의 하단 곡선 -->
+    <path d="M-100 140C-100 140 -50 180 40 180C110 180 160 140 160 100C160 50 120 20 80 10L-60 -30" 
+          stroke="url(#premium-gradient)" stroke-width="48" stroke-linecap="round" fill="none"/>
+  </g>
+  
+  <!-- 악센트 점 -->
+  <circle cx="100" cy="100" r="24" fill="#06b6d4" opacity="0.8"/>
+  <circle cx="540" cy="540" r="24" fill="#8b5cf6" opacity="0.8"/>
+</svg>
+
