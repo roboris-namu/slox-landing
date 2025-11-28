@@ -85,7 +85,7 @@ export default function Portfolio() {
     elements?.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, []);
+  }, [activeCategory]);
 
   return (
     <section id="portfolio" ref={sectionRef} className="py-32 relative overflow-hidden">
