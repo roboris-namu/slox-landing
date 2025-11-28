@@ -47,15 +47,33 @@ export default function Contact() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log("=== SLOX 문의 접수 ===", formData);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "001c0c61-152c-4b75-8651-240034a2893f",
+          subject: `[SLOX 문의] ${formData.name}님의 문의`,
+          from_name: formData.name,
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          message: formData.message,
+        }),
+      });
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (response.ok) {
+        setIsSubmitted(true);
+        setFormData({ name: "", phone: "", email: "", message: "" });
+        setTimeout(() => setIsSubmitted(false), 5000);
+      }
+    } catch (error) {
+      console.error("전송 실패:", error);
+    }
 
     setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({ name: "", phone: "", email: "", message: "" });
-
-    setTimeout(() => setIsSubmitted(false), 5000);
   };
 
   return (
