@@ -7,7 +7,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "SLOX - 홈페이지 · 앱 제작 · AI 챗봇 구축",
   description:
-    "SLOX는 홈페이지 제작, 앱 개발, AI 챗봇 구축을 전문으로 하는 개발 스튜디오입니다. 작지만 강한 개발 스튜디오 SLOX와 함께 프로젝트를 시작하세요.",
+    "SLOX는 홈페이지 제작, 앱 개발, AI 챗봇 구축을 전문으로 하는 개발 스튜디오입니다. 당신의 개발 파트너 SLOX와 함께 프로젝트를 시작하세요.",
   keywords: [
     "홈페이지 제작",
     "앱 개발",

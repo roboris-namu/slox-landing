@@ -86,7 +86,7 @@ export default function Hero() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
               </span>
-              작지만 강한 개발 스튜디오
+              당신의 개발 파트너
             </span>
           </div>
 

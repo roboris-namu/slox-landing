@@ -88,7 +88,7 @@ function Footer() {
               <span className="font-bold text-xl text-white">SLOX</span>
             </div>
             <p className="text-dark-400 text-sm leading-relaxed">
-              작지만 강한 개발 스튜디오<br />
+              당신의 개발 파트너<br />
               아이디어를 현실로 만들어 드립니다
             </p>
           </div>
