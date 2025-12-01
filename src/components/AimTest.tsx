@@ -394,9 +394,9 @@ const langUrls: Record<Language, string> = {
 };
 
 const difficultySettings: Record<Difficulty, { size: number; duration: number }> = {
-  easy: { size: 80, duration: 30 },
-  normal: { size: 50, duration: 30 },
-  hard: { size: 30, duration: 30 },
+  easy: { size: 60, duration: 30 },
+  normal: { size: 40, duration: 30 },
+  hard: { size: 25, duration: 30 },
 };
 
 interface AimTestProps {
@@ -421,12 +421,24 @@ export default function AimTest({ initialLang }: AimTestProps) {
   const t = translations[lang];
   const settings = difficultySettings[difficulty];
 
-  // 점수 계산 (정확도 * 명중수)
+  // 점수 계산 (명중수 * 정확도 * 속도보너스)
+  // 일반적인 에임 트레이너 기준:
+  // - 30초에 40+ 타겟 = 상급
+  // - 정확도 90%+ = 상급
+  // - 평균 반응시간 400ms 이하 = 상급
   const getScore = useCallback(() => {
-    if (hits + misses === 0) return 0;
+    if (hits === 0) return 0;
     const accuracy = hits / (hits + misses);
-    return Math.round(accuracy * hits * 100);
-  }, [hits, misses]);
+    const avgTime = reactionTimes.length > 0 
+      ? reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length 
+      : 1000;
+    
+    // 속도 보너스: 400ms 이하면 보너스, 800ms 이상이면 페널티
+    const speedMultiplier = Math.max(0.5, Math.min(1.5, (800 - avgTime) / 400 + 1));
+    
+    // 기본 점수 = 명중수 * 100 * 정확도 * 속도배율
+    return Math.round(hits * 100 * accuracy * speedMultiplier);
+  }, [hits, misses, reactionTimes]);
 
   // 정확도 계산
   const getAccuracy = useCallback(() => {
@@ -440,13 +452,18 @@ export default function AimTest({ initialLang }: AimTestProps) {
     return Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length);
   }, [reactionTimes]);
 
-  // 등급 계산
+  // 등급 계산 (일반적인 에임 트레이너 기준)
+  // 전설: 30초에 50+ 타겟, 95%+ 정확도, 350ms 이하 = ~7500점
+  // 프로: 30초에 45+ 타겟, 90%+ 정확도, 400ms = ~5500점
+  // 다이아: 30초에 40+ 타겟, 85%+ 정확도 = ~4000점
+  // 골드: 30초에 30+ 타겟, 80%+ 정확도 = ~2500점
+  // 실버: 30초에 20+ 타겟, 70%+ 정확도 = ~1500점
   const getGrade = useCallback((score: number): { grade: string; color: string; emoji: string; message: string } => {
-    if (score >= 4000) return { grade: t.legendary, color: "text-cyan-300", emoji: "🏆", message: t.msgLegendary };
-    if (score >= 3000) return { grade: t.proGamer, color: "text-purple-400", emoji: "👑", message: t.msgProGamer };
-    if (score >= 2000) return { grade: t.diamond, color: "text-blue-400", emoji: "💎", message: t.msgDiamond };
-    if (score >= 1000) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
-    if (score >= 500) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+    if (score >= 7000) return { grade: t.legendary, color: "text-cyan-300", emoji: "🏆", message: t.msgLegendary };
+    if (score >= 5000) return { grade: t.proGamer, color: "text-purple-400", emoji: "👑", message: t.msgProGamer };
+    if (score >= 3500) return { grade: t.diamond, color: "text-blue-400", emoji: "💎", message: t.msgDiamond };
+    if (score >= 2000) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+    if (score >= 1000) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
     return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
   }, [t]);
 
@@ -762,23 +779,23 @@ ${t.shareTestIt}`;
             <h3 className="text-white font-medium mb-6 text-center">{t.tierTable}</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               <div className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-lg text-center">
-                <span className="text-cyan-300 font-bold">🏆 4000+</span>
+                <span className="text-cyan-300 font-bold">🏆 7000+</span>
                 <p className="text-dark-400 text-xs mt-1">{t.legendary}</p>
               </div>
               <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg text-center">
-                <span className="text-purple-400 font-bold">👑 3000+</span>
+                <span className="text-purple-400 font-bold">👑 5000+</span>
                 <p className="text-dark-400 text-xs mt-1">{t.proGamer}</p>
               </div>
               <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg text-center">
-                <span className="text-blue-400 font-bold">💎 2000+</span>
+                <span className="text-blue-400 font-bold">💎 3500+</span>
                 <p className="text-dark-400 text-xs mt-1">{t.diamond}</p>
               </div>
               <div className="p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg text-center">
-                <span className="text-yellow-400 font-bold">🥇 1000+</span>
+                <span className="text-yellow-400 font-bold">🥇 2000+</span>
                 <p className="text-dark-400 text-xs mt-1">{t.gold}</p>
               </div>
               <div className="p-3 bg-gray-400/10 border border-gray-400/30 rounded-lg text-center">
-                <span className="text-gray-300 font-bold">🥈 500+</span>
+                <span className="text-gray-300 font-bold">🥈 1000+</span>
                 <p className="text-dark-400 text-xs mt-1">{t.silver}</p>
               </div>
               <div className="p-3 bg-orange-500/10 border border-orange-400/30 rounded-lg text-center">
@@ -786,6 +803,9 @@ ${t.shareTestIt}`;
                 <p className="text-dark-400 text-xs mt-1">{t.bronze}</p>
               </div>
             </div>
+            <p className="text-dark-500 text-xs mt-4 text-center">
+              💡 점수 = 명중수 × 정확도 × 속도보너스
+            </p>
           </div>
 
           {/* 다른 도구 링크 */}
