@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
 
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
 
@@ -25,6 +26,7 @@ export default function ReactionTest() {
   const [attempts, setAttempts] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number>(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   // 게임 시작
   const startGame = useCallback(() => {
@@ -83,22 +85,67 @@ export default function ReactionTest() {
     return Math.min(...attempts);
   };
 
-  // 결과 공유
-  const shareResult = () => {
+  // 이미지로 공유
+  const shareAsImage = async () => {
+    if (!resultRef.current) return;
+    
+    try {
+      const canvas = await html2canvas(resultRef.current, {
+        backgroundColor: '#0a0a0f',
+        scale: 2,
+      });
+      
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        
+        const file = new File([blob], 'reaction-result.png', { type: 'image/png' });
+        
+        if (navigator.share && navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({
+              files: [file],
+              title: '반응속도 테스트 결과',
+              text: `나도 테스트하기 👉 https://www.slox.co.kr/reaction`
+            });
+          } catch {
+            // 공유 취소시 다운로드
+            downloadImage(canvas);
+          }
+        } else {
+          // 공유 불가시 다운로드
+          downloadImage(canvas);
+        }
+      }, 'image/png');
+    } catch {
+      alert("이미지 생성에 실패했습니다.");
+    }
+  };
+
+  // 이미지 다운로드
+  const downloadImage = (canvas: HTMLCanvasElement) => {
+    const link = document.createElement('a');
+    link.download = 'reaction-result.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    alert("이미지가 다운로드되었습니다!");
+  };
+
+  // 텍스트로 공유
+  const shareAsText = () => {
     const avg = getAverage();
     const best = getBest();
-    const grade = getGrade(avg);
-    const text = `⚡ 반응속도 테스트 결과!\n\n🎯 평균: ${avg}ms\n🏆 최고: ${best}ms\n${grade.emoji} 등급: ${grade.grade}\n\n나도 테스트하기 👉 https://www.slox.co.kr/reaction`;
+    const lastGrade = getGrade(reactionTime);
+    const avgGrade = getGrade(avg);
+    const text = `⚡ 반응속도 테스트 결과!
+
+${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
+🎯 평균: ${avg}ms (${avgGrade.grade})
+🏆 최고: ${best}ms
+
+나도 테스트하기 👉 https://www.slox.co.kr/reaction`;
     
-    if (navigator.share) {
-      navigator.share({ text }).catch(() => {
-        navigator.clipboard.writeText(text);
-        alert("결과가 클립보드에 복사되었습니다!");
-      });
-    } else {
-      navigator.clipboard.writeText(text);
-      alert("결과가 클립보드에 복사되었습니다!");
-    }
+    navigator.clipboard.writeText(text);
+    alert("결과가 클립보드에 복사되었습니다!");
   };
 
   // cleanup
@@ -235,24 +282,35 @@ export default function ReactionTest() {
           {/* 기록 */}
           {attempts.length > 0 && (
             <div className="glass-card p-6 rounded-2xl mb-8">
-              <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="text-center">
-                  <p className="text-dark-400 text-sm mb-1">시도 횟수</p>
-                  <p className="text-2xl font-bold text-white">{attempts.length}회</p>
+              {/* 공유용 결과 카드 */}
+              <div ref={resultRef} className="p-6 rounded-xl bg-dark-900 mb-6">
+                <div className="text-center mb-4">
+                  <p className="text-accent-purple text-sm mb-1">⚡ 반응속도 테스트</p>
+                  <p className="text-4xl mb-1">{getGrade(reactionTime).emoji}</p>
+                  <p className={`text-2xl font-bold ${getGrade(reactionTime).color}`}>
+                    {getGrade(reactionTime).grade}
+                  </p>
                 </div>
-                <div className="text-center">
-                  <p className="text-dark-400 text-sm mb-1">평균</p>
-                  <p className="text-2xl font-bold text-accent-cyan">{getAverage()}ms</p>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="text-center">
+                    <p className="text-dark-400 text-xs mb-1">현재</p>
+                    <p className="text-lg font-bold text-white">{reactionTime}ms</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-dark-400 text-xs mb-1">평균</p>
+                    <p className="text-lg font-bold text-accent-cyan">{getAverage()}ms</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-dark-400 text-xs mb-1">최고</p>
+                    <p className="text-lg font-bold text-accent-purple">{getBest()}ms</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <p className="text-dark-400 text-sm mb-1">최고 기록</p>
-                  <p className="text-2xl font-bold text-accent-purple">{getBest()}ms</p>
-                </div>
+                <p className="text-center text-dark-500 text-xs mt-4">slox.co.kr/reaction</p>
               </div>
               
               {/* 최근 기록 */}
               <div className="mb-6">
-                <p className="text-dark-400 text-sm mb-2">최근 기록</p>
+                <p className="text-dark-400 text-sm mb-2">최근 기록 ({attempts.length}회)</p>
                 <div className="flex flex-wrap gap-2">
                   {attempts.slice(-10).map((time, index) => (
                     <span 
@@ -272,16 +330,22 @@ export default function ReactionTest() {
               {/* 버튼들 */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
-                  onClick={shareResult}
+                  onClick={shareAsImage}
                   className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all"
                 >
-                  📤 결과 공유하기
+                  🖼️ 이미지로 공유
+                </button>
+                <button
+                  onClick={shareAsText}
+                  className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
+                >
+                  📋 텍스트 복사
                 </button>
                 <button
                   onClick={resetGame}
                   className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
                 >
-                  🔄 기록 초기화
+                  🔄 초기화
                 </button>
               </div>
             </div>
