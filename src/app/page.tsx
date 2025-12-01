@@ -80,6 +80,9 @@ function Navigation() {
                     <a href="/aim" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🎯 에임 트레이너
                     </a>
+                    <a href="/memory" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      🧠 숫자 기억 게임
+                    </a>
                   </div>
                 </div>
               </div>
@@ -170,6 +173,11 @@ function Footer() {
               <li>
                 <a href="/aim" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   🎯 에임 트레이너
+                </a>
+              </li>
+              <li>
+                <a href="/memory" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  🧠 숫자 기억 게임
                 </a>
               </li>
             </ul>
