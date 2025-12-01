@@ -175,7 +175,7 @@ export default function SalaryCalculator() {
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
               연봉 실수령액
-              <span className="bg-gradient-to-r from-accent-purple to-accent-cyan bg-clip-text text-transparent"> 계산기</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400"> 계산기</span>
             </h1>
             <p className="text-dark-400 text-lg max-w-2xl mx-auto">
               4대보험과 소득세를 반영한 정확한 실수령액을 확인하세요
@@ -239,7 +239,7 @@ export default function SalaryCalculator() {
                 <div className="p-6 bg-gradient-to-br from-accent-purple/20 to-accent-cyan/20 rounded-xl border border-accent-purple/30">
                   <div className="text-center">
                     <p className="text-dark-300 text-sm mb-2">월 실수령액</p>
-                    <p className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-accent-purple to-accent-cyan bg-clip-text text-transparent mb-4">
+                    <p className="text-4xl sm:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-4">
                       {formatNumber(result.netMonthly)}원
                     </p>
                     <p className="text-dark-400">
