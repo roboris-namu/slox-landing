@@ -4,31 +4,249 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
+type Language = "ko" | "en" | "ja" | "zh";
 
-/**
- * 등급 계산 (롤 스타일) - 모바일/데스크톱 분리
- */
-const getGrade = (ms: number, isMobile: boolean = false): { grade: string; color: string; emoji: string; message: string } => {
-  if (isMobile) {
-    // 모바일 기준 (터치 반응 느림 반영)
-    if (ms < 200) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑", message: "전설의 반응속도!" };
-    if (ms < 280) return { grade: "마스터", color: "text-purple-400", emoji: "💎", message: "인간의 한계를 넘었어요!" };
-    if (ms < 360) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠", message: "프로게이머 수준!" };
-    if (ms < 450) return { grade: "플래티넘", color: "text-teal-400", emoji: "🏆", message: "상위권 반응속도!" };
-    if (ms < 550) return { grade: "골드", color: "text-yellow-400", emoji: "🥇", message: "평균보다 빠르네요!" };
-    if (ms < 700) return { grade: "실버", color: "text-gray-300", emoji: "🥈", message: "평균적인 속도예요" };
-    if (ms < 900) return { grade: "브론즈", color: "text-orange-400", emoji: "🥉", message: "조금 느린 편이에요" };
-    return { grade: "아이언", color: "text-stone-400", emoji: "🪨", message: "연습이 필요해요!" };
-  }
-  // 데스크톱 기준
-  if (ms < 120) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑", message: "전설의 반응속도!" };
-  if (ms < 150) return { grade: "마스터", color: "text-purple-400", emoji: "💎", message: "인간의 한계를 넘었어요!" };
-  if (ms < 180) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠", message: "프로게이머 수준!" };
-  if (ms < 220) return { grade: "플래티넘", color: "text-teal-400", emoji: "🏆", message: "상위권 반응속도!" };
-  if (ms < 270) return { grade: "골드", color: "text-yellow-400", emoji: "🥇", message: "평균보다 빠르네요!" };
-  if (ms < 330) return { grade: "실버", color: "text-gray-300", emoji: "🥈", message: "평균적인 속도예요" };
-  if (ms < 400) return { grade: "브론즈", color: "text-orange-400", emoji: "🥉", message: "조금 느린 편이에요" };
-  return { grade: "아이언", color: "text-stone-400", emoji: "🪨", message: "연습이 필요해요!" };
+// 번역 데이터
+const translations = {
+  ko: {
+    title: "반응속도",
+    titleHighlight: " 테스트",
+    subtitle: "초록색이 되면 최대한 빠르게 클릭하세요!",
+    badge: "⚡ 반응속도 측정",
+    ready: "준비되셨나요?",
+    clickToStart: "클릭하여 시작하세요",
+    wait: "기다리세요...",
+    waitUntilGreen: "초록색이 될 때까지 기다리세요!",
+    clickNow: "지금 클릭!",
+    asFastAsPossible: "최대한 빠르게!",
+    tooEarly: "너무 빨랐어요!",
+    waitForGreen: "초록색이 될 때까지 기다리세요",
+    clickToRetry: "클릭하여 다시 시도",
+    current: "현재",
+    average: "평균",
+    best: "최고",
+    recentRecords: "최근 기록",
+    times: "회",
+    share: "📤 공유하기",
+    reset: "🔄 기록 초기화",
+    tierTable: "🎮 반응속도 티어표",
+    mobileStandard: "📱 모바일 기준",
+    desktopStandard: "🖥️ 데스크톱 기준",
+    mobileNote: "💡 모바일 터치 반응 시간을 고려한 기준입니다",
+    desktopNote: "💡 평균 반응속도는 약 250~300ms (골드~실버) 입니다",
+    otherTools: "🔗 다른 도구",
+    typingTest: "⌨️ 타자 속도 테스트",
+    salaryCalc: "💰 연봉 실수령액 계산기",
+    severanceCalc: "💼 퇴직금 계산기",
+    backToMain: "← 메인으로",
+    poweredBy: "Powered by",
+    slogan: "홈페이지 · 앱 제작 · AI 챗봇 구축",
+    adArea: "광고 영역 (Google AdSense)",
+    shareText: "⚡ 반응속도 테스트 결과!",
+    shareTestIt: "나도 테스트하기 👉",
+    copied: "결과가 클립보드에 복사되었습니다!",
+    // 등급
+    challenger: "챌린저",
+    master: "마스터",
+    diamond: "다이아몬드",
+    platinum: "플래티넘",
+    gold: "골드",
+    silver: "실버",
+    bronze: "브론즈",
+    iron: "아이언",
+    // 등급 메시지
+    msgChallenger: "전설의 반응속도!",
+    msgMaster: "인간의 한계를 넘었어요!",
+    msgDiamond: "프로게이머 수준!",
+    msgPlatinum: "상위권 반응속도!",
+    msgGold: "평균보다 빠르네요!",
+    msgSilver: "평균적인 속도예요",
+    msgBronze: "조금 느린 편이에요",
+    msgIron: "연습이 필요해요!",
+  },
+  en: {
+    title: "Reaction",
+    titleHighlight: " Speed Test",
+    subtitle: "Click as fast as you can when it turns green!",
+    badge: "⚡ Reaction Speed Test",
+    ready: "Are you ready?",
+    clickToStart: "Click to start",
+    wait: "Wait...",
+    waitUntilGreen: "Wait until it turns green!",
+    clickNow: "Click Now!",
+    asFastAsPossible: "As fast as possible!",
+    tooEarly: "Too early!",
+    waitForGreen: "Wait for green",
+    clickToRetry: "Click to try again",
+    current: "Current",
+    average: "Average",
+    best: "Best",
+    recentRecords: "Recent Records",
+    times: "tries",
+    share: "📤 Share",
+    reset: "🔄 Reset",
+    tierTable: "🎮 Reaction Speed Tiers",
+    mobileStandard: "📱 Mobile Standard",
+    desktopStandard: "🖥️ Desktop Standard",
+    mobileNote: "💡 Adjusted for mobile touch response time",
+    desktopNote: "💡 Average reaction speed is about 250-300ms (Gold-Silver)",
+    otherTools: "🔗 Other Tools",
+    typingTest: "⌨️ Typing Speed Test",
+    salaryCalc: "💰 Salary Calculator",
+    severanceCalc: "💼 Severance Calculator",
+    backToMain: "← Home",
+    poweredBy: "Powered by",
+    slogan: "Web · App · AI Chatbot Development",
+    adArea: "Ad Space (Google AdSense)",
+    shareText: "⚡ Reaction Speed Test Result!",
+    shareTestIt: "Try it yourself 👉",
+    copied: "Result copied to clipboard!",
+    // 등급
+    challenger: "Challenger",
+    master: "Master",
+    diamond: "Diamond",
+    platinum: "Platinum",
+    gold: "Gold",
+    silver: "Silver",
+    bronze: "Bronze",
+    iron: "Iron",
+    // 등급 메시지
+    msgChallenger: "Legendary reflexes!",
+    msgMaster: "Beyond human limits!",
+    msgDiamond: "Pro gamer level!",
+    msgPlatinum: "Top-tier speed!",
+    msgGold: "Faster than average!",
+    msgSilver: "Average speed",
+    msgBronze: "A bit slow",
+    msgIron: "Keep practicing!",
+  },
+  ja: {
+    title: "反応速度",
+    titleHighlight: " テスト",
+    subtitle: "緑色になったらできるだけ速くクリック！",
+    badge: "⚡ 反応速度測定",
+    ready: "準備はいいですか？",
+    clickToStart: "クリックしてスタート",
+    wait: "待って...",
+    waitUntilGreen: "緑色になるまで待ってください！",
+    clickNow: "今すぐクリック！",
+    asFastAsPossible: "できるだけ速く！",
+    tooEarly: "早すぎました！",
+    waitForGreen: "緑色になるまで待ってください",
+    clickToRetry: "クリックして再挑戦",
+    current: "現在",
+    average: "平均",
+    best: "最高",
+    recentRecords: "最近の記録",
+    times: "回",
+    share: "📤 共有",
+    reset: "🔄 リセット",
+    tierTable: "🎮 反応速度ティア表",
+    mobileStandard: "📱 モバイル基準",
+    desktopStandard: "🖥️ デスクトップ基準",
+    mobileNote: "💡 モバイルタッチの反応時間を考慮した基準です",
+    desktopNote: "💡 平均反応速度は約250-300ms（ゴールド〜シルバー）です",
+    otherTools: "🔗 他のツール",
+    typingTest: "⌨️ タイピングテスト",
+    salaryCalc: "💰 年収計算機",
+    severanceCalc: "💼 退職金計算機",
+    backToMain: "← ホームへ",
+    poweredBy: "Powered by",
+    slogan: "ウェブ・アプリ・AIチャットボット開発",
+    adArea: "広告エリア (Google AdSense)",
+    shareText: "⚡ 反応速度テスト結果！",
+    shareTestIt: "あなたも挑戦 👉",
+    copied: "結果がクリップボードにコピーされました！",
+    // 등급
+    challenger: "チャレンジャー",
+    master: "マスター",
+    diamond: "ダイヤモンド",
+    platinum: "プラチナ",
+    gold: "ゴールド",
+    silver: "シルバー",
+    bronze: "ブロンズ",
+    iron: "アイアン",
+    // 등급 메시지
+    msgChallenger: "伝説の反応速度！",
+    msgMaster: "人間の限界を超えた！",
+    msgDiamond: "プロゲーマーレベル！",
+    msgPlatinum: "上位の反応速度！",
+    msgGold: "平均より速い！",
+    msgSilver: "平均的な速度",
+    msgBronze: "少し遅め",
+    msgIron: "練習が必要！",
+  },
+  zh: {
+    title: "反应速度",
+    titleHighlight: " 测试",
+    subtitle: "变绿时尽快点击！",
+    badge: "⚡ 反应速度测试",
+    ready: "准备好了吗？",
+    clickToStart: "点击开始",
+    wait: "等待...",
+    waitUntilGreen: "等到变绿！",
+    clickNow: "现在点击！",
+    asFastAsPossible: "尽快！",
+    tooEarly: "太早了！",
+    waitForGreen: "等到变绿",
+    clickToRetry: "点击重试",
+    current: "当前",
+    average: "平均",
+    best: "最佳",
+    recentRecords: "最近记录",
+    times: "次",
+    share: "📤 分享",
+    reset: "🔄 重置",
+    tierTable: "🎮 反应速度等级表",
+    mobileStandard: "📱 移动端标准",
+    desktopStandard: "🖥️ 桌面端标准",
+    mobileNote: "💡 已考虑移动端触控反应时间",
+    desktopNote: "💡 平均反应速度约250-300ms（黄金-白银）",
+    otherTools: "🔗 其他工具",
+    typingTest: "⌨️ 打字速度测试",
+    salaryCalc: "💰 工资计算器",
+    severanceCalc: "💼 遣散费计算器",
+    backToMain: "← 首页",
+    poweredBy: "Powered by",
+    slogan: "网站·应用·AI聊天机器人开发",
+    adArea: "广告区域 (Google AdSense)",
+    shareText: "⚡ 反应速度测试结果！",
+    shareTestIt: "你也来试试 👉",
+    copied: "结果已复制到剪贴板！",
+    // 등급
+    challenger: "挑战者",
+    master: "大师",
+    diamond: "钻石",
+    platinum: "铂金",
+    gold: "黄金",
+    silver: "白银",
+    bronze: "青铜",
+    iron: "黑铁",
+    // 등급 메시지
+    msgChallenger: "传说级反应速度！",
+    msgMaster: "超越人类极限！",
+    msgDiamond: "职业选手水平！",
+    msgPlatinum: "顶级反应速度！",
+    msgGold: "比平均快！",
+    msgSilver: "平均速度",
+    msgBronze: "有点慢",
+    msgIron: "需要练习！",
+  },
+};
+
+// 언어별 국기 이모지
+const langFlags: Record<Language, string> = {
+  ko: "🇰🇷",
+  en: "🇺🇸",
+  ja: "🇯🇵",
+  zh: "🇨🇳",
+};
+
+const langNames: Record<Language, string> = {
+  ko: "한국어",
+  en: "English",
+  ja: "日本語",
+  zh: "中文",
 };
 
 export default function ReactionTest() {
@@ -37,7 +255,37 @@ export default function ReactionTest() {
   const [attempts, setAttempts] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number>(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [lang, setLang] = useState<Language>("ko");
+  const [showLangMenu, setShowLangMenu] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  
+  const t = translations[lang];
+
+  // 브라우저 언어 감지 및 자동 설정
+  useEffect(() => {
+    const detectLanguage = (): Language => {
+      const browserLang = navigator.language.toLowerCase();
+      if (browserLang.startsWith("ko")) return "ko";
+      if (browserLang.startsWith("ja")) return "ja";
+      if (browserLang.startsWith("zh")) return "zh";
+      return "en"; // 기본값
+    };
+    
+    // localStorage에서 저장된 언어 확인
+    const savedLang = localStorage.getItem("slox-lang") as Language | null;
+    if (savedLang && ["ko", "en", "ja", "zh"].includes(savedLang)) {
+      setLang(savedLang);
+    } else {
+      setLang(detectLanguage());
+    }
+  }, []);
+
+  // 언어 변경 시 저장
+  const changeLang = (newLang: Language) => {
+    setLang(newLang);
+    localStorage.setItem("slox-lang", newLang);
+    setShowLangMenu(false);
+  };
 
   // 모바일 감지
   useEffect(() => {
@@ -49,13 +297,34 @@ export default function ReactionTest() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  /**
+   * 등급 계산 (롤 스타일) - 모바일/데스크톱 분리 + 다국어
+   */
+  const getGrade = (ms: number): { grade: string; color: string; emoji: string; message: string } => {
+    if (isMobile) {
+      if (ms < 200) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+      if (ms < 280) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+      if (ms < 360) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+      if (ms < 450) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
+      if (ms < 550) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+      if (ms < 700) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+      if (ms < 900) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+      return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
+    }
+    if (ms < 120) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+    if (ms < 150) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+    if (ms < 180) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+    if (ms < 220) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
+    if (ms < 270) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+    if (ms < 330) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+    if (ms < 400) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+    return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
+  };
+
   // 게임 시작
   const startGame = useCallback(() => {
     setState("ready");
-    
-    // 2~5초 사이 랜덤 대기
     const delay = Math.random() * 3000 + 2000;
-    
     timeoutRef.current = setTimeout(() => {
       setState("click");
       setStartTime(Date.now());
@@ -67,19 +336,16 @@ export default function ReactionTest() {
     if (state === "waiting") {
       startGame();
     } else if (state === "ready") {
-      // 너무 일찍 클릭
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
       setState("tooEarly");
     } else if (state === "click") {
-      // 반응 시간 측정
       const reaction = Date.now() - startTime;
       setReactionTime(reaction);
       setAttempts(prev => [...prev, reaction]);
       setState("result");
     } else if (state === "result" || state === "tooEarly") {
-      // 다시 시작
       startGame();
     }
   }, [state, startTime, startGame]);
@@ -106,19 +372,19 @@ export default function ReactionTest() {
     return Math.min(...attempts);
   };
 
-  // 공유하기 (텍스트 + URL)
+  // 공유하기
   const shareResult = async () => {
     const avg = getAverage();
     const best = getBest();
-    const lastGrade = getGrade(reactionTime, isMobile);
+    const lastGrade = getGrade(reactionTime);
     const shareUrl = 'https://www.slox.co.kr/reaction';
-    const shareText = `⚡ 반응속도 테스트 결과!
+    const shareText = `${t.shareText}
 
-${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
-🎯 평균: ${avg}ms
-🏆 최고: ${best}ms
+${lastGrade.emoji} ${t.current}: ${reactionTime}ms (${lastGrade.grade})
+🎯 ${t.average}: ${avg}ms
+🏆 ${t.best}: ${best}ms
 
-나도 테스트하기 👉`;
+${t.shareTestIt}`;
     
     if (navigator.share) {
       try {
@@ -130,9 +396,8 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
         // 공유 취소시 무시
       }
     } else {
-      // PC: 클립보드에 복사
       navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
-      alert("결과가 클립보드에 복사되었습니다!");
+      alert(t.copied);
     }
   };
 
@@ -170,17 +435,40 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
               <span className="text-white font-semibold">SLOX</span>
             </Link>
             <div className="flex items-center gap-4">
-              <Link 
-                href="/typing"
-                className="text-dark-400 hover:text-white transition-colors text-sm"
-              >
-                타자 테스트
-              </Link>
+              {/* 언어 선택 */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowLangMenu(!showLangMenu)}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-dark-800 hover:bg-dark-700 rounded-lg text-sm transition-colors"
+                >
+                  <span>{langFlags[lang]}</span>
+                  <span className="text-dark-300 hidden sm:inline">{langNames[lang]}</span>
+                  <svg className="w-4 h-4 text-dark-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showLangMenu && (
+                  <div className="absolute right-0 mt-2 w-40 bg-dark-800 border border-dark-700 rounded-lg shadow-xl overflow-hidden">
+                    {(Object.keys(langFlags) as Language[]).map((l) => (
+                      <button
+                        key={l}
+                        onClick={() => changeLang(l)}
+                        className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-dark-700 transition-colors ${
+                          lang === l ? "bg-dark-700 text-white" : "text-dark-300"
+                        }`}
+                      >
+                        <span>{langFlags[l]}</span>
+                        <span>{langNames[l]}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               <Link 
                 href="/"
                 className="text-dark-300 hover:text-white transition-colors text-sm"
               >
-                ← 메인으로
+                {t.backToMain}
               </Link>
             </div>
           </div>
@@ -193,21 +481,21 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
           {/* 헤더 */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-purple/10 border border-accent-purple/20 mb-6">
-              <span className="text-accent-purple text-sm font-medium">⚡ 반응속도 측정</span>
+              <span className="text-accent-purple text-sm font-medium">{t.badge}</span>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-              반응속도
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400"> 테스트</span>
+              {t.title}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">{t.titleHighlight}</span>
             </h1>
             <p className="text-dark-400 text-lg max-w-2xl mx-auto">
-              초록색이 되면 최대한 빠르게 클릭하세요!
+              {t.subtitle}
             </p>
           </div>
 
           {/* 광고 영역 (상단) */}
           <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
             <div className="text-dark-500 text-sm py-6">
-              광고 영역 (Google AdSense)
+              {t.adArea}
             </div>
           </div>
 
@@ -221,47 +509,47 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
               {state === "waiting" && (
                 <>
                   <p className="text-6xl mb-4">🎯</p>
-                  <p className="text-2xl font-bold text-white mb-2">준비되셨나요?</p>
-                  <p className="text-dark-400">클릭하여 시작하세요</p>
+                  <p className="text-2xl font-bold text-white mb-2">{t.ready}</p>
+                  <p className="text-dark-400">{t.clickToStart}</p>
                 </>
               )}
               
               {state === "ready" && (
                 <>
                   <p className="text-6xl mb-4">🔴</p>
-                  <p className="text-2xl font-bold text-white mb-2">기다리세요...</p>
-                  <p className="text-red-200">초록색이 될 때까지 기다리세요!</p>
+                  <p className="text-2xl font-bold text-white mb-2">{t.wait}</p>
+                  <p className="text-red-200">{t.waitUntilGreen}</p>
                 </>
               )}
               
               {state === "click" && (
                 <>
                   <p className="text-6xl mb-4">🟢</p>
-                  <p className="text-3xl font-bold text-white mb-2">지금 클릭!</p>
-                  <p className="text-green-100">최대한 빠르게!</p>
+                  <p className="text-3xl font-bold text-white mb-2">{t.clickNow}</p>
+                  <p className="text-green-100">{t.asFastAsPossible}</p>
                 </>
               )}
               
               {state === "tooEarly" && (
                 <>
                   <p className="text-6xl mb-4">😅</p>
-                  <p className="text-2xl font-bold text-white mb-2">너무 빨랐어요!</p>
-                  <p className="text-yellow-100">초록색이 될 때까지 기다리세요</p>
-                  <p className="text-yellow-200 text-sm mt-4">클릭하여 다시 시도</p>
+                  <p className="text-2xl font-bold text-white mb-2">{t.tooEarly}</p>
+                  <p className="text-yellow-100">{t.waitForGreen}</p>
+                  <p className="text-yellow-200 text-sm mt-4">{t.clickToRetry}</p>
                 </>
               )}
               
               {state === "result" && (
                 <>
-                  <p className="text-5xl mb-4">{getGrade(reactionTime, isMobile).emoji}</p>
-                  <p className={`text-xl font-bold ${getGrade(reactionTime, isMobile).color} mb-2`}>
-                    {getGrade(reactionTime, isMobile).grade}
+                  <p className="text-5xl mb-4">{getGrade(reactionTime).emoji}</p>
+                  <p className={`text-xl font-bold ${getGrade(reactionTime).color} mb-2`}>
+                    {getGrade(reactionTime).grade}
                   </p>
                   <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2">
                     {reactionTime}ms
                   </p>
-                  <p className="text-dark-400 mb-4">{getGrade(reactionTime, isMobile).message}</p>
-                  <p className="text-dark-500 text-sm">클릭하여 다시 시도</p>
+                  <p className="text-dark-400 mb-4">{getGrade(reactionTime).message}</p>
+                  <p className="text-dark-500 text-sm">{t.clickToRetry}</p>
                 </>
               )}
             </div>
@@ -273,23 +561,23 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
               {/* 결과 요약 */}
               <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="text-center p-4 bg-dark-800/50 rounded-xl">
-                  <p className="text-dark-400 text-sm mb-1">현재</p>
+                  <p className="text-dark-400 text-sm mb-1">{t.current}</p>
                   <p className="text-2xl font-bold text-white">{reactionTime}ms</p>
-                  <p className={`text-xs ${getGrade(reactionTime, isMobile).color}`}>{getGrade(reactionTime, isMobile).grade}</p>
+                  <p className={`text-xs ${getGrade(reactionTime).color}`}>{getGrade(reactionTime).grade}</p>
                 </div>
                 <div className="text-center p-4 bg-dark-800/50 rounded-xl">
-                  <p className="text-dark-400 text-sm mb-1">평균</p>
+                  <p className="text-dark-400 text-sm mb-1">{t.average}</p>
                   <p className="text-2xl font-bold text-accent-cyan">{getAverage()}ms</p>
                 </div>
                 <div className="text-center p-4 bg-dark-800/50 rounded-xl">
-                  <p className="text-dark-400 text-sm mb-1">최고</p>
+                  <p className="text-dark-400 text-sm mb-1">{t.best}</p>
                   <p className="text-2xl font-bold text-accent-purple">{getBest()}ms</p>
                 </div>
               </div>
               
               {/* 최근 기록 */}
               <div className="mb-6">
-                <p className="text-dark-400 text-sm mb-2">최근 기록 ({attempts.length}회)</p>
+                <p className="text-dark-400 text-sm mb-2">{t.recentRecords} ({attempts.length}{t.times})</p>
                 <div className="flex flex-wrap gap-2">
                   {attempts.slice(-10).map((time, index) => (
                     <span 
@@ -312,13 +600,13 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
                   onClick={shareResult}
                   className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all"
                 >
-                  📤 공유하기
+                  {t.share}
                 </button>
                 <button
                   onClick={resetGame}
                   className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
                 >
-                  🔄 기록 초기화
+                  {t.reset}
                 </button>
               </div>
             </div>
@@ -327,94 +615,91 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
           {/* 광고 영역 (하단) */}
           <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
             <div className="text-dark-500 text-sm py-6">
-              광고 영역 (Google AdSense)
+              {t.adArea}
             </div>
           </div>
 
           {/* 등급 안내 (롤 스타일 - 계층형) */}
           <div className="glass-card p-6 rounded-xl mb-8">
-            <h3 className="text-white font-medium mb-2 text-center">🎮 반응속도 티어표</h3>
+            <h3 className="text-white font-medium mb-2 text-center">{t.tierTable}</h3>
             <p className="text-accent-cyan text-xs text-center mb-6">
-              {isMobile ? "📱 모바일 기준" : "🖥️ 데스크톱 기준"}
+              {isMobile ? t.mobileStandard : t.desktopStandard}
             </p>
             <div className="flex flex-col items-center gap-2">
               {/* 챌린저 */}
               <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
-                <span className="text-cyan-300 text-sm font-bold">👑 챌린저</span>
+                <span className="text-cyan-300 text-sm font-bold">👑 {t.challenger}</span>
                 <span className="text-white text-xs ml-2">&lt;{isMobile ? "200" : "120"}ms</span>
               </div>
               {/* 마스터 */}
               <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
-                <span className="text-purple-400 text-sm font-bold">💎 마스터</span>
+                <span className="text-purple-400 text-sm font-bold">💎 {t.master}</span>
                 <span className="text-white text-xs ml-2">{isMobile ? "200~279" : "120~149"}ms</span>
               </div>
               {/* 다이아 */}
               <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
-                <span className="text-blue-400 text-sm font-bold">💠 다이아</span>
+                <span className="text-blue-400 text-sm font-bold">💠 {t.diamond}</span>
                 <span className="text-white text-xs ml-2">{isMobile ? "280~359" : "150~179"}ms</span>
               </div>
               {/* 플래티넘 */}
               <div className="w-56 p-2 bg-gradient-to-r from-teal-500/20 to-teal-400/20 rounded-lg text-center border border-teal-400/50">
-                <span className="text-teal-400 text-sm font-bold">🏆 플래티넘</span>
+                <span className="text-teal-400 text-sm font-bold">🏆 {t.platinum}</span>
                 <span className="text-white text-xs ml-2">{isMobile ? "360~449" : "180~219"}ms</span>
               </div>
               {/* 골드 */}
               <div className="w-64 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
-                <span className="text-yellow-400 text-sm font-bold">🥇 골드</span>
+                <span className="text-yellow-400 text-sm font-bold">🥇 {t.gold}</span>
                 <span className="text-white text-xs ml-2">{isMobile ? "450~549" : "220~269"}ms</span>
               </div>
               {/* 실버 */}
               <div className="w-72 p-2 bg-gradient-to-r from-gray-400/20 to-gray-300/20 rounded-lg text-center border border-gray-400/50">
-                <span className="text-gray-300 text-sm font-bold">🥈 실버</span>
+                <span className="text-gray-300 text-sm font-bold">🥈 {t.silver}</span>
                 <span className="text-white text-xs ml-2">{isMobile ? "550~699" : "270~329"}ms</span>
               </div>
               {/* 브론즈 */}
               <div className="w-80 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
-                <span className="text-orange-400 text-sm font-bold">🥉 브론즈</span>
+                <span className="text-orange-400 text-sm font-bold">🥉 {t.bronze}</span>
                 <span className="text-white text-xs ml-2">{isMobile ? "700~899" : "330~399"}ms</span>
               </div>
               {/* 아이언 */}
               <div className="w-[22rem] p-2 bg-gradient-to-r from-stone-500/20 to-stone-400/20 rounded-lg text-center border border-stone-400/50">
-                <span className="text-stone-400 text-sm font-bold">🪨 아이언</span>
+                <span className="text-stone-400 text-sm font-bold">🪨 {t.iron}</span>
                 <span className="text-white text-xs ml-2">{isMobile ? "900" : "400"}ms+</span>
               </div>
             </div>
             <p className="text-dark-500 text-xs mt-6 text-center">
-              {isMobile 
-                ? "💡 모바일 터치 반응 시간을 고려한 기준입니다"
-                : "💡 평균 반응속도는 약 250~300ms (골드~실버) 입니다"
-              }
+              {isMobile ? t.mobileNote : t.desktopNote}
             </p>
           </div>
 
           {/* 다른 도구 링크 */}
           <div className="glass-card p-6 rounded-xl">
-            <h3 className="text-white font-medium mb-4">🔗 다른 도구</h3>
+            <h3 className="text-white font-medium mb-4">{t.otherTools}</h3>
             <div className="flex flex-wrap gap-3">
               <Link 
                 href="/typing"
                 className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
               >
-                ⌨️ 타자 속도 테스트
+                {t.typingTest}
               </Link>
               <Link 
                 href="/salary"
                 className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
               >
-                💰 연봉 실수령액 계산기
+                {t.salaryCalc}
               </Link>
               <Link 
                 href="/severance"
                 className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
               >
-                💼 퇴직금 계산기
+                {t.severanceCalc}
               </Link>
             </div>
           </div>
 
           {/* SLOX 홍보 */}
           <div className="mt-12 text-center">
-            <p className="text-dark-500 text-sm mb-2">Powered by</p>
+            <p className="text-dark-500 text-sm mb-2">{t.poweredBy}</p>
             <Link href="/" className="inline-flex items-center gap-2 text-dark-400 hover:text-white transition-colors">
               <div className="w-6 h-6 bg-gradient-to-br from-accent-purple to-accent-cyan rounded flex items-center justify-center">
                 <span className="text-white font-bold text-xs">S</span>
@@ -422,7 +707,7 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
               <span className="font-medium">SLOX</span>
             </Link>
             <p className="text-dark-500 text-xs mt-2">
-              홈페이지 · 앱 제작 · AI 챗봇 구축
+              {t.slogan}
             </p>
           </div>
         </div>
@@ -430,4 +715,3 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
     </div>
   );
 }
-
