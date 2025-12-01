@@ -294,52 +294,52 @@ export default function ReactionTest() {
             </div>
           </div>
 
-          {/* 등급 안내 (롤 스타일) */}
+          {/* 등급 안내 (롤 스타일 - 계층형) */}
           <div className="glass-card p-6 rounded-xl mb-8">
-            <h3 className="text-white font-medium mb-4">🎮 반응속도 티어표</h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center border border-cyan-500/30">
-                <p className="text-2xl mb-1">👑</p>
-                <p className="text-cyan-300 text-sm font-bold">챌린저</p>
-                <p className="text-white text-xs">&lt;120ms</p>
+            <h3 className="text-white font-medium mb-6 text-center">🎮 반응속도 티어표</h3>
+            <div className="flex flex-col items-center gap-2">
+              {/* 챌린저 */}
+              <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
+                <span className="text-cyan-300 text-sm font-bold">👑 챌린저</span>
+                <span className="text-white text-xs ml-2">&lt;120ms</span>
               </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center border border-purple-500/30">
-                <p className="text-2xl mb-1">💎</p>
-                <p className="text-purple-400 text-sm font-bold">마스터</p>
-                <p className="text-white text-xs">120~149ms</p>
+              {/* 마스터 */}
+              <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
+                <span className="text-purple-400 text-sm font-bold">💎 마스터</span>
+                <span className="text-white text-xs ml-2">120~149ms</span>
               </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center border border-blue-500/30">
-                <p className="text-2xl mb-1">💠</p>
-                <p className="text-blue-400 text-sm font-bold">다이아</p>
-                <p className="text-white text-xs">150~179ms</p>
+              {/* 다이아 */}
+              <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
+                <span className="text-blue-400 text-sm font-bold">💠 다이아</span>
+                <span className="text-white text-xs ml-2">150~179ms</span>
               </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center border border-teal-500/30">
-                <p className="text-2xl mb-1">🏆</p>
-                <p className="text-teal-400 text-sm font-bold">플래티넘</p>
-                <p className="text-white text-xs">180~219ms</p>
+              {/* 플래티넘 */}
+              <div className="w-56 p-2 bg-gradient-to-r from-teal-500/20 to-teal-400/20 rounded-lg text-center border border-teal-400/50">
+                <span className="text-teal-400 text-sm font-bold">🏆 플래티넘</span>
+                <span className="text-white text-xs ml-2">180~219ms</span>
               </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center border border-yellow-500/30">
-                <p className="text-2xl mb-1">🥇</p>
-                <p className="text-yellow-400 text-sm font-bold">골드</p>
-                <p className="text-white text-xs">220~269ms</p>
+              {/* 골드 */}
+              <div className="w-64 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
+                <span className="text-yellow-400 text-sm font-bold">🥇 골드</span>
+                <span className="text-white text-xs ml-2">220~269ms</span>
               </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center border border-gray-400/30">
-                <p className="text-2xl mb-1">🥈</p>
-                <p className="text-gray-300 text-sm font-bold">실버</p>
-                <p className="text-white text-xs">270~329ms</p>
+              {/* 실버 */}
+              <div className="w-72 p-2 bg-gradient-to-r from-gray-400/20 to-gray-300/20 rounded-lg text-center border border-gray-400/50">
+                <span className="text-gray-300 text-sm font-bold">🥈 실버</span>
+                <span className="text-white text-xs ml-2">270~329ms</span>
               </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center border border-orange-500/30">
-                <p className="text-2xl mb-1">🥉</p>
-                <p className="text-orange-400 text-sm font-bold">브론즈</p>
-                <p className="text-white text-xs">330~399ms</p>
+              {/* 브론즈 */}
+              <div className="w-80 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
+                <span className="text-orange-400 text-sm font-bold">🥉 브론즈</span>
+                <span className="text-white text-xs ml-2">330~399ms</span>
               </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center border border-stone-500/30">
-                <p className="text-2xl mb-1">🪨</p>
-                <p className="text-stone-400 text-sm font-bold">아이언</p>
-                <p className="text-white text-xs">400ms+</p>
+              {/* 아이언 */}
+              <div className="w-[22rem] p-2 bg-gradient-to-r from-stone-500/20 to-stone-400/20 rounded-lg text-center border border-stone-400/50">
+                <span className="text-stone-400 text-sm font-bold">🪨 아이언</span>
+                <span className="text-white text-xs ml-2">400ms+</span>
               </div>
             </div>
-            <p className="text-dark-500 text-xs mt-4 text-center">
+            <p className="text-dark-500 text-xs mt-6 text-center">
               💡 평균 반응속도는 약 250~300ms (골드~실버) 입니다
             </p>
           </div>
