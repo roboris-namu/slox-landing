@@ -43,6 +43,45 @@ const getRandomSentence = (): string => {
   return SENTENCES[Math.floor(Math.random() * SENTENCES.length)];
 };
 
+/**
+ * 한글 글자를 키 입력 횟수로 변환
+ * 예: "건" = ㄱ(1) + ㅓ(1) + ㄴ(1) = 3타
+ */
+const getKeyStrokes = (text: string): number => {
+  let strokes = 0;
+  
+  for (const char of text) {
+    const code = char.charCodeAt(0);
+    
+    // 한글 음절 범위 (가 ~ 힣)
+    if (code >= 0xAC00 && code <= 0xD7A3) {
+      const syllableIndex = code - 0xAC00;
+      const cho = Math.floor(syllableIndex / (21 * 28)); // 초성
+      const jung = Math.floor((syllableIndex % (21 * 28)) / 28); // 중성
+      const jong = syllableIndex % 28; // 종성
+      
+      // 초성 타수 (쌍자음은 2타)
+      const doubleChosung = [1, 4, 8, 10, 13]; // ㄲ, ㄸ, ㅃ, ㅆ, ㅉ
+      strokes += doubleChosung.includes(cho) ? 2 : 1;
+      
+      // 중성 타수 (복합모음은 2타)
+      const doubleJungsung = [9, 10, 11, 14, 15, 16, 19]; // ㅘ, ㅙ, ㅚ, ㅝ, ㅞ, ㅟ, ㅢ
+      strokes += doubleJungsung.includes(jung) ? 2 : 1;
+      
+      // 종성 타수 (복합받침은 2타, 없으면 0타)
+      if (jong > 0) {
+        const doubleJongsung = [3, 5, 6, 9, 10, 11, 12, 13, 14, 15, 18]; // ㄳ, ㄵ, ㄶ, ㄺ, ㄻ, ㄼ, ㄽ, ㄾ, ㄿ, ㅀ, ㅄ
+        strokes += doubleJongsung.includes(jong) ? 2 : 1;
+      }
+    } else {
+      // 영문, 숫자, 특수문자, 공백 등은 1타
+      strokes += 1;
+    }
+  }
+  
+  return strokes;
+};
+
 export default function TypingTest() {
   const [sentence, setSentence] = useState<string>("");
   const [input, setInput] = useState<string>("");
@@ -85,8 +124,11 @@ export default function TypingTest() {
     }
     
     const accuracy = Math.round((correctChars / sentence.length) * 100);
-    const cpm = Math.round(input.length / timeInMinutes);
-    const wpm = Math.round(cpm / 5); // 평균 5글자 = 1단어
+    
+    // 키 입력 횟수 기준 타수 계산 (한컴타자 방식)
+    const keyStrokes = getKeyStrokes(input);
+    const cpm = Math.round(keyStrokes / timeInMinutes);
+    const wpm = Math.round(cpm / 5); // 평균 5타 = 1단어
     
     return {
       wpm,
