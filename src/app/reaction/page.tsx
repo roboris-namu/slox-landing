@@ -100,7 +100,6 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
     if (navigator.share) {
       try {
         await navigator.share({
-          title: '반응속도 테스트 결과',
           text: shareText,
           url: shareUrl
         });
