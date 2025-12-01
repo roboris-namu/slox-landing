@@ -4,6 +4,7 @@ import TechStack from "@/components/TechStack";
 import Pricing from "@/components/Pricing";
 import Portfolio from "@/components/Portfolio";
 import Contact from "@/components/Contact";
+import MobileToolsButton from "@/components/MobileToolsButton";
 
 /**
  * SLOX 메인 랜딩페이지
@@ -20,6 +21,7 @@ export default function Home() {
       <Portfolio />
       <Contact />
       <Footer />
+      <MobileToolsButton />
     </main>
   );
 }
