@@ -302,16 +302,11 @@ export default function TypingTest() {
                     type="text"
                     value={input}
                     onChange={handleInput}
-                    placeholder={isStarted ? "" : "여기에 입력을 시작하세요..."}
-                    className="w-full px-6 py-4 bg-dark-800 border-2 border-dark-700 rounded-xl text-white text-xl font-mono focus:outline-none focus:border-accent-purple transition-colors"
+                    placeholder={isStarted ? "" : "클릭하고 타이핑을 시작하세요!"}
+                    className="w-full px-6 py-4 bg-dark-800 border-2 border-dark-700 rounded-xl text-white text-xl font-mono focus:outline-none focus:border-accent-purple transition-colors placeholder:text-dark-500"
                     autoFocus
                     disabled={isFinished}
                   />
-                  {!isStarted && (
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                      <span className="text-dark-500 animate-pulse">클릭하고 타이핑을 시작하세요!</span>
-                    </div>
-                  )}
                 </div>
 
                 {/* 힌트 */}
