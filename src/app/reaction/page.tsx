@@ -298,7 +298,7 @@ export default function ReactionTest() {
                     {getGrade(reactionTime).grade}
                   </p>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-4 mb-4">
                   <div className="text-center">
                     <p className="text-dark-400 text-xs mb-1">현재</p>
                     <p className="text-lg font-bold text-white">{reactionTime}ms</p>
@@ -312,7 +312,11 @@ export default function ReactionTest() {
                     <p className="text-lg font-bold text-accent-purple">{getBest()}ms</p>
                   </div>
                 </div>
-                <p className="text-center text-dark-500 text-xs mt-4">slox.co.kr/reaction</p>
+                {/* URL 강조 영역 */}
+                <div className="mt-4 pt-4 border-t border-dark-700">
+                  <p className="text-center text-accent-cyan text-sm font-medium mb-1">👉 나도 도전하기!</p>
+                  <p className="text-center text-white text-base font-bold">slox.co.kr/reaction</p>
+                </div>
               </div>
               
               {/* 최근 기록 */}
