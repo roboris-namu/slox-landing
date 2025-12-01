@@ -207,8 +207,29 @@ export default function TypingTest() {
     });
   };
 
-  // 등급 계산
+  // 모바일 감지
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // 등급 계산 (모바일은 기준 낮춤)
   const getGrade = (cpm: number): { grade: string; color: string; emoji: string } => {
+    if (isMobile) {
+      // 모바일 등급 기준 (약 60% 수준)
+      if (cpm >= 350) return { grade: "전문가", color: "text-purple-400", emoji: "👑" };
+      if (cpm >= 280) return { grade: "고급", color: "text-cyan-400", emoji: "🚀" };
+      if (cpm >= 220) return { grade: "중급", color: "text-green-400", emoji: "⚡" };
+      if (cpm >= 150) return { grade: "초급", color: "text-yellow-400", emoji: "📝" };
+      return { grade: "입문", color: "text-dark-400", emoji: "🌱" };
+    }
+    // 데스크톱 등급 기준
     if (cpm >= 600) return { grade: "전문가", color: "text-purple-400", emoji: "👑" };
     if (cpm >= 500) return { grade: "고급", color: "text-cyan-400", emoji: "🚀" };
     if (cpm >= 400) return { grade: "중급", color: "text-green-400", emoji: "⚡" };
@@ -378,32 +399,37 @@ export default function TypingTest() {
 
           {/* 등급 안내 */}
           <div className="glass-card p-6 rounded-xl mb-8">
-            <h3 className="text-white font-medium mb-4">📊 타자 속도 등급표</h3>
+            <h3 className="text-white font-medium mb-4">
+              📊 타자 속도 등급표 
+              <span className="text-sm text-dark-400 font-normal ml-2">
+                ({isMobile ? "📱 모바일" : "💻 데스크톱"} 기준)
+              </span>
+            </h3>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
               <div className="p-3 bg-dark-800/50 rounded-lg text-center">
                 <p className="text-2xl mb-1">🌱</p>
                 <p className="text-dark-400 text-sm">입문</p>
-                <p className="text-white text-xs">~299타</p>
+                <p className="text-white text-xs">~{isMobile ? "149" : "299"}타</p>
               </div>
               <div className="p-3 bg-dark-800/50 rounded-lg text-center">
                 <p className="text-2xl mb-1">📝</p>
                 <p className="text-yellow-400 text-sm">초급</p>
-                <p className="text-white text-xs">300~399타</p>
+                <p className="text-white text-xs">{isMobile ? "150~219" : "300~399"}타</p>
               </div>
               <div className="p-3 bg-dark-800/50 rounded-lg text-center">
                 <p className="text-2xl mb-1">⚡</p>
                 <p className="text-green-400 text-sm">중급</p>
-                <p className="text-white text-xs">400~499타</p>
+                <p className="text-white text-xs">{isMobile ? "220~279" : "400~499"}타</p>
               </div>
               <div className="p-3 bg-dark-800/50 rounded-lg text-center">
                 <p className="text-2xl mb-1">🚀</p>
                 <p className="text-cyan-400 text-sm">고급</p>
-                <p className="text-white text-xs">500~599타</p>
+                <p className="text-white text-xs">{isMobile ? "280~349" : "500~599"}타</p>
               </div>
               <div className="p-3 bg-dark-800/50 rounded-lg text-center">
                 <p className="text-2xl mb-1">👑</p>
                 <p className="text-purple-400 text-sm">전문가</p>
-                <p className="text-white text-xs">600타+</p>
+                <p className="text-white text-xs">{isMobile ? "350" : "600"}타+</p>
               </div>
             </div>
           </div>
