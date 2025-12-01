@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 
 type GameState = "waiting" | "playing" | "wrong" | "result";
@@ -430,14 +430,6 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
       return hslToString(baseColor.h, baseColor.s, newL);
     }
     return hslToString(baseColor.h, baseColor.s, baseColor.l);
-  };
-
-  // 리셋
-  const resetGame = () => {
-    setState("waiting");
-    setLevel(1);
-    setScore(0);
-    setShowCorrect(false);
   };
 
   // 공유
