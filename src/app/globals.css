@@ -87,9 +87,11 @@ body {
     @apply text-base md:text-lg text-dark-400 mb-16 max-w-lg mx-auto leading-relaxed;
   }
   
-  /* 그라데이션 텍스트 */
+  /* 그라데이션 텍스트 - 삼성 브라우저 호환 */
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-accent-500 to-cyan-400;
+    @apply text-transparent bg-gradient-to-r from-indigo-400 via-accent-500 to-cyan-400;
+    -webkit-background-clip: text;
+    background-clip: text;
   }
 }
 
@@ -217,6 +219,17 @@ body {
 ::selection {
   background: rgba(139, 92, 246, 0.3);
   color: #ffffff;
+}
+
+/* 삼성 브라우저 그라디언트 텍스트 호환 */
+.bg-clip-text {
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+
+/* text-transparent 삼성 브라우저 호환 */
+.text-transparent {
+  -webkit-text-fill-color: transparent;
 }
 
 /* 링크 호버 효과 */
