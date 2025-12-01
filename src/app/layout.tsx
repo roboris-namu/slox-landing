@@ -67,6 +67,7 @@ export default function RootLayout({
       <head>
         <meta name="naver-site-verification" content="c674c400fde18181c55d1613538d9c5308b707cf" />
         <meta name="google-site-verification" content="RLeEptoySR_WdUTzUnkHQtAFjmHZvdFB4mEfEQPAdtA" />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4738855756690019" crossOrigin="anonymous"></script>
         <link
           rel="preconnect"
           href="https://cdn.jsdelivr.net"
