@@ -74,6 +74,9 @@ function Navigation() {
                     <a href="/reaction" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       ⚡ 반응속도 테스트
                     </a>
+                    <a href="/cps" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      🖱️ CPS 테스트
+                    </a>
                   </div>
                 </div>
               </div>
@@ -154,6 +157,11 @@ function Footer() {
               <li>
                 <a href="/reaction" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   ⚡ 반응속도 테스트
+                </a>
+              </li>
+              <li>
+                <a href="/cps" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  🖱️ CPS 테스트
                 </a>
               </li>
             </ul>
