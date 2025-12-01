@@ -85,9 +85,15 @@ export default function ReactionTest() {
     return Math.min(...attempts);
   };
 
-  // 이미지로 공유
-  const shareAsImage = async () => {
+  // 공유하기
+  const shareResult = async () => {
     if (!resultRef.current) return;
+    
+    const avg = getAverage();
+    const best = getBest();
+    const lastGrade = getGrade(reactionTime);
+    const shareUrl = 'https://www.slox.co.kr/reaction';
+    const shareText = `⚡ 반응속도 테스트 결과!\n\n${lastGrade.emoji} ${lastGrade.grade}: ${reactionTime}ms\n🎯 평균: ${avg}ms\n🏆 최고: ${best}ms\n\n나도 테스트하기 👉`;
     
     try {
       const canvas = await html2canvas(resultRef.current, {
@@ -100,52 +106,53 @@ export default function ReactionTest() {
         
         const file = new File([blob], 'reaction-result.png', { type: 'image/png' });
         
+        // 모바일에서 이미지+URL 공유 가능한 경우
         if (navigator.share && navigator.canShare({ files: [file] })) {
           try {
             await navigator.share({
               files: [file],
               title: '반응속도 테스트 결과',
-              text: `나도 테스트하기 👉 https://www.slox.co.kr/reaction`
+              text: shareText,
+              url: shareUrl
             });
           } catch {
-            // 공유 취소시 다운로드
-            downloadImage(canvas);
+            // 공유 취소시 무시
+          }
+        } else if (navigator.share) {
+          // 이미지 없이 텍스트+URL만 공유
+          try {
+            await navigator.share({
+              title: '반응속도 테스트 결과',
+              text: shareText,
+              url: shareUrl
+            });
+          } catch {
+            // 공유 취소시 무시
           }
         } else {
-          // 공유 불가시 다운로드
-          downloadImage(canvas);
+          // PC: 이미지 다운로드 + URL 복사
+          const link = document.createElement('a');
+          link.download = 'reaction-result.png';
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+          
+          navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
+          alert("이미지가 다운로드되고, 결과가 클립보드에 복사되었습니다!");
         }
       }, 'image/png');
     } catch {
-      alert("이미지 생성에 실패했습니다.");
+      // 이미지 생성 실패시 텍스트만 공유
+      if (navigator.share) {
+        navigator.share({
+          title: '반응속도 테스트 결과',
+          text: shareText,
+          url: shareUrl
+        });
+      } else {
+        navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
+        alert("결과가 클립보드에 복사되었습니다!");
+      }
     }
-  };
-
-  // 이미지 다운로드
-  const downloadImage = (canvas: HTMLCanvasElement) => {
-    const link = document.createElement('a');
-    link.download = 'reaction-result.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-    alert("이미지가 다운로드되었습니다!");
-  };
-
-  // 텍스트로 공유
-  const shareAsText = () => {
-    const avg = getAverage();
-    const best = getBest();
-    const lastGrade = getGrade(reactionTime);
-    const avgGrade = getGrade(avg);
-    const text = `⚡ 반응속도 테스트 결과!
-
-${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
-🎯 평균: ${avg}ms (${avgGrade.grade})
-🏆 최고: ${best}ms
-
-나도 테스트하기 👉 https://www.slox.co.kr/reaction`;
-    
-    navigator.clipboard.writeText(text);
-    alert("결과가 클립보드에 복사되었습니다!");
   };
 
   // cleanup
@@ -330,22 +337,16 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
               {/* 버튼들 */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
-                  onClick={shareAsImage}
+                  onClick={shareResult}
                   className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all"
                 >
-                  🖼️ 이미지로 공유
-                </button>
-                <button
-                  onClick={shareAsText}
-                  className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
-                >
-                  📋 텍스트 복사
+                  📤 공유하기
                 </button>
                 <button
                   onClick={resetGame}
                   className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
                 >
-                  🔄 초기화
+                  🔄 기록 초기화
                 </button>
               </div>
             </div>
