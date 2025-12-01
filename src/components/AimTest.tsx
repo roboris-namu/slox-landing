@@ -1,0 +1,826 @@
+"use client";
+
+import { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
+
+type GameState = "waiting" | "playing" | "result";
+type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
+type Difficulty = "easy" | "normal" | "hard";
+
+const translations = {
+  ko: {
+    title: "에임",
+    titleHighlight: " 트레이너",
+    subtitle: "나타나는 타겟을 최대한 빠르고 정확하게 클릭하세요!",
+    badge: "🎯 에임 테스트",
+    clickToStart: "클릭하여 시작",
+    ready: "준비되셨나요?",
+    timeLeft: "남은 시간",
+    hits: "명중",
+    misses: "미스",
+    seconds: "초",
+    accuracy: "정확도",
+    avgTime: "평균 반응",
+    totalHits: "총 명중",
+    score: "점수",
+    difficulty: "난이도",
+    easy: "쉬움",
+    normal: "보통",
+    hard: "어려움",
+    tryAgain: "다시 도전",
+    share: "📤 공유하기",
+    tierTable: "🎮 에임 등급표",
+    otherTools: "🔗 다른 도구",
+    reactionTest: "⚡ 반응속도 테스트",
+    cpsTest: "🖱️ CPS 테스트",
+    backToMain: "← 메인으로",
+    poweredBy: "Powered by",
+    slogan: "홈페이지 · 앱 제작 · AI 챗봇 구축",
+    adArea: "광고 영역 (Google AdSense)",
+    shareText: "🎯 에임 테스트 결과!",
+    shareTestIt: "나도 테스트하기 👉",
+    copied: "결과가 클립보드에 복사되었습니다!",
+    targetSize: "타겟 크기",
+    legendary: "전설",
+    proGamer: "프로게이머",
+    diamond: "다이아",
+    gold: "골드",
+    silver: "실버",
+    bronze: "브론즈",
+    msgLegendary: "발로란트 레디언트급!",
+    msgProGamer: "프로게이머 수준!",
+    msgDiamond: "상위권 에임!",
+    msgGold: "괜찮은 에임!",
+    msgSilver: "평균적인 에임",
+    msgBronze: "연습이 필요해요!",
+  },
+  en: {
+    title: "Aim",
+    titleHighlight: " Trainer",
+    subtitle: "Click the targets as fast and accurately as possible!",
+    badge: "🎯 Aim Test",
+    clickToStart: "Click to Start",
+    ready: "Are you ready?",
+    timeLeft: "Time Left",
+    hits: "Hits",
+    misses: "Misses",
+    seconds: "sec",
+    accuracy: "Accuracy",
+    avgTime: "Avg Time",
+    totalHits: "Total Hits",
+    score: "Score",
+    difficulty: "Difficulty",
+    easy: "Easy",
+    normal: "Normal",
+    hard: "Hard",
+    tryAgain: "Try Again",
+    share: "📤 Share",
+    tierTable: "🎮 Aim Tier Chart",
+    otherTools: "🔗 Other Tools",
+    reactionTest: "⚡ Reaction Test",
+    cpsTest: "🖱️ CPS Test",
+    backToMain: "← Home",
+    poweredBy: "Powered by",
+    slogan: "Web · App · AI Chatbot Development",
+    adArea: "Ad Space (Google AdSense)",
+    shareText: "🎯 Aim Test Result!",
+    shareTestIt: "Try it yourself 👉",
+    copied: "Result copied to clipboard!",
+    targetSize: "Target Size",
+    legendary: "Legendary",
+    proGamer: "Pro Gamer",
+    diamond: "Diamond",
+    gold: "Gold",
+    silver: "Silver",
+    bronze: "Bronze",
+    msgLegendary: "Valorant Radiant level!",
+    msgProGamer: "Pro gamer skills!",
+    msgDiamond: "Top-tier aim!",
+    msgGold: "Good aim!",
+    msgSilver: "Average aim",
+    msgBronze: "Keep practicing!",
+  },
+  ja: {
+    title: "エイム",
+    titleHighlight: " トレーナー",
+    subtitle: "ターゲットをできるだけ速く正確にクリック！",
+    badge: "🎯 エイムテスト",
+    clickToStart: "クリックしてスタート",
+    ready: "準備はいいですか？",
+    timeLeft: "残り時間",
+    hits: "命中",
+    misses: "ミス",
+    seconds: "秒",
+    accuracy: "正確度",
+    avgTime: "平均時間",
+    totalHits: "総命中",
+    score: "スコア",
+    difficulty: "難易度",
+    easy: "簡単",
+    normal: "普通",
+    hard: "難しい",
+    tryAgain: "再挑戦",
+    share: "📤 共有",
+    tierTable: "🎮 エイムランク表",
+    otherTools: "🔗 他のツール",
+    reactionTest: "⚡ 反応速度テスト",
+    cpsTest: "🖱️ CPSテスト",
+    backToMain: "← ホームへ",
+    poweredBy: "Powered by",
+    slogan: "ウェブ・アプリ・AIチャットボット開発",
+    adArea: "広告エリア (Google AdSense)",
+    shareText: "🎯 エイムテスト結果！",
+    shareTestIt: "あなたも挑戦 👉",
+    copied: "結果がクリップボードにコピーされました！",
+    targetSize: "ターゲットサイズ",
+    legendary: "レジェンド",
+    proGamer: "プロゲーマー",
+    diamond: "ダイヤモンド",
+    gold: "ゴールド",
+    silver: "シルバー",
+    bronze: "ブロンズ",
+    msgLegendary: "ヴァロラント レディアント級！",
+    msgProGamer: "プロゲーマーレベル！",
+    msgDiamond: "上位のエイム！",
+    msgGold: "良いエイム！",
+    msgSilver: "平均的なエイム",
+    msgBronze: "練習が必要！",
+  },
+  zh: {
+    title: "瞄准",
+    titleHighlight: " 训练",
+    subtitle: "尽快准确地点击目标！",
+    badge: "🎯 瞄准测试",
+    clickToStart: "点击开始",
+    ready: "准备好了吗？",
+    timeLeft: "剩余时间",
+    hits: "命中",
+    misses: "失误",
+    seconds: "秒",
+    accuracy: "准确度",
+    avgTime: "平均时间",
+    totalHits: "总命中",
+    score: "分数",
+    difficulty: "难度",
+    easy: "简单",
+    normal: "普通",
+    hard: "困难",
+    tryAgain: "再试一次",
+    share: "📤 分享",
+    tierTable: "🎮 瞄准等级表",
+    otherTools: "🔗 其他工具",
+    reactionTest: "⚡ 反应速度测试",
+    cpsTest: "🖱️ CPS测试",
+    backToMain: "← 首页",
+    poweredBy: "Powered by",
+    slogan: "网站·应用·AI聊天机器人开发",
+    adArea: "广告区域 (Google AdSense)",
+    shareText: "🎯 瞄准测试结果！",
+    shareTestIt: "你也来试试 👉",
+    copied: "结果已复制到剪贴板！",
+    targetSize: "目标大小",
+    legendary: "传说",
+    proGamer: "职业选手",
+    diamond: "钻石",
+    gold: "黄金",
+    silver: "白银",
+    bronze: "青铜",
+    msgLegendary: "无畏契约 光芒级！",
+    msgProGamer: "职业选手水平！",
+    msgDiamond: "顶级瞄准！",
+    msgGold: "不错的瞄准！",
+    msgSilver: "平均水平",
+    msgBronze: "需要练习！",
+  },
+  es: {
+    title: "Entrenador",
+    titleHighlight: " de Puntería",
+    subtitle: "¡Haz clic en los objetivos lo más rápido y preciso posible!",
+    badge: "🎯 Test de Puntería",
+    clickToStart: "Clic para Empezar",
+    ready: "¿Estás listo?",
+    timeLeft: "Tiempo Restante",
+    hits: "Aciertos",
+    misses: "Fallos",
+    seconds: "seg",
+    accuracy: "Precisión",
+    avgTime: "Tiempo Promedio",
+    totalHits: "Total Aciertos",
+    score: "Puntuación",
+    difficulty: "Dificultad",
+    easy: "Fácil",
+    normal: "Normal",
+    hard: "Difícil",
+    tryAgain: "Intentar de Nuevo",
+    share: "📤 Compartir",
+    tierTable: "🎮 Tabla de Rangos",
+    otherTools: "🔗 Otras Herramientas",
+    reactionTest: "⚡ Test de Reacción",
+    cpsTest: "🖱️ Test CPS",
+    backToMain: "← Inicio",
+    poweredBy: "Powered by",
+    slogan: "Desarrollo Web · Apps · Chatbots IA",
+    adArea: "Espacio Publicitario (Google AdSense)",
+    shareText: "🎯 ¡Resultado del Test de Puntería!",
+    shareTestIt: "¡Pruébalo tú también! 👉",
+    copied: "¡Resultado copiado al portapapeles!",
+    targetSize: "Tamaño del Objetivo",
+    legendary: "Legendario",
+    proGamer: "Pro Gamer",
+    diamond: "Diamante",
+    gold: "Oro",
+    silver: "Plata",
+    bronze: "Bronce",
+    msgLegendary: "¡Nivel Radiante de Valorant!",
+    msgProGamer: "¡Nivel de pro gamer!",
+    msgDiamond: "¡Puntería de élite!",
+    msgGold: "¡Buena puntería!",
+    msgSilver: "Puntería promedio",
+    msgBronze: "¡Sigue practicando!",
+  },
+  pt: {
+    title: "Treinador",
+    titleHighlight: " de Mira",
+    subtitle: "Clique nos alvos o mais rápido e preciso possível!",
+    badge: "🎯 Teste de Mira",
+    clickToStart: "Clique para Começar",
+    ready: "Você está pronto?",
+    timeLeft: "Tempo Restante",
+    hits: "Acertos",
+    misses: "Erros",
+    seconds: "seg",
+    accuracy: "Precisão",
+    avgTime: "Tempo Médio",
+    totalHits: "Total de Acertos",
+    score: "Pontuação",
+    difficulty: "Dificuldade",
+    easy: "Fácil",
+    normal: "Normal",
+    hard: "Difícil",
+    tryAgain: "Tentar Novamente",
+    share: "📤 Compartilhar",
+    tierTable: "🎮 Tabela de Ranks",
+    otherTools: "🔗 Outras Ferramentas",
+    reactionTest: "⚡ Teste de Reação",
+    cpsTest: "🖱️ Teste CPS",
+    backToMain: "← Início",
+    poweredBy: "Powered by",
+    slogan: "Desenvolvimento Web · Apps · Chatbots IA",
+    adArea: "Espaço Publicitário (Google AdSense)",
+    shareText: "🎯 Resultado do Teste de Mira!",
+    shareTestIt: "Experimente você também! 👉",
+    copied: "Resultado copiado para a área de transferência!",
+    targetSize: "Tamanho do Alvo",
+    legendary: "Lendário",
+    proGamer: "Pro Gamer",
+    diamond: "Diamante",
+    gold: "Ouro",
+    silver: "Prata",
+    bronze: "Bronze",
+    msgLegendary: "Nível Radiante do Valorant!",
+    msgProGamer: "Nível de pro gamer!",
+    msgDiamond: "Mira de elite!",
+    msgGold: "Boa mira!",
+    msgSilver: "Mira média",
+    msgBronze: "Continue praticando!",
+  },
+  de: {
+    title: "Aim",
+    titleHighlight: " Trainer",
+    subtitle: "Klicke die Ziele so schnell und präzise wie möglich!",
+    badge: "🎯 Aim Test",
+    clickToStart: "Klicken zum Starten",
+    ready: "Bist du bereit?",
+    timeLeft: "Verbleibende Zeit",
+    hits: "Treffer",
+    misses: "Fehler",
+    seconds: "Sek",
+    accuracy: "Genauigkeit",
+    avgTime: "Durchschnittszeit",
+    totalHits: "Gesamt Treffer",
+    score: "Punktzahl",
+    difficulty: "Schwierigkeit",
+    easy: "Leicht",
+    normal: "Normal",
+    hard: "Schwer",
+    tryAgain: "Nochmal Versuchen",
+    share: "📤 Teilen",
+    tierTable: "🎮 Aim Rang-Tabelle",
+    otherTools: "🔗 Andere Tools",
+    reactionTest: "⚡ Reaktionstest",
+    cpsTest: "🖱️ CPS Test",
+    backToMain: "← Startseite",
+    poweredBy: "Powered by",
+    slogan: "Web · App · KI-Chatbot Entwicklung",
+    adArea: "Werbefläche (Google AdSense)",
+    shareText: "🎯 Aim Test Ergebnis!",
+    shareTestIt: "Probiere es selbst! 👉",
+    copied: "Ergebnis in Zwischenablage kopiert!",
+    targetSize: "Zielgröße",
+    legendary: "Legendär",
+    proGamer: "Pro Gamer",
+    diamond: "Diamant",
+    gold: "Gold",
+    silver: "Silber",
+    bronze: "Bronze",
+    msgLegendary: "Valorant Radiant Level!",
+    msgProGamer: "Pro-Gamer Niveau!",
+    msgDiamond: "Elite-Aim!",
+    msgGold: "Guter Aim!",
+    msgSilver: "Durchschnittlicher Aim",
+    msgBronze: "Weiter üben!",
+  },
+  fr: {
+    title: "Entraîneur",
+    titleHighlight: " de Visée",
+    subtitle: "Cliquez sur les cibles le plus vite et précisément possible !",
+    badge: "🎯 Test de Visée",
+    clickToStart: "Cliquez pour Commencer",
+    ready: "Êtes-vous prêt ?",
+    timeLeft: "Temps Restant",
+    hits: "Touches",
+    misses: "Ratés",
+    seconds: "sec",
+    accuracy: "Précision",
+    avgTime: "Temps Moyen",
+    totalHits: "Total Touches",
+    score: "Score",
+    difficulty: "Difficulté",
+    easy: "Facile",
+    normal: "Normal",
+    hard: "Difficile",
+    tryAgain: "Réessayer",
+    share: "📤 Partager",
+    tierTable: "🎮 Tableau des Rangs",
+    otherTools: "🔗 Autres Outils",
+    reactionTest: "⚡ Test de Réaction",
+    cpsTest: "🖱️ Test CPS",
+    backToMain: "← Accueil",
+    poweredBy: "Powered by",
+    slogan: "Développement Web · Apps · Chatbots IA",
+    adArea: "Espace Publicitaire (Google AdSense)",
+    shareText: "🎯 Résultat du Test de Visée !",
+    shareTestIt: "Essayez vous aussi ! 👉",
+    copied: "Résultat copié dans le presse-papiers !",
+    targetSize: "Taille de la Cible",
+    legendary: "Légendaire",
+    proGamer: "Pro Gamer",
+    diamond: "Diamant",
+    gold: "Or",
+    silver: "Argent",
+    bronze: "Bronze",
+    msgLegendary: "Niveau Radiant Valorant !",
+    msgProGamer: "Niveau pro-gamer !",
+    msgDiamond: "Visée d'élite !",
+    msgGold: "Bonne visée !",
+    msgSilver: "Visée moyenne",
+    msgBronze: "Continuez à pratiquer !",
+  },
+};
+
+const langFlags: Record<Language, string> = {
+  ko: "🇰🇷", en: "🇺🇸", ja: "🇯🇵", zh: "🇨🇳",
+  es: "🇪🇸", pt: "🇧🇷", de: "🇩🇪", fr: "🇫🇷",
+};
+
+const langNames: Record<Language, string> = {
+  ko: "한국어", en: "English", ja: "日本語", zh: "中文",
+  es: "Español", pt: "Português", de: "Deutsch", fr: "Français",
+};
+
+const langUrls: Record<Language, string> = {
+  ko: "/aim", en: "/en/aim", ja: "/ja/aim", zh: "/zh/aim",
+  es: "/es/aim", pt: "/pt/aim", de: "/de/aim", fr: "/fr/aim",
+};
+
+const difficultySettings: Record<Difficulty, { size: number; duration: number }> = {
+  easy: { size: 80, duration: 30 },
+  normal: { size: 50, duration: 30 },
+  hard: { size: 30, duration: 30 },
+};
+
+interface AimTestProps {
+  initialLang: Language;
+}
+
+export default function AimTest({ initialLang }: AimTestProps) {
+  const [state, setState] = useState<GameState>("waiting");
+  const [hits, setHits] = useState(0);
+  const [misses, setMisses] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [difficulty, setDifficulty] = useState<Difficulty>("normal");
+  const [targetPos, setTargetPos] = useState({ x: 50, y: 50 });
+  const [reactionTimes, setReactionTimes] = useState<number[]>([]);
+  const [targetAppearTime, setTargetAppearTime] = useState(0);
+  const [lang, setLang] = useState<Language>(initialLang);
+  const [showLangMenu, setShowLangMenu] = useState(false);
+  const [bestScore, setBestScore] = useState(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const gameAreaRef = useRef<HTMLDivElement>(null);
+
+  const t = translations[lang];
+  const settings = difficultySettings[difficulty];
+
+  // 점수 계산 (정확도 * 명중수)
+  const getScore = useCallback(() => {
+    if (hits + misses === 0) return 0;
+    const accuracy = hits / (hits + misses);
+    return Math.round(accuracy * hits * 100);
+  }, [hits, misses]);
+
+  // 정확도 계산
+  const getAccuracy = useCallback(() => {
+    if (hits + misses === 0) return 0;
+    return Math.round((hits / (hits + misses)) * 100);
+  }, [hits, misses]);
+
+  // 평균 반응 시간
+  const getAvgTime = useCallback(() => {
+    if (reactionTimes.length === 0) return 0;
+    return Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length);
+  }, [reactionTimes]);
+
+  // 등급 계산
+  const getGrade = useCallback((score: number): { grade: string; color: string; emoji: string; message: string } => {
+    if (score >= 4000) return { grade: t.legendary, color: "text-cyan-300", emoji: "🏆", message: t.msgLegendary };
+    if (score >= 3000) return { grade: t.proGamer, color: "text-purple-400", emoji: "👑", message: t.msgProGamer };
+    if (score >= 2000) return { grade: t.diamond, color: "text-blue-400", emoji: "💎", message: t.msgDiamond };
+    if (score >= 1000) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+    if (score >= 500) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+    return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+  }, [t]);
+
+  // 새 타겟 위치 생성
+  const generateNewTarget = useCallback(() => {
+    const padding = settings.size / 2 + 10;
+    const x = padding + Math.random() * (100 - padding * 2);
+    const y = padding + Math.random() * (100 - padding * 2);
+    setTargetPos({ x, y });
+    setTargetAppearTime(Date.now());
+  }, [settings.size]);
+
+  // 게임 시작
+  const startGame = useCallback(() => {
+    setState("playing");
+    setHits(0);
+    setMisses(0);
+    setTimeLeft(settings.duration);
+    setReactionTimes([]);
+    generateNewTarget();
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          if (timerRef.current) clearInterval(timerRef.current);
+          setState("result");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  }, [settings.duration, generateNewTarget]);
+
+  // 타겟 클릭
+  const handleTargetClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (state !== "playing") return;
+    
+    const reactionTime = Date.now() - targetAppearTime;
+    setReactionTimes(prev => [...prev, reactionTime]);
+    setHits(prev => prev + 1);
+    generateNewTarget();
+  }, [state, targetAppearTime, generateNewTarget]);
+
+  // 미스 클릭
+  const handleMissClick = useCallback(() => {
+    if (state !== "playing") return;
+    setMisses(prev => prev + 1);
+  }, [state]);
+
+  // 게임 영역 클릭
+  const handleGameAreaClick = useCallback(() => {
+    if (state === "waiting") {
+      startGame();
+    } else if (state === "playing") {
+      handleMissClick();
+    }
+  }, [state, startGame, handleMissClick]);
+
+  // 결과 저장
+  useEffect(() => {
+    if (state === "result") {
+      const score = getScore();
+      if (score > bestScore) {
+        setBestScore(score);
+      }
+    }
+  }, [state, getScore, bestScore]);
+
+  // 리셋
+  const resetGame = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    setState("waiting");
+    setHits(0);
+    setMisses(0);
+    setTimeLeft(settings.duration);
+    setReactionTimes([]);
+  };
+
+  // 공유
+  const shareResult = async () => {
+    const score = getScore();
+    const grade = getGrade(score);
+    const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
+    const shareText = `${t.shareText}
+
+${grade.emoji} ${grade.grade}
+🎯 ${t.score}: ${score}
+✅ ${t.accuracy}: ${getAccuracy()}%
+⏱️ ${t.avgTime}: ${getAvgTime()}ms
+
+${t.shareTestIt}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ text: shareText, url: shareUrl });
+      } catch { /* 취소 */ }
+    } else {
+      navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
+      alert(t.copied);
+    }
+  };
+
+  // cleanup
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-dark-950">
+      {/* 네비게이션 */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-900/80 backdrop-blur-xl border-b border-dark-800">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-accent-purple to-accent-cyan rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">S</span>
+              </div>
+              <span className="text-white font-semibold">SLOX</span>
+            </Link>
+            <div className="flex items-center gap-4">
+              {/* 언어 선택 */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowLangMenu(!showLangMenu)}
+                  className="flex items-center gap-1 px-3 py-1.5 bg-dark-800 hover:bg-dark-700 rounded-lg text-sm transition-colors"
+                >
+                  <span>{langFlags[lang]}</span>
+                  <span className="text-dark-300 hidden sm:inline">{langNames[lang]}</span>
+                  <svg className="w-4 h-4 text-dark-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showLangMenu && (
+                  <div className="absolute right-0 mt-2 w-40 bg-dark-800 border border-dark-700 rounded-lg shadow-xl overflow-hidden">
+                    {(Object.keys(langFlags) as Language[]).map((l) => (
+                      <Link
+                        key={l}
+                        href={langUrls[l]}
+                        onClick={() => setShowLangMenu(false)}
+                        className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-dark-700 transition-colors ${
+                          lang === l ? "bg-dark-700 text-white" : "text-dark-300"
+                        }`}
+                      >
+                        <span>{langFlags[l]}</span>
+                        <span>{langNames[l]}</span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Link href="/" className="text-dark-300 hover:text-white transition-colors text-sm">
+                {t.backToMain}
+              </Link>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* 메인 콘텐츠 */}
+      <main className="pt-24 pb-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          {/* 헤더 */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-purple/10 border border-accent-purple/20 mb-6">
+              <span className="text-accent-purple text-sm font-medium">{t.badge}</span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+              {t.title}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">{t.titleHighlight}</span>
+            </h1>
+            <p className="text-dark-400 text-lg max-w-2xl mx-auto">{t.subtitle}</p>
+          </div>
+
+          {/* 난이도 선택 */}
+          {state === "waiting" && (
+            <div className="flex justify-center gap-3 mb-8">
+              {(["easy", "normal", "hard"] as Difficulty[]).map((d) => (
+                <button
+                  key={d}
+                  onClick={() => setDifficulty(d)}
+                  className={`px-6 py-3 rounded-xl font-medium transition-all ${
+                    difficulty === d
+                      ? "bg-accent-purple text-white"
+                      : "bg-dark-800 text-dark-300 hover:bg-dark-700"
+                  }`}
+                >
+                  {t[d]}
+                  <span className="text-xs ml-1 opacity-60">({difficultySettings[d].size}px)</span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* 게임 상태 표시 */}
+          {state === "playing" && (
+            <div className="flex justify-center gap-6 mb-4">
+              <div className="text-center">
+                <p className="text-dark-400 text-sm">{t.timeLeft}</p>
+                <p className="text-2xl font-bold text-white">{timeLeft}{t.seconds}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-dark-400 text-sm">{t.hits}</p>
+                <p className="text-2xl font-bold text-green-400">{hits}</p>
+              </div>
+              <div className="text-center">
+                <p className="text-dark-400 text-sm">{t.misses}</p>
+                <p className="text-2xl font-bold text-red-400">{misses}</p>
+              </div>
+            </div>
+          )}
+
+          {/* 광고 영역 (상단) */}
+          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
+            <div className="text-dark-500 text-sm py-4">{t.adArea}</div>
+          </div>
+
+          {/* 게임 영역 */}
+          <div
+            ref={gameAreaRef}
+            onClick={handleGameAreaClick}
+            className="relative bg-dark-900 rounded-2xl cursor-crosshair select-none mb-8 overflow-hidden"
+            style={{ height: "400px" }}
+          >
+            {state === "waiting" && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <p className="text-6xl mb-4">🎯</p>
+                <p className="text-2xl font-bold text-white mb-2">{t.ready}</p>
+                <p className="text-dark-400">{t.clickToStart}</p>
+              </div>
+            )}
+
+            {state === "playing" && (
+              <div
+                onClick={handleTargetClick}
+                className="absolute bg-gradient-to-br from-red-500 to-orange-500 rounded-full cursor-pointer transform -translate-x-1/2 -translate-y-1/2 hover:scale-110 transition-transform shadow-lg shadow-red-500/50"
+                style={{
+                  width: settings.size,
+                  height: settings.size,
+                  left: `${targetPos.x}%`,
+                  top: `${targetPos.y}%`,
+                }}
+              >
+                <div className="absolute inset-2 bg-white rounded-full opacity-30" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-2 h-2 bg-white rounded-full" />
+                </div>
+              </div>
+            )}
+
+            {state === "result" && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center">
+                <p className="text-5xl mb-2">{getGrade(getScore()).emoji}</p>
+                <p className={`text-xl font-bold ${getGrade(getScore()).color} mb-2`}>
+                  {getGrade(getScore()).grade}
+                </p>
+                <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2">
+                  {getScore()}
+                </p>
+                <p className="text-dark-400 mb-4">{getGrade(getScore()).message}</p>
+              </div>
+            )}
+          </div>
+
+          {/* 결과 */}
+          {state === "result" && (
+            <div className="glass-card p-6 rounded-2xl mb-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="text-center p-4 bg-dark-800/50 rounded-xl">
+                  <p className="text-dark-400 text-sm mb-1">{t.score}</p>
+                  <p className="text-2xl font-bold text-accent-purple">{getScore()}</p>
+                </div>
+                <div className="text-center p-4 bg-dark-800/50 rounded-xl">
+                  <p className="text-dark-400 text-sm mb-1">{t.accuracy}</p>
+                  <p className="text-2xl font-bold text-green-400">{getAccuracy()}%</p>
+                </div>
+                <div className="text-center p-4 bg-dark-800/50 rounded-xl">
+                  <p className="text-dark-400 text-sm mb-1">{t.totalHits}</p>
+                  <p className="text-2xl font-bold text-accent-cyan">{hits}</p>
+                </div>
+                <div className="text-center p-4 bg-dark-800/50 rounded-xl">
+                  <p className="text-dark-400 text-sm mb-1">{t.avgTime}</p>
+                  <p className="text-2xl font-bold text-yellow-400">{getAvgTime()}ms</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={shareResult}
+                  className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all"
+                >
+                  {t.share}
+                </button>
+                <button
+                  onClick={resetGame}
+                  className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
+                >
+                  {t.tryAgain}
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* 광고 영역 (하단) */}
+          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
+            <div className="text-dark-500 text-sm py-4">{t.adArea}</div>
+          </div>
+
+          {/* 등급 안내 */}
+          <div className="glass-card p-6 rounded-xl mb-8">
+            <h3 className="text-white font-medium mb-6 text-center">{t.tierTable}</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-lg text-center">
+                <span className="text-cyan-300 font-bold">🏆 4000+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.legendary}</p>
+              </div>
+              <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg text-center">
+                <span className="text-purple-400 font-bold">👑 3000+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.proGamer}</p>
+              </div>
+              <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg text-center">
+                <span className="text-blue-400 font-bold">💎 2000+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.diamond}</p>
+              </div>
+              <div className="p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg text-center">
+                <span className="text-yellow-400 font-bold">🥇 1000+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.gold}</p>
+              </div>
+              <div className="p-3 bg-gray-400/10 border border-gray-400/30 rounded-lg text-center">
+                <span className="text-gray-300 font-bold">🥈 500+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.silver}</p>
+              </div>
+              <div className="p-3 bg-orange-500/10 border border-orange-400/30 rounded-lg text-center">
+                <span className="text-orange-400 font-bold">🥉 0+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.bronze}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* 다른 도구 링크 */}
+          <div className="glass-card p-6 rounded-xl">
+            <h3 className="text-white font-medium mb-4">{t.otherTools}</h3>
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href={lang === "ko" ? "/reaction" : `/${lang}/reaction`}
+                className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
+              >
+                {t.reactionTest}
+              </Link>
+              <Link
+                href={lang === "ko" ? "/cps" : `/${lang}/cps`}
+                className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
+              >
+                {t.cpsTest}
+              </Link>
+            </div>
+          </div>
+
+          {/* SLOX 홍보 */}
+          <div className="mt-12 text-center">
+            <p className="text-dark-500 text-sm mb-2">{t.poweredBy}</p>
+            <Link href="/" className="inline-flex items-center gap-2 text-dark-400 hover:text-white transition-colors">
+              <div className="w-6 h-6 bg-gradient-to-br from-accent-purple to-accent-cyan rounded flex items-center justify-center">
+                <span className="text-white font-bold text-xs">S</span>
+              </div>
+              <span className="font-medium">SLOX</span>
+            </Link>
+            <p className="text-dark-500 text-xs mt-2">{t.slogan}</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
