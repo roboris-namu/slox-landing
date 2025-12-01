@@ -61,11 +61,11 @@ export default function MobileToolsButton() {
         </div>
       )}
 
-      {/* 손가락 포인터 애니메이션 */}
+      {/* 손가락 포인터 애니메이션 - 버튼 왼쪽 위를 찌르는 느낌 */}
       {showHint && !hasInteracted && (
-        <div className="lg:hidden fixed bottom-[88px] right-[26px] z-40 pointer-events-none">
-          <div className="animate-bounce-gentle">
-            <span className="text-2xl drop-shadow-lg">👆</span>
+        <div className="lg:hidden fixed bottom-[72px] right-[52px] z-40 pointer-events-none">
+          <div className="animate-poke">
+            <span className="text-3xl drop-shadow-lg" style={{ transform: "rotate(45deg)", display: "inline-block" }}>👆</span>
           </div>
         </div>
       )}
