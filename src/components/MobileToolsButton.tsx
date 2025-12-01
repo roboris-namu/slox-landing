@@ -18,10 +18,10 @@ export default function MobileToolsButton() {
 
   return (
     <>
-      {/* 플로팅 버튼 - 모바일에서만 보임 (md:hidden) */}
+      {/* 플로팅 버튼 - 태블릿 이하에서만 보임 (lg:hidden = 1024px 미만) */}
       <button
         onClick={() => setIsOpen(true)}
-        className="md:hidden fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-full shadow-lg shadow-purple-500/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+        className="lg:hidden fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-full shadow-lg shadow-purple-500/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
         aria-label="무료 도구 열기"
       >
         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,17 +29,17 @@ export default function MobileToolsButton() {
         </svg>
       </button>
 
-      {/* 오버레이 - 모바일에서만 */}
+      {/* 오버레이 - 태블릿 이하에서만 */}
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+          className="lg:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* Bottom Sheet - 모바일에서만 */}
+      {/* Bottom Sheet - 태블릿 이하에서만 */}
       <div
-        className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-dark-900 rounded-t-3xl border-t border-white/10 transform transition-transform duration-300 ease-out ${
+        className={`lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-dark-900 rounded-t-3xl border-t border-white/10 transform transition-transform duration-300 ease-out ${
           isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         style={{ maxHeight: "80vh" }}
