@@ -409,7 +409,7 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
   const [duration, setDuration] = useState<Duration>(5);
   const [cps, setCps] = useState(0);
   const [bestCps, setBestCps] = useState(0);
-  const [lang, setLang] = useState<Language>(initialLang);
+  const [lang] = useState<Language>(initialLang);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);

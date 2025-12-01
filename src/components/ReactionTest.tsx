@@ -486,7 +486,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   const [attempts, setAttempts] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number>(0);
   const [isMobile, setIsMobile] = useState(false);
-  const [lang, setLang] = useState<Language>(initialLang);
+  const [lang] = useState<Language>(initialLang);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   

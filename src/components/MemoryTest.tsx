@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 import Link from "next/link";
 
 type GameState = "waiting" | "showing" | "input" | "correct" | "wrong" | "result";
@@ -362,7 +362,7 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
   const [numbers, setNumbers] = useState("");
   const [userInput, setUserInput] = useState("");
   const [bestLevel, setBestLevel] = useState(1);
-  const [lang, setLang] = useState<Language>(initialLang);
+  const [lang] = useState<Language>(initialLang);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 

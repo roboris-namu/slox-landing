@@ -412,7 +412,7 @@ export default function AimTest({ initialLang }: AimTestProps) {
   const [targetPos, setTargetPos] = useState({ x: 50, y: 50 });
   const [reactionTimes, setReactionTimes] = useState<number[]>([]);
   const [targetAppearTime, setTargetAppearTime] = useState(0);
-  const [lang, setLang] = useState<Language>(initialLang);
+  const [lang] = useState<Language>(initialLang);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [bestScore, setBestScore] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
