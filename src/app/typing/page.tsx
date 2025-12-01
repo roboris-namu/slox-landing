@@ -439,16 +439,22 @@ export default function TypingTest() {
             <h3 className="text-white font-medium mb-4">🔗 다른 도구</h3>
             <div className="flex flex-wrap gap-3">
               <Link 
+                href="/reaction"
+                className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
+              >
+                ⚡ 반응속도 테스트
+              </Link>
+              <Link 
                 href="/salary"
                 className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
               >
-                연봉 실수령액 계산기 →
+                💰 연봉 실수령액 계산기
               </Link>
               <Link 
                 href="/severance"
                 className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
               >
-                퇴직금 계산기 →
+                💼 퇴직금 계산기
               </Link>
             </div>
           </div>
