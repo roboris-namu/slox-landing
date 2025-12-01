@@ -155,12 +155,18 @@ export default function SalaryCalculator() {
               </div>
               <span className="text-white font-semibold">SLOX</span>
             </Link>
-            <Link 
-              href="/"
-              className="text-dark-300 hover:text-white transition-colors text-sm"
-            >
-              ← 메인으로
-            </Link>
+<Link 
+                href="/severance"
+                className="text-dark-400 hover:text-white transition-colors text-sm"
+              >
+                퇴직금 계산기
+              </Link>
+              <Link 
+                href="/"
+                className="text-dark-300 hover:text-white transition-colors text-sm"
+              >
+                ← 메인으로
+              </Link>
           </div>
         </div>
       </nav>
@@ -342,6 +348,19 @@ export default function SalaryCalculator() {
               <li>• 정확한 금액은 급여명세서 또는 회사 인사팀에 문의하세요.</li>
               <li>• 국민연금은 월 소득 617만원 상한 적용 (2025년 기준)</li>
             </ul>
+          </div>
+
+          {/* 다른 계산기 링크 */}
+          <div className="glass-card p-6 rounded-xl mb-8">
+            <h3 className="text-white font-medium mb-4">🔗 다른 계산기</h3>
+            <div className="flex flex-wrap gap-3">
+              <Link 
+                href="/severance"
+                className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
+              >
+                퇴직금 계산기 →
+              </Link>
+            </div>
           </div>
 
           {/* SLOX 홍보 */}
