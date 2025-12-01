@@ -85,6 +85,9 @@ function Navigation() {
                     <a href="/memory" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🧠 숫자 기억 게임
                     </a>
+                    <a href="/color" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      🎨 색상 찾기 게임
+                    </a>
                   </div>
                 </div>
               </div>
@@ -180,6 +183,11 @@ function Footer() {
               <li>
                 <a href="/memory" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   🧠 숫자 기억 게임
+                </a>
+              </li>
+              <li>
+                <a href="/color" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  🎨 색상 찾기 게임
                 </a>
               </li>
             </ul>

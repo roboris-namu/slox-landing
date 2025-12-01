@@ -11,6 +11,7 @@ const tools = [
   { href: "/cps", emoji: "🖱️", label: "CPS 테스트" },
   { href: "/aim", emoji: "🎯", label: "에임 트레이너" },
   { href: "/memory", emoji: "🧠", label: "숫자 기억 게임" },
+  { href: "/color", emoji: "🎨", label: "색상 찾기 게임" },
 ];
 
 export default function MobileToolsButton() {
