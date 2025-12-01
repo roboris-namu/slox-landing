@@ -307,6 +307,22 @@ body {
   animation: poke-finger 0.6s ease-in-out infinite;
 }
 
+/* BEST/NEW 배지 은은한 애니메이션 */
+@keyframes pulse-badge {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-badge {
+  animation: pulse-badge 2s ease-in-out infinite;
+}
+
 @keyframes pulse-gentle {
   0%, 100% {
     transform: scale(1);

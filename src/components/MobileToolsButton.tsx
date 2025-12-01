@@ -4,40 +4,28 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const tools = [
-  { href: "/salary", emoji: "💰", label: "연봉 계산기" },
+  { href: "/salary", emoji: "💰", label: "연봉 계산기", best: true },
   { href: "/severance", emoji: "💼", label: "퇴직금 계산기" },
   { href: "/typing", emoji: "⌨️", label: "타자 테스트" },
-  { href: "/reaction", emoji: "⚡", label: "반응속도 테스트" },
+  { href: "/reaction", emoji: "⚡", label: "반응속도 테스트", best: true },
   { href: "/cps", emoji: "🖱️", label: "CPS 테스트" },
   { href: "/aim", emoji: "🎯", label: "에임 트레이너" },
   { href: "/memory", emoji: "🧠", label: "숫자 기억 게임" },
-  { href: "/color", emoji: "🎨", label: "색상 찾기 게임" },
+  { href: "/color", emoji: "🎨", label: "색상 찾기 게임", isNew: true },
 ];
 
 export default function MobileToolsButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showHint, setShowHint] = useState(false);
+  const [showHint, setShowHint] = useState(true); // 일단 항상 true로 시작
 
-  // 첫 방문자만 힌트 표시 (2초 후 나타남, 15초 후 사라짐)
+  // 클릭하면 숨기고 localStorage에 저장
   useEffect(() => {
-    const hasSeenHint = localStorage.getItem("toolsHintSeen");
-    if (hasSeenHint) return;
-
-    // 2초 후 힌트 표시
-    const showTimer = setTimeout(() => {
-      setShowHint(true);
-    }, 2000);
-
     // 15초 후 자동 숨김
     const hideTimer = setTimeout(() => {
       setShowHint(false);
-      localStorage.setItem("toolsHintSeen", "true");
-    }, 17000); // 2초 + 15초
+    }, 15000);
 
-    return () => {
-      clearTimeout(showTimer);
-      clearTimeout(hideTimer);
-    };
+    return () => clearTimeout(hideTimer);
   }, []);
 
   const handleClick = () => {
@@ -118,8 +106,22 @@ export default function MobileToolsButton() {
                 key={tool.href}
                 href={tool.href}
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 p-4 bg-dark-800/50 hover:bg-dark-800 border border-white/[0.05] hover:border-purple-500/30 rounded-xl transition-all active:scale-95"
+                className={`relative flex items-center gap-3 p-4 bg-dark-800/50 hover:bg-dark-800 border rounded-xl transition-all active:scale-95 ${
+                  tool.best ? "border-purple-500/50 bg-purple-500/10" : "border-white/[0.05] hover:border-purple-500/30"
+                }`}
               >
+                {/* BEST 태그 */}
+                {tool.best && (
+                  <span className="absolute -top-2 -right-2 px-2 py-0.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[10px] font-bold rounded-full animate-pulse-badge shadow-lg shadow-purple-500/30">
+                    BEST
+                  </span>
+                )}
+                {/* NEW 태그 */}
+                {tool.isNew && (
+                  <span className="absolute -top-2 -right-2 px-2 py-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-[10px] font-bold rounded-full animate-pulse-badge shadow-lg shadow-cyan-500/30">
+                    NEW
+                  </span>
+                )}
                 <span className="text-2xl">{tool.emoji}</span>
                 <span className="text-sm font-medium text-white">{tool.label}</span>
               </Link>
