@@ -138,4 +138,117 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- CPS 테스트 - 8개 언어 -->
+  <url>
+    <loc>https://www.slox.co.kr/cps</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/cps</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/cps</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/cps</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/cps</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/cps</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/cps</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/cps</loc>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+    <lastmod>2025-12-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
