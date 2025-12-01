@@ -52,6 +52,31 @@ function Navigation() {
               <a href="#portfolio" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
                 포트폴리오
               </a>
+              {/* 도구 드롭다운 */}
+              <div className="relative group">
+                <button className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300 flex items-center gap-1">
+                  도구
+                  <svg className="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <div className="absolute top-full left-0 mt-2 w-48 bg-dark-900/95 backdrop-blur-xl rounded-xl border border-white/[0.08] shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="p-2">
+                    <a href="/salary" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      💰 연봉 계산기
+                    </a>
+                    <a href="/severance" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      💼 퇴직금 계산기
+                    </a>
+                    <a href="/typing" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      ⌨️ 타자 테스트
+                    </a>
+                    <a href="/reaction" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      ⚡ 반응속도 테스트
+                    </a>
+                  </div>
+                </div>
+              </div>
               <a href="#contact" className="ml-3 px-5 py-2.5 bg-gradient-to-r from-indigo-500 via-accent-500 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:shadow-glow-sm transition-all duration-300 hover:-translate-y-0.5">
                 문의하기
               </a>
@@ -78,9 +103,9 @@ function Footer() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-accent-500/50 to-transparent" />
       
       <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* 브랜드 */}
-          <div className="md:col-span-1">
+          <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-accent-500 to-cyan-500 flex items-center justify-center shadow-glow-sm">
                 <span className="text-white font-bold">S</span>
@@ -93,7 +118,7 @@ function Footer() {
             </p>
           </div>
           
-          {/* 링크 */}
+          {/* 서비스 */}
           <div>
             <h4 className="font-semibold text-sm mb-4 text-dark-300 uppercase tracking-wider">서비스</h4>
             <ul className="space-y-3">
@@ -107,6 +132,34 @@ function Footer() {
             </ul>
           </div>
           
+          {/* 무료 도구 */}
+          <div>
+            <h4 className="font-semibold text-sm mb-4 text-dark-300 uppercase tracking-wider">무료 도구</h4>
+            <ul className="space-y-3">
+              <li>
+                <a href="/salary" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  💰 연봉 계산기
+                </a>
+              </li>
+              <li>
+                <a href="/severance" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  💼 퇴직금 계산기
+                </a>
+              </li>
+              <li>
+                <a href="/typing" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  ⌨️ 타자 테스트
+                </a>
+              </li>
+              <li>
+                <a href="/reaction" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  ⚡ 반응속도 테스트
+                </a>
+              </li>
+            </ul>
+          </div>
+          
+          {/* 연락처 */}
           <div>
             <h4 className="font-semibold text-sm mb-4 text-dark-300 uppercase tracking-wider">연락처</h4>
             <ul className="space-y-3">
