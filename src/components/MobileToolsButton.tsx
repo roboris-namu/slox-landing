@@ -16,14 +16,28 @@ const tools = [
 
 export default function MobileToolsButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showHint, setShowHint] = useState(true);
+  const [showHint, setShowHint] = useState(false);
 
-  // 첫 방문자만 힌트 표시
+  // 첫 방문자만 힌트 표시 (2초 후 나타남, 15초 후 사라짐)
   useEffect(() => {
     const hasSeenHint = localStorage.getItem("toolsHintSeen");
-    if (hasSeenHint) {
+    if (hasSeenHint) return;
+
+    // 2초 후 힌트 표시
+    const showTimer = setTimeout(() => {
+      setShowHint(true);
+    }, 2000);
+
+    // 15초 후 자동 숨김
+    const hideTimer = setTimeout(() => {
       setShowHint(false);
-    }
+      localStorage.setItem("toolsHintSeen", "true");
+    }, 17000); // 2초 + 15초
+
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
   }, []);
 
   const handleClick = () => {
