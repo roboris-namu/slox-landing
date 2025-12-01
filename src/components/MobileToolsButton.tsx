@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 const tools = [
@@ -15,26 +15,13 @@ const tools = [
 
 export default function MobileToolsButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // 데스크톱에서는 렌더링 안함
-  if (!isMobile) return null;
 
   return (
     <>
-      {/* 플로팅 버튼 */}
+      {/* 플로팅 버튼 - 모바일에서만 보임 (md:hidden) */}
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-r from-indigo-500 via-accent-500 to-cyan-500 rounded-full shadow-lg shadow-accent-500/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+        className="md:hidden fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-full shadow-lg shadow-purple-500/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
         aria-label="무료 도구 열기"
       >
         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,17 +29,17 @@ export default function MobileToolsButton() {
         </svg>
       </button>
 
-      {/* 오버레이 */}
+      {/* 오버레이 - 모바일에서만 */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
+          className="md:hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
           onClick={() => setIsOpen(false)}
         />
       )}
 
-      {/* Bottom Sheet */}
+      {/* Bottom Sheet - 모바일에서만 */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-dark-900 rounded-t-3xl border-t border-white/10 transform transition-transform duration-300 ease-out ${
+        className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-dark-900 rounded-t-3xl border-t border-white/10 transform transition-transform duration-300 ease-out ${
           isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         style={{ maxHeight: "80vh" }}
@@ -85,7 +72,7 @@ export default function MobileToolsButton() {
                 key={tool.href}
                 href={tool.href}
                 onClick={() => setIsOpen(false)}
-                className="flex items-center gap-3 p-4 bg-dark-800/50 hover:bg-dark-800 border border-white/[0.05] hover:border-accent-500/30 rounded-xl transition-all active:scale-95"
+                className="flex items-center gap-3 p-4 bg-dark-800/50 hover:bg-dark-800 border border-white/[0.05] hover:border-purple-500/30 rounded-xl transition-all active:scale-95"
               >
                 <span className="text-2xl">{tool.emoji}</span>
                 <span className="text-sm font-medium text-white">{tool.label}</span>
@@ -96,7 +83,7 @@ export default function MobileToolsButton() {
           {/* SLOX 홍보 */}
           <div className="mt-6 text-center">
             <p className="text-dark-500 text-xs">
-              Powered by <span className="text-accent-400 font-medium">SLOX</span>
+              Powered by <span className="text-purple-400 font-medium">SLOX</span>
             </p>
           </div>
         </div>
@@ -104,4 +91,3 @@ export default function MobileToolsButton() {
     </>
   );
 }
-
