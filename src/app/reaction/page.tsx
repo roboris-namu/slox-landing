@@ -6,9 +6,21 @@ import Link from "next/link";
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
 
 /**
- * 등급 계산 (롤 스타일)
+ * 등급 계산 (롤 스타일) - 모바일/데스크톱 분리
  */
-const getGrade = (ms: number): { grade: string; color: string; emoji: string; message: string } => {
+const getGrade = (ms: number, isMobile: boolean = false): { grade: string; color: string; emoji: string; message: string } => {
+  if (isMobile) {
+    // 모바일 기준 (터치 반응 느림 반영)
+    if (ms < 200) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑", message: "전설의 반응속도!" };
+    if (ms < 280) return { grade: "마스터", color: "text-purple-400", emoji: "💎", message: "인간의 한계를 넘었어요!" };
+    if (ms < 360) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠", message: "프로게이머 수준!" };
+    if (ms < 450) return { grade: "플래티넘", color: "text-teal-400", emoji: "🏆", message: "상위권 반응속도!" };
+    if (ms < 550) return { grade: "골드", color: "text-yellow-400", emoji: "🥇", message: "평균보다 빠르네요!" };
+    if (ms < 700) return { grade: "실버", color: "text-gray-300", emoji: "🥈", message: "평균적인 속도예요" };
+    if (ms < 900) return { grade: "브론즈", color: "text-orange-400", emoji: "🥉", message: "조금 느린 편이에요" };
+    return { grade: "아이언", color: "text-stone-400", emoji: "🪨", message: "연습이 필요해요!" };
+  }
+  // 데스크톱 기준
   if (ms < 120) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑", message: "전설의 반응속도!" };
   if (ms < 150) return { grade: "마스터", color: "text-purple-400", emoji: "💎", message: "인간의 한계를 넘었어요!" };
   if (ms < 180) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠", message: "프로게이머 수준!" };
@@ -24,7 +36,18 @@ export default function ReactionTest() {
   const [reactionTime, setReactionTime] = useState<number>(0);
   const [attempts, setAttempts] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // 모바일 감지
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // 게임 시작
   const startGame = useCallback(() => {
@@ -87,7 +110,7 @@ export default function ReactionTest() {
   const shareResult = async () => {
     const avg = getAverage();
     const best = getBest();
-    const lastGrade = getGrade(reactionTime);
+    const lastGrade = getGrade(reactionTime, isMobile);
     const shareUrl = 'https://www.slox.co.kr/reaction';
     const shareText = `⚡ 반응속도 테스트 결과!
 
@@ -230,14 +253,14 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
               
               {state === "result" && (
                 <>
-                  <p className="text-5xl mb-4">{getGrade(reactionTime).emoji}</p>
-                  <p className={`text-xl font-bold ${getGrade(reactionTime).color} mb-2`}>
-                    {getGrade(reactionTime).grade}
+                  <p className="text-5xl mb-4">{getGrade(reactionTime, isMobile).emoji}</p>
+                  <p className={`text-xl font-bold ${getGrade(reactionTime, isMobile).color} mb-2`}>
+                    {getGrade(reactionTime, isMobile).grade}
                   </p>
                   <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2">
                     {reactionTime}ms
                   </p>
-                  <p className="text-dark-400 mb-4">{getGrade(reactionTime).message}</p>
+                  <p className="text-dark-400 mb-4">{getGrade(reactionTime, isMobile).message}</p>
                   <p className="text-dark-500 text-sm">클릭하여 다시 시도</p>
                 </>
               )}
@@ -252,7 +275,7 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
                 <div className="text-center p-4 bg-dark-800/50 rounded-xl">
                   <p className="text-dark-400 text-sm mb-1">현재</p>
                   <p className="text-2xl font-bold text-white">{reactionTime}ms</p>
-                  <p className={`text-xs ${getGrade(reactionTime).color}`}>{getGrade(reactionTime).grade}</p>
+                  <p className={`text-xs ${getGrade(reactionTime, isMobile).color}`}>{getGrade(reactionTime, isMobile).grade}</p>
                 </div>
                 <div className="text-center p-4 bg-dark-800/50 rounded-xl">
                   <p className="text-dark-400 text-sm mb-1">평균</p>
@@ -310,51 +333,57 @@ ${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
 
           {/* 등급 안내 (롤 스타일 - 계층형) */}
           <div className="glass-card p-6 rounded-xl mb-8">
-            <h3 className="text-white font-medium mb-6 text-center">🎮 반응속도 티어표</h3>
+            <h3 className="text-white font-medium mb-2 text-center">🎮 반응속도 티어표</h3>
+            <p className="text-accent-cyan text-xs text-center mb-6">
+              {isMobile ? "📱 모바일 기준" : "🖥️ 데스크톱 기준"}
+            </p>
             <div className="flex flex-col items-center gap-2">
               {/* 챌린저 */}
               <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
                 <span className="text-cyan-300 text-sm font-bold">👑 챌린저</span>
-                <span className="text-white text-xs ml-2">&lt;120ms</span>
+                <span className="text-white text-xs ml-2">&lt;{isMobile ? "200" : "120"}ms</span>
               </div>
               {/* 마스터 */}
               <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
                 <span className="text-purple-400 text-sm font-bold">💎 마스터</span>
-                <span className="text-white text-xs ml-2">120~149ms</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "200~279" : "120~149"}ms</span>
               </div>
               {/* 다이아 */}
               <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
                 <span className="text-blue-400 text-sm font-bold">💠 다이아</span>
-                <span className="text-white text-xs ml-2">150~179ms</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "280~359" : "150~179"}ms</span>
               </div>
               {/* 플래티넘 */}
               <div className="w-56 p-2 bg-gradient-to-r from-teal-500/20 to-teal-400/20 rounded-lg text-center border border-teal-400/50">
                 <span className="text-teal-400 text-sm font-bold">🏆 플래티넘</span>
-                <span className="text-white text-xs ml-2">180~219ms</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "360~449" : "180~219"}ms</span>
               </div>
               {/* 골드 */}
               <div className="w-64 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
                 <span className="text-yellow-400 text-sm font-bold">🥇 골드</span>
-                <span className="text-white text-xs ml-2">220~269ms</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "450~549" : "220~269"}ms</span>
               </div>
               {/* 실버 */}
               <div className="w-72 p-2 bg-gradient-to-r from-gray-400/20 to-gray-300/20 rounded-lg text-center border border-gray-400/50">
                 <span className="text-gray-300 text-sm font-bold">🥈 실버</span>
-                <span className="text-white text-xs ml-2">270~329ms</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "550~699" : "270~329"}ms</span>
               </div>
               {/* 브론즈 */}
               <div className="w-80 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
                 <span className="text-orange-400 text-sm font-bold">🥉 브론즈</span>
-                <span className="text-white text-xs ml-2">330~399ms</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "700~899" : "330~399"}ms</span>
               </div>
               {/* 아이언 */}
               <div className="w-[22rem] p-2 bg-gradient-to-r from-stone-500/20 to-stone-400/20 rounded-lg text-center border border-stone-400/50">
                 <span className="text-stone-400 text-sm font-bold">🪨 아이언</span>
-                <span className="text-white text-xs ml-2">400ms+</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "900" : "400"}ms+</span>
               </div>
             </div>
             <p className="text-dark-500 text-xs mt-6 text-center">
-              💡 평균 반응속도는 약 250~300ms (골드~실버) 입니다
+              {isMobile 
+                ? "💡 모바일 터치 반응 시간을 고려한 기준입니다"
+                : "💡 평균 반응속도는 약 250~300ms (골드~실버) 입니다"
+              }
             </p>
           </div>
 
