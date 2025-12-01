@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import html2canvas from "html2canvas";
 
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
 
@@ -26,7 +25,6 @@ export default function ReactionTest() {
   const [attempts, setAttempts] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number>(0);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const resultRef = useRef<HTMLDivElement>(null);
 
   // 게임 시작
   const startGame = useCallback(() => {
@@ -85,73 +83,34 @@ export default function ReactionTest() {
     return Math.min(...attempts);
   };
 
-  // 공유하기
+  // 공유하기 (텍스트 + URL)
   const shareResult = async () => {
-    if (!resultRef.current) return;
-    
     const avg = getAverage();
     const best = getBest();
     const lastGrade = getGrade(reactionTime);
     const shareUrl = 'https://www.slox.co.kr/reaction';
-    const shareText = `⚡ 반응속도 테스트 결과!\n\n${lastGrade.emoji} ${lastGrade.grade}: ${reactionTime}ms\n🎯 평균: ${avg}ms\n🏆 최고: ${best}ms\n\n나도 테스트하기 👉`;
+    const shareText = `⚡ 반응속도 테스트 결과!
+
+${lastGrade.emoji} 현재: ${reactionTime}ms (${lastGrade.grade})
+🎯 평균: ${avg}ms
+🏆 최고: ${best}ms
+
+나도 테스트하기 👉`;
     
-    try {
-      const canvas = await html2canvas(resultRef.current, {
-        backgroundColor: '#0a0a0f',
-        scale: 2,
-      });
-      
-      canvas.toBlob(async (blob) => {
-        if (!blob) return;
-        
-        const file = new File([blob], 'reaction-result.png', { type: 'image/png' });
-        
-        // 모바일에서 이미지+URL 공유 가능한 경우
-        if (navigator.share && navigator.canShare({ files: [file] })) {
-          try {
-            await navigator.share({
-              files: [file],
-              title: '반응속도 테스트 결과',
-              text: shareText,
-              url: shareUrl
-            });
-          } catch {
-            // 공유 취소시 무시
-          }
-        } else if (navigator.share) {
-          // 이미지 없이 텍스트+URL만 공유
-          try {
-            await navigator.share({
-              title: '반응속도 테스트 결과',
-              text: shareText,
-              url: shareUrl
-            });
-          } catch {
-            // 공유 취소시 무시
-          }
-        } else {
-          // PC: 이미지 다운로드 + URL 복사
-          const link = document.createElement('a');
-          link.download = 'reaction-result.png';
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-          
-          navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
-          alert("이미지가 다운로드되고, 결과가 클립보드에 복사되었습니다!");
-        }
-      }, 'image/png');
-    } catch {
-      // 이미지 생성 실패시 텍스트만 공유
-      if (navigator.share) {
-        navigator.share({
+    if (navigator.share) {
+      try {
+        await navigator.share({
           title: '반응속도 테스트 결과',
           text: shareText,
           url: shareUrl
         });
-      } else {
-        navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
-        alert("결과가 클립보드에 복사되었습니다!");
+      } catch {
+        // 공유 취소시 무시
       }
+    } else {
+      // PC: 클립보드에 복사
+      navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
+      alert("결과가 클립보드에 복사되었습니다!");
     }
   };
 
@@ -289,33 +248,20 @@ export default function ReactionTest() {
           {/* 기록 */}
           {attempts.length > 0 && (
             <div className="glass-card p-6 rounded-2xl mb-8">
-              {/* 공유용 결과 카드 */}
-              <div ref={resultRef} className="p-6 rounded-xl bg-dark-900 mb-6">
-                <div className="text-center mb-4">
-                  <p className="text-accent-purple text-sm mb-1">⚡ 반응속도 테스트</p>
-                  <p className="text-4xl mb-1">{getGrade(reactionTime).emoji}</p>
-                  <p className={`text-2xl font-bold ${getGrade(reactionTime).color}`}>
-                    {getGrade(reactionTime).grade}
-                  </p>
+              {/* 결과 요약 */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="text-center p-4 bg-dark-800/50 rounded-xl">
+                  <p className="text-dark-400 text-sm mb-1">현재</p>
+                  <p className="text-2xl font-bold text-white">{reactionTime}ms</p>
+                  <p className={`text-xs ${getGrade(reactionTime).color}`}>{getGrade(reactionTime).grade}</p>
                 </div>
-                <div className="grid grid-cols-3 gap-4 mb-4">
-                  <div className="text-center">
-                    <p className="text-dark-400 text-xs mb-1">현재</p>
-                    <p className="text-lg font-bold text-white">{reactionTime}ms</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-dark-400 text-xs mb-1">평균</p>
-                    <p className="text-lg font-bold text-accent-cyan">{getAverage()}ms</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-dark-400 text-xs mb-1">최고</p>
-                    <p className="text-lg font-bold text-accent-purple">{getBest()}ms</p>
-                  </div>
+                <div className="text-center p-4 bg-dark-800/50 rounded-xl">
+                  <p className="text-dark-400 text-sm mb-1">평균</p>
+                  <p className="text-2xl font-bold text-accent-cyan">{getAverage()}ms</p>
                 </div>
-                {/* URL 강조 영역 */}
-                <div className="mt-4 pt-4 border-t border-dark-700">
-                  <p className="text-center text-accent-cyan text-sm font-medium mb-1">👉 나도 도전하기!</p>
-                  <p className="text-center text-white text-base font-bold">slox.co.kr/reaction</p>
+                <div className="text-center p-4 bg-dark-800/50 rounded-xl">
+                  <p className="text-dark-400 text-sm mb-1">최고</p>
+                  <p className="text-2xl font-bold text-accent-purple">{getBest()}ms</p>
                 </div>
               </div>
               
