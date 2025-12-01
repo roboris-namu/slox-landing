@@ -221,15 +221,39 @@ body {
   color: #ffffff;
 }
 
-/* 삼성 브라우저 그라디언트 텍스트 호환 */
-.bg-clip-text {
-  -webkit-background-clip: text !important;
-  background-clip: text !important;
+/* 그라디언트 텍스트 - 브라우저 호환성 */
+@supports (-webkit-background-clip: text) and (-webkit-text-fill-color: transparent) {
+  .bg-clip-text {
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+  }
+  .text-transparent {
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
 }
 
-/* text-transparent 삼성 브라우저 호환 */
-.text-transparent {
-  -webkit-text-fill-color: transparent;
+/* 그라디언트 텍스트 미지원 브라우저 fallback */
+@supports not ((-webkit-background-clip: text) and (-webkit-text-fill-color: transparent)) {
+  .bg-clip-text,
+  .text-transparent {
+    background: none !important;
+    -webkit-text-fill-color: inherit !important;
+  }
+}
+
+/* 안전한 그라디언트 텍스트 - 삼성 브라우저 호환 */
+.gradient-text-safe {
+  color: #a78bfa; /* fallback 보라색 */
+  background: linear-gradient(to right, #a78bfa, #c084fc, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@supports (-webkit-background-clip: text) {
+  .gradient-text-safe {
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 /* 링크 호버 효과 */

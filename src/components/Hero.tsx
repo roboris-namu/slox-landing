@@ -69,15 +69,8 @@ export default function Hero() {
             className="animate-on-scroll mb-6"
             style={{ animationDelay: "0.05s" }}
           >
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight">
-              <span className="text-white" style={{ 
-                background: 'linear-gradient(to right, #ffffff, #ffffff, #ddd6fe)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}>
-                SLOX
-              </span>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white">
+              SLOX
             </h1>
           </div>
 
@@ -103,12 +96,7 @@ export default function Hero() {
             <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-[1.15] tracking-tight">
               <span className="block mb-2">홈페이지 · 앱 제작</span>
               <span className="relative inline-block">
-                <span className="text-violet-400" style={{ 
-                  background: 'linear-gradient(to right, #a78bfa, #c084fc, #22d3ee)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text'
-                }}>
+                <span className="gradient-text-safe">
                   AI 챗봇 구축
                 </span>
                 {/* 밑줄 효과 */}
