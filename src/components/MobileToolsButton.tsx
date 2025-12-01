@@ -16,72 +16,50 @@ const tools = [
 
 export default function MobileToolsButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showHint, setShowHint] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const [showHint, setShowHint] = useState(true);
 
-  // 첫 방문 시 힌트 표시
+  // 첫 방문자만 힌트 표시
   useEffect(() => {
     const hasSeenHint = localStorage.getItem("toolsHintSeen");
-    if (!hasSeenHint) {
-      // 2초 후 힌트 표시
-      const timer = setTimeout(() => {
-        setShowHint(true);
-      }, 2000);
-      
-      // 8초 후 자동 숨김
-      const hideTimer = setTimeout(() => {
-        setShowHint(false);
-        localStorage.setItem("toolsHintSeen", "true");
-      }, 10000);
-
-      return () => {
-        clearTimeout(timer);
-        clearTimeout(hideTimer);
-      };
+    if (hasSeenHint) {
+      setShowHint(false);
     }
   }, []);
 
   const handleClick = () => {
     setIsOpen(true);
     setShowHint(false);
-    setHasInteracted(true);
     localStorage.setItem("toolsHintSeen", "true");
   };
 
   return (
     <>
-      {/* 힌트 말풍선 */}
-      {showHint && !hasInteracted && (
-        <div className="lg:hidden fixed bottom-24 right-4 z-40 animate-fade-in">
-          <div className="relative bg-white text-dark-900 px-4 py-2 rounded-xl shadow-lg text-sm font-medium">
-            <span>무료 도구 보기 👀</span>
-            {/* 말풍선 꼬리 */}
-            <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white transform rotate-45" />
+      {/* 손가락 + 버튼 컨테이너 - 함께 플로팅 */}
+      <div className="lg:hidden fixed bottom-6 right-6 z-40">
+        {/* 손가락 포인터 - 버튼 왼쪽 위에서 통통 찌르기 */}
+        {showHint && !isOpen && (
+          <div className="absolute -top-8 -left-4 pointer-events-none z-50">
+            <div className="animate-poke-finger">
+              <span className="text-3xl drop-shadow-lg inline-block" style={{ transform: "rotate(135deg)" }}>
+                👆
+              </span>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* 손가락 포인터 애니메이션 - 버튼 왼쪽 위를 찌르는 느낌 */}
-      {showHint && !hasInteracted && (
-        <div className="lg:hidden fixed bottom-[72px] right-[52px] z-40 pointer-events-none">
-          <div className="animate-poke">
-            <span className="text-3xl drop-shadow-lg" style={{ transform: "rotate(45deg)", display: "inline-block" }}>👆</span>
-          </div>
-        </div>
-      )}
-
-      {/* 플로팅 버튼 - 태블릿 이하에서만 보임 (lg:hidden = 1024px 미만) */}
-      <button
-        onClick={handleClick}
-        className={`lg:hidden fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-full shadow-lg shadow-purple-500/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform ${
-          showHint && !hasInteracted ? "animate-pulse-gentle ring-4 ring-purple-400/50" : ""
-        }`}
-        aria-label="무료 도구 열기"
-      >
-        <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
+        {/* 플로팅 버튼 */}
+        <button
+          onClick={handleClick}
+          className={`w-14 h-14 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 rounded-full shadow-lg shadow-purple-500/30 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform ${
+            showHint && !isOpen ? "animate-pulse-gentle ring-4 ring-purple-400/50 ring-opacity-50" : ""
+          }`}
+          aria-label="무료 도구 열기"
+        >
+          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
 
       {/* 오버레이 - 태블릿 이하에서만 */}
       {isOpen && (
