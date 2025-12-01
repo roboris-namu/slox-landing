@@ -66,6 +66,7 @@ export default function RootLayout({
     <html lang="ko" className="scroll-smooth dark">
       <head>
         <meta name="naver-site-verification" content="c674c400fde18181c55d1613538d9c5308b707cf" />
+        <meta name="google-site-verification" content="RLeEptoySR_WdUTzUnkHQtAFjmHZvdFB4mEfEQPAdtA" />
         <link
           rel="preconnect"
           href="https://cdn.jsdelivr.net"
