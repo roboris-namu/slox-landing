@@ -4,7 +4,7 @@ import type { Metadata } from "next";
  * 반응속도 테스트 페이지 SEO 메타데이터
  */
 export const metadata: Metadata = {
-  title: "반응속도 테스트 - 무료 반응속도 측정, 티어 확인",
+  title: "반응속도 테스트 - 무료 반응속도 측정, 티어 확인 | SLOX",
   description:
     "무료 반응속도 테스트입니다. 당신의 반응속도는 몇 ms일까요? 챌린저부터 아이언까지, 지금 바로 티어를 확인하고 친구들과 결과를 공유해보세요!",
   keywords: [
@@ -17,6 +17,15 @@ export const metadata: Metadata = {
     "반응속도 티어",
     "reaction test",
   ],
+  alternates: {
+    canonical: "https://www.slox.co.kr/reaction",
+    languages: {
+      "ko": "https://www.slox.co.kr/reaction",
+      "en": "https://www.slox.co.kr/en/reaction",
+      "ja": "https://www.slox.co.kr/ja/reaction",
+      "zh": "https://www.slox.co.kr/zh/reaction",
+    },
+  },
   openGraph: {
     type: "website",
     locale: "ko_KR",
@@ -45,4 +54,3 @@ export default function ReactionLayout({
 }) {
   return <>{children}</>;
 }
-
