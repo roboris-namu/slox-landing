@@ -221,9 +221,14 @@ function Footer() {
         
         {/* 하단 */}
         <div className="mt-14 pt-8 border-t border-white/[0.05] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-dark-500">
-            © {new Date().getFullYear()} SLOX. All rights reserved.
-          </p>
+          <div className="flex items-center gap-4">
+            <p className="text-sm text-dark-500">
+              © {new Date().getFullYear()} SLOX. All rights reserved.
+            </p>
+            <a href="/privacy" className="text-sm text-dark-500 hover:text-dark-300 transition-colors">
+              개인정보처리방침
+            </a>
+          </div>
           <div className="flex gap-3">
             <a href="https://pf.kakao.com/_tixaYn/chat" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.08] flex items-center justify-center hover:bg-accent-500/20 hover:border-accent-500/30 transition-all duration-300 group">
               <svg className="w-4 h-4 text-dark-400 group-hover:text-accent-400 transition-colors" viewBox="0 0 24 24" fill="currentColor">
