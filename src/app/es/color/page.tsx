@@ -3,3 +3,5 @@ export default function ColorPageEs() { return <ColorTest initialLang="es" />; }
 
 
 
+
+

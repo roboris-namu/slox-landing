@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
 import Services from "@/components/Services";
-import TechStack from "@/components/TechStack";
 import Pricing from "@/components/Pricing";
 import Portfolio from "@/components/Portfolio";
 import Contact from "@/components/Contact";
@@ -16,7 +15,6 @@ export default function Home() {
       <Navigation />
       <Hero />
       <Services />
-      <TechStack />
       <Pricing />
       <Portfolio />
       <Contact />
@@ -62,11 +60,8 @@ function Navigation() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div className="absolute top-full left-0 mt-2 w-48 bg-dark-900/95 backdrop-blur-xl rounded-xl border border-white/[0.08] shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="absolute top-full left-0 mt-2 w-56 bg-dark-900/95 backdrop-blur-xl rounded-xl border border-white/[0.08] shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <div className="p-2">
-                    <a href="/slox-test" className="flex items-center gap-2 px-3 py-2 text-sm text-amber-400 hover:text-amber-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium">
-                      🐂 나와 닮은 황소 <span className="text-[10px] bg-amber-500/20 px-1.5 py-0.5 rounded text-amber-400">NEW</span>
-                    </a>
                     <a href="/salary" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       💰 연봉 계산기
                     </a>
@@ -76,14 +71,17 @@ function Navigation() {
                     <a href="/typing" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       ⌨️ 타자 테스트
                     </a>
-                    <a href="/reaction" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      ⚡ 반응속도 테스트
+                    <a href="/reaction" className="flex items-center gap-2 px-3 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      ⚡ 반응속도 테스트 <span className="text-[10px] bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-400">BEST</span>
                     </a>
                     <a href="/cps" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🖱️ CPS 테스트
                     </a>
                     <a href="/aim" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🎯 에임 트레이너
+                    </a>
+                    <a href="/slox-test" className="flex items-center gap-2 px-3 py-2 text-sm text-amber-400 hover:text-amber-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      🐂 나와 닮은 황소 <span className="text-[10px] bg-amber-500/20 px-1.5 py-0.5 rounded text-amber-400">NEW</span>
                     </a>
                     <a href="/memory" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🧠 숫자 기억 게임
@@ -154,11 +152,6 @@ function Footer() {
             <h4 className="font-semibold text-sm mb-4 text-dark-300 uppercase tracking-wider">무료 도구</h4>
             <ul className="space-y-3">
               <li>
-                <a href="/slox-test" className="text-sm text-amber-400 hover:text-amber-300 transition-colors duration-300 font-medium">
-                  🐂 나와 닮은 황소 ✨
-                </a>
-              </li>
-              <li>
                 <a href="/salary" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   💰 연봉 계산기
                 </a>
@@ -186,6 +179,11 @@ function Footer() {
               <li>
                 <a href="/aim" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   🎯 에임 트레이너
+                </a>
+              </li>
+              <li>
+                <a href="/slox-test" className="text-sm text-amber-400 hover:text-amber-300 transition-colors duration-300 font-medium">
+                  🐂 나와 닮은 황소 ✨
                 </a>
               </li>
               <li>

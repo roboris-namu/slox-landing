@@ -4,3 +4,5 @@ export default function ColorLayoutJa({ children }: { children: React.ReactNode 
 
 
 
+
+
