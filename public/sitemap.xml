@@ -25,11 +25,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!-- SLOX 성격 테스트 -->
+  <!-- 황소 테스트 - 나와 닮은 황소 -->
   <url>
     <loc>https://www.slox.co.kr/slox-test</loc>
-    <lastmod>2025-12-01</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2025-12-02</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- 반응속도 테스트 - 8개 언어 -->
