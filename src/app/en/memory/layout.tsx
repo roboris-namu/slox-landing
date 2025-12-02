@@ -10,3 +10,4 @@ export const metadata: Metadata = {
 
 export default function MemoryLayoutEn({ children }: { children: React.ReactNode }) { return <>{children}</>; }
 
+

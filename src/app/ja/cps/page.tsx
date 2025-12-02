@@ -4,3 +4,4 @@ export default function CpsPageJa() {
   return <CpsTest initialLang="ja" />;
 }
 
+

@@ -4,3 +4,4 @@ export default function AimPage() {
   return <AimTest initialLang="ko" />;
 }
 
+

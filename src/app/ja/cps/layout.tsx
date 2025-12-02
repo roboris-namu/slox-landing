@@ -38,3 +38,4 @@ export default function CpsLayoutJa({ children }: { children: React.ReactNode })
   return <>{children}</>;
 }
 
+

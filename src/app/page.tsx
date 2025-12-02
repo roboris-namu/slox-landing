@@ -64,6 +64,9 @@ function Navigation() {
                 </button>
                 <div className="absolute top-full left-0 mt-2 w-48 bg-dark-900/95 backdrop-blur-xl rounded-xl border border-white/[0.08] shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <div className="p-2">
+                    <a href="/slox-test" className="flex items-center gap-2 px-3 py-2 text-sm text-amber-400 hover:text-amber-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium">
+                      🐂 SLOX 테스트 <span className="text-[10px] bg-amber-500/20 px-1.5 py-0.5 rounded text-amber-400">NEW</span>
+                    </a>
                     <a href="/salary" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       💰 연봉 계산기
                     </a>
@@ -150,6 +153,11 @@ function Footer() {
           <div>
             <h4 className="font-semibold text-sm mb-4 text-dark-300 uppercase tracking-wider">무료 도구</h4>
             <ul className="space-y-3">
+              <li>
+                <a href="/slox-test" className="text-sm text-amber-400 hover:text-amber-300 transition-colors duration-300 font-medium">
+                  🐂 SLOX 테스트 ✨
+                </a>
+              </li>
               <li>
                 <a href="/salary" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   💰 연봉 계산기

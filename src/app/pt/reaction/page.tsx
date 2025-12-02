@@ -4,3 +4,4 @@ export default function ReactionPagePt() {
   return <ReactionTest initialLang="pt" />;
 }
 
+

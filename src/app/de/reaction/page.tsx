@@ -4,3 +4,4 @@ export default function ReactionPageDe() {
   return <ReactionTest initialLang="de" />;
 }
 
+
