@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 const tools = [
@@ -17,17 +17,7 @@ const tools = [
 
 export default function MobileToolsButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const [showHint, setShowHint] = useState(true); // 일단 항상 true로 시작
-
-  // 클릭하면 숨기고 localStorage에 저장
-  useEffect(() => {
-    // 15초 후 자동 숨김
-    const hideTimer = setTimeout(() => {
-      setShowHint(false);
-    }, 15000);
-
-    return () => clearTimeout(hideTimer);
-  }, []);
+  const [showHint, setShowHint] = useState(true); // 항상 보이기
 
   const handleClick = () => {
     setIsOpen(true);
