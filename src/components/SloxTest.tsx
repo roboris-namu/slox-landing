@@ -259,7 +259,7 @@ export default function SloxTest() {
     if (!result) return;
     
     const shareUrl = "https://www.slox.co.kr/slox-test";
-    const shareText = `🐂 SLOX 성격 테스트 결과!
+    const shareText = `🐂 나와 닮은 황소 테스트 결과!
 
 ${result.emoji} 나는 "${result.name}" - ${result.title}
 
@@ -307,13 +307,13 @@ ${result.description}
             <div className="text-center">
               <div className="mb-8">
                 <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
-                  <span className="text-amber-400 text-sm font-medium">🐂 SLOX 유니버스</span>
+                  <span className="text-amber-400 text-sm font-medium">🐂 황소 성격 테스트</span>
                 </span>
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
                   나와 닮은
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400"> SLOX</span>는?
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400"> 황소</span>는?
                 </h1>
-                <p className="text-dark-400 text-lg">8가지 질문으로 알아보는 나의 SLOX 캐릭터!</p>
+                <p className="text-dark-400 text-lg">8가지 질문으로 알아보는 나의 황소 캐릭터!</p>
               </div>
 
               {/* 캐릭터 미리보기 */}

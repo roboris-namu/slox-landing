@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 const tools = [
-  { href: "/slox-test", emoji: "🐂", label: "SLOX 테스트", isNew: true, best: true },
+  { href: "/slox-test", emoji: "🐂", label: "나와 닮은 황소", isNew: true, best: true },
   { href: "/salary", emoji: "💰", label: "연봉 계산기" },
   { href: "/severance", emoji: "💼", label: "퇴직금 계산기" },
   { href: "/typing", emoji: "⌨️", label: "타자 테스트" },
