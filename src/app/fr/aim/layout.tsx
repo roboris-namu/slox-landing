@@ -11,3 +11,4 @@ export const metadata: Metadata = {
 export default function AimLayoutFr({ children }: { children: React.ReactNode }) { return <>{children}</>; }
 
 
+

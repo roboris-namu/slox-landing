@@ -3,3 +3,4 @@ export const metadata: Metadata = { title: "Test de Visión de Color | SLOX", de
 export default function ColorLayoutEs({ children }: { children: React.ReactNode }) { return <>{children}</>; }
 
 
+

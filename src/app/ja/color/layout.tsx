@@ -3,3 +3,4 @@ export const metadata: Metadata = { title: "色探しゲーム | SLOX", descript
 export default function ColorLayoutJa({ children }: { children: React.ReactNode }) { return <>{children}</>; }
 
 
+

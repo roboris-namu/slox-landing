@@ -3,3 +3,4 @@ export const metadata: Metadata = { title: "找不同颜色游戏 | SLOX", descr
 export default function ColorLayoutZh({ children }: { children: React.ReactNode }) { return <>{children}</>; }
 
 
+

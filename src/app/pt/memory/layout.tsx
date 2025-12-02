@@ -3,3 +3,4 @@ export const metadata: Metadata = { title: "Jogo de Memória de Números | SLOX"
 export default function MemoryLayoutPt({ children }: { children: React.ReactNode }) { return <>{children}</>; }
 
 
+

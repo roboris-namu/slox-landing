@@ -3,3 +3,4 @@ export const metadata: Metadata = { title: "Zahlen-Gedächtnisspiel | SLOX", des
 export default function MemoryLayoutDe({ children }: { children: React.ReactNode }) { return <>{children}</>; }
 
 
+

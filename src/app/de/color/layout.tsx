@@ -3,3 +3,4 @@ export const metadata: Metadata = { title: "Farbsehtest | SLOX", description: "K
 export default function ColorLayoutDe({ children }: { children: React.ReactNode }) { return <>{children}</>; }
 
 
+

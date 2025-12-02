@@ -97,7 +97,7 @@ export default function MobileToolsButton() {
                 key={tool.href}
                 href={tool.href}
                 onClick={() => setIsOpen(false)}
-                className={`relative flex items-center gap-3 p-4 bg-dark-800/50 hover:bg-dark-800 border rounded-xl transition-all active:scale-95 ${
+                className={`relative flex items-center gap-2 p-3 bg-dark-800/50 hover:bg-dark-800 border rounded-xl transition-all active:scale-95 ${
                   tool.best ? "border-purple-500/50 bg-purple-500/10" : "border-white/[0.05] hover:border-purple-500/30"
                 }`}
               >
@@ -113,8 +113,8 @@ export default function MobileToolsButton() {
                     NEW
                   </span>
                 )}
-                <span className="text-2xl">{tool.emoji}</span>
-                <span className="text-sm font-medium text-white">{tool.label}</span>
+                <span className="text-xl flex-shrink-0">{tool.emoji}</span>
+                <span className="text-xs font-medium text-white leading-tight">{tool.label}</span>
               </Link>
             ))}
           </div>
