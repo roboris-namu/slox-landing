@@ -6,3 +6,7 @@ export default function MemoryLayoutJa({ children }: { children: React.ReactNode
 
 
 
+
+
+
+

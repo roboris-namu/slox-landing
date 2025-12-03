@@ -213,10 +213,17 @@ export default function SeveranceCalculator() {
             </p>
           </div>
 
-          {/* 광고 영역 (상단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-8">
-              광고 영역 (Google AdSense)
+          {/* 💡 퇴직금 계산 팁 */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-emerald-500/10 to-green-500/10 border border-emerald-500/20 rounded-xl">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">💼</span>
+              <div>
+                <p className="text-white font-medium mb-1">퇴직금 계산 팁</p>
+                <p className="text-dark-400 text-sm">
+                  퇴직금은 1년 이상 근무 시 발생하며, 평균임금 × 근속일수 ÷ 365로 계산됩니다.
+                  평균임금에는 기본급 외 상여금, 연차수당 등이 포함됩니다!
+                </p>
+              </div>
             </div>
           </div>
 
@@ -392,10 +399,25 @@ export default function SeveranceCalculator() {
             )}
           </div>
 
-          {/* 광고 영역 (하단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-8">
-              광고 영역 (Google AdSense)
+          {/* 📋 퇴직금 정보 */}
+          <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
+            <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+              <span>📊</span> 퇴직금 계산 공식
+            </h3>
+            <div className="bg-dark-800/50 p-4 rounded-lg mb-3">
+              <p className="text-cyan-400 font-mono text-center">
+                퇴직금 = (1일 평균임금) × 30일 × (총 근속일수 ÷ 365)
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-emerald-400 font-medium">📅 지급 시기</p>
+                <p className="text-dark-400 mt-1">퇴직일로부터 14일 이내</p>
+              </div>
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-green-400 font-medium">💵 퇴직소득세</p>
+                <p className="text-dark-400 mt-1">근속연수에 따라 공제</p>
+              </div>
             </div>
           </div>
 

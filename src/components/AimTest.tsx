@@ -7,6 +7,25 @@ type GameState = "waiting" | "playing" | "result";
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
 type Difficulty = "easy" | "normal" | "hard";
 
+// 파티클 타입
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  color: string;
+  size: number;
+  angle: number;
+  velocity: number;
+}
+
+// 히트 마커 타입 (명중 표시)
+interface HitMarker {
+  id: number;
+  x: number;
+  y: number;
+  type: "hit" | "miss";
+}
+
 const translations = {
   ko: {
     title: "에임",
@@ -415,11 +434,135 @@ export default function AimTest({ initialLang }: AimTestProps) {
   const [lang] = useState<Language>(initialLang);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [bestScore, setBestScore] = useState(0);
+  
+  // 🔥 박진감 효과를 위한 새로운 상태들
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const [hitMarkers, setHitMarkers] = useState<HitMarker[]>([]);
+  const [combo, setCombo] = useState(0);
+  const [maxCombo, setMaxCombo] = useState(0);
+  const [screenShake, setScreenShake] = useState(false);
+  const [targetScale, setTargetScale] = useState(1);
+  const [showComboEffect, setShowComboEffect] = useState(false);
+  
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const gameAreaRef = useRef<HTMLDivElement>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
   const t = translations[lang];
   const settings = difficultySettings[difficulty];
+
+  // 🔊 오디오 컨텍스트 초기화
+  const getAudioContext = useCallback(() => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    }
+    return audioContextRef.current;
+  }, []);
+
+  // 🔊 사운드 효과 재생 함수
+  const playSound = useCallback((type: "hit" | "miss" | "combo" | "start" | "end") => {
+    try {
+      const ctx = getAudioContext();
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      switch (type) {
+        case "hit":
+          // 타격음 - 짧고 묵직한 퍽!
+          oscillator.type = "square";
+          oscillator.frequency.setValueAtTime(150, ctx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(80, ctx.currentTime + 0.1);
+          gainNode.gain.setValueAtTime(0.4, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.1);
+          break;
+        case "miss":
+          // 미스음 - 날카로운 삑
+          oscillator.type = "sawtooth";
+          oscillator.frequency.setValueAtTime(200, ctx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.15);
+          gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.15);
+          break;
+        case "combo":
+          // 콤보음 - 상승하는 화음
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(440, ctx.currentTime);
+          oscillator.frequency.setValueAtTime(554, ctx.currentTime + 0.05);
+          oscillator.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+          gainNode.gain.setValueAtTime(0.25, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.2);
+          break;
+        case "start":
+          // 시작음 - 긴장감 있는 카운트다운
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(880, ctx.currentTime);
+          gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.1);
+          break;
+        case "end":
+          // 종료음 - 결과 발표
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(523, ctx.currentTime);
+          oscillator.frequency.setValueAtTime(659, ctx.currentTime + 0.15);
+          oscillator.frequency.setValueAtTime(784, ctx.currentTime + 0.3);
+          gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.5);
+          break;
+      }
+    } catch {
+      // 오디오 재생 실패 시 무시
+    }
+  }, [getAudioContext]);
+
+  // 💥 파티클 생성 함수
+  const createParticles = useCallback((x: number, y: number, isHit: boolean) => {
+    const colors = isHit 
+      ? ["#ff6b6b", "#ffd93d", "#ff9f43", "#ee5a24", "#ff4757"]
+      : ["#636e72", "#b2bec3", "#dfe6e9"];
+    const count = isHit ? 15 : 5;
+    
+    const newParticles: Particle[] = [];
+    for (let i = 0; i < count; i++) {
+      newParticles.push({
+        id: Date.now() + i,
+        x,
+        y,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        size: isHit ? Math.random() * 10 + 5 : Math.random() * 6 + 3,
+        angle: (Math.PI * 2 * i) / count + Math.random() * 0.5,
+        velocity: isHit ? Math.random() * 120 + 80 : Math.random() * 60 + 30,
+      });
+    }
+    
+    setParticles(prev => [...prev, ...newParticles]);
+    setTimeout(() => setParticles(prev => prev.filter(p => !newParticles.includes(p))), 500);
+  }, []);
+
+  // ✖️ 히트 마커 생성
+  const createHitMarker = useCallback((x: number, y: number, type: "hit" | "miss") => {
+    const marker: HitMarker = { id: Date.now(), x, y, type };
+    setHitMarkers(prev => [...prev, marker]);
+    setTimeout(() => setHitMarkers(prev => prev.filter(m => m.id !== marker.id)), 400);
+  }, []);
+
+  // 📳 화면 흔들림 효과
+  const triggerScreenShake = useCallback(() => {
+    setScreenShake(true);
+    setTimeout(() => setScreenShake(false), 100);
+  }, []);
 
   // 점수 계산 (명중수 * 정확도 * 속도보너스)
   // 일반적인 에임 트레이너 기준:
@@ -474,6 +617,9 @@ export default function AimTest({ initialLang }: AimTestProps) {
     const y = padding + Math.random() * (100 - padding * 2);
     setTargetPos({ x, y });
     setTargetAppearTime(Date.now());
+    // 타겟 등장 애니메이션
+    setTargetScale(0);
+    setTimeout(() => setTargetScale(1), 50);
   }, [settings.size]);
 
   // 게임 시작
@@ -481,23 +627,29 @@ export default function AimTest({ initialLang }: AimTestProps) {
     setState("playing");
     setHits(0);
     setMisses(0);
+    setCombo(0);
+    setMaxCombo(0);
     setTimeLeft(settings.duration);
     setReactionTimes([]);
+    setParticles([]);
+    setHitMarkers([]);
     generateNewTarget();
+    playSound("start");
 
     timerRef.current = setInterval(() => {
       setTimeLeft(prev => {
         if (prev <= 1) {
           if (timerRef.current) clearInterval(timerRef.current);
           setState("result");
+          playSound("end");
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
-  }, [settings.duration, generateNewTarget]);
+  }, [settings.duration, generateNewTarget, playSound]);
 
-  // 타겟 클릭
+  // 🎯 타겟 클릭 - 박진감 넘치는 효과!
   const handleTargetClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     if (state !== "playing") return;
@@ -505,21 +657,58 @@ export default function AimTest({ initialLang }: AimTestProps) {
     const reactionTime = Date.now() - targetAppearTime;
     setReactionTimes(prev => [...prev, reactionTime]);
     setHits(prev => prev + 1);
+    
+    // 콤보 증가
+    const newCombo = combo + 1;
+    setCombo(newCombo);
+    if (newCombo > maxCombo) setMaxCombo(newCombo);
+    
+    // 💥 효과들!
+    const rect = gameAreaRef.current?.getBoundingClientRect();
+    if (rect) {
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      createParticles(x, y, true);
+      createHitMarker(x, y, "hit");
+    }
+    
+    playSound("hit");
+    triggerScreenShake();
+    
+    // 🔥 콤보 효과 (5콤보마다)
+    if (newCombo > 0 && newCombo % 5 === 0) {
+      playSound("combo");
+      setShowComboEffect(true);
+      setTimeout(() => setShowComboEffect(false), 500);
+    }
+    
     generateNewTarget();
-  }, [state, targetAppearTime, generateNewTarget]);
+  }, [state, targetAppearTime, generateNewTarget, combo, maxCombo, playSound, triggerScreenShake, createParticles, createHitMarker]);
 
-  // 미스 클릭
-  const handleMissClick = useCallback(() => {
+  // ❌ 미스 클릭
+  const handleMissClick = useCallback((e: React.MouseEvent) => {
     if (state !== "playing") return;
     setMisses(prev => prev + 1);
-  }, [state]);
+    setCombo(0); // 콤보 리셋
+    
+    // 미스 효과
+    const rect = gameAreaRef.current?.getBoundingClientRect();
+    if (rect) {
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      createParticles(x, y, false);
+      createHitMarker(x, y, "miss");
+    }
+    
+    playSound("miss");
+  }, [state, playSound, createParticles, createHitMarker]);
 
   // 게임 영역 클릭
-  const handleGameAreaClick = useCallback(() => {
+  const handleGameAreaClick = useCallback((e: React.MouseEvent) => {
     if (state === "waiting") {
       startGame();
     } else if (state === "playing") {
-      handleMissClick();
+      handleMissClick(e);
     }
   }, [state, startGame, handleMissClick]);
 
@@ -678,54 +867,134 @@ ${t.shareTestIt}`;
             </div>
           )}
 
-          {/* 광고 영역 (상단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-4">{t.adArea}</div>
+          {/* 💡 에임 향상 팁 */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-red-500/10 to-orange-500/10 border border-red-500/20 rounded-xl">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">🎯</span>
+              <div>
+                <p className="text-white font-medium mb-1">에임 향상 팁</p>
+                <p className="text-dark-400 text-sm">
+                  타겟을 예측하지 말고 눈으로 확인 후 클릭하세요. 
+                  팔꿈치를 고정하고 손목만 움직이면 정확도가 올라갑니다!
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* 게임 영역 */}
           <div
             ref={gameAreaRef}
             onClick={handleGameAreaClick}
-            className="relative bg-dark-900 rounded-2xl cursor-crosshair select-none mb-8 overflow-hidden"
+            className={`relative bg-dark-900 rounded-2xl cursor-crosshair select-none mb-8 overflow-hidden transition-transform ${
+              screenShake ? "animate-screen-shake" : ""
+            }`}
             style={{ height: "400px" }}
           >
+            {/* 💥 파티클 효과 */}
+            {particles.map((particle) => (
+              <div
+                key={particle.id}
+                className="absolute pointer-events-none animate-particle-burst"
+                style={{
+                  left: particle.x,
+                  top: particle.y,
+                  width: particle.size,
+                  height: particle.size,
+                  backgroundColor: particle.color,
+                  borderRadius: "50%",
+                  transform: "translate(-50%, -50%)",
+                  boxShadow: `0 0 ${particle.size}px ${particle.color}`,
+                  ["--angle" as string]: `${particle.angle}rad`,
+                  ["--velocity" as string]: `${particle.velocity}px`,
+                }}
+              />
+            ))}
+
+            {/* ✖️ 히트 마커 */}
+            {hitMarkers.map((marker) => (
+              <div
+                key={marker.id}
+                className={`absolute pointer-events-none text-4xl font-bold animate-hit-marker ${
+                  marker.type === "hit" ? "text-green-400" : "text-red-400"
+                }`}
+                style={{
+                  left: marker.x,
+                  top: marker.y,
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                {marker.type === "hit" ? "✓" : "✗"}
+              </div>
+            ))}
+
+            {/* 🔥 콤보 효과 */}
+            {showComboEffect && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+                <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-pink-500 animate-combo-burst">
+                  🔥 {combo} COMBO!
+                </div>
+              </div>
+            )}
+
+            {/* 콤보 카운터 (플레이 중) */}
+            {state === "playing" && combo > 0 && (
+              <div className="absolute top-4 right-4 z-10">
+                <div className={`px-4 py-2 rounded-xl font-bold text-xl ${
+                  combo >= 10 ? "bg-gradient-to-r from-orange-500 to-red-500 text-white animate-pulse" :
+                  combo >= 5 ? "bg-yellow-500/20 text-yellow-400" :
+                  "bg-dark-800/80 text-dark-300"
+                }`}>
+                  {combo >= 10 ? "🔥" : combo >= 5 ? "⚡" : ""} {combo}x
+                </div>
+              </div>
+            )}
+
             {state === "waiting" && (
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <p className="text-6xl mb-4">🎯</p>
+                <div className="text-7xl mb-4 animate-float">🎯</div>
                 <p className="text-2xl font-bold text-white mb-2">{t.ready}</p>
                 <p className="text-dark-400">{t.clickToStart}</p>
+                <p className="text-dark-500 text-xs mt-4 animate-pulse">👆 클릭하여 시작!</p>
               </div>
             )}
 
             {state === "playing" && (
               <div
                 onClick={handleTargetClick}
-                className="absolute bg-gradient-to-br from-red-500 to-orange-500 rounded-full cursor-pointer transform -translate-x-1/2 -translate-y-1/2 hover:scale-110 transition-transform shadow-lg shadow-red-500/50"
+                className="absolute bg-gradient-to-br from-red-500 to-orange-500 rounded-full cursor-pointer transform -translate-x-1/2 -translate-y-1/2 shadow-lg shadow-red-500/50 hover:shadow-red-500/80 transition-all animate-target-appear"
                 style={{
                   width: settings.size,
                   height: settings.size,
                   left: `${targetPos.x}%`,
                   top: `${targetPos.y}%`,
+                  transform: `translate(-50%, -50%) scale(${targetScale})`,
                 }}
               >
+                {/* 타겟 외곽 글로우 */}
+                <div className="absolute -inset-1 bg-red-500/30 rounded-full animate-ping" />
+                {/* 타겟 내부 링 */}
+                <div className="absolute inset-1 border-2 border-white/40 rounded-full" />
                 <div className="absolute inset-2 bg-white rounded-full opacity-30" />
+                {/* 중앙 점 */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-2 h-2 bg-white rounded-full" />
+                  <div className="w-2 h-2 bg-white rounded-full shadow-lg" />
                 </div>
               </div>
             )}
 
             {state === "result" && (
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <p className="text-5xl mb-2">{getGrade(getScore()).emoji}</p>
-                <p className={`text-xl font-bold ${getGrade(getScore()).color} mb-2`}>
+                <div className="text-6xl mb-2 animate-bounce-in">{getGrade(getScore()).emoji}</div>
+                <p className={`text-xl font-bold ${getGrade(getScore()).color} mb-2 animate-fade-in`}>
                   {getGrade(getScore()).grade}
                 </p>
-                <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2">
+                <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2 animate-scale-in">
                   {getScore()}
                 </p>
-                <p className="text-dark-400 mb-4">{getGrade(getScore()).message}</p>
+                <p className="text-dark-400 mb-2">{getGrade(getScore()).message}</p>
+                {maxCombo > 0 && (
+                  <p className="text-orange-400 text-sm">🔥 최대 콤보: {maxCombo}x</p>
+                )}
               </div>
             )}
           </div>
@@ -769,9 +1038,29 @@ ${t.shareTestIt}`;
             </div>
           )}
 
-          {/* 광고 영역 (하단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-4">{t.adArea}</div>
+          {/* 🎮 에임 트레이닝이란? */}
+          <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
+            <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+              <span>🖱️</span> 에임 트레이닝이란?
+            </h3>
+            <p className="text-dark-400 text-sm leading-relaxed mb-3">
+              에임 트레이닝은 FPS 게임에서 중요한 마우스 정확도와 반응속도를 향상시키는 연습입니다.
+              꾸준한 트레이닝으로 발로란트, 오버워치, 배그 등에서 실력을 올릴 수 있습니다.
+            </p>
+            <div className="grid grid-cols-3 gap-2 text-xs">
+              <div className="bg-dark-800/50 p-2 rounded-lg text-center">
+                <p className="text-red-400 font-medium">🎯 정확도</p>
+                <p className="text-dark-400 mt-1">타겟 명중률</p>
+              </div>
+              <div className="bg-dark-800/50 p-2 rounded-lg text-center">
+                <p className="text-orange-400 font-medium">⚡ 속도</p>
+                <p className="text-dark-400 mt-1">반응 시간</p>
+              </div>
+              <div className="bg-dark-800/50 p-2 rounded-lg text-center">
+                <p className="text-yellow-400 font-medium">🔥 일관성</p>
+                <p className="text-dark-400 mt-1">꾸준한 성능</p>
+              </div>
+            </div>
           </div>
 
           {/* 등급 안내 */}

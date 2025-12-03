@@ -6,3 +6,7 @@ export default function ColorLayoutEn({ children }: { children: React.ReactNode 
 
 
 
+
+
+
+

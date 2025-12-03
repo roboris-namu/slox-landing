@@ -5,3 +5,7 @@ export default function ColorPageFr() { return <ColorTest initialLang="fr" />; }
 
 
 
+
+
+
+

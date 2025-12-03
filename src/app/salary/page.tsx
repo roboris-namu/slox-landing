@@ -188,10 +188,17 @@ export default function SalaryCalculator() {
             </p>
           </div>
 
-          {/* 광고 영역 (상단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-8">
-              광고 영역 (Google AdSense)
+          {/* 💡 연봉 계산 팁 */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 rounded-xl">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">💰</span>
+              <div>
+                <p className="text-white font-medium mb-1">연봉 실수령액 계산 팁</p>
+                <p className="text-dark-400 text-sm">
+                  연봉에서 4대보험료와 소득세를 공제한 금액이 실수령액입니다. 
+                  부양가족 수에 따라 세금 공제액이 달라지니 정확히 입력해주세요!
+                </p>
+              </div>
             </div>
           </div>
 
@@ -332,10 +339,28 @@ export default function SalaryCalculator() {
             )}
           </div>
 
-          {/* 광고 영역 (하단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-8">
-              광고 영역 (Google AdSense)
+          {/* 📊 연봉 정보 */}
+          <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
+            <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+              <span>📋</span> 2024년 4대보험 요율
+            </h3>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-yellow-400 font-medium">국민연금</p>
+                <p className="text-dark-400 mt-1">4.5% (회사 4.5%)</p>
+              </div>
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-green-400 font-medium">건강보험</p>
+                <p className="text-dark-400 mt-1">3.545% (회사 3.545%)</p>
+              </div>
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-blue-400 font-medium">장기요양</p>
+                <p className="text-dark-400 mt-1">건강보험의 12.95%</p>
+              </div>
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-purple-400 font-medium">고용보험</p>
+                <p className="text-dark-400 mt-1">0.9% (회사 0.9%+)</p>
+              </div>
             </div>
           </div>
 

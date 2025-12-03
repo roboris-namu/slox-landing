@@ -5,3 +5,7 @@ export default function ColorPagePt() { return <ColorTest initialLang="pt" />; }
 
 
 
+
+
+
+

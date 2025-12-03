@@ -5,3 +5,7 @@ export default function MemoryPage() { return <MemoryTest initialLang="ko" />; }
 
 
 
+
+
+
+

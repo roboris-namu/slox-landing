@@ -5,3 +5,7 @@ export default function ColorPage() { return <ColorTest initialLang="ko" />; }
 
 
 
+
+
+
+

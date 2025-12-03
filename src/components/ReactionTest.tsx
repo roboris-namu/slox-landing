@@ -6,6 +6,17 @@ import Link from "next/link";
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
 
+// 파티클 타입
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  color: string;
+  size: number;
+  angle: number;
+  velocity: number;
+}
+
 // 번역 데이터
 const translations = {
   ko: {
@@ -488,9 +499,124 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [lang] = useState<Language>(initialLang);
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const [showExplosion, setShowExplosion] = useState(false);
+  const [balloonScale, setBalloonScale] = useState(1);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const gameAreaRef = useRef<HTMLDivElement>(null);
   
   const t = translations[lang];
+
+  // 오디오 컨텍스트 초기화
+  const getAudioContext = useCallback(() => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+    }
+    return audioContextRef.current;
+  }, []);
+
+  // 사운드 효과 재생 함수
+  const playSound = useCallback((type: "pop" | "success" | "fail" | "ready") => {
+    try {
+      const ctx = getAudioContext();
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+      
+      switch (type) {
+        case "pop":
+          // 풍선 터지는 소리 - 짧고 날카로운 팡!
+          oscillator.type = "square";
+          oscillator.frequency.setValueAtTime(800, ctx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.1);
+          gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.15);
+          break;
+        case "success":
+          // 성공 사운드 - 상승하는 음
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(523, ctx.currentTime);
+          oscillator.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+          oscillator.frequency.setValueAtTime(784, ctx.currentTime + 0.2);
+          gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.4);
+          break;
+        case "fail":
+          // 실패 사운드 - 하강하는 음
+          oscillator.type = "sawtooth";
+          oscillator.frequency.setValueAtTime(300, ctx.currentTime);
+          oscillator.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.3);
+          gainNode.gain.setValueAtTime(0.15, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.3);
+          break;
+        case "ready":
+          // 준비 사운드 - 긴장감 있는 틱
+          oscillator.type = "sine";
+          oscillator.frequency.setValueAtTime(440, ctx.currentTime);
+          gainNode.gain.setValueAtTime(0.1, ctx.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+          oscillator.start(ctx.currentTime);
+          oscillator.stop(ctx.currentTime + 0.05);
+          break;
+      }
+    } catch {
+      // 오디오 재생 실패 시 무시
+    }
+  }, [getAudioContext]);
+
+  // 파티클 생성 함수
+  const createParticles = useCallback((x: number, y: number, count: number = 20) => {
+    const colors = ["#ff6b6b", "#ffd93d", "#6bcb77", "#4d96ff", "#ff6b9d", "#c44dff", "#00d4ff"];
+    const newParticles: Particle[] = [];
+    
+    for (let i = 0; i < count; i++) {
+      newParticles.push({
+        id: Date.now() + i,
+        x,
+        y,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        size: Math.random() * 12 + 6,
+        angle: (Math.PI * 2 * i) / count + Math.random() * 0.5,
+        velocity: Math.random() * 150 + 100,
+      });
+    }
+    
+    setParticles(newParticles);
+    
+    // 파티클 제거
+    setTimeout(() => setParticles([]), 600);
+  }, []);
+
+  // 폭발 효과
+  const triggerExplosion = useCallback((e?: React.MouseEvent) => {
+    setShowExplosion(true);
+    setBalloonScale(1.3);
+    
+    // 클릭 위치에 파티클 생성
+    if (e && gameAreaRef.current) {
+      const rect = gameAreaRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      createParticles(x, y, 25);
+    } else {
+      // 중앙에 파티클 생성
+      createParticles(200, 150, 25);
+    }
+    
+    setTimeout(() => {
+      setShowExplosion(false);
+      setBalloonScale(1);
+    }, 300);
+  }, [createParticles]);
 
   // 모바일 감지
   useEffect(() => {
@@ -529,31 +655,45 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   // 게임 시작
   const startGame = useCallback(() => {
     setState("ready");
+    playSound("ready");
+    setBalloonScale(1);
+    
     const delay = Math.random() * 3000 + 2000;
     timeoutRef.current = setTimeout(() => {
       setState("click");
       setStartTime(Date.now());
+      // 풍선 커지는 애니메이션
+      setBalloonScale(1.1);
     }, delay);
-  }, []);
+  }, [playSound]);
 
   // 클릭 처리
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((e?: React.MouseEvent<HTMLDivElement>) => {
     if (state === "waiting") {
       startGame();
     } else if (state === "ready") {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
+      playSound("fail");
       setState("tooEarly");
     } else if (state === "click") {
       const reaction = Date.now() - startTime;
       setReactionTime(reaction);
       setAttempts(prev => [...prev, reaction]);
-      setState("result");
+      
+      // 🎈 풍선 터지는 효과!
+      playSound("pop");
+      triggerExplosion(e);
+      
+      setTimeout(() => {
+        playSound("success");
+        setState("result");
+      }, 150);
     } else if (state === "result" || state === "tooEarly") {
       startGame();
     }
-  }, [state, startTime, startGame]);
+  }, [state, startTime, startGame, playSound, triggerExplosion]);
 
   // 리셋
   const resetGame = () => {
@@ -698,47 +838,105 @@ ${t.shareTestIt}`;
             </p>
           </div>
 
-          {/* 광고 영역 (상단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-6">
-              {t.adArea}
+          {/* 💡 반응속도 향상 팁 */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 rounded-xl">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">💡</span>
+              <div>
+                <p className="text-white font-medium mb-1">반응속도 향상 팁</p>
+                <p className="text-dark-400 text-sm">
+                  화면 중앙에 집중하고, 손가락을 마우스/화면 위에 준비하세요. 
+                  꾸준한 연습으로 반응속도가 향상됩니다!
+                </p>
+              </div>
             </div>
           </div>
 
           {/* 게임 영역 */}
           <div 
+            ref={gameAreaRef}
             onClick={handleClick}
-            className={`${getBgColor()} rounded-2xl cursor-pointer transition-colors duration-100 select-none mb-8`}
+            className={`${getBgColor()} rounded-2xl cursor-pointer transition-colors duration-100 select-none mb-8 relative overflow-hidden`}
             style={{ minHeight: "300px" }}
           >
-            <div className="flex flex-col items-center justify-center h-full min-h-[300px] p-8">
+            {/* 파티클 효과 */}
+            {particles.map((particle) => (
+              <div
+                key={particle.id}
+                className="absolute pointer-events-none animate-particle-burst"
+                style={{
+                  left: particle.x,
+                  top: particle.y,
+                  width: particle.size,
+                  height: particle.size,
+                  backgroundColor: particle.color,
+                  borderRadius: "50%",
+                  transform: `translate(-50%, -50%)`,
+                  boxShadow: `0 0 ${particle.size}px ${particle.color}`,
+                  ["--angle" as string]: `${particle.angle}rad`,
+                  ["--velocity" as string]: `${particle.velocity}px`,
+                }}
+              />
+            ))}
+
+            {/* 폭발 링 효과 */}
+            {showExplosion && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="animate-explosion-ring w-32 h-32 rounded-full border-4 border-white/50" />
+                <div className="animate-explosion-ring-delay w-24 h-24 rounded-full border-4 border-yellow-400/50 absolute" />
+              </div>
+            )}
+
+            <div className="flex flex-col items-center justify-center h-full min-h-[300px] p-8 relative z-10">
               {state === "waiting" && (
                 <>
-                  <p className="text-6xl mb-4">🎯</p>
+                  <div 
+                    className="text-7xl mb-4 transition-transform duration-200 hover:scale-110 animate-float"
+                    style={{ transform: `scale(${balloonScale})` }}
+                  >
+                    🎈
+                  </div>
                   <p className="text-2xl font-bold text-white mb-2">{t.ready}</p>
                   <p className="text-dark-400">{t.clickToStart}</p>
+                  <p className="text-dark-500 text-xs mt-2 animate-pulse">👆 탭하여 시작!</p>
                 </>
               )}
               
               {state === "ready" && (
                 <>
-                  <p className="text-6xl mb-4">🔴</p>
-                  <p className="text-2xl font-bold text-white mb-2">{t.wait}</p>
+                  <div 
+                    className="text-7xl mb-4 transition-transform duration-300 animate-balloon-grow"
+                    style={{ transform: `scale(${balloonScale})` }}
+                  >
+                    🎈
+                  </div>
+                  <p className="text-2xl font-bold text-white mb-2 animate-pulse">{t.wait}</p>
                   <p className="text-red-200">{t.waitUntilGreen}</p>
+                  <div className="flex gap-1 mt-4">
+                    <span className="w-2 h-2 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                    <span className="w-2 h-2 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                    <span className="w-2 h-2 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                  </div>
                 </>
               )}
               
               {state === "click" && (
                 <>
-                  <p className="text-6xl mb-4">🟢</p>
-                  <p className="text-3xl font-bold text-white mb-2">{t.clickNow}</p>
+                  <div 
+                    className="text-8xl mb-4 transition-transform duration-100 animate-balloon-pulse cursor-pointer"
+                    style={{ transform: `scale(${balloonScale})` }}
+                  >
+                    🎈
+                  </div>
+                  <p className="text-3xl font-bold text-white mb-2 animate-bounce">{t.clickNow}</p>
                   <p className="text-green-100">{t.asFastAsPossible}</p>
+                  <p className="text-green-200 text-lg mt-2 animate-pulse">💥 팡!</p>
                 </>
               )}
               
               {state === "tooEarly" && (
                 <>
-                  <p className="text-6xl mb-4">😅</p>
+                  <div className="text-7xl mb-4 animate-shake">💨</div>
                   <p className="text-2xl font-bold text-white mb-2">{t.tooEarly}</p>
                   <p className="text-yellow-100">{t.waitForGreen}</p>
                   <p className="text-yellow-200 text-sm mt-4">{t.clickToRetry}</p>
@@ -747,15 +945,17 @@ ${t.shareTestIt}`;
               
               {state === "result" && (
                 <>
-                  <p className="text-5xl mb-4">{getGrade(reactionTime).emoji}</p>
-                  <p className={`text-xl font-bold ${getGrade(reactionTime).color} mb-2`}>
+                  <div className="text-6xl mb-4 animate-bounce-in">
+                    {getGrade(reactionTime).emoji}
+                  </div>
+                  <p className={`text-xl font-bold ${getGrade(reactionTime).color} mb-2 animate-fade-in`}>
                     {getGrade(reactionTime).grade}
                   </p>
-                  <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2">
+                  <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2 animate-scale-in">
                     {reactionTime}ms
                   </p>
                   <p className="text-dark-400 mb-4">{getGrade(reactionTime).message}</p>
-                  <p className="text-dark-500 text-sm">{t.clickToRetry}</p>
+                  <p className="text-dark-500 text-sm animate-pulse">{t.clickToRetry}</p>
                 </>
               )}
             </div>
@@ -818,10 +1018,24 @@ ${t.shareTestIt}`;
             </div>
           )}
 
-          {/* 광고 영역 (하단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-6">
-              {t.adArea}
+          {/* 🎮 반응속도란? */}
+          <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
+            <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+              <span>🧠</span> 반응속도란?
+            </h3>
+            <p className="text-dark-400 text-sm leading-relaxed mb-3">
+              반응속도는 시각적 자극을 인지하고 신체가 반응하기까지 걸리는 시간입니다. 
+              평균적인 사람의 반응속도는 200~300ms이며, 프로게이머는 150ms 이하를 기록하기도 합니다.
+            </p>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-cyan-400 font-medium">⚡ 게임에서</p>
+                <p className="text-dark-400 mt-1">FPS, 격투 게임에서 승패를 좌우</p>
+              </div>
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-purple-400 font-medium">🚗 일상에서</p>
+                <p className="text-dark-400 mt-1">운전, 스포츠 등 순간 판단력</p>
+              </div>
             </div>
           </div>
 

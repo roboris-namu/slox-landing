@@ -284,10 +284,17 @@ export default function TypingTest() {
             </p>
           </div>
 
-          {/* 광고 영역 (상단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-8">
-              광고 영역 (Google AdSense)
+          {/* 💡 타자 속도 향상 팁 */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-green-500/10 to-teal-500/10 border border-green-500/20 rounded-xl">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">⌨️</span>
+              <div>
+                <p className="text-white font-medium mb-1">타자 속도 향상 팁</p>
+                <p className="text-dark-400 text-sm">
+                  올바른 손가락 배치(홈 포지션)를 유지하고 키보드를 보지 않고 치는 연습을 해보세요.
+                  정확도가 먼저, 속도는 자연스럽게 따라옵니다!
+                </p>
+              </div>
             </div>
           </div>
 
@@ -390,10 +397,24 @@ export default function TypingTest() {
             )}
           </div>
 
-          {/* 광고 영역 (하단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-8">
-              광고 영역 (Google AdSense)
+          {/* 📝 타자 테스트란? */}
+          <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
+            <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+              <span>📊</span> 타자 속도 측정이란?
+            </h3>
+            <p className="text-dark-400 text-sm leading-relaxed mb-3">
+              타자 속도는 WPM(Words Per Minute) 또는 타/분으로 측정합니다. 
+              평균 타자 속도는 200~300타/분이며, 전문 타이피스트는 500타/분 이상을 기록합니다.
+            </p>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-green-400 font-medium">💼 업무</p>
+                <p className="text-dark-400 mt-1">문서 작성, 코딩 생산성 향상</p>
+              </div>
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-teal-400 font-medium">🎓 학습</p>
+                <p className="text-dark-400 mt-1">리포트, 과제 작성 효율화</p>
+              </div>
             </div>
           </div>
 

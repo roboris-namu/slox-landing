@@ -5,3 +5,7 @@ export default function MemoryPageJa() { return <MemoryTest initialLang="ja" />;
 
 
 
+
+
+
+

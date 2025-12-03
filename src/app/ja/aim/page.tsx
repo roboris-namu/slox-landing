@@ -5,3 +5,7 @@ export default function AimPageJa() { return <AimTest initialLang="ja" />; }
 
 
 
+
+
+
+

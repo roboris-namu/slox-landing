@@ -588,9 +588,18 @@ ${t.shareTestIt}`;
             </div>
           )}
 
-          {/* 광고 영역 (상단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-6">{t.adArea}</div>
+          {/* 💡 CPS 향상 팁 */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">🖱️</span>
+              <div>
+                <p className="text-white font-medium mb-1">CPS 향상 팁</p>
+                <p className="text-dark-400 text-sm">
+                  버터플라이 클릭이나 지터 클릭 기법을 연습해보세요. 
+                  손가락 2개를 번갈아 사용하면 더 높은 CPS를 달성할 수 있습니다!
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* 게임 영역 */}
@@ -673,9 +682,25 @@ ${t.shareTestIt}`;
             </div>
           )}
 
-          {/* 광고 영역 (하단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-6">{t.adArea}</div>
+          {/* 🎮 CPS란? */}
+          <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
+            <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+              <span>⚡</span> CPS(Clicks Per Second)란?
+            </h3>
+            <p className="text-dark-400 text-sm leading-relaxed mb-3">
+              CPS는 1초당 클릭 횟수를 나타내는 지표입니다. 마인크래프트 PvP, 클리커 게임 등에서 
+              높은 CPS는 큰 장점이 됩니다. 평균 CPS는 6~8이며, 10+ CPS는 상위권입니다.
+            </p>
+            <div className="grid grid-cols-2 gap-3 text-xs">
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-blue-400 font-medium">🎮 마인크래프트</p>
+                <p className="text-dark-400 mt-1">PvP 전투에서 데미지 우위</p>
+              </div>
+              <div className="bg-dark-800/50 p-3 rounded-lg">
+                <p className="text-purple-400 font-medium">🏆 경쟁</p>
+                <p className="text-dark-400 mt-1">클리커 게임 랭킹 도전</p>
+              </div>
+            </div>
           </div>
 
           {/* 등급 안내 */}

@@ -5,3 +5,7 @@ export default function MemoryPageFr() { return <MemoryTest initialLang="fr" />;
 
 
 
+
+
+
+

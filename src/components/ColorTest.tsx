@@ -531,9 +531,18 @@ ${t.shareTestIt}`;
             </div>
           )}
 
-          {/* 광고 영역 (상단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-4">{t.adArea}</div>
+          {/* 💡 색상 인지 팁 */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-pink-500/10 to-violet-500/10 border border-pink-500/20 rounded-xl">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">👁️</span>
+              <div>
+                <p className="text-white font-medium mb-1">색상 구별 팁</p>
+                <p className="text-dark-400 text-sm">
+                  화면 밝기를 적절히 조절하고, 전체 그리드를 한눈에 보며 미세한 차이를 찾아보세요.
+                  주변 색상과 비교하면 더 쉽게 찾을 수 있습니다!
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* 게임 영역 */}
@@ -605,9 +614,15 @@ ${t.shareTestIt}`;
             )}
           </div>
 
-          {/* 광고 영역 (하단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-4">{t.adArea}</div>
+          {/* 🎨 색각 테스트 정보 */}
+          <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
+            <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+              <span>🌈</span> 색각(色覺)이란?
+            </h3>
+            <p className="text-dark-400 text-sm leading-relaxed">
+              색각은 색상을 구별하는 능력입니다. 인간의 눈은 약 1천만 가지 색상을 구별할 수 있으며,
+              디자이너, 화가, 사진작가 등 시각 관련 직업에서 중요한 능력입니다.
+            </p>
           </div>
 
           {/* 등급 안내 */}

@@ -541,9 +541,18 @@ ${t.shareTestIt}`;
             </div>
           )}
 
-          {/* 광고 영역 (상단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-4">{t.adArea}</div>
+          {/* 💡 기억력 향상 팁 */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-indigo-500/10 to-blue-500/10 border border-indigo-500/20 rounded-xl">
+            <div className="flex items-start gap-3">
+              <span className="text-2xl">🧠</span>
+              <div>
+                <p className="text-white font-medium mb-1">기억력 향상 팁</p>
+                <p className="text-dark-400 text-sm">
+                  숫자를 2~3개씩 묶어서 기억하는 청킹(Chunking) 기법을 사용해보세요.
+                  예: 1234567 → 123-456-7로 나눠서 기억!
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* 게임 영역 */}
@@ -639,9 +648,16 @@ ${t.shareTestIt}`;
             </div>
           </div>
 
-          {/* 광고 영역 (하단) */}
-          <div className="mb-8 p-4 bg-dark-900/50 border border-dark-800 rounded-xl text-center">
-            <div className="text-dark-500 text-sm py-4">{t.adArea}</div>
+          {/* 🧩 작업 기억력이란? */}
+          <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
+            <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+              <span>💭</span> 작업 기억력(Working Memory)이란?
+            </h3>
+            <p className="text-dark-400 text-sm leading-relaxed">
+              작업 기억력은 정보를 일시적으로 저장하고 조작하는 인지 능력입니다.
+              평균적인 사람은 7±2개의 항목을 기억할 수 있습니다(밀러의 법칙).
+              훈련을 통해 12자리 이상까지 향상시킬 수 있습니다!
+            </p>
           </div>
 
           {/* 등급 안내 */}

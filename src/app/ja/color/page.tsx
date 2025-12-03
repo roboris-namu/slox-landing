@@ -5,3 +5,7 @@ export default function ColorPageJa() { return <ColorTest initialLang="ja" />; }
 
 
 
+
+
+
+
