@@ -13,6 +13,7 @@ const tools = [
   { href: "/slox-test", emoji: "🐂", label: "나와 닮은 황소", isNew: true },
   { href: "/memory", emoji: "🧠", label: "숫자 기억 게임" },
   { href: "/color", emoji: "🎨", label: "색상 찾기 게임" },
+  { href: "/card-match", emoji: "🃏", label: "카드 짝 맞추기" },
 ];
 
 export default function MobileToolsButton() {

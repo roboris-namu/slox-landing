@@ -258,4 +258,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <!-- 카드 짝 맞추기 게임 -->
+  <url>
+    <loc>https://www.slox.co.kr/card-match</loc>
+    <lastmod>2025-12-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

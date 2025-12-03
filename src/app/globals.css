@@ -575,3 +575,101 @@ body {
   animation: combo-burst 0.5s ease-out forwards;
   text-shadow: 0 0 30px rgba(255, 100, 50, 0.8), 0 0 60px rgba(255, 50, 50, 0.5);
 }
+
+/* ========================================
+   🃏 카드 짝 맞추기 게임 - 애니메이션
+   ======================================== */
+
+/* 카드 3D 뒤집기 */
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 카드 등장 애니메이션 */
+@keyframes card-appear {
+  0% {
+    transform: scale(0) rotateY(180deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotateY(90deg);
+  }
+  100% {
+    transform: scale(1) rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+/* 카드 매치 성공 반짝임 */
+@keyframes card-match-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.8), 0 0 40px rgba(34, 197, 94, 0.4);
+  }
+}
+
+.animate-card-match {
+  animation: card-match-glow 0.5s ease-in-out;
+}
+
+/* 카드 실패 흔들림 */
+@keyframes card-shake {
+  0%, 100% { transform: translateX(0) rotateY(180deg); }
+  20% { transform: translateX(-5px) rotateY(180deg); }
+  40% { transform: translateX(5px) rotateY(180deg); }
+  60% { transform: translateX(-5px) rotateY(180deg); }
+  80% { transform: translateX(5px) rotateY(180deg); }
+}
+
+.animate-card-shake {
+  animation: card-shake 0.3s ease-in-out;
+}
+
+/* 긴박 모드 - 빠른 펄스 */
+@keyframes pulse-fast {
+  0%, 100% {
+    opacity: 0.3;
+    box-shadow: inset 0 0 30px rgba(239, 68, 68, 0.3);
+  }
+  50% {
+    opacity: 0.6;
+    box-shadow: inset 0 0 60px rgba(239, 68, 68, 0.5);
+  }
+}
+
+.animate-pulse-fast {
+  animation: pulse-fast 0.5s ease-in-out infinite;
+}
+
+/* 시간 차감 효과 - 크고 임팩트 있게 */
+@keyframes time-penalty-pop {
+  0% { 
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  30% { 
+    transform: scale(1.3);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-time-penalty-pop {
+  animation: time-penalty-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
