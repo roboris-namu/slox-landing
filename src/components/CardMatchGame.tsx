@@ -42,7 +42,6 @@ export default function CardMatchGame() {
   const [combo, setCombo] = useState(0);
   const [maxCombo, setMaxCombo] = useState(0);
   const [timer, setTimer] = useState(0);
-  const [countdown, setCountdown] = useState(3);
   const [memorizeTimer, setMemorizeTimer] = useState(0);
   const [particles, setParticles] = useState<Particle[]>([]);
   const [screenShake, setScreenShake] = useState(false);
