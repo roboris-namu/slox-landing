@@ -62,17 +62,11 @@ function Navigation() {
                 </button>
                 <div className="absolute top-full left-0 mt-2 w-56 bg-dark-900/95 backdrop-blur-xl rounded-xl border border-white/[0.08] shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <div className="p-2">
-                    <a href="/salary" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      💰 연봉 계산기
-                    </a>
-                    <a href="/severance" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      💼 퇴직금 계산기
+                    <a href="/reaction" className="flex items-center gap-2 px-3 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      ⚡ 반응속도 테스트 <span className="text-[10px] bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-400">BEST</span>
                     </a>
                     <a href="/typing" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       ⌨️ 타자 테스트
-                    </a>
-                    <a href="/reaction" className="flex items-center gap-2 px-3 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      ⚡ 반응속도 테스트 <span className="text-[10px] bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-400">BEST</span>
                     </a>
                     <a href="/cps" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🖱️ CPS 테스트
@@ -80,8 +74,11 @@ function Navigation() {
                     <a href="/aim" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🎯 에임 트레이너
                     </a>
-                    <a href="/slox-test" className="flex items-center gap-2 px-3 py-2 text-sm text-amber-400 hover:text-amber-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      🐂 나와 닮은 황소 <span className="text-[10px] bg-amber-500/20 px-1.5 py-0.5 rounded text-amber-400">NEW</span>
+                    <a href="/card-match" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      🃏 카드 짝 맞추기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
+                    </a>
+                    <a href="/salary" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      💰 연봉 계산기
                     </a>
                     <a href="/memory" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🧠 숫자 기억 게임
@@ -89,8 +86,11 @@ function Navigation() {
                     <a href="/color" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🎨 색상 찾기 게임
                     </a>
-                    <a href="/card-match" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🃏 카드 짝 맞추기
+                    <a href="/slox-test" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all whitespace-nowrap">
+                      🐂 나와 닮은 황소
+                    </a>
+                    <a href="/severance" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      💼 퇴직금 계산기
                     </a>
                   </div>
                 </div>
@@ -155,23 +155,13 @@ function Footer() {
             <h4 className="font-semibold text-sm mb-4 text-dark-300 uppercase tracking-wider">무료 도구</h4>
             <ul className="space-y-3">
               <li>
-                <a href="/salary" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  💰 연봉 계산기
-                </a>
-              </li>
-              <li>
-                <a href="/severance" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  💼 퇴직금 계산기
+                <a href="/reaction" className="text-sm text-purple-400 hover:text-purple-300 transition-colors duration-300 font-medium">
+                  ⚡ 반응속도 테스트 ⭐
                 </a>
               </li>
               <li>
                 <a href="/typing" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   ⌨️ 타자 테스트
-                </a>
-              </li>
-              <li>
-                <a href="/reaction" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  ⚡ 반응속도 테스트
                 </a>
               </li>
               <li>
@@ -185,8 +175,13 @@ function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/slox-test" className="text-sm text-amber-400 hover:text-amber-300 transition-colors duration-300 font-medium">
-                  🐂 나와 닮은 황소 ✨
+                <a href="/card-match" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors duration-300 font-medium">
+                  🃏 카드 짝 맞추기 ✨
+                </a>
+              </li>
+              <li>
+                <a href="/salary" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  💰 연봉 계산기
                 </a>
               </li>
               <li>
@@ -200,8 +195,13 @@ function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/card-match" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🃏 카드 짝 맞추기
+                <a href="/slox-test" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  🐂 나와 닮은 황소
+                </a>
+              </li>
+              <li>
+                <a href="/severance" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  💼 퇴직금 계산기
                 </a>
               </li>
             </ul>

@@ -4,16 +4,16 @@ import { useState } from "react";
 import Link from "next/link";
 
 const tools = [
-  { href: "/salary", emoji: "💰", label: "연봉 계산기", best: true },
-  { href: "/severance", emoji: "💼", label: "퇴직금 계산기" },
-  { href: "/typing", emoji: "⌨️", label: "타자 테스트" },
   { href: "/reaction", emoji: "⚡", label: "반응속도 테스트", best: true },
+  { href: "/typing", emoji: "⌨️", label: "타자 테스트" },
   { href: "/cps", emoji: "🖱️", label: "CPS 테스트" },
   { href: "/aim", emoji: "🎯", label: "에임 트레이너" },
-  { href: "/slox-test", emoji: "🐂", label: "나와 닮은 황소", isNew: true },
+  { href: "/card-match", emoji: "🃏", label: "카드 짝 맞추기", isNew: true },
+  { href: "/salary", emoji: "💰", label: "연봉 계산기" },
   { href: "/memory", emoji: "🧠", label: "숫자 기억 게임" },
   { href: "/color", emoji: "🎨", label: "색상 찾기 게임" },
-  { href: "/card-match", emoji: "🃏", label: "카드 짝 맞추기" },
+  { href: "/slox-test", emoji: "🐂", label: "나와 닮은 황소" },
+  { href: "/severance", emoji: "💼", label: "퇴직금 계산기" },
 ];
 
 export default function MobileToolsButton() {
