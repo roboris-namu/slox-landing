@@ -534,15 +534,24 @@ export default function CardMatchGame() {
               <div className="absolute inset-0 rounded-2xl pointer-events-none animate-pulse-fast border-4 border-red-500/30" />
             )}
 
-            {/* 시간 패널티 표시 - 크고 눈에 띄게! */}
+            {/* 시간 패널티 표시 - 대비 강하게! */}
             {showTimePenalty && (
-              <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none bg-red-900/20">
-                <div className="animate-time-penalty-pop">
-                  <div className="text-7xl md:text-8xl font-black text-red-500 drop-shadow-[0_0_30px_rgba(239,68,68,1)] text-center">
+              <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
+                {/* 어두운 오버레이 */}
+                <div className="absolute inset-0 bg-black/70 rounded-2xl" />
+                {/* 패널티 텍스트 */}
+                <div className="relative animate-time-penalty-pop">
+                  <div className="text-7xl md:text-9xl font-black text-center"
+                    style={{
+                      color: '#FFD700',
+                      textShadow: '0 0 20px #FFD700, 0 0 40px #FFA500, 0 0 60px #FF6B00, 0 4px 0 #B8860B',
+                      WebkitTextStroke: '2px #B8860B'
+                    }}
+                  >
                     -3초
                   </div>
-                  <div className="text-2xl text-red-400 text-center mt-2 font-bold">
-                    ⚠️ 시간 차감!
+                  <div className="text-2xl text-white text-center mt-3 font-bold tracking-wider">
+                    ⚡ TIME PENALTY ⚡
                   </div>
                 </div>
               </div>
