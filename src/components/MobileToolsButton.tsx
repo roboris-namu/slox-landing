@@ -18,7 +18,8 @@ const tools = [
   { href: "/savings", emoji: "🏧", label: "적금이자 계산기" },
   { href: "/character-count", emoji: "✍️", label: "글자수 세기" },
   { href: "/bmi", emoji: "⚖️", label: "BMI 계산기" },
-  { href: "/dday", emoji: "📅", label: "D-day 계산기", isNew: true },
+  { href: "/dday", emoji: "📅", label: "D-day 계산기" },
+  { href: "/age", emoji: "🎂", label: "나이 계산기", isNew: true },
 ];
 
 export default function MobileToolsButton() {
