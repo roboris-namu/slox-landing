@@ -20,7 +20,8 @@ const tools = [
   { href: "/bmi", emoji: "⚖️", label: "BMI 계산기" },
   { href: "/dday", emoji: "📅", label: "D-day 계산기" },
   { href: "/age", emoji: "🎂", label: "나이 계산기" },
-  { href: "/percent", emoji: "🔢", label: "퍼센트 계산기", isNew: true },
+  { href: "/percent", emoji: "🔢", label: "퍼센트 계산기" },
+  { href: "/random", emoji: "🎲", label: "랜덤 뽑기", isNew: true },
 ];
 
 export default function MobileToolsButton() {
