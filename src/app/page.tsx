@@ -68,17 +68,17 @@ function Navigation() {
                     <a href="/typing" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       ⌨️ 타자 테스트
                     </a>
-                    <a href="/cps" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🖱️ CPS 테스트
+                    <a href="/cps" className="flex items-center gap-2 px-3 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      🖱️ CPS 테스트 <span className="text-[10px] bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-400">BEST</span>
                     </a>
                     <a href="/aim" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🎯 에임 트레이너
                     </a>
-                    <a href="/card-match" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      🃏 카드 짝 맞추기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
+                    <a href="/card-match" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      🃏 카드 짝 맞추기
                     </a>
-                    <a href="/salary" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      💰 연봉 계산기
+                    <a href="/salary" className="flex items-center gap-2 px-3 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      💰 연봉 계산기 <span className="text-[10px] bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-400">BEST</span>
                     </a>
                     <a href="/memory" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🧠 숫자 기억 게임
@@ -98,17 +98,17 @@ function Navigation() {
                     <a href="/savings" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🏧 적금이자 계산기
                     </a>
-                    <a href="/character-count" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      ✍️ 글자수 세기
+                    <a href="/character-count" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      ✍️ 글자수 세기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
                     </a>
-                    <a href="/bmi" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      ⚖️ BMI 계산기
+                    <a href="/bmi" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      ⚖️ BMI 계산기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
                     </a>
-                    <a href="/dday" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      📅 D-day 계산기
+                    <a href="/dday" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      📅 D-day 계산기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
                     </a>
-                    <a href="/age" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🎂 나이 계산기
+                    <a href="/age" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      🎂 나이 계산기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
                     </a>
                     <a href="/percent" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🔢 퍼센트 계산기
@@ -116,15 +116,14 @@ function Navigation() {
                     <a href="/random" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🎲 랜덤 뽑기
                     </a>
-                    <a href="/qr" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      📱 QR코드 생성기
+                    <a href="/qr" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      📱 QR코드 생성기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
                     </a>
-                    <a href="/password" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🔐 비밀번호 생성기
+                    <a href="/password" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      🔐 비밀번호 생성기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
                     </a>
-                    <a href="/lotto" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🎰 로또 번호 생성기
-                      <span className="px-1.5 py-0.5 text-xs bg-yellow-500/20 text-yellow-400 rounded">NEW</span>
+                    <a href="/lotto" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
+                      🎰 로또 번호 생성기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
                     </a>
                   </div>
                 </div>

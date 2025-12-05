@@ -254,8 +254,28 @@ interface PasswordGeneratorProps {
   lang?: Lang;
 }
 
+const languageOptions: { code: Lang; label: string; flag: string }[] = [
+  { code: "ko", label: "한국어", flag: "🇰🇷" },
+  { code: "en", label: "English", flag: "🇺🇸" },
+  { code: "ja", label: "日本語", flag: "🇯🇵" },
+  { code: "zh", label: "中文", flag: "🇨🇳" },
+  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "pt", label: "Português", flag: "🇧🇷" },
+  { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+];
+
 export default function PasswordGenerator({ lang = "ko" }: PasswordGeneratorProps) {
-  const t = translations[lang];
+  const [currentLang, setCurrentLang] = useState<Lang>(lang);
+  const [showLangMenu, setShowLangMenu] = useState(false);
+  const t = translations[currentLang];
+
+  const handleLanguageChange = (newLang: Lang) => {
+    setCurrentLang(newLang);
+    setShowLangMenu(false);
+    const basePath = newLang === "ko" ? "/password" : `/${newLang}/password`;
+    window.history.pushState({}, "", basePath);
+  };
   const [length, setLength] = useState(16);
   const [useUppercase, setUseUppercase] = useState(true);
   const [useLowercase, setUseLowercase] = useState(true);
@@ -308,7 +328,8 @@ export default function PasswordGenerator({ lang = "ko" }: PasswordGeneratorProp
   };
 
   const strength = getStrength();
-  const mainPath = lang === "ko" ? "/" : `/${lang}`;
+  const mainPath = currentLang === "ko" ? "/" : `/${currentLang}`;
+  const currentLangOption = languageOptions.find(l => l.code === currentLang);
   const quickLengths = [8, 12, 16, 20, 24, 32];
 
   return (
@@ -322,9 +343,39 @@ export default function PasswordGenerator({ lang = "ko" }: PasswordGeneratorProp
               </div>
               <span className="text-white font-semibold">SLOX</span>
             </Link>
-            <Link href={mainPath} className="text-dark-300 hover:text-white transition-colors text-sm">
-              {t.backToMain}
-            </Link>
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <button
+                  onClick={() => setShowLangMenu(!showLangMenu)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-dark-800 border border-dark-700 hover:border-dark-600 transition-colors text-sm"
+                >
+                  <span>{currentLangOption?.flag}</span>
+                  <span className="text-dark-300">{currentLangOption?.label}</span>
+                  <svg className={`w-3 h-3 text-dark-400 transition-transform ${showLangMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showLangMenu && (
+                  <div className="absolute top-full right-0 mt-2 w-40 bg-dark-800 border border-dark-700 rounded-lg shadow-xl overflow-hidden z-50">
+                    {languageOptions.map((option) => (
+                      <button
+                        key={option.code}
+                        onClick={() => handleLanguageChange(option.code)}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-dark-700 transition-colors ${
+                          currentLang === option.code ? 'bg-dark-700 text-white' : 'text-dark-300'
+                        }`}
+                      >
+                        <span>{option.flag}</span>
+                        <span>{option.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Link href={mainPath} className="text-dark-300 hover:text-white transition-colors text-sm">
+                {t.backToMain}
+              </Link>
+            </div>
           </div>
         </div>
       </nav>

@@ -238,8 +238,28 @@ interface QRGeneratorProps {
 
 type QRType = "url" | "text" | "wifi" | "email" | "phone";
 
+const languageOptions: { code: Lang; label: string; flag: string }[] = [
+  { code: "ko", label: "한국어", flag: "🇰🇷" },
+  { code: "en", label: "English", flag: "🇺🇸" },
+  { code: "ja", label: "日本語", flag: "🇯🇵" },
+  { code: "zh", label: "中文", flag: "🇨🇳" },
+  { code: "es", label: "Español", flag: "🇪🇸" },
+  { code: "pt", label: "Português", flag: "🇧🇷" },
+  { code: "de", label: "Deutsch", flag: "🇩🇪" },
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+];
+
 export default function QRGenerator({ lang = "ko" }: QRGeneratorProps) {
-  const t = translations[lang];
+  const [currentLang, setCurrentLang] = useState<Lang>(lang);
+  const [showLangMenu, setShowLangMenu] = useState(false);
+  const t = translations[currentLang];
+
+  const handleLanguageChange = (newLang: Lang) => {
+    setCurrentLang(newLang);
+    setShowLangMenu(false);
+    const basePath = newLang === "ko" ? "/qr" : `/${newLang}/qr`;
+    window.history.pushState({}, "", basePath);
+  };
   const [qrType, setQrType] = useState<QRType>("url");
   const [url, setUrl] = useState("");
   const [text, setText] = useState("");
@@ -281,7 +301,8 @@ export default function QRGenerator({ lang = "ko" }: QRGeneratorProps) {
     setQrUrl("");
   }, [qrType]);
 
-  const mainPath = lang === "ko" ? "/" : `/${lang}`;
+  const mainPath = currentLang === "ko" ? "/" : `/${currentLang}`;
+  const currentLangOption = languageOptions.find(l => l.code === currentLang);
   const types: { id: QRType; label: string; emoji: string }[] = [
     { id: "url", label: t.types.url, emoji: "🔗" },
     { id: "text", label: t.types.text, emoji: "📝" },
@@ -301,9 +322,39 @@ export default function QRGenerator({ lang = "ko" }: QRGeneratorProps) {
               </div>
               <span className="text-white font-semibold">SLOX</span>
             </Link>
-            <Link href={mainPath} className="text-dark-300 hover:text-white transition-colors text-sm">
-              {t.backToMain}
-            </Link>
+            <div className="flex items-center gap-4">
+              <div className="relative">
+                <button
+                  onClick={() => setShowLangMenu(!showLangMenu)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-dark-800 border border-dark-700 hover:border-dark-600 transition-colors text-sm"
+                >
+                  <span>{currentLangOption?.flag}</span>
+                  <span className="text-dark-300">{currentLangOption?.label}</span>
+                  <svg className={`w-3 h-3 text-dark-400 transition-transform ${showLangMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {showLangMenu && (
+                  <div className="absolute top-full right-0 mt-2 w-40 bg-dark-800 border border-dark-700 rounded-lg shadow-xl overflow-hidden z-50">
+                    {languageOptions.map((option) => (
+                      <button
+                        key={option.code}
+                        onClick={() => handleLanguageChange(option.code)}
+                        className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-dark-700 transition-colors ${
+                          currentLang === option.code ? 'bg-dark-700 text-white' : 'text-dark-300'
+                        }`}
+                      >
+                        <span>{option.flag}</span>
+                        <span>{option.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <Link href={mainPath} className="text-dark-300 hover:text-white transition-colors text-sm">
+                {t.backToMain}
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
