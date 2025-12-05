@@ -320,7 +320,7 @@ const languageOptions: { code: Lang; label: string; flag: string }[] = [
 ];
 
 export default function DdayCalculator({ lang = "ko" }: DdayCalculatorProps) {
-  const [currentLang, setCurrentLang] = useState<Lang>(lang);
+  const [currentLang] = useState<Lang>(lang);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const t = translations[currentLang];
   const today = new Date();
@@ -331,11 +331,9 @@ export default function DdayCalculator({ lang = "ko" }: DdayCalculatorProps) {
   const [targetDay, setTargetDay] = useState(today.getDate());
   const [eventName, setEventName] = useState("");
 
-  const handleLanguageChange = (newLang: Lang) => {
-    setCurrentLang(newLang);
-    setShowLangMenu(false);
-    const basePath = newLang === "ko" ? "/dday" : `/${newLang}/dday`;
-    window.history.pushState({}, "", basePath);
+  // 언어별 URL 생성
+  const getLangUrl = (langCode: string) => {
+    return langCode === "ko" ? "/dday" : `/${langCode}/dday`;
   };
 
   const result = useMemo(() => {
@@ -414,16 +412,17 @@ export default function DdayCalculator({ lang = "ko" }: DdayCalculatorProps) {
                 {showLangMenu && (
                   <div className="absolute top-full right-0 mt-2 w-40 bg-dark-800 border border-dark-700 rounded-lg shadow-xl overflow-hidden z-50">
                     {languageOptions.map((option) => (
-                      <button
+                      <Link
                         key={option.code}
-                        onClick={() => handleLanguageChange(option.code)}
+                        href={getLangUrl(option.code)}
+                        onClick={() => setShowLangMenu(false)}
                         className={`w-full flex items-center gap-2 px-3 py-2 text-sm hover:bg-dark-700 transition-colors ${
                           currentLang === option.code ? 'bg-dark-700 text-white' : 'text-dark-300'
                         }`}
                       >
                         <span>{option.flag}</span>
                         <span>{option.label}</span>
-                      </button>
+                      </Link>
                     ))}
                   </div>
                 )}

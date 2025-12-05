@@ -7,8 +7,30 @@ type GameState = "waiting" | "playing" | "result";
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
 type Duration = 1 | 5 | 10;
 
-// CPS 등급 기준 (일반적인 기준)
-// 1-3: 느림, 4-6: 평균, 7-9: 빠름, 10-12: 매우 빠름, 13+: 프로
+// 클릭 파티클 타입
+interface ClickParticle {
+  id: number;
+  x: number;
+  y: number;
+  color: string;
+  emoji: string;
+  scale: number;
+  tx: number;
+  ty: number;
+}
+
+// 클릭 이펙트 색상 & 이모지
+const clickEffects = [
+  { color: "#f472b6", emoji: "💥" },
+  { color: "#a78bfa", emoji: "✨" },
+  { color: "#60a5fa", emoji: "⚡" },
+  { color: "#34d399", emoji: "💫" },
+  { color: "#fbbf24", emoji: "🔥" },
+  { color: "#f87171", emoji: "💢" },
+  { color: "#22d3ee", emoji: "⭐" },
+];
+
+// CPS 등급 기준
 const translations = {
   ko: {
     title: "CPS",
@@ -38,21 +60,18 @@ const translations = {
     shareText: "🖱️ CPS 테스트 결과!",
     shareTestIt: "나도 테스트하기 👉",
     copied: "결과가 클립보드에 복사되었습니다!",
-    // 등급
     legendary: "전설",
     proGamer: "프로게이머",
     veryFast: "매우 빠름",
     fast: "빠름",
     average: "평균",
     slow: "느림",
-    // 메시지
     msgLegendary: "드래그 클릭 마스터!",
     msgProGamer: "버터플라이 클릭 수준!",
     msgVeryFast: "지터 클릭 실력이네요!",
     msgFast: "꽤 빠른 편이에요!",
     msgAverage: "평균적인 속도예요",
     msgSlow: "연습이 필요해요!",
-    // 클릭 방법
     clickMethods: "💡 클릭 방법",
     normalClick: "일반 클릭: 4-6 CPS",
     jitterClick: "지터 클릭: 8-12 CPS",
@@ -411,10 +430,53 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
   const [bestCps, setBestCps] = useState(0);
   const [lang] = useState<Language>(initialLang);
   const [showLangMenu, setShowLangMenu] = useState(false);
+  const [particles, setParticles] = useState<ClickParticle[]>([]);
+  const [screenShake, setScreenShake] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
+  const gameAreaRef = useRef<HTMLDivElement>(null);
+  const particleIdRef = useRef(0);
 
   const t = translations[lang];
+
+  // 클릭 파티클 생성
+  const createClickParticles = useCallback((clientX: number, clientY: number) => {
+    if (!gameAreaRef.current) return;
+    
+    const rect = gameAreaRef.current.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    const newParticles: ClickParticle[] = [];
+    const numParticles = 8 + Math.floor(Math.random() * 5);
+
+    for (let i = 0; i < numParticles; i++) {
+      const effect = clickEffects[Math.floor(Math.random() * clickEffects.length)];
+      const angle = (i / numParticles) * 360 + Math.random() * 30;
+      const velocity = 60 + Math.random() * 50;
+      const rad = (angle * Math.PI) / 180;
+      
+      newParticles.push({
+        id: particleIdRef.current++,
+        x,
+        y,
+        color: effect.color,
+        emoji: effect.emoji,
+        scale: 0.6 + Math.random() * 0.6,
+        tx: Math.cos(rad) * velocity,
+        ty: Math.sin(rad) * velocity,
+      });
+    }
+
+    setParticles(prev => [...prev, ...newParticles]);
+
+    setTimeout(() => {
+      setParticles(prev => prev.filter(p => !newParticles.find(np => np.id === p.id)));
+    }, 600);
+
+    setScreenShake(true);
+    setTimeout(() => setScreenShake(false), 60);
+  }, []);
 
   // 등급 계산
   const getGrade = (cpsValue: number): { grade: string; color: string; emoji: string; message: string } => {
@@ -446,13 +508,15 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
   }, [duration]);
 
   // 클릭 처리
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback((e: React.MouseEvent) => {
     if (state === "waiting") {
       startGame();
+      createClickParticles(e.clientX, e.clientY);
     } else if (state === "playing") {
       setClicks(prev => prev + 1);
+      createClickParticles(e.clientX, e.clientY);
     }
-  }, [state, startGame]);
+  }, [state, startGame, createClickParticles]);
 
   // 결과 계산
   useEffect(() => {
@@ -604,18 +668,53 @@ ${t.shareTestIt}`;
 
           {/* 게임 영역 */}
           <div
+            ref={gameAreaRef}
             onClick={handleClick}
-            className={`rounded-2xl cursor-pointer transition-all select-none mb-8 ${
+            className={`relative rounded-2xl cursor-pointer select-none mb-8 overflow-hidden ${
               state === "playing" 
-                ? "bg-gradient-to-br from-purple-600 to-cyan-600 active:scale-[0.98]" 
+                ? "bg-gradient-to-br from-purple-600 to-cyan-600" 
                 : "bg-dark-900 hover:bg-dark-800"
-            }`}
+            } ${screenShake ? "animate-shake" : ""}`}
             style={{ minHeight: "300px" }}
           >
-            <div className="flex flex-col items-center justify-center h-full min-h-[300px] p-8">
+            {/* 클릭 파티클 💥 */}
+            {particles.map((particle) => (
+              <div
+                key={particle.id}
+                className="absolute pointer-events-none animate-particle-burst"
+                style={{
+                  left: particle.x,
+                  top: particle.y,
+                  "--tx": `${particle.tx}px`,
+                  "--ty": `${particle.ty}px`,
+                } as React.CSSProperties}
+              >
+                <span 
+                  className="text-2xl drop-shadow-lg"
+                  style={{ 
+                    transform: `scale(${particle.scale})`,
+                    textShadow: `0 0 15px ${particle.color}, 0 0 30px ${particle.color}` 
+                  }}
+                >
+                  {particle.emoji}
+                </span>
+              </div>
+            ))}
+
+            {/* 클릭시 원형 파동 */}
+            {state === "playing" && clicks > 0 && (
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                key={clicks}
+              >
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border-4 border-white/50 animate-ripple" />
+              </div>
+            )}
+
+            <div className="flex flex-col items-center justify-center h-full min-h-[300px] p-8 relative z-10">
               {state === "waiting" && (
                 <>
-                  <p className="text-6xl mb-4">🖱️</p>
+                  <p className="text-6xl mb-4 animate-bounce">🖱️</p>
                   <p className="text-2xl font-bold text-white mb-2">{t.ready}</p>
                   <p className="text-dark-400">{t.clickToStart}</p>
                 </>
@@ -623,25 +722,28 @@ ${t.shareTestIt}`;
 
               {state === "playing" && (
                 <>
-                  <p className="text-5xl font-bold text-white mb-2">{clicks}</p>
+                  <p className={`text-6xl font-bold text-white mb-2 transition-transform ${screenShake ? "scale-110" : "scale-100"}`}>
+                    {clicks}
+                  </p>
                   <p className="text-xl text-white/80 mb-4">{t.clicks}</p>
-                  <div className="w-full max-w-xs bg-white/20 rounded-full h-3 mb-4">
+                  <div className="w-full max-w-xs bg-white/20 rounded-full h-4 mb-4 overflow-hidden">
                     <div 
-                      className="bg-white rounded-full h-3 transition-all duration-100"
+                      className="bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 rounded-full h-4 transition-all duration-100"
                       style={{ width: `${(timeLeft / duration) * 100}%` }}
                     />
                   </div>
-                  <p className="text-white/60">{timeLeft.toFixed(1)}{t.seconds}</p>
+                  <p className="text-white/80 text-lg font-mono">{timeLeft.toFixed(1)}{t.seconds}</p>
+                  <p className="text-white/60 text-sm mt-4 animate-pulse">{t.clicking}</p>
                 </>
               )}
 
               {state === "result" && (
                 <>
-                  <p className="text-5xl mb-2">{getGrade(cps).emoji}</p>
-                  <p className={`text-xl font-bold ${getGrade(cps).color} mb-2`}>
+                  <p className="text-6xl mb-2 animate-bounce">{getGrade(cps).emoji}</p>
+                  <p className={`text-2xl font-bold ${getGrade(cps).color} mb-2`}>
                     {getGrade(cps).grade}
                   </p>
-                  <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2">
+                  <p className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2">
                     {cps.toFixed(1)} CPS
                   </p>
                   <p className="text-dark-400 mb-4">{getGrade(cps).message}</p>
@@ -780,4 +882,3 @@ ${t.shareTestIt}`;
     </div>
   );
 }
-

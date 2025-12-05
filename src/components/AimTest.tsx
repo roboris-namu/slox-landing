@@ -26,6 +26,14 @@ interface HitMarker {
   type: "hit" | "miss";
 }
 
+// 히트 링 이펙트
+interface HitRing {
+  id: number;
+  x: number;
+  y: number;
+  color: string;
+}
+
 const translations = {
   ko: {
     title: "에임",
@@ -438,6 +446,7 @@ export default function AimTest({ initialLang }: AimTestProps) {
   // 🔥 박진감 효과를 위한 새로운 상태들
   const [particles, setParticles] = useState<Particle[]>([]);
   const [hitMarkers, setHitMarkers] = useState<HitMarker[]>([]);
+  const [hitRings, setHitRings] = useState<HitRing[]>([]);
   const [combo, setCombo] = useState(0);
   const [maxCombo, setMaxCombo] = useState(0);
   const [screenShake, setScreenShake] = useState(false);
@@ -527,12 +536,12 @@ export default function AimTest({ initialLang }: AimTestProps) {
     }
   }, [getAudioContext]);
 
-  // 💥 파티클 생성 함수
+  // 💥 파티클 생성 함수 - 더 화려하게!
   const createParticles = useCallback((x: number, y: number, isHit: boolean) => {
     const colors = isHit 
-      ? ["#ff6b6b", "#ffd93d", "#ff9f43", "#ee5a24", "#ff4757"]
-      : ["#636e72", "#b2bec3", "#dfe6e9"];
-    const count = isHit ? 15 : 5;
+      ? ["#22c55e", "#10b981", "#fbbf24", "#f59e0b", "#fff", "#84cc16"]  // 초록+노랑+흰색
+      : ["#ef4444", "#dc2626", "#7f1d1d"];
+    const count = isHit ? 20 : 8;
     
     const newParticles: Particle[] = [];
     for (let i = 0; i < count; i++) {
@@ -541,9 +550,9 @@ export default function AimTest({ initialLang }: AimTestProps) {
         x,
         y,
         color: colors[Math.floor(Math.random() * colors.length)],
-        size: isHit ? Math.random() * 10 + 5 : Math.random() * 6 + 3,
+        size: isHit ? Math.random() * 12 + 6 : Math.random() * 8 + 4,
         angle: (Math.PI * 2 * i) / count + Math.random() * 0.5,
-        velocity: isHit ? Math.random() * 120 + 80 : Math.random() * 60 + 30,
+        velocity: isHit ? Math.random() * 150 + 100 : Math.random() * 80 + 40,
       });
     }
     
@@ -555,7 +564,22 @@ export default function AimTest({ initialLang }: AimTestProps) {
   const createHitMarker = useCallback((x: number, y: number, type: "hit" | "miss") => {
     const marker: HitMarker = { id: Date.now(), x, y, type };
     setHitMarkers(prev => [...prev, marker]);
-    setTimeout(() => setHitMarkers(prev => prev.filter(m => m.id !== marker.id)), 400);
+    setTimeout(() => setHitMarkers(prev => prev.filter(m => m.id !== marker.id)), 350);
+  }, []);
+
+  // 🔵 히트 링 생성 (원형 파동)
+  const createHitRing = useCallback((x: number, y: number, isHit: boolean) => {
+    const colors = isHit 
+      ? ["#22c55e", "#10b981", "#34d399"] 
+      : ["#ef4444", "#f87171"];
+    const ring: HitRing = { 
+      id: Date.now(), 
+      x, 
+      y, 
+      color: colors[Math.floor(Math.random() * colors.length)]
+    };
+    setHitRings(prev => [...prev, ring]);
+    setTimeout(() => setHitRings(prev => prev.filter(r => r.id !== ring.id)), 400);
   }, []);
 
   // 📳 화면 흔들림 효과
@@ -663,13 +687,17 @@ export default function AimTest({ initialLang }: AimTestProps) {
     setCombo(newCombo);
     if (newCombo > maxCombo) setMaxCombo(newCombo);
     
-    // 💥 효과들!
+    // 💥 효과들! - 타겟 중심 위치 계산
     const rect = gameAreaRef.current?.getBoundingClientRect();
     if (rect) {
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      createParticles(x, y, true);
-      createHitMarker(x, y, "hit");
+      // 타겟 중심 좌표 (%, 픽셀로 변환)
+      const targetCenterX = (targetPos.x / 100) * rect.width;
+      const targetCenterY = (targetPos.y / 100) * rect.height;
+      
+      // 타겟 중심에 효과!
+      createParticles(targetCenterX, targetCenterY, true);
+      createHitMarker(targetCenterX, targetCenterY, "hit");
+      createHitRing(targetCenterX, targetCenterY, true);
     }
     
     playSound("hit");
@@ -683,7 +711,7 @@ export default function AimTest({ initialLang }: AimTestProps) {
     }
     
     generateNewTarget();
-  }, [state, targetAppearTime, generateNewTarget, combo, maxCombo, playSound, triggerScreenShake, createParticles, createHitMarker]);
+  }, [state, targetAppearTime, targetPos, generateNewTarget, combo, maxCombo, playSound, triggerScreenShake, createParticles, createHitMarker, createHitRing]);
 
   // ❌ 미스 클릭
   const handleMissClick = useCallback((e: React.MouseEvent) => {
@@ -691,17 +719,18 @@ export default function AimTest({ initialLang }: AimTestProps) {
     setMisses(prev => prev + 1);
     setCombo(0); // 콤보 리셋
     
-    // 미스 효과
+    // 미스 효과 - 클릭 위치에
     const rect = gameAreaRef.current?.getBoundingClientRect();
     if (rect) {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       createParticles(x, y, false);
       createHitMarker(x, y, "miss");
+      createHitRing(x, y, false);
     }
     
     playSound("miss");
-  }, [state, playSound, createParticles, createHitMarker]);
+  }, [state, playSound, createParticles, createHitMarker, createHitRing]);
 
   // 게임 영역 클릭
   const handleGameAreaClick = useCallback((e: React.MouseEvent) => {
@@ -730,6 +759,10 @@ export default function AimTest({ initialLang }: AimTestProps) {
     setMisses(0);
     setTimeLeft(settings.duration);
     setReactionTimes([]);
+    setParticles([]);
+    setHitMarkers([]);
+    setHitRings([]);
+    setCombo(0);
   };
 
   // 공유
@@ -890,22 +923,41 @@ ${t.shareTestIt}`;
             }`}
             style={{ height: "400px" }}
           >
-            {/* 💥 파티클 효과 */}
-            {particles.map((particle) => (
+            {/* 💥 파티클 효과 - 폭발! */}
+            {particles.map((particle) => {
+              const tx = Math.cos(particle.angle) * particle.velocity;
+              const ty = Math.sin(particle.angle) * particle.velocity;
+              return (
+                <div
+                  key={particle.id}
+                  className="absolute pointer-events-none animate-aim-particle"
+                  style={{
+                    left: particle.x,
+                    top: particle.y,
+                    width: particle.size,
+                    height: particle.size,
+                    backgroundColor: particle.color,
+                    borderRadius: "50%",
+                    boxShadow: `0 0 ${particle.size * 2}px ${particle.color}`,
+                    "--tx": `${tx}px`,
+                    "--ty": `${ty}px`,
+                  } as React.CSSProperties}
+                />
+              );
+            })}
+
+            {/* 🔵 히트 링 (원형 파동) */}
+            {hitRings.map((ring) => (
               <div
-                key={particle.id}
-                className="absolute pointer-events-none animate-particle-burst"
+                key={ring.id}
+                className="absolute pointer-events-none rounded-full border-4 animate-hit-ring"
                 style={{
-                  left: particle.x,
-                  top: particle.y,
-                  width: particle.size,
-                  height: particle.size,
-                  backgroundColor: particle.color,
-                  borderRadius: "50%",
-                  transform: "translate(-50%, -50%)",
-                  boxShadow: `0 0 ${particle.size}px ${particle.color}`,
-                  ["--angle" as string]: `${particle.angle}rad`,
-                  ["--velocity" as string]: `${particle.velocity}px`,
+                  left: ring.x,
+                  top: ring.y,
+                  width: 60,
+                  height: 60,
+                  borderColor: ring.color,
+                  boxShadow: `0 0 20px ${ring.color}`,
                 }}
               />
             ))}
@@ -914,13 +966,12 @@ ${t.shareTestIt}`;
             {hitMarkers.map((marker) => (
               <div
                 key={marker.id}
-                className={`absolute pointer-events-none text-4xl font-bold animate-hit-marker ${
+                className={`absolute pointer-events-none text-5xl font-black animate-hit-marker ${
                   marker.type === "hit" ? "text-green-400" : "text-red-400"
                 }`}
                 style={{
                   left: marker.x,
                   top: marker.y,
-                  transform: "translate(-50%, -50%)",
                 }}
               >
                 {marker.type === "hit" ? "✓" : "✗"}

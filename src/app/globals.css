@@ -515,25 +515,48 @@ body {
   animation: screen-shake 0.1s ease-in-out;
 }
 
-/* 히트 마커 효과 */
+/* 히트 마커 효과 - 팡! 터지는 느낌 */
 @keyframes hit-marker {
   0% {
-    transform: translate(-50%, -50%) scale(0.5);
+    transform: translate(-50%, -50%) scale(0);
     opacity: 1;
   }
-  50% {
+  20% {
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: 1;
+  }
+  40% {
     transform: translate(-50%, -50%) scale(1.2);
-    opacity: 0.8;
+    opacity: 0.9;
   }
   100% {
-    transform: translate(-50%, -100%) scale(1);
+    transform: translate(-50%, -50%) scale(0.8);
     opacity: 0;
   }
 }
 
 .animate-hit-marker {
-  animation: hit-marker 0.4s ease-out forwards;
-  text-shadow: 0 0 10px currentColor;
+  animation: hit-marker 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+/* 히트 이펙트 링 */
+@keyframes hit-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3);
+    opacity: 1;
+    border-width: 4px;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+    border-width: 1px;
+  }
+}
+
+.animate-hit-ring {
+  animation: hit-ring 0.4s ease-out forwards;
 }
 
 /* 타겟 등장 애니메이션 */
@@ -574,6 +597,25 @@ body {
 .animate-combo-burst {
   animation: combo-burst 0.5s ease-out forwards;
   text-shadow: 0 0 30px rgba(255, 100, 50, 0.8), 0 0 60px rgba(255, 50, 50, 0.5);
+}
+
+/* 에임 테스트 파티클 폭발 */
+@keyframes aim-particle {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+      calc(-50% + var(--tx)),
+      calc(-50% + var(--ty))
+    ) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-aim-particle {
+  animation: aim-particle 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 /* ========================================
@@ -672,4 +714,61 @@ body {
 
 .animate-time-penalty-pop {
   animation: time-penalty-pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* ===== CPS 테스트 클릭 이펙트 ===== */
+
+/* 클릭 파티클 폭발 */
+@keyframes particle-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0) rotate(180deg);
+  }
+}
+
+.animate-particle-burst {
+  animation: particle-burst 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* 화면 흔들림 */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px) translateY(-2px); }
+  50% { transform: translateX(3px) translateY(2px); }
+  75% { transform: translateX(-2px) translateY(-1px); }
+}
+
+.animate-shake {
+  animation: shake 0.1s ease-in-out;
+}
+
+/* 원형 파동 */
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+.animate-ripple {
+  animation: ripple 0.4s ease-out forwards;
+}
+
+/* 클릭 숫자 펀치 효과 */
+@keyframes click-punch {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.animate-click-punch {
+  animation: click-punch 0.1s ease-out;
 }
