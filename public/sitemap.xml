@@ -25,9 +25,17 @@
     <priority>0.9</priority>
   </url>
   
-  <!-- 대출이자 계산기 (NEW!) -->
+  <!-- 대출이자 계산기 -->
   <url>
     <loc>https://www.slox.co.kr/loan</loc>
+    <lastmod>2025-12-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- 적금이자 계산기 (NEW!) -->
+  <url>
+    <loc>https://www.slox.co.kr/savings</loc>
     <lastmod>2025-12-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
