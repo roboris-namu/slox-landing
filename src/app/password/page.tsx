@@ -142,8 +142,9 @@ export default function PasswordGenerator() {
               </div>
               <input
                 type="range"
-                min="4"
-                max="64"
+                min="8"
+                max="32"
+                step="4"
                 value={length}
                 onChange={(e) => setLength(Number(e.target.value))}
                 className="w-full h-2 bg-dark-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"

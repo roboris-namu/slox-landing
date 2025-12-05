@@ -96,7 +96,7 @@ function Navigation() {
                       🏦 대출이자 계산기
                     </a>
                     <a href="/savings" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      💰 적금이자 계산기
+                      🏧 적금이자 계산기
                     </a>
                     <a href="/character-count" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       ✍️ 글자수 세기
@@ -242,7 +242,7 @@ function Footer() {
               </li>
               <li>
                 <a href="/savings" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  💰 적금이자 계산기
+                  🏧 적금이자 계산기
                 </a>
               </li>
               <li>
