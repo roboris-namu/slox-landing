@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 
 type Lang = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
@@ -229,14 +229,41 @@ interface AgeCalculatorProps {
   lang?: Lang;
 }
 
+// 년도 옵션 생성 (1900 ~ 현재년도)
+const currentYear = new Date().getFullYear();
+const years = Array.from({ length: currentYear - 1900 + 1 }, (_, i) => currentYear - i);
+const months = Array.from({ length: 12 }, (_, i) => i + 1);
+
+const getDaysInMonth = (year: number, month: number) => {
+  return new Date(year, month, 0).getDate();
+};
+
 export default function AgeCalculator({ lang = "ko" }: AgeCalculatorProps) {
   const t = translations[lang];
-  const [birthdate, setBirthdate] = useState<string>("");
+  const [birthYear, setBirthYear] = useState<number | "">("");
+  const [birthMonth, setBirthMonth] = useState<number | "">("");
+  const [birthDay, setBirthDay] = useState<number | "">("");
+  
+  // 선택한 년/월에 따른 일수 계산
+  const days = useMemo(() => {
+    if (birthYear && birthMonth) {
+      const daysInMonth = getDaysInMonth(birthYear as number, birthMonth as number);
+      return Array.from({ length: daysInMonth }, (_, i) => i + 1);
+    }
+    return Array.from({ length: 31 }, (_, i) => i + 1);
+  }, [birthYear, birthMonth]);
+
+  // 일수가 변경되면 선택된 일이 범위를 벗어나면 조정
+  useEffect(() => {
+    if (birthDay && days.length < (birthDay as number)) {
+      setBirthDay(days.length);
+    }
+  }, [days, birthDay]);
 
   const result = useMemo(() => {
-    if (!birthdate) return null;
+    if (!birthYear || !birthMonth || !birthDay) return null;
 
-    const birth = new Date(birthdate);
+    const birth = new Date(birthYear as number, (birthMonth as number) - 1, birthDay as number);
     const today = new Date();
     
     // 만 나이 계산
@@ -308,16 +335,64 @@ export default function AgeCalculator({ lang = "ko" }: AgeCalculatorProps) {
 
           {/* 입력 */}
           <div className="glass-card p-6 rounded-xl mb-8">
-            <label className="block text-dark-300 text-sm font-medium mb-2">
+            <label className="block text-dark-300 text-sm font-medium mb-4">
               {t.birthdate}
             </label>
-            <input
-              type="date"
-              value={birthdate}
-              onChange={(e) => setBirthdate(e.target.value)}
-              max={new Date().toISOString().split("T")[0]}
-              className="w-full p-3 bg-dark-800 border border-dark-700 rounded-lg text-white text-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all"
-            />
+            <div className="flex gap-3 items-center justify-center flex-wrap">
+              {/* 년도 선택 */}
+              <div className="relative">
+                <select
+                  value={birthYear}
+                  onChange={(e) => setBirthYear(e.target.value ? Number(e.target.value) : "")}
+                  className="appearance-none w-28 p-3 bg-dark-800 border border-dark-700 rounded-lg text-white text-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none transition-all cursor-pointer hover:border-rose-500/50 pr-8"
+                >
+                  <option value="">{lang === "ko" ? "년도" : "Year"}</option>
+                  {years.map((y) => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-dark-400">
+                  ▼
+                </div>
+              </div>
+              <span className="text-dark-400 text-lg">{lang === "ko" || lang === "ja" || lang === "zh" ? "년" : "/"}</span>
+
+              {/* 월 선택 */}
+              <div className="relative">
+                <select
+                  value={birthMonth}
+                  onChange={(e) => setBirthMonth(e.target.value ? Number(e.target.value) : "")}
+                  className="appearance-none w-24 p-3 bg-dark-800 border border-dark-700 rounded-lg text-white text-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none transition-all cursor-pointer hover:border-rose-500/50 pr-8"
+                >
+                  <option value="">{lang === "ko" ? "월" : "Month"}</option>
+                  {months.map((m) => (
+                    <option key={m} value={m}>{m}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-dark-400">
+                  ▼
+                </div>
+              </div>
+              <span className="text-dark-400 text-lg">{lang === "ko" || lang === "ja" || lang === "zh" ? "월" : "/"}</span>
+
+              {/* 일 선택 */}
+              <div className="relative">
+                <select
+                  value={birthDay}
+                  onChange={(e) => setBirthDay(e.target.value ? Number(e.target.value) : "")}
+                  className="appearance-none w-24 p-3 bg-dark-800 border border-dark-700 rounded-lg text-white text-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none transition-all cursor-pointer hover:border-rose-500/50 pr-8"
+                >
+                  <option value="">{lang === "ko" ? "일" : "Day"}</option>
+                  {days.map((d) => (
+                    <option key={d} value={d}>{d}</option>
+                  ))}
+                </select>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-dark-400">
+                  ▼
+                </div>
+              </div>
+              <span className="text-dark-400 text-lg">{lang === "ko" || lang === "ja" || lang === "zh" ? "일" : ""}</span>
+            </div>
           </div>
 
           {/* 결과 */}
