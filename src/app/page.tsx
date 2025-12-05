@@ -92,6 +92,10 @@ function Navigation() {
                     <a href="/severance" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       💼 퇴직금 계산기
                     </a>
+                    <a href="/loan" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      🏦 대출이자 계산기
+                      <span className="px-1.5 py-0.5 text-xs bg-green-500/20 text-green-400 rounded">NEW</span>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -202,6 +206,11 @@ function Footer() {
               <li>
                 <a href="/severance" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   💼 퇴직금 계산기
+                </a>
+              </li>
+              <li>
+                <a href="/loan" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  🏦 대출이자 계산기
                 </a>
               </li>
             </ul>

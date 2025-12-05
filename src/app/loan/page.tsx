@@ -12,12 +12,12 @@ type RepaymentType = "equalPrincipalInterest" | "equalPrincipal" | "bullet";
  * 대출 계산 결과
  */
 interface LoanResult {
-  monthlyPayment: number;        // 월 상환금액 (원리금균등) 또는 첫 달 (원금균등)
-  lastMonthPayment: number;      // 마지막 달 상환금액 (원금균등용)
-  totalPayment: number;          // 총 상환금액
-  totalInterest: number;         // 총 이자
-  principal: number;             // 대출 원금
-  interestRatio: number;         // 이자 비율 (%)
+  monthlyPayment: number;
+  lastMonthPayment: number;
+  totalPayment: number;
+  totalInterest: number;
+  principal: number;
+  interestRatio: number;
 }
 
 /**
@@ -33,7 +33,6 @@ interface ScheduleItem {
 
 /**
  * 원리금균등상환 계산
- * 매월 동일한 금액(원금+이자)을 상환
  */
 const calculateEqualPrincipalInterest = (
   principal: number,
@@ -42,7 +41,6 @@ const calculateEqualPrincipalInterest = (
 ): { result: LoanResult; schedule: ScheduleItem[] } => {
   const monthlyRate = annualRate / 100 / 12;
   
-  // 월 상환금액 = 원금 × 월이자율 × (1 + 월이자율)^개월수 / ((1 + 월이자율)^개월수 - 1)
   const monthlyPayment = monthlyRate === 0 
     ? principal / months
     : principal * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
@@ -83,7 +81,6 @@ const calculateEqualPrincipalInterest = (
 
 /**
  * 원금균등상환 계산
- * 매월 동일한 원금 + 잔액에 대한 이자 상환
  */
 const calculateEqualPrincipal = (
   principal: number,
@@ -129,7 +126,6 @@ const calculateEqualPrincipal = (
 
 /**
  * 만기일시상환 계산
- * 매월 이자만 납부, 만기에 원금 일시 상환
  */
 const calculateBullet = (
   principal: number,
@@ -172,18 +168,15 @@ const calculateBullet = (
  * 대출이자 계산기 메인 컴포넌트
  */
 export default function LoanCalculator() {
-  // 입력값 상태
-  const [principal, setPrincipal] = useState<string>("100000000"); // 1억
+  const [principal, setPrincipal] = useState<string>("100000000");
   const [annualRate, setAnnualRate] = useState<string>("4.5");
-  const [months, setMonths] = useState<string>("360"); // 30년
+  const [months, setMonths] = useState<string>("360");
   const [repaymentType, setRepaymentType] = useState<RepaymentType>("equalPrincipalInterest");
   
-  // 결과 상태
   const [result, setResult] = useState<LoanResult | null>(null);
   const [schedule, setSchedule] = useState<ScheduleItem[]>([]);
   const [showSchedule, setShowSchedule] = useState(false);
   
-  // 계산 실행
   useEffect(() => {
     const principalNum = parseInt(principal.replace(/,/g, "")) || 0;
     const rateNum = parseFloat(annualRate) || 0;
@@ -212,18 +205,15 @@ export default function LoanCalculator() {
     setSchedule(calcResult.schedule);
   }, [principal, annualRate, months, repaymentType]);
   
-  // 숫자 포맷팅
   const formatNumber = (num: number): string => {
     return num.toLocaleString("ko-KR");
   };
   
-  // 입력값 포맷팅 (콤마 추가)
   const handlePrincipalChange = (value: string) => {
     const numOnly = value.replace(/[^0-9]/g, "");
     setPrincipal(numOnly);
   };
   
-  // 빠른 금액 선택
   const quickAmounts = [
     { label: "5천만", value: "50000000" },
     { label: "1억", value: "100000000" },
@@ -232,7 +222,6 @@ export default function LoanCalculator() {
     { label: "5억", value: "500000000" },
   ];
   
-  // 빠른 기간 선택
   const quickPeriods = [
     { label: "1년", value: "12" },
     { label: "3년", value: "36" },
@@ -274,9 +263,7 @@ export default function LoanCalculator() {
             
             {/* 대출 원금 */}
             <div className="mb-6">
-              <label className="block text-dark-300 text-sm mb-2">
-                대출 원금
-              </label>
+              <label className="block text-dark-300 text-sm mb-2">대출 원금</label>
               <div className="relative">
                 <input
                   type="text"
@@ -287,7 +274,6 @@ export default function LoanCalculator() {
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-400">원</span>
               </div>
-              {/* 빠른 선택 */}
               <div className="flex flex-wrap gap-2 mt-2">
                 {quickAmounts.map((item) => (
                   <button
@@ -307,9 +293,7 @@ export default function LoanCalculator() {
             
             {/* 연이자율 */}
             <div className="mb-6">
-              <label className="block text-dark-300 text-sm mb-2">
-                연이자율 (%)
-              </label>
+              <label className="block text-dark-300 text-sm mb-2">연이자율 (%)</label>
               <div className="relative">
                 <input
                   type="number"
@@ -323,7 +307,6 @@ export default function LoanCalculator() {
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-400">%</span>
               </div>
-              {/* 빠른 이율 선택 */}
               <div className="flex flex-wrap gap-2 mt-2">
                 {["3.0", "3.5", "4.0", "4.5", "5.0", "6.0"].map((rate) => (
                   <button
@@ -343,9 +326,7 @@ export default function LoanCalculator() {
             
             {/* 대출 기간 */}
             <div className="mb-6">
-              <label className="block text-dark-300 text-sm mb-2">
-                대출 기간 (개월)
-              </label>
+              <label className="block text-dark-300 text-sm mb-2">대출 기간 (개월)</label>
               <div className="relative">
                 <input
                   type="number"
@@ -358,7 +339,6 @@ export default function LoanCalculator() {
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-dark-400">개월</span>
               </div>
-              {/* 빠른 기간 선택 */}
               <div className="flex flex-wrap gap-2 mt-2">
                 {quickPeriods.map((item) => (
                   <button
@@ -378,9 +358,7 @@ export default function LoanCalculator() {
             
             {/* 상환 방식 */}
             <div className="mb-6">
-              <label className="block text-dark-300 text-sm mb-2">
-                상환 방식
-              </label>
+              <label className="block text-dark-300 text-sm mb-2">상환 방식</label>
               <div className="grid grid-cols-1 gap-2">
                 <button
                   onClick={() => setRepaymentType("equalPrincipalInterest")}
@@ -427,7 +405,6 @@ export default function LoanCalculator() {
             
             {result ? (
               <div className="space-y-4">
-                {/* 월 상환금액 */}
                 <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl p-4">
                   <div className="text-dark-400 text-sm mb-1">
                     {repaymentType === "equalPrincipal" ? "첫 달 상환금액" : "월 상환금액"}
@@ -448,7 +425,6 @@ export default function LoanCalculator() {
                   )}
                 </div>
                 
-                {/* 상세 내역 */}
                 <div className="bg-dark-800/50 rounded-xl p-4 space-y-3">
                   <div className="flex justify-between items-center py-2 border-b border-dark-700">
                     <span className="text-dark-400">대출 원금</span>
@@ -468,7 +444,6 @@ export default function LoanCalculator() {
                   </div>
                 </div>
                 
-                {/* 그래프 */}
                 <div className="bg-dark-800/50 rounded-xl p-4">
                   <div className="text-sm text-dark-400 mb-3">원금 vs 이자 비율</div>
                   <div className="h-6 rounded-full overflow-hidden flex">
@@ -487,7 +462,6 @@ export default function LoanCalculator() {
                   </div>
                 </div>
                 
-                {/* 상환 스케줄 버튼 */}
                 <button
                   onClick={() => setShowSchedule(!showSchedule)}
                   className="w-full py-3 bg-dark-800 hover:bg-dark-700 text-white rounded-xl transition-colors"
@@ -529,31 +503,29 @@ export default function LoanCalculator() {
                       <td className="py-3 px-2 text-right text-dark-400">{formatNumber(item.balance)}원</td>
                     </tr>
                   ))}
-                  {schedule.length > 12 && (
-                    <>
-                      <tr>
-                        <td colSpan={5} className="py-3 text-center text-dark-500">
-                          ... {schedule.length - 24}개월 생략 ...
-                        </td>
-                      </tr>
-                      {schedule.slice(-12).map((item) => (
-                        <tr key={item.month} className="border-b border-dark-800 hover:bg-dark-800/50">
-                          <td className="py-3 px-2 text-white">{item.month}회</td>
-                          <td className="py-3 px-2 text-right text-white">{formatNumber(item.payment)}원</td>
-                          <td className="py-3 px-2 text-right text-green-400">{formatNumber(item.principal)}원</td>
-                          <td className="py-3 px-2 text-right text-red-400">{formatNumber(item.interest)}원</td>
-                          <td className="py-3 px-2 text-right text-dark-400">{formatNumber(item.balance)}원</td>
-                        </tr>
-                      ))}
-                    </>
+                  {schedule.length > 24 && (
+                    <tr>
+                      <td colSpan={5} className="py-3 text-center text-dark-500">
+                        ... {schedule.length - 24}개월 생략 ...
+                      </td>
+                    </tr>
                   )}
+                  {schedule.length > 12 && schedule.slice(-12).map((item) => (
+                    <tr key={`last-${item.month}`} className="border-b border-dark-800 hover:bg-dark-800/50">
+                      <td className="py-3 px-2 text-white">{item.month}회</td>
+                      <td className="py-3 px-2 text-right text-white">{formatNumber(item.payment)}원</td>
+                      <td className="py-3 px-2 text-right text-green-400">{formatNumber(item.principal)}원</td>
+                      <td className="py-3 px-2 text-right text-red-400">{formatNumber(item.interest)}원</td>
+                      <td className="py-3 px-2 text-right text-dark-400">{formatNumber(item.balance)}원</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
           </div>
         )}
 
-        {/* 💡 상환방식 비교 안내 */}
+        {/* 상환방식 비교 */}
         <div className="glass-card p-6 rounded-2xl mt-8">
           <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
             <span>💡</span> 상환방식 비교
@@ -590,22 +562,13 @@ export default function LoanCalculator() {
         <div className="glass-card p-6 rounded-2xl mt-8">
           <h3 className="text-white font-medium mb-4">🔗 다른 계산기</h3>
           <div className="flex flex-wrap gap-3">
-            <Link
-              href="/salary"
-              className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
-            >
+            <Link href="/salary" className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all">
               💰 연봉 실수령액 계산기
             </Link>
-            <Link
-              href="/severance"
-              className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
-            >
+            <Link href="/severance" className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all">
               💼 퇴직금 계산기
             </Link>
-            <Link
-              href="/reaction"
-              className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all"
-            >
+            <Link href="/reaction" className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all">
               ⚡ 반응속도 테스트
             </Link>
           </div>

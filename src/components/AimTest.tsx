@@ -72,10 +72,6 @@ const translations = {
     msgGold: "괜찮은 에임!",
     msgSilver: "평균적인 에임",
     msgBronze: "연습이 필요해요!",
-    tipTitle: "에임 향상 팁",
-    tipContent: "마우스 감도를 조절하고, 손목이 아닌 팔 전체를 사용해보세요. 일정한 리듬으로 클릭하면 더 정확해집니다!",
-    whatIsAim: "에임 트레이닝이란?",
-    aimDescription: "에임 트레이닝은 FPS 게임에서 중요한 마우스 정확도와 반응속도를 향상시키는 연습입니다. 꾸준한 연습으로 실력이 향상됩니다!",
   },
   en: {
     title: "Aim",
@@ -122,10 +118,6 @@ const translations = {
     msgGold: "Good aim!",
     msgSilver: "Average aim",
     msgBronze: "Keep practicing!",
-    tipTitle: "Aim Improvement Tips",
-    tipContent: "Adjust your mouse sensitivity and use your whole arm instead of just your wrist. Clicking with a consistent rhythm improves accuracy!",
-    whatIsAim: "What is Aim Training?",
-    aimDescription: "Aim training helps improve mouse accuracy and reaction speed important for FPS games. Consistent practice leads to improvement!",
   },
   ja: {
     title: "エイム",
@@ -172,10 +164,6 @@ const translations = {
     msgGold: "良いエイム！",
     msgSilver: "平均的なエイム",
     msgBronze: "練習が必要！",
-    tipTitle: "エイム向上のコツ",
-    tipContent: "マウス感度を調整し、手首だけでなく腕全体を使いましょう。一定のリズムでクリックすると精度が上がります！",
-    whatIsAim: "エイムトレーニングとは？",
-    aimDescription: "エイムトレーニングはFPSゲームで重要なマウスの精度と反応速度を向上させる練習です。継続的な練習で上達します！",
   },
   zh: {
     title: "瞄准",
@@ -222,10 +210,6 @@ const translations = {
     msgGold: "不错的瞄准！",
     msgSilver: "平均水平",
     msgBronze: "需要练习！",
-    tipTitle: "瞄准提升技巧",
-    tipContent: "调整鼠标灵敏度，使用整个手臂而不仅仅是手腕。保持稳定的点击节奏可以提高准确性！",
-    whatIsAim: "什么是瞄准训练？",
-    aimDescription: "瞄准训练帮助提高FPS游戏中重要的鼠标准确性和反应速度。持续练习就会进步！",
   },
   es: {
     title: "Entrenador",
@@ -272,10 +256,6 @@ const translations = {
     msgGold: "¡Buena puntería!",
     msgSilver: "Puntería promedio",
     msgBronze: "¡Sigue practicando!",
-    tipTitle: "Consejos para mejorar la puntería",
-    tipContent: "Ajusta la sensibilidad del ratón y usa todo el brazo en lugar de solo la muñeca. ¡Hacer clic con un ritmo constante mejora la precisión!",
-    whatIsAim: "¿Qué es el entrenamiento de puntería?",
-    aimDescription: "El entrenamiento de puntería ayuda a mejorar la precisión del ratón y la velocidad de reacción importantes para juegos FPS. ¡La práctica constante lleva a la mejora!",
   },
   pt: {
     title: "Treinador",
@@ -322,10 +302,6 @@ const translations = {
     msgGold: "Boa mira!",
     msgSilver: "Mira média",
     msgBronze: "Continue praticando!",
-    tipTitle: "Dicas para melhorar a mira",
-    tipContent: "Ajuste a sensibilidade do mouse e use todo o braço em vez de apenas o pulso. Clicar com um ritmo constante melhora a precisão!",
-    whatIsAim: "O que é treino de mira?",
-    aimDescription: "O treino de mira ajuda a melhorar a precisão do mouse e a velocidade de reação importantes para jogos FPS. A prática constante leva à melhora!",
   },
   de: {
     title: "Aim",
@@ -372,10 +348,6 @@ const translations = {
     msgGold: "Guter Aim!",
     msgSilver: "Durchschnittlicher Aim",
     msgBronze: "Weiter üben!",
-    tipTitle: "Tipps zur Verbesserung der Zielgenauigkeit",
-    tipContent: "Passe die Mausempfindlichkeit an und verwende den ganzen Arm statt nur das Handgelenk. Klicken mit konstantem Rhythmus verbessert die Genauigkeit!",
-    whatIsAim: "Was ist Aim-Training?",
-    aimDescription: "Aim-Training hilft, die Mausgenauigkeit und Reaktionsgeschwindigkeit zu verbessern, die für FPS-Spiele wichtig sind. Konsequentes Üben führt zu Verbesserung!",
   },
   fr: {
     title: "Entraîneur",
@@ -422,10 +394,6 @@ const translations = {
     msgGold: "Bonne visée !",
     msgSilver: "Visée moyenne",
     msgBronze: "Continuez à pratiquer !",
-    tipTitle: "Conseils pour améliorer la visée",
-    tipContent: "Ajustez la sensibilité de la souris et utilisez tout le bras au lieu du poignet seulement. Cliquer avec un rythme constant améliore la précision !",
-    whatIsAim: "Qu'est-ce que l'entraînement à la visée ?",
-    aimDescription: "L'entraînement à la visée aide à améliorer la précision de la souris et la vitesse de réaction importantes pour les jeux FPS. La pratique régulière mène à l'amélioration !",
   },
 };
 
@@ -904,8 +872,11 @@ ${t.shareTestIt}`;
             <div className="flex items-start gap-3">
               <span className="text-2xl">🎯</span>
               <div>
-                <p className="text-white font-medium mb-1">{t.tipTitle}</p>
-                <p className="text-dark-400 text-sm">{t.tipContent}</p>
+                <p className="text-white font-medium mb-1">에임 향상 팁</p>
+                <p className="text-dark-400 text-sm">
+                  타겟을 예측하지 말고 눈으로 확인 후 클릭하세요. 
+                  팔꿈치를 고정하고 손목만 움직이면 정확도가 올라갑니다!
+                </p>
               </div>
             </div>
           </div>
@@ -1070,10 +1041,11 @@ ${t.shareTestIt}`;
           {/* 🎮 에임 트레이닝이란? */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
             <h3 className="text-white font-medium mb-3 flex items-center gap-2">
-              <span>🖱️</span> {t.whatIsAim}
+              <span>🖱️</span> 에임 트레이닝이란?
             </h3>
             <p className="text-dark-400 text-sm leading-relaxed mb-3">
-              {t.aimDescription}
+              에임 트레이닝은 FPS 게임에서 중요한 마우스 정확도와 반응속도를 향상시키는 연습입니다.
+              꾸준한 트레이닝으로 발로란트, 오버워치, 배그 등에서 실력을 올릴 수 있습니다.
             </p>
             <div className="grid grid-cols-3 gap-2 text-xs">
               <div className="bg-dark-800/50 p-2 rounded-lg text-center">
