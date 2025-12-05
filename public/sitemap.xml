@@ -748,4 +748,12 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <!-- ========== 글자수 세기 (NEW!) ========== -->
+  <url>
+    <loc>https://www.slox.co.kr/character-count</loc>
+    <lastmod>2025-12-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
 </urlset>
