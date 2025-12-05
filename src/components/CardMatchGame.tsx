@@ -459,43 +459,69 @@ export default function CardMatchGame() {
 
           {/* 게임 상태 표시 */}
           {(state === "playing" || state === "memorize") && (
-            <div className="flex justify-center items-center gap-4 mb-6">
-              {/* 기억 시간 카운트다운 - 왼쪽 */}
-              {state === "memorize" && (
-                <div className={`text-center px-5 py-2 rounded-xl border-2 transition-all ${
-                  memorizeTimer <= 3 
-                    ? 'bg-red-500/20 border-red-500/50 animate-pulse' 
-                    : 'bg-yellow-500/20 border-yellow-500/50'
+            <div className="flex flex-col items-center gap-3 mb-6">
+              {/* 🎯 실시간 점수 & 등급 표시 */}
+              {state === "playing" && (
+                <div className="flex items-center gap-3">
+                  <div className={`px-5 py-2 rounded-xl border-2 ${getGrade().color.replace('text-', 'border-')}/50 bg-gradient-to-r ${
+                    getScore() >= 1200 ? 'from-yellow-500/20 to-orange-500/20' :
+                    getScore() >= 1000 ? 'from-yellow-500/10 to-amber-500/10' :
+                    getScore() >= 800 ? 'from-purple-500/10 to-violet-500/10' :
+                    getScore() >= 600 ? 'from-blue-500/10 to-cyan-500/10' :
+                    getScore() >= 400 ? 'from-green-500/10 to-emerald-500/10' :
+                    'from-gray-500/10 to-slate-500/10'
+                  }`}>
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{getGrade().emoji}</span>
+                      <div>
+                        <p className="text-dark-400 text-xs">현재 점수</p>
+                        <p className={`text-2xl font-black ${getGrade().color}`}>
+                          {getScore()}점 <span className="text-lg">({getGrade().grade})</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="flex justify-center items-center gap-4">
+                {/* 기억 시간 카운트다운 - 왼쪽 */}
+                {state === "memorize" && (
+                  <div className={`text-center px-5 py-2 rounded-xl border-2 transition-all ${
+                    memorizeTimer <= 3 
+                      ? 'bg-red-500/20 border-red-500/50 animate-pulse' 
+                      : 'bg-yellow-500/20 border-yellow-500/50'
+                  }`}>
+                    <p className="text-xs font-medium text-yellow-400">👀 기억하세요!</p>
+                    <p className={`text-2xl font-black ${memorizeTimer <= 3 ? 'text-red-400' : 'text-yellow-300'}`}>
+                      {memorizeTimer}초
+                    </p>
+                  </div>
+                )}
+                
+                <div className={`text-center px-4 py-2 rounded-xl transition-all ${
+                  timer <= 10 ? 'bg-red-500/20 border border-red-500/50 animate-pulse' : 'bg-dark-800/50'
                 }`}>
-                  <p className="text-xs font-medium text-yellow-400">👀 기억하세요!</p>
-                  <p className={`text-2xl font-black ${memorizeTimer <= 3 ? 'text-red-400' : 'text-yellow-300'}`}>
-                    {memorizeTimer}초
+                  <p className="text-dark-400 text-xs">⏱️ 남은 시간</p>
+                  <p className={`text-xl font-bold ${timer <= 10 ? 'text-red-400' : timer <= 30 ? 'text-yellow-400' : 'text-white'}`}>
+                    {formatTime(timer)}
                   </p>
                 </div>
-              )}
-              
-              <div className={`text-center px-4 py-2 rounded-xl transition-all ${
-                timer <= 10 ? 'bg-red-500/20 border border-red-500/50 animate-pulse' : 'bg-dark-800/50'
-              }`}>
-                <p className="text-dark-400 text-xs">⏱️ 남은 시간</p>
-                <p className={`text-xl font-bold ${timer <= 10 ? 'text-red-400' : timer <= 30 ? 'text-yellow-400' : 'text-white'}`}>
-                  {formatTime(timer)}
-                </p>
-              </div>
-              <div className="text-center px-4 py-2 bg-dark-800/50 rounded-xl">
-                <p className="text-dark-400 text-xs">짝</p>
-                <p className="text-xl font-bold text-green-400">{matchedPairs}/{totalPairs}</p>
-              </div>
-              <div className="text-center px-4 py-2 bg-dark-800/50 rounded-xl">
-                <p className="text-dark-400 text-xs">🖱️ 클릭</p>
-                <p className="text-xl font-bold text-yellow-400">{moves}</p>
-              </div>
-              {combo > 0 && (
-                <div className="text-center px-4 py-2 bg-orange-500/20 rounded-xl border border-orange-500/30">
-                  <p className="text-dark-400 text-xs">콤보</p>
-                  <p className="text-xl font-bold text-orange-400">🔥 {combo}x</p>
+                <div className="text-center px-4 py-2 bg-dark-800/50 rounded-xl">
+                  <p className="text-dark-400 text-xs">짝</p>
+                  <p className="text-xl font-bold text-green-400">{matchedPairs}/{totalPairs}</p>
                 </div>
-              )}
+                <div className="text-center px-4 py-2 bg-dark-800/50 rounded-xl">
+                  <p className="text-dark-400 text-xs">🖱️ 클릭</p>
+                  <p className="text-xl font-bold text-yellow-400">{moves}</p>
+                </div>
+                {combo > 0 && (
+                  <div className="text-center px-4 py-2 bg-orange-500/20 rounded-xl border border-orange-500/30">
+                    <p className="text-dark-400 text-xs">콤보</p>
+                    <p className="text-xl font-bold text-orange-400">🔥 {combo}x</p>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
@@ -648,42 +674,58 @@ export default function CardMatchGame() {
 
             {/* 결과 화면 */}
             {state === "result" && (
-              <div className="flex flex-col items-center justify-center h-[400px]">
-                {/* 시간 초과 vs 성공 구분 */}
+              <div className="flex flex-col items-center justify-center min-h-[400px] py-6">
+                {/* 시간 초과 vs 성공 - 둘 다 점수/등급 표시! */}
                 {matchedPairs === totalPairs ? (
-                  <>
-                    <div className="text-6xl mb-4 animate-bounce-in">{getGrade().emoji}</div>
-                    <p className={`text-3xl font-bold ${getGrade().color} mb-2`}>
-                      {getGrade().grade}
-                    </p>
-                    <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-4">
-                      {getScore()}점
-                    </p>
-                  </>
+                  <p className="text-green-400 text-sm font-medium mb-2">🎉 완료!</p>
                 ) : (
-                  <>
-                    <div className="text-6xl mb-4">⏰</div>
-                    <p className="text-3xl font-bold text-red-400 mb-2">
-                      시간 초과!
-                    </p>
-                    <p className="text-dark-400 mb-4">
-                      {matchedPairs}/{totalPairs} 짝 맞춤
-                    </p>
-                  </>
+                  <p className="text-red-400 text-sm font-medium mb-2">⏰ 시간 초과! ({matchedPairs}/{totalPairs} 짝)</p>
                 )}
                 
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  <div className="text-center px-4 py-2 bg-dark-800/50 rounded-xl">
-                    <p className="text-dark-400 text-xs">남은 시간</p>
-                    <p className="text-lg font-bold text-white">{formatTime(timer)}</p>
-                  </div>
-                  <div className="text-center px-4 py-2 bg-dark-800/50 rounded-xl">
-                    <p className="text-dark-400 text-xs">클릭</p>
-                    <p className="text-lg font-bold text-yellow-400">{moves}회</p>
-                  </div>
-                  <div className="text-center px-4 py-2 bg-dark-800/50 rounded-xl">
-                    <p className="text-dark-400 text-xs">최대 콤보</p>
-                    <p className="text-lg font-bold text-orange-400">{maxCombo}x</p>
+                {/* 등급 & 점수 - 항상 표시 */}
+                <div className="text-6xl mb-2 animate-bounce-in">{getGrade().emoji}</div>
+                <p className={`text-4xl font-black ${getGrade().color} mb-1`}>
+                  {getGrade().grade} 등급
+                </p>
+                <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2">
+                  {getScore()}점
+                </p>
+                
+                {/* 다음 등급까지 안내 */}
+                {getScore() < 1200 && (
+                  <p className="text-dark-400 text-sm mb-4">
+                    {getScore() >= 1000 ? `👑 S+ 등급까지 ${1200 - getScore()}점!` :
+                     getScore() >= 800 ? `🏆 S 등급까지 ${1000 - getScore()}점!` :
+                     getScore() >= 600 ? `💎 A 등급까지 ${800 - getScore()}점!` :
+                     getScore() >= 400 ? `⭐ B 등급까지 ${600 - getScore()}점!` :
+                     `👍 C 등급까지 ${400 - getScore()}점!`}
+                  </p>
+                )}
+                
+                {/* 점수 상세 내역 */}
+                <div className="bg-dark-800/50 rounded-xl p-4 mb-4 w-full max-w-sm">
+                  <p className="text-dark-400 text-xs mb-2 text-center">📊 점수 계산</p>
+                  <div className="space-y-1 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-dark-400">기본 점수</span>
+                      <span className="text-white">+1,000점</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-dark-400">남은 시간 보너스 ({timer}초 × 5)</span>
+                      <span className="text-green-400">+{timer * 5}점</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-dark-400">클릭 패널티 ({moves}회 × 5)</span>
+                      <span className="text-red-400">-{moves * 5}점</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-dark-400">콤보 보너스 ({maxCombo}x × 50)</span>
+                      <span className="text-orange-400">+{maxCombo * 50}점</span>
+                    </div>
+                    <div className="border-t border-dark-700 pt-2 mt-2 flex justify-between font-bold">
+                      <span className="text-white">총점</span>
+                      <span className={getGrade().color}>{getScore()}점</span>
+                    </div>
                   </div>
                 </div>
 
