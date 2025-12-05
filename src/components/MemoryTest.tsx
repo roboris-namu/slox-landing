@@ -47,6 +47,11 @@ const translations = {
     msgAverage: "일반적인 기억력",
     msgBeginner: "연습이 필요해요!",
     digits: "자리",
+    tipTitle: "기억력 향상 팁",
+    tipContent: "숫자를 묶어서 기억해보세요. 예: 1234567890을 123-456-7890으로 나누면 더 쉽게 기억할 수 있어요!",
+    whatIsMemory: "숫자 기억력이란?",
+    memoryDescription: "평균적인 사람은 7±2개의 항목을 기억할 수 있습니다(밀러의 법칙). 훈련을 통해 12자리 이상까지 향상시킬 수 있습니다!",
+    averageNote: "💡 일반인 평균: 7±2자리 (밀러의 법칙)",
   },
   en: {
     title: "Number",
@@ -88,6 +93,11 @@ const translations = {
     msgAverage: "Average memory",
     msgBeginner: "Keep practicing!",
     digits: "digits",
+    tipTitle: "Memory Improvement Tips",
+    tipContent: "Try chunking numbers. For example: remembering 1234567890 as 123-456-7890 makes it easier!",
+    whatIsMemory: "What is Number Memory?",
+    memoryDescription: "The average person can remember 7±2 items (Miller's Law). Through training, you can improve to 12+ digits!",
+    averageNote: "💡 Average: 7±2 digits (Miller's Law)",
   },
   ja: {
     title: "数字記憶",
@@ -129,6 +139,11 @@ const translations = {
     msgAverage: "平均的な記憶力",
     msgBeginner: "練習が必要！",
     digits: "桁",
+    tipTitle: "記憶力向上のコツ",
+    tipContent: "数字をまとめて覚えてみてください。例：1234567890を123-456-7890として覚えると簡単です！",
+    whatIsMemory: "数字記憶力とは？",
+    memoryDescription: "平均的な人は7±2個の項目を記憶できます（ミラーの法則）。トレーニングで12桁以上に向上させることができます！",
+    averageNote: "💡 平均：7±2桁（ミラーの法則）",
   },
   zh: {
     title: "数字记忆",
@@ -170,6 +185,11 @@ const translations = {
     msgAverage: "平均记忆力",
     msgBeginner: "需要练习！",
     digits: "位",
+    tipTitle: "记忆力提升技巧",
+    tipContent: "尝试分组记忆数字。例如：把1234567890记成123-456-7890会更容易！",
+    whatIsMemory: "什么是数字记忆力？",
+    memoryDescription: "普通人可以记住7±2个项目（米勒法则）。通过训练，可以提高到12位以上！",
+    averageNote: "💡 平均：7±2位（米勒法则）",
   },
   es: {
     title: "Memoria de",
@@ -211,6 +231,11 @@ const translations = {
     msgAverage: "Memoria promedio",
     msgBeginner: "¡Sigue practicando!",
     digits: "dígitos",
+    tipTitle: "Consejos para mejorar la memoria",
+    tipContent: "Intenta agrupar números. Por ejemplo: recordar 1234567890 como 123-456-7890 es más fácil!",
+    whatIsMemory: "¿Qué es la memoria numérica?",
+    memoryDescription: "La persona promedio puede recordar 7±2 elementos (Ley de Miller). ¡Con entrenamiento puedes mejorar a 12+ dígitos!",
+    averageNote: "💡 Promedio: 7±2 dígitos (Ley de Miller)",
   },
   pt: {
     title: "Memória de",
@@ -252,6 +277,11 @@ const translations = {
     msgAverage: "Memória média",
     msgBeginner: "Continue praticando!",
     digits: "dígitos",
+    tipTitle: "Dicas para melhorar a memória",
+    tipContent: "Tente agrupar números. Por exemplo: lembrar 1234567890 como 123-456-7890 é mais fácil!",
+    whatIsMemory: "O que é memória numérica?",
+    memoryDescription: "A pessoa média pode lembrar 7±2 itens (Lei de Miller). Com treinamento, você pode melhorar para 12+ dígitos!",
+    averageNote: "💡 Média: 7±2 dígitos (Lei de Miller)",
   },
   de: {
     title: "Zahlen",
@@ -293,6 +323,11 @@ const translations = {
     msgAverage: "Durchschnittliches Gedächtnis",
     msgBeginner: "Weiter üben!",
     digits: "Ziffern",
+    tipTitle: "Tipps zur Gedächtnisverbesserung",
+    tipContent: "Versuche Zahlen zu gruppieren. Beispiel: 1234567890 als 123-456-7890 zu merken ist einfacher!",
+    whatIsMemory: "Was ist Zahlengedächtnis?",
+    memoryDescription: "Der Durchschnittsmensch kann sich 7±2 Elemente merken (Millersche Zahl). Durch Training kannst du auf 12+ Ziffern verbessern!",
+    averageNote: "💡 Durchschnitt: 7±2 Ziffern (Millersche Zahl)",
   },
   fr: {
     title: "Mémoire des",
@@ -334,6 +369,11 @@ const translations = {
     msgAverage: "Mémoire moyenne",
     msgBeginner: "Continuez à pratiquer !",
     digits: "chiffres",
+    tipTitle: "Conseils pour améliorer la mémoire",
+    tipContent: "Essayez de regrouper les nombres. Par exemple: retenir 1234567890 comme 123-456-7890 est plus facile !",
+    whatIsMemory: "Qu'est-ce que la mémoire numérique ?",
+    memoryDescription: "La personne moyenne peut retenir 7±2 éléments (Loi de Miller). Avec l'entraînement, vous pouvez améliorer à 12+ chiffres !",
+    averageNote: "💡 Moyenne : 7±2 chiffres (Loi de Miller)",
   },
 };
 
@@ -546,11 +586,8 @@ ${t.shareTestIt}`;
             <div className="flex items-start gap-3">
               <span className="text-2xl">🧠</span>
               <div>
-                <p className="text-white font-medium mb-1">기억력 향상 팁</p>
-                <p className="text-dark-400 text-sm">
-                  숫자를 2~3개씩 묶어서 기억하는 청킹(Chunking) 기법을 사용해보세요.
-                  예: 1234567 → 123-456-7로 나눠서 기억!
-                </p>
+                <p className="text-white font-medium mb-1">{t.tipTitle}</p>
+                <p className="text-dark-400 text-sm">{t.tipContent}</p>
               </div>
             </div>
           </div>
@@ -651,12 +688,10 @@ ${t.shareTestIt}`;
           {/* 🧩 작업 기억력이란? */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
             <h3 className="text-white font-medium mb-3 flex items-center gap-2">
-              <span>💭</span> 작업 기억력(Working Memory)이란?
+              <span>💭</span> {t.whatIsMemory}
             </h3>
             <p className="text-dark-400 text-sm leading-relaxed">
-              작업 기억력은 정보를 일시적으로 저장하고 조작하는 인지 능력입니다.
-              평균적인 사람은 7±2개의 항목을 기억할 수 있습니다(밀러의 법칙).
-              훈련을 통해 12자리 이상까지 향상시킬 수 있습니다!
+              {t.memoryDescription}
             </p>
           </div>
 
@@ -686,7 +721,7 @@ ${t.shareTestIt}`;
               </div>
             </div>
             <p className="text-dark-500 text-xs mt-4 text-center">
-              💡 일반인 평균: 7±2자리 (밀러의 법칙)
+              {t.averageNote}
             </p>
           </div>
 

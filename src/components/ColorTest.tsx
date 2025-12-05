@@ -45,6 +45,10 @@ const translations = {
     msgGood: "평균 이상의 색각!",
     msgAverage: "일반적인 색각",
     msgBeginner: "연습이 필요해요!",
+    tipTitle: "색상 구별 팁",
+    tipContent: "화면 중앙에 시선을 고정하고, 주변시를 활용해보세요. 밝기 차이에 주목하면 더 쉽게 찾을 수 있습니다!",
+    whatIsColor: "색각 테스트란?",
+    colorDescription: "색각 테스트는 미세한 색상 차이를 구별하는 능력을 측정합니다. 디자이너, 화가, 조종사 등 정확한 색 구별이 필요한 직업에서 중요합니다!",
   },
   en: {
     title: "Find the",
@@ -84,6 +88,10 @@ const translations = {
     msgGood: "Above average color vision!",
     msgAverage: "Normal color vision",
     msgBeginner: "Keep practicing!",
+    tipTitle: "Color Differentiation Tips",
+    tipContent: "Focus your gaze on the center of the screen and use peripheral vision. Paying attention to brightness differences makes it easier to find!",
+    whatIsColor: "What is Color Vision Test?",
+    colorDescription: "The color vision test measures your ability to distinguish subtle color differences. It's important for professions like designers, painters, and pilots that require accurate color discrimination!",
   },
   ja: {
     title: "色探し",
@@ -123,6 +131,10 @@ const translations = {
     msgGood: "平均以上の色覚！",
     msgAverage: "一般的な色覚",
     msgBeginner: "練習が必要！",
+    tipTitle: "色の区別のコツ",
+    tipContent: "画面の中心に視線を固定し、周辺視野を活用してください。明るさの違いに注目すると見つけやすくなります！",
+    whatIsColor: "色覚テストとは？",
+    colorDescription: "色覚テストは微細な色の違いを区別する能力を測定します。デザイナー、画家、パイロットなど正確な色の区別が必要な職業で重要です！",
   },
   zh: {
     title: "找不同",
@@ -162,6 +174,10 @@ const translations = {
     msgGood: "高于平均的色觉！",
     msgAverage: "正常色觉",
     msgBeginner: "需要练习！",
+    tipTitle: "颜色区分技巧",
+    tipContent: "将视线固定在屏幕中央，利用周边视野。注意亮度差异可以更容易找到！",
+    whatIsColor: "什么是色觉测试？",
+    colorDescription: "色觉测试测量你区分细微颜色差异的能力。对于设计师、画家、飞行员等需要准确色彩辨别的职业很重要！",
   },
   es: {
     title: "Encuentra el",
@@ -201,6 +217,10 @@ const translations = {
     msgGood: "¡Visión superior al promedio!",
     msgAverage: "Visión de color normal",
     msgBeginner: "¡Sigue practicando!",
+    tipTitle: "Consejos para distinguir colores",
+    tipContent: "Fija la mirada en el centro de la pantalla y usa la visión periférica. ¡Prestar atención a las diferencias de brillo facilita encontrarlo!",
+    whatIsColor: "¿Qué es el test de visión de colores?",
+    colorDescription: "El test de visión de colores mide tu capacidad para distinguir diferencias sutiles de color. ¡Es importante para profesiones como diseñadores, pintores y pilotos que requieren discriminación precisa del color!",
   },
   pt: {
     title: "Encontre a",
@@ -240,6 +260,10 @@ const translations = {
     msgGood: "Visão acima da média!",
     msgAverage: "Visão de cores normal",
     msgBeginner: "Continue praticando!",
+    tipTitle: "Dicas para distinguir cores",
+    tipContent: "Fixe o olhar no centro da tela e use a visão periférica. Prestar atenção às diferenças de brilho facilita encontrar!",
+    whatIsColor: "O que é o teste de visão de cores?",
+    colorDescription: "O teste de visão de cores mede sua capacidade de distinguir diferenças sutis de cor. É importante para profissões como designers, pintores e pilotos que requerem discriminação precisa de cores!",
   },
   de: {
     title: "Finde die",
@@ -279,6 +303,10 @@ const translations = {
     msgGood: "Überdurchschnittliches Farbsehen!",
     msgAverage: "Normales Farbsehen",
     msgBeginner: "Weiter üben!",
+    tipTitle: "Tipps zur Farbunterscheidung",
+    tipContent: "Fixiere den Blick auf die Bildschirmmitte und nutze das periphere Sehen. Auf Helligkeitsunterschiede zu achten macht es einfacher zu finden!",
+    whatIsColor: "Was ist ein Farbsehentest?",
+    colorDescription: "Der Farbsehentest misst deine Fähigkeit, subtile Farbunterschiede zu unterscheiden. Wichtig für Berufe wie Designer, Maler und Piloten, die genaue Farbunterscheidung erfordern!",
   },
   fr: {
     title: "Trouvez la",
@@ -318,6 +346,10 @@ const translations = {
     msgGood: "Vision supérieure à la moyenne !",
     msgAverage: "Vision des couleurs normale",
     msgBeginner: "Continuez à pratiquer !",
+    tipTitle: "Conseils pour distinguer les couleurs",
+    tipContent: "Fixez le regard au centre de l'écran et utilisez la vision périphérique. Faire attention aux différences de luminosité facilite la recherche !",
+    whatIsColor: "Qu'est-ce que le test de vision des couleurs ?",
+    colorDescription: "Le test de vision des couleurs mesure votre capacité à distinguer les différences subtiles de couleur. Important pour les métiers comme designers, peintres et pilotes qui nécessitent une discrimination précise des couleurs !",
   },
 };
 
@@ -536,11 +568,8 @@ ${t.shareTestIt}`;
             <div className="flex items-start gap-3">
               <span className="text-2xl">👁️</span>
               <div>
-                <p className="text-white font-medium mb-1">색상 구별 팁</p>
-                <p className="text-dark-400 text-sm">
-                  화면 밝기를 적절히 조절하고, 전체 그리드를 한눈에 보며 미세한 차이를 찾아보세요.
-                  주변 색상과 비교하면 더 쉽게 찾을 수 있습니다!
-                </p>
+                <p className="text-white font-medium mb-1">{t.tipTitle}</p>
+                <p className="text-dark-400 text-sm">{t.tipContent}</p>
               </div>
             </div>
           </div>
@@ -617,11 +646,10 @@ ${t.shareTestIt}`;
           {/* 🎨 색각 테스트 정보 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
             <h3 className="text-white font-medium mb-3 flex items-center gap-2">
-              <span>🌈</span> 색각(色覺)이란?
+              <span>🌈</span> {t.whatIsColor}
             </h3>
             <p className="text-dark-400 text-sm leading-relaxed">
-              색각은 색상을 구별하는 능력입니다. 인간의 눈은 약 1천만 가지 색상을 구별할 수 있으며,
-              디자이너, 화가, 사진작가 등 시각 관련 직업에서 중요한 능력입니다.
+              {t.colorDescription}
             </p>
           </div>
 

@@ -29,6 +29,7 @@ const translations: Record<Lang, {
   backToMain: string;
   shareText: string;
   copied: string;
+  slotAlt: string;
   characters: {
     leader: { name: string; title: string; traits: string[]; description: string; strength: string; weakness: string; };
     josoon: { name: string; title: string; traits: string[]; description: string; strength: string; weakness: string; };
@@ -62,6 +63,7 @@ const translations: Record<Lang, {
     backToMain: "← 메인으로",
     shareText: "🐂 나와 닮은 황소 테스트 결과!",
     copied: "결과가 클립보드에 복사되었습니다!",
+    slotAlt: "슬롯",
     characters: {
       leader: { name: "리더황", title: "타고난 리더", traits: ["책임감", "결단력", "신뢰"], description: "당신은 팀을 이끄는 천부적인 리더예요! 어떤 상황에서도 흔들리지 않는 듬직함과 책임감으로 주변 사람들에게 신뢰를 줍니다.", strength: "위기 상황에서 빛나는 판단력", weakness: "가끔 혼자 모든 걸 짊어지려 해요" },
       josoon: { name: "조순", title: "따뜻한 치유자", traits: ["배려심", "공감력", "따뜻함"], description: "당신은 주변 사람들을 편안하게 만드는 힐러예요! 뛰어난 공감 능력과 따뜻한 마음으로 모두에게 사랑받습니다.", strength: "누구와도 잘 어울리는 친화력", weakness: "거절을 잘 못해요" },
@@ -104,6 +106,7 @@ const translations: Record<Lang, {
     backToMain: "← Back",
     shareText: "🐂 My Bull Character Test Result!",
     copied: "Result copied to clipboard!",
+    slotAlt: "Slot",
     characters: {
       leader: { name: "Leader Bull", title: "Born Leader", traits: ["Responsibility", "Decisive", "Trustworthy"], description: "You are a natural-born leader! Your reliability and sense of responsibility in any situation earns trust from everyone around you.", strength: "Brilliant judgment in crisis", weakness: "Sometimes tries to carry everything alone" },
       josoon: { name: "Josoon", title: "Warm Healer", traits: ["Caring", "Empathetic", "Warm"], description: "You make everyone around you feel comfortable! Your excellent empathy and warm heart make you beloved by all.", strength: "Gets along with anyone", weakness: "Has trouble saying no" },
@@ -146,6 +149,7 @@ const translations: Record<Lang, {
     backToMain: "← 戻る",
     shareText: "🐂 私に似た牛テストの結果！",
     copied: "結果がクリップボードにコピーされました！",
+    slotAlt: "スロット",
     characters: {
       leader: { name: "リーダー牛", title: "生まれながらのリーダー", traits: ["責任感", "決断力", "信頼"], description: "あなたは天性のリーダーです！どんな状況でも揺るがない頼もしさと責任感で周りの人々から信頼されています。", strength: "危機的状況での優れた判断力", weakness: "時々一人で全てを背負おうとする" },
       josoon: { name: "ジョスン", title: "温かい癒し手", traits: ["思いやり", "共感力", "温かさ"], description: "あなたは周りの人を心地よくさせるヒーラーです！優れた共感能力と温かい心で皆から愛されています。", strength: "誰とでも仲良くなれる親和力", weakness: "断るのが苦手" },
@@ -188,6 +192,7 @@ const translations: Record<Lang, {
     backToMain: "← 返回",
     shareText: "🐂 与我相似的牛测试结果！",
     copied: "结果已复制到剪贴板！",
+    slotAlt: "老虎机",
     characters: {
       leader: { name: "领导牛", title: "天生领袖", traits: ["责任感", "决断力", "可信赖"], description: "你是天生的领导者！在任何情况下都不动摇的可靠和责任感让周围的人信任你。", strength: "危机时刻闪耀的判断力", weakness: "有时试图独自承担一切" },
       josoon: { name: "朝顺", title: "温暖的治愈者", traits: ["体贴", "共情", "温暖"], description: "你让周围的人感到舒适！出色的共情能力和温暖的心使你受到所有人的喜爱。", strength: "与任何人都能相处融洽", weakness: "不擅长拒绝" },
@@ -230,6 +235,7 @@ const translations: Record<Lang, {
     backToMain: "← Volver",
     shareText: "🐂 ¡Mi resultado del test del toro!",
     copied: "¡Resultado copiado!",
+    slotAlt: "Ranura",
     characters: {
       leader: { name: "Toro Líder", title: "Líder Nato", traits: ["Responsable", "Decisivo", "Confiable"], description: "¡Eres un líder natural! Tu fiabilidad y responsabilidad en cualquier situación te gana la confianza de todos.", strength: "Juicio brillante en crisis", weakness: "A veces intenta cargar con todo solo" },
       josoon: { name: "Josoon", title: "Sanador Cálido", traits: ["Cariñoso", "Empático", "Cálido"], description: "¡Haces que todos se sientan cómodos! Tu excelente empatía y corazón cálido te hacen querido por todos.", strength: "Se lleva bien con cualquiera", weakness: "Le cuesta decir que no" },
@@ -272,6 +278,7 @@ const translations: Record<Lang, {
     backToMain: "← Voltar",
     shareText: "🐂 Meu resultado do teste do touro!",
     copied: "Resultado copiado!",
+    slotAlt: "Slot",
     characters: {
       leader: { name: "Touro Líder", title: "Líder Nato", traits: ["Responsável", "Decisivo", "Confiável"], description: "Você é um líder natural! Sua confiabilidade e responsabilidade em qualquer situação ganha a confiança de todos.", strength: "Julgamento brilhante em crises", weakness: "Às vezes tenta carregar tudo sozinho" },
       josoon: { name: "Josoon", title: "Curador Caloroso", traits: ["Carinhoso", "Empático", "Caloroso"], description: "Você faz todos se sentirem confortáveis! Sua excelente empatia e coração caloroso te fazem amado por todos.", strength: "Se dá bem com qualquer um", weakness: "Tem dificuldade em dizer não" },
@@ -314,6 +321,7 @@ const translations: Record<Lang, {
     backToMain: "← Zurück",
     shareText: "🐂 Mein Stier-Test Ergebnis!",
     copied: "Ergebnis kopiert!",
+    slotAlt: "Spielautomat",
     characters: {
       leader: { name: "Anführer-Stier", title: "Geborener Anführer", traits: ["Verantwortung", "Entschlossen", "Vertrauenswürdig"], description: "Du bist ein geborener Anführer! Deine Zuverlässigkeit und Verantwortung in jeder Situation gewinnt das Vertrauen aller.", strength: "Brillantes Urteil in Krisen", weakness: "Versucht manchmal alles allein zu tragen" },
       josoon: { name: "Josoon", title: "Warmer Heiler", traits: ["Fürsorglich", "Empathisch", "Warm"], description: "Du machst alle um dich herum wohl! Deine exzellente Empathie und warmes Herz machen dich bei allen beliebt.", strength: "Kommt mit jedem aus", weakness: "Kann schwer Nein sagen" },
@@ -356,6 +364,7 @@ const translations: Record<Lang, {
     backToMain: "← Retour",
     shareText: "🐂 Mon résultat du test du taureau!",
     copied: "Résultat copié!",
+    slotAlt: "Machine à sous",
     characters: {
       leader: { name: "Taureau Leader", title: "Leader Né", traits: ["Responsable", "Décisif", "Fiable"], description: "Vous êtes un leader naturel! Votre fiabilité et responsabilité dans toute situation gagne la confiance de tous.", strength: "Jugement brillant en crise", weakness: "Essaie parfois de tout porter seul" },
       josoon: { name: "Josoon", title: "Guérisseur Chaleureux", traits: ["Attentionné", "Empathique", "Chaleureux"], description: "Vous mettez tout le monde à l'aise! Votre excellente empathie et cœur chaleureux vous rendent aimé de tous.", strength: "S'entend avec tout le monde", weakness: "A du mal à dire non" },
@@ -618,7 +627,7 @@ ${charT.description}
                 <div className={`absolute inset-0 flex items-center justify-center ${isSpinning ? "animate-pulse" : ""}`}>
                   <Image
                     src={characterBase[characterIds[slotIndex]].image}
-                    alt="슬롯"
+                    alt={t.slotAlt}
                     width={150}
                     height={150}
                     className="object-contain"

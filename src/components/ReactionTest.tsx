@@ -72,6 +72,16 @@ const translations = {
     msgSilver: "평균적인 속도예요",
     msgBronze: "조금 느린 편이에요",
     msgIron: "연습이 필요해요!",
+    // 팁 & 설명
+    tipTitle: "반응속도 향상 팁",
+    tipContent: "화면 중앙에 집중하고, 손가락을 마우스/화면 위에 준비하세요. 꾸준한 연습으로 반응속도가 향상됩니다!",
+    tapToStart: "👆 탭하여 시작!",
+    whatIsReaction: "반응속도란?",
+    reactionDescription: "반응속도는 시각적 자극을 인지하고 신체가 반응하기까지 걸리는 시간입니다. 평균적인 사람의 반응속도는 200~300ms이며, 프로게이머는 150ms 이하를 기록하기도 합니다.",
+    inGames: "게임에서",
+    inGamesDesc: "FPS, 격투 게임에서 승패를 좌우",
+    inDaily: "일상에서",
+    inDailyDesc: "운전, 스포츠 등 순간 판단력",
   },
   en: {
     title: "Reaction",
@@ -126,6 +136,15 @@ const translations = {
     msgSilver: "Average speed",
     msgBronze: "A bit slow",
     msgIron: "Keep practicing!",
+    tipTitle: "Reaction Speed Tips",
+    tipContent: "Focus on the center of the screen and keep your finger ready on the mouse/screen. Consistent practice improves reaction speed!",
+    tapToStart: "👆 Tap to start!",
+    whatIsReaction: "What is Reaction Speed?",
+    reactionDescription: "Reaction speed is the time it takes to perceive a visual stimulus and respond physically. Average human reaction time is 200-300ms, while pro gamers can achieve under 150ms.",
+    inGames: "In Games",
+    inGamesDesc: "Determines victory in FPS and fighting games",
+    inDaily: "In Daily Life",
+    inDailyDesc: "Quick judgment in driving, sports, etc.",
   },
   ja: {
     title: "反応速度",
@@ -180,6 +199,15 @@ const translations = {
     msgSilver: "平均的な速度",
     msgBronze: "少し遅め",
     msgIron: "練習が必要！",
+    tipTitle: "反応速度向上のコツ",
+    tipContent: "画面の中央に集中し、指をマウス/画面の上に準備してください。継続的な練習で反応速度が向上します！",
+    tapToStart: "👆 タップしてスタート！",
+    whatIsReaction: "反応速度とは？",
+    reactionDescription: "反応速度とは、視覚的刺激を認識してから身体が反応するまでの時間です。平均的な人の反応速度は200〜300msで、プロゲーマーは150ms以下を記録することもあります。",
+    inGames: "ゲームで",
+    inGamesDesc: "FPS、格闘ゲームで勝敗を左右",
+    inDaily: "日常で",
+    inDailyDesc: "運転、スポーツなどの瞬間判断",
   },
   zh: {
     title: "反应速度",
@@ -234,6 +262,15 @@ const translations = {
     msgSilver: "平均速度",
     msgBronze: "有点慢",
     msgIron: "需要练习！",
+    tipTitle: "反应速度提升技巧",
+    tipContent: "专注于屏幕中央，手指放在鼠标/屏幕上准备好。持续练习可以提高反应速度！",
+    tapToStart: "👆 点击开始！",
+    whatIsReaction: "什么是反应速度？",
+    reactionDescription: "反应速度是感知视觉刺激并做出身体反应所需的时间。普通人的平均反应时间是200-300毫秒，职业玩家可以达到150毫秒以下。",
+    inGames: "在游戏中",
+    inGamesDesc: "决定FPS和格斗游戏的胜负",
+    inDaily: "在日常生活中",
+    inDailyDesc: "驾驶、运动等需要快速判断",
   },
   es: {
     title: "Test de",
@@ -288,6 +325,15 @@ const translations = {
     msgSilver: "Velocidad promedio",
     msgBronze: "Un poco lento",
     msgIron: "¡Sigue practicando!",
+    tipTitle: "Consejos para mejorar la velocidad de reacción",
+    tipContent: "Concéntrate en el centro de la pantalla y mantén tu dedo listo sobre el ratón/pantalla. ¡La práctica constante mejora la velocidad de reacción!",
+    tapToStart: "👆 ¡Toca para empezar!",
+    whatIsReaction: "¿Qué es la velocidad de reacción?",
+    reactionDescription: "La velocidad de reacción es el tiempo que tarda en percibir un estímulo visual y responder físicamente. El tiempo promedio es de 200-300ms, mientras que los jugadores profesionales pueden lograr menos de 150ms.",
+    inGames: "En juegos",
+    inGamesDesc: "Determina la victoria en FPS y juegos de lucha",
+    inDaily: "En la vida diaria",
+    inDailyDesc: "Juicio rápido al conducir, deportes, etc.",
   },
   pt: {
     title: "Teste de",
@@ -342,6 +388,15 @@ const translations = {
     msgSilver: "Velocidade média",
     msgBronze: "Um pouco lento",
     msgIron: "Continue praticando!",
+    tipTitle: "Dicas para melhorar a velocidade de reação",
+    tipContent: "Concentre-se no centro da tela e mantenha o dedo pronto no mouse/tela. A prática constante melhora a velocidade de reação!",
+    tapToStart: "👆 Toque para começar!",
+    whatIsReaction: "O que é velocidade de reação?",
+    reactionDescription: "A velocidade de reação é o tempo necessário para perceber um estímulo visual e responder fisicamente. O tempo médio é de 200-300ms, enquanto jogadores profissionais podem atingir menos de 150ms.",
+    inGames: "Em jogos",
+    inGamesDesc: "Determina a vitória em FPS e jogos de luta",
+    inDaily: "No dia a dia",
+    inDailyDesc: "Julgamento rápido ao dirigir, esportes, etc.",
   },
   de: {
     title: "Reaktionszeit",
@@ -396,6 +451,15 @@ const translations = {
     msgSilver: "Durchschnittliche Geschwindigkeit",
     msgBronze: "Etwas langsam",
     msgIron: "Weiter üben!",
+    tipTitle: "Tipps zur Verbesserung der Reaktionszeit",
+    tipContent: "Konzentriere dich auf die Bildschirmmitte und halte deinen Finger bereit auf der Maus/dem Bildschirm. Kontinuierliches Üben verbessert die Reaktionszeit!",
+    tapToStart: "👆 Tippen zum Starten!",
+    whatIsReaction: "Was ist Reaktionszeit?",
+    reactionDescription: "Die Reaktionszeit ist die Zeit, die benötigt wird, um einen visuellen Reiz wahrzunehmen und körperlich zu reagieren. Die durchschnittliche Zeit liegt bei 200-300ms, während Profispieler unter 150ms erreichen können.",
+    inGames: "In Spielen",
+    inGamesDesc: "Entscheidet über Sieg in FPS und Kampfspielen",
+    inDaily: "Im Alltag",
+    inDailyDesc: "Schnelle Entscheidungen beim Fahren, Sport usw.",
   },
   fr: {
     title: "Test de",
@@ -450,6 +514,15 @@ const translations = {
     msgSilver: "Vitesse moyenne",
     msgBronze: "Un peu lent",
     msgIron: "Continuez à pratiquer !",
+    tipTitle: "Conseils pour améliorer le temps de réaction",
+    tipContent: "Concentrez-vous sur le centre de l'écran et gardez votre doigt prêt sur la souris/l'écran. La pratique régulière améliore le temps de réaction !",
+    tapToStart: "👆 Appuyez pour commencer !",
+    whatIsReaction: "Qu'est-ce que le temps de réaction ?",
+    reactionDescription: "Le temps de réaction est le temps nécessaire pour percevoir un stimulus visuel et réagir physiquement. Le temps moyen est de 200-300ms, tandis que les joueurs professionnels peuvent atteindre moins de 150ms.",
+    inGames: "Dans les jeux",
+    inGamesDesc: "Détermine la victoire dans les FPS et jeux de combat",
+    inDaily: "Au quotidien",
+    inDailyDesc: "Jugement rapide en conduite, sports, etc.",
   },
 };
 
@@ -843,11 +916,8 @@ ${t.shareTestIt}`;
             <div className="flex items-start gap-3">
               <span className="text-2xl">💡</span>
               <div>
-                <p className="text-white font-medium mb-1">반응속도 향상 팁</p>
-                <p className="text-dark-400 text-sm">
-                  화면 중앙에 집중하고, 손가락을 마우스/화면 위에 준비하세요. 
-                  꾸준한 연습으로 반응속도가 향상됩니다!
-                </p>
+                <p className="text-white font-medium mb-1">{t.tipTitle}</p>
+                <p className="text-dark-400 text-sm">{t.tipContent}</p>
               </div>
             </div>
           </div>
@@ -898,7 +968,7 @@ ${t.shareTestIt}`;
                   </div>
                   <p className="text-2xl font-bold text-white mb-2">{t.ready}</p>
                   <p className="text-dark-400">{t.clickToStart}</p>
-                  <p className="text-dark-500 text-xs mt-2 animate-pulse">👆 탭하여 시작!</p>
+                  <p className="text-dark-500 text-xs mt-2 animate-pulse">{t.tapToStart}</p>
                 </>
               )}
               
@@ -1021,20 +1091,19 @@ ${t.shareTestIt}`;
           {/* 🎮 반응속도란? */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
             <h3 className="text-white font-medium mb-3 flex items-center gap-2">
-              <span>🧠</span> 반응속도란?
+              <span>🧠</span> {t.whatIsReaction}
             </h3>
             <p className="text-dark-400 text-sm leading-relaxed mb-3">
-              반응속도는 시각적 자극을 인지하고 신체가 반응하기까지 걸리는 시간입니다. 
-              평균적인 사람의 반응속도는 200~300ms이며, 프로게이머는 150ms 이하를 기록하기도 합니다.
+              {t.reactionDescription}
             </p>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="bg-dark-800/50 p-3 rounded-lg">
-                <p className="text-cyan-400 font-medium">⚡ 게임에서</p>
-                <p className="text-dark-400 mt-1">FPS, 격투 게임에서 승패를 좌우</p>
+                <p className="text-cyan-400 font-medium">⚡ {t.inGames}</p>
+                <p className="text-dark-400 mt-1">{t.inGamesDesc}</p>
               </div>
               <div className="bg-dark-800/50 p-3 rounded-lg">
-                <p className="text-purple-400 font-medium">🚗 일상에서</p>
-                <p className="text-dark-400 mt-1">운전, 스포츠 등 순간 판단력</p>
+                <p className="text-purple-400 font-medium">🚗 {t.inDaily}</p>
+                <p className="text-dark-400 mt-1">{t.inDailyDesc}</p>
               </div>
             </div>
           </div>
