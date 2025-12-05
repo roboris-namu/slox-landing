@@ -136,31 +136,36 @@ export default function PasswordGenerator() {
 
             {/* 길이 */}
             <div className="mb-6">
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between items-center mb-3">
                 <label className="text-dark-300 text-sm">길이</label>
-                <span className="text-white font-bold">{length}자</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setLength(Math.max(4, length - 1))}
+                    className="w-8 h-8 bg-dark-700 hover:bg-dark-600 text-white rounded-lg transition-all"
+                  >
+                    -
+                  </button>
+                  <span className="text-white font-bold text-xl w-12 text-center">{length}</span>
+                  <button
+                    onClick={() => setLength(Math.min(64, length + 1))}
+                    className="w-8 h-8 bg-dark-700 hover:bg-dark-600 text-white rounded-lg transition-all"
+                  >
+                    +
+                  </button>
+                </div>
               </div>
-              <input
-                type="range"
-                min="8"
-                max="32"
-                step="4"
-                value={length}
-                onChange={(e) => setLength(Number(e.target.value))}
-                className="w-full h-2 bg-dark-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-              />
-              <div className="flex justify-between mt-2">
+              <div className="flex flex-wrap gap-2">
                 {lengths.map((l) => (
                   <button
                     key={l}
                     onClick={() => setLength(l)}
-                    className={`px-2 py-1 rounded text-xs transition-all ${
+                    className={`px-4 py-2 rounded-lg text-sm transition-all ${
                       length === l
                         ? "bg-emerald-600 text-white"
-                        : "bg-dark-700 text-dark-400 hover:bg-dark-600"
+                        : "bg-dark-700 text-dark-400 hover:bg-dark-600 hover:text-white"
                     }`}
                   >
-                    {l}
+                    {l}자
                   </button>
                 ))}
               </div>
