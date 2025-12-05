@@ -115,7 +115,10 @@ function Navigation() {
                     </a>
                     <a href="/random" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🎲 랜덤 뽑기
-                      <span className="px-1.5 py-0.5 text-xs bg-orange-500/20 text-orange-400 rounded">NEW</span>
+                    </a>
+                    <a href="/qr" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      📱 QR코드 생성기
+                      <span className="px-1.5 py-0.5 text-xs bg-teal-500/20 text-teal-400 rounded">NEW</span>
                     </a>
                   </div>
                 </div>
@@ -267,6 +270,11 @@ function Footer() {
               <li>
                 <a href="/random" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   🎲 랜덤 뽑기
+                </a>
+              </li>
+              <li>
+                <a href="/qr" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  📱 QR코드 생성기
                 </a>
               </li>
             </ul>

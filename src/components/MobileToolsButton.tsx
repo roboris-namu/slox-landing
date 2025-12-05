@@ -21,7 +21,8 @@ const tools = [
   { href: "/dday", emoji: "📅", label: "D-day 계산기" },
   { href: "/age", emoji: "🎂", label: "나이 계산기" },
   { href: "/percent", emoji: "🔢", label: "퍼센트 계산기" },
-  { href: "/random", emoji: "🎲", label: "랜덤 뽑기", isNew: true },
+  { href: "/random", emoji: "🎲", label: "랜덤 뽑기" },
+  { href: "/qr", emoji: "📱", label: "QR코드 생성기", isNew: true },
 ];
 
 export default function MobileToolsButton() {
