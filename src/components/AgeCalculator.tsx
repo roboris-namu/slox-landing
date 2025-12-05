@@ -301,7 +301,7 @@ export default function AgeCalculator({ lang = "ko" }: AgeCalculatorProps) {
       zodiac,
       birthYear: birth.getFullYear()
     };
-  }, [birthdate]);
+  }, [birthYear, birthMonth, birthDay]);
 
   const mainPath = lang === "ko" ? "/" : `/${lang}`;
 
