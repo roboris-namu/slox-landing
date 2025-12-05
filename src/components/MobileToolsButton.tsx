@@ -8,12 +8,17 @@ const tools = [
   { href: "/typing", emoji: "⌨️", label: "타자 테스트" },
   { href: "/cps", emoji: "🖱️", label: "CPS 테스트" },
   { href: "/aim", emoji: "🎯", label: "에임 트레이너" },
-  { href: "/card-match", emoji: "🃏", label: "카드 짝 맞추기", isNew: true },
+  { href: "/card-match", emoji: "🃏", label: "카드 짝 맞추기" },
   { href: "/salary", emoji: "💰", label: "연봉 계산기" },
   { href: "/memory", emoji: "🧠", label: "숫자 기억 게임" },
   { href: "/color", emoji: "🎨", label: "색상 찾기 게임" },
   { href: "/slox-test", emoji: "🐂", label: "나와 닮은 황소" },
   { href: "/severance", emoji: "💼", label: "퇴직금 계산기" },
+  { href: "/loan", emoji: "🏦", label: "대출이자 계산기" },
+  { href: "/savings", emoji: "🏧", label: "적금이자 계산기" },
+  { href: "/character-count", emoji: "✍️", label: "글자수 세기" },
+  { href: "/bmi", emoji: "⚖️", label: "BMI 계산기" },
+  { href: "/dday", emoji: "📅", label: "D-day 계산기", isNew: true },
 ];
 
 export default function MobileToolsButton() {
