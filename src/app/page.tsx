@@ -121,7 +121,10 @@ function Navigation() {
                     </a>
                     <a href="/password" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🔐 비밀번호 생성기
-                      <span className="px-1.5 py-0.5 text-xs bg-emerald-500/20 text-emerald-400 rounded">NEW</span>
+                    </a>
+                    <a href="/lotto" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      🎰 로또 번호 생성기
+                      <span className="px-1.5 py-0.5 text-xs bg-yellow-500/20 text-yellow-400 rounded">NEW</span>
                     </a>
                   </div>
                 </div>
@@ -283,6 +286,11 @@ function Footer() {
               <li>
                 <a href="/password" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   🔐 비밀번호 생성기
+                </a>
+              </li>
+              <li>
+                <a href="/lotto" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  🎰 로또 번호 생성기
                 </a>
               </li>
             </ul>

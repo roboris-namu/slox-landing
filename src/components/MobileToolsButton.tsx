@@ -23,7 +23,8 @@ const tools = [
   { href: "/percent", emoji: "🔢", label: "퍼센트 계산기" },
   { href: "/random", emoji: "🎲", label: "랜덤 뽑기" },
   { href: "/qr", emoji: "📱", label: "QR코드 생성기" },
-  { href: "/password", emoji: "🔐", label: "비밀번호 생성기", isNew: true },
+  { href: "/password", emoji: "🔐", label: "비밀번호 생성기" },
+  { href: "/lotto", emoji: "🎰", label: "로또 번호 생성기", isNew: true },
 ];
 
 export default function MobileToolsButton() {
