@@ -109,7 +109,10 @@ function Navigation() {
                     </a>
                     <a href="/age" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       🎂 나이 계산기
-                      <span className="px-1.5 py-0.5 text-xs bg-rose-500/20 text-rose-400 rounded">NEW</span>
+                    </a>
+                    <a href="/percent" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      🔢 퍼센트 계산기
+                      <span className="px-1.5 py-0.5 text-xs bg-indigo-500/20 text-indigo-400 rounded">NEW</span>
                     </a>
                   </div>
                 </div>
@@ -251,6 +254,11 @@ function Footer() {
               <li>
                 <a href="/age" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   🎂 나이 계산기
+                </a>
+              </li>
+              <li>
+                <a href="/percent" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  🔢 퍼센트 계산기
                 </a>
               </li>
             </ul>
