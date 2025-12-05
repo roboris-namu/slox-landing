@@ -100,7 +100,10 @@ function Navigation() {
                     </a>
                     <a href="/character-count" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
                       ✍️ 글자수 세기
-                      <span className="px-1.5 py-0.5 text-xs bg-violet-500/20 text-violet-400 rounded">NEW</span>
+                    </a>
+                    <a href="/bmi" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
+                      ⚖️ BMI 계산기
+                      <span className="px-1.5 py-0.5 text-xs bg-pink-500/20 text-pink-400 rounded">NEW</span>
                     </a>
                   </div>
                 </div>
@@ -227,6 +230,11 @@ function Footer() {
               <li>
                 <a href="/character-count" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
                   ✍️ 글자수 세기
+                </a>
+              </li>
+              <li>
+                <a href="/bmi" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
+                  ⚖️ BMI 계산기
                 </a>
               </li>
             </ul>
