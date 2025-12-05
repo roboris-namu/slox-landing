@@ -58,15 +58,6 @@ const translations = {
     jitterClick: "지터 클릭: 8-12 CPS",
     butterflyClick: "버터플라이: 12-16 CPS",
     dragClick: "드래그 클릭: 20+ CPS",
-    // 팁 & 설명
-    tipTitle: "CPS 향상 팁",
-    tipContent: "버터플라이 클릭이나 지터 클릭 기법을 연습해보세요. 손가락 2개를 번갈아 사용하면 더 높은 CPS를 달성할 수 있습니다!",
-    whatIsCps: "CPS(Clicks Per Second)란?",
-    cpsDescription: "CPS는 1초당 클릭 횟수를 나타내는 지표입니다. 마인크래프트 PvP, 클리커 게임 등에서 높은 CPS는 큰 장점이 됩니다. 평균 CPS는 6~8이며, 10+ CPS는 상위권입니다.",
-    minecraft: "마인크래프트",
-    minecraftDesc: "PvP 전투에서 데미지 우위",
-    competition: "경쟁",
-    competitionDesc: "클리커 게임 랭킹 도전",
   },
   en: {
     title: "CPS",
@@ -113,14 +104,6 @@ const translations = {
     jitterClick: "Jitter Click: 8-12 CPS",
     butterflyClick: "Butterfly: 12-16 CPS",
     dragClick: "Drag Click: 20+ CPS",
-    tipTitle: "CPS Improvement Tips",
-    tipContent: "Practice butterfly clicking or jitter clicking. Using two fingers alternately can help you achieve higher CPS!",
-    whatIsCps: "What is CPS (Clicks Per Second)?",
-    cpsDescription: "CPS measures how many times you can click per second. High CPS is a major advantage in Minecraft PvP, clicker games, etc. Average CPS is 6-8, and 10+ CPS is top tier.",
-    minecraft: "Minecraft",
-    minecraftDesc: "Damage advantage in PvP",
-    competition: "Competition",
-    competitionDesc: "Clicker game rankings",
   },
   ja: {
     title: "CPS",
@@ -167,14 +150,6 @@ const translations = {
     jitterClick: "ジッター: 8-12 CPS",
     butterflyClick: "バタフライ: 12-16 CPS",
     dragClick: "ドラッグ: 20+ CPS",
-    tipTitle: "CPS向上のコツ",
-    tipContent: "バタフライクリックやジッタークリックを練習しましょう。2本の指を交互に使うと、より高いCPSを達成できます！",
-    whatIsCps: "CPS（Clicks Per Second）とは？",
-    cpsDescription: "CPSは1秒あたりのクリック回数を表す指標です。マインクラフトPvP、クリッカーゲームなどで高いCPSは大きな利点になります。平均CPSは6〜8、10以上のCPSは上位です。",
-    minecraft: "マインクラフト",
-    minecraftDesc: "PvP戦闘でダメージ優位",
-    competition: "競争",
-    competitionDesc: "クリッカーゲームランキング",
   },
   zh: {
     title: "CPS",
@@ -221,14 +196,6 @@ const translations = {
     jitterClick: "抖动点击: 8-12 CPS",
     butterflyClick: "蝴蝶点击: 12-16 CPS",
     dragClick: "拖拽点击: 20+ CPS",
-    tipTitle: "CPS提升技巧",
-    tipContent: "练习蝴蝶点击或抖动点击技巧。交替使用两根手指可以达到更高的CPS！",
-    whatIsCps: "什么是CPS（每秒点击次数）？",
-    cpsDescription: "CPS是衡量每秒点击次数的指标。在Minecraft PvP、点击游戏等中，高CPS是很大的优势。平均CPS是6-8，10+CPS属于顶级水平。",
-    minecraft: "Minecraft",
-    minecraftDesc: "PvP战斗中的伤害优势",
-    competition: "竞争",
-    competitionDesc: "点击游戏排名",
   },
   es: {
     title: "Test",
@@ -275,14 +242,6 @@ const translations = {
     jitterClick: "Jitter Click: 8-12 CPS",
     butterflyClick: "Butterfly: 12-16 CPS",
     dragClick: "Drag Click: 20+ CPS",
-    tipTitle: "Consejos para mejorar CPS",
-    tipContent: "Practica el butterfly click o jitter click. ¡Usar dos dedos alternadamente puede ayudarte a lograr un CPS más alto!",
-    whatIsCps: "¿Qué es CPS (Clics Por Segundo)?",
-    cpsDescription: "CPS mide cuántas veces puedes hacer clic por segundo. Un CPS alto es una gran ventaja en Minecraft PvP, juegos clicker, etc. El CPS promedio es 6-8, y 10+ CPS es nivel superior.",
-    minecraft: "Minecraft",
-    minecraftDesc: "Ventaja de daño en PvP",
-    competition: "Competición",
-    competitionDesc: "Rankings de juegos clicker",
   },
   pt: {
     title: "Teste",
@@ -329,14 +288,6 @@ const translations = {
     jitterClick: "Jitter Click: 8-12 CPS",
     butterflyClick: "Butterfly: 12-16 CPS",
     dragClick: "Drag Click: 20+ CPS",
-    tipTitle: "Dicas para melhorar CPS",
-    tipContent: "Pratique butterfly click ou jitter click. Usar dois dedos alternadamente pode ajudá-lo a alcançar um CPS mais alto!",
-    whatIsCps: "O que é CPS (Cliques Por Segundo)?",
-    cpsDescription: "CPS mede quantas vezes você pode clicar por segundo. Um CPS alto é uma grande vantagem no Minecraft PvP, jogos clicker, etc. O CPS médio é 6-8, e 10+ CPS é nível superior.",
-    minecraft: "Minecraft",
-    minecraftDesc: "Vantagem de dano no PvP",
-    competition: "Competição",
-    competitionDesc: "Rankings de jogos clicker",
   },
   de: {
     title: "CPS",
@@ -383,14 +334,6 @@ const translations = {
     jitterClick: "Jitter Klick: 8-12 CPS",
     butterflyClick: "Butterfly: 12-16 CPS",
     dragClick: "Drag Klick: 20+ CPS",
-    tipTitle: "CPS Verbesserungstipps",
-    tipContent: "Übe Butterfly-Klick oder Jitter-Klick. Abwechselndes Verwenden von zwei Fingern kann dir helfen, einen höheren CPS zu erreichen!",
-    whatIsCps: "Was ist CPS (Klicks Pro Sekunde)?",
-    cpsDescription: "CPS misst, wie oft du pro Sekunde klicken kannst. Ein hoher CPS ist ein großer Vorteil bei Minecraft PvP, Clicker-Spielen usw. Der durchschnittliche CPS liegt bei 6-8, und 10+ CPS ist Top-Niveau.",
-    minecraft: "Minecraft",
-    minecraftDesc: "Schadensvorteil im PvP",
-    competition: "Wettbewerb",
-    competitionDesc: "Clicker-Spiel-Rankings",
   },
   fr: {
     title: "Test",
@@ -437,14 +380,6 @@ const translations = {
     jitterClick: "Jitter Clic: 8-12 CPS",
     butterflyClick: "Butterfly: 12-16 CPS",
     dragClick: "Drag Clic: 20+ CPS",
-    tipTitle: "Conseils pour améliorer CPS",
-    tipContent: "Pratiquez le butterfly click ou le jitter click. Utiliser deux doigts en alternance peut vous aider à atteindre un CPS plus élevé !",
-    whatIsCps: "Qu'est-ce que le CPS (Clics Par Seconde) ?",
-    cpsDescription: "Le CPS mesure combien de fois vous pouvez cliquer par seconde. Un CPS élevé est un grand avantage dans Minecraft PvP, les jeux clicker, etc. Le CPS moyen est de 6-8, et 10+ CPS est niveau supérieur.",
-    minecraft: "Minecraft",
-    minecraftDesc: "Avantage de dégâts en PvP",
-    competition: "Compétition",
-    competitionDesc: "Classements de jeux clicker",
   },
 };
 
@@ -658,8 +593,11 @@ ${t.shareTestIt}`;
             <div className="flex items-start gap-3">
               <span className="text-2xl">🖱️</span>
               <div>
-                <p className="text-white font-medium mb-1">{t.tipTitle}</p>
-                <p className="text-dark-400 text-sm">{t.tipContent}</p>
+                <p className="text-white font-medium mb-1">CPS 향상 팁</p>
+                <p className="text-dark-400 text-sm">
+                  버터플라이 클릭이나 지터 클릭 기법을 연습해보세요. 
+                  손가락 2개를 번갈아 사용하면 더 높은 CPS를 달성할 수 있습니다!
+                </p>
               </div>
             </div>
           </div>
@@ -747,19 +685,20 @@ ${t.shareTestIt}`;
           {/* 🎮 CPS란? */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
             <h3 className="text-white font-medium mb-3 flex items-center gap-2">
-              <span>⚡</span> {t.whatIsCps}
+              <span>⚡</span> CPS(Clicks Per Second)란?
             </h3>
             <p className="text-dark-400 text-sm leading-relaxed mb-3">
-              {t.cpsDescription}
+              CPS는 1초당 클릭 횟수를 나타내는 지표입니다. 마인크래프트 PvP, 클리커 게임 등에서 
+              높은 CPS는 큰 장점이 됩니다. 평균 CPS는 6~8이며, 10+ CPS는 상위권입니다.
             </p>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="bg-dark-800/50 p-3 rounded-lg">
-                <p className="text-blue-400 font-medium">🎮 {t.minecraft}</p>
-                <p className="text-dark-400 mt-1">{t.minecraftDesc}</p>
+                <p className="text-blue-400 font-medium">🎮 마인크래프트</p>
+                <p className="text-dark-400 mt-1">PvP 전투에서 데미지 우위</p>
               </div>
               <div className="bg-dark-800/50 p-3 rounded-lg">
-                <p className="text-purple-400 font-medium">🏆 {t.competition}</p>
-                <p className="text-dark-400 mt-1">{t.competitionDesc}</p>
+                <p className="text-purple-400 font-medium">🏆 경쟁</p>
+                <p className="text-dark-400 mt-1">클리커 게임 랭킹 도전</p>
               </div>
             </div>
           </div>
