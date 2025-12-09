@@ -736,21 +736,43 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
             )}
           </div>
 
-          {/* 🏆 리더보드 */}
+          {/* 🏆 명예의전당 */}
           <div className="glass-card p-6 rounded-2xl mb-8">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-white font-bold text-lg flex items-center gap-2"><span className="text-2xl">🏆</span> 색상 찾기 랭킹</h3>
-              <button onClick={fetchLeaderboard} className="text-dark-400 hover:text-white text-sm">🔄</button>
+              <h3 className="text-white font-bold text-lg flex items-center gap-2"><span className="text-2xl">🏆</span> {lang === "ko" ? "명예의전당" : "Hall of Fame"}</h3>
+              <button onClick={fetchLeaderboard} className="text-dark-400 hover:text-white text-sm">🔄 {lang === "ko" ? "새로고침" : "Refresh"}</button>
             </div>
             {leaderboard.length === 0 ? (
-              <div className="text-center py-8"><div className="text-4xl mb-3">👁️</div><p className="text-dark-400">아직 기록이 없습니다!</p></div>
+              <div className="text-center py-8"><div className="text-4xl mb-3">👁️</div><p className="text-dark-400">{lang === "ko" ? "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!" : "No records yet. Be the first challenger!"}</p></div>
             ) : (
               <div className="space-y-2">
                 {leaderboard.map((entry, index) => (
-                  <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
+                  <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
-                    <div className="flex-1"><span className="text-white font-medium">{entry.nickname}</span><span className="text-xs ml-2 text-dark-400">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span></div>
-                    <div className="text-right"><div className="text-white font-bold">{entry.score}점</div><div className="text-xs text-dark-400">Lv.{entry.level}</div></div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-medium truncate">{entry.nickname}</span>
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-dark-400">
+                        <span className={
+                          entry.grade === t.challenger ? "text-cyan-300" :
+                          entry.grade === t.master ? "text-purple-400" :
+                          entry.grade === t.diamond ? "text-blue-400" :
+                          entry.grade === t.platinum ? "text-teal-400" :
+                          entry.grade === t.gold ? "text-yellow-400" :
+                          entry.grade === t.silver ? "text-gray-300" :
+                          entry.grade === t.bronze ? "text-orange-400" :
+                          "text-stone-400"
+                        }>{entry.grade || getGrade(entry.level).grade}</span>
+                        <span>•</span>
+                        <span>{new Date(entry.created_at).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-white font-bold">Lv.{entry.level}</div>
+                      <div className="text-xs text-dark-400">{lang === "ko" ? "상위" : "Top"} {entry.percentile || Math.round(100 - (entry.level / 35) * 100)}%</div>
+                    </div>
                   </div>
                 ))}
               </div>
