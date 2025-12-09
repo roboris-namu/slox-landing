@@ -83,7 +83,8 @@ export default function HallOfFameCarousel() {
             href: config.href,
             unit: config.unit,
             color: config.color,
-            entries: (data || []).map((entry: Record<string, unknown>) => ({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            entries: (data || []).map((entry: any) => ({
               nickname: entry.nickname as string,
               score: entry[config.scoreField] as number,
               grade: entry.grade as string,
