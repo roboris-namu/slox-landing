@@ -571,52 +571,42 @@ export default function TypingTest() {
 
           {/* 등급 안내 */}
           <div className="glass-card p-6 rounded-xl mb-8">
-            <h3 className="text-white font-medium mb-4">
-              📊 타자 속도 등급표 
-              <span className="text-sm text-dark-400 font-normal ml-2">
-                ({isMobile ? "📱 모바일" : "💻 데스크톱"} 기준)
-              </span>
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-lg text-center">
-                <p className="text-2xl mb-1">👑</p>
-                <p className="text-cyan-300 text-sm font-bold">챌린저</p>
-                <p className="text-white text-xs">{isMobile ? "400" : "650"}타+</p>
+            <h3 className="text-white font-medium mb-2 text-center">📊 타자 속도 등급표</h3>
+            <p className="text-dark-400 text-xs text-center mb-6">
+              {isMobile ? "📱 모바일" : "💻 데스크톱"} 기준 (타/분)
+            </p>
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
+                <span className="text-cyan-300 text-sm font-bold">👑 챌린저</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "400" : "650"}+</span>
               </div>
-              <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg text-center">
-                <p className="text-2xl mb-1">💎</p>
-                <p className="text-purple-400 text-sm font-bold">마스터</p>
-                <p className="text-white text-xs">{isMobile ? "320~399" : "550~649"}타</p>
+              <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
+                <span className="text-purple-400 text-sm font-bold">💎 마스터</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "320~399" : "550~649"}</span>
               </div>
-              <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg text-center">
-                <p className="text-2xl mb-1">💠</p>
-                <p className="text-blue-400 text-sm font-bold">다이아몬드</p>
-                <p className="text-white text-xs">{isMobile ? "260~319" : "450~549"}타</p>
+              <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
+                <span className="text-blue-400 text-sm font-bold">💠 다이아몬드</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "260~319" : "450~549"}</span>
               </div>
-              <div className="p-3 bg-teal-500/10 border border-teal-400/30 rounded-lg text-center">
-                <p className="text-2xl mb-1">🏆</p>
-                <p className="text-teal-400 text-sm font-bold">플래티넘</p>
-                <p className="text-white text-xs">{isMobile ? "200~259" : "370~449"}타</p>
+              <div className="w-56 p-2 bg-gradient-to-r from-teal-500/20 to-teal-400/20 rounded-lg text-center border border-teal-400/50">
+                <span className="text-teal-400 text-sm font-bold">🏆 플래티넘</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "200~259" : "370~449"}</span>
               </div>
-              <div className="p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg text-center">
-                <p className="text-2xl mb-1">🥇</p>
-                <p className="text-yellow-400 text-sm font-bold">골드</p>
-                <p className="text-white text-xs">{isMobile ? "150~199" : "300~369"}타</p>
+              <div className="w-64 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
+                <span className="text-yellow-400 text-sm font-bold">🥇 골드</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "150~199" : "300~369"}</span>
               </div>
-              <div className="p-3 bg-gray-400/10 border border-gray-400/30 rounded-lg text-center">
-                <p className="text-2xl mb-1">🥈</p>
-                <p className="text-gray-300 text-sm font-bold">실버</p>
-                <p className="text-white text-xs">{isMobile ? "100~149" : "230~299"}타</p>
+              <div className="w-72 p-2 bg-gradient-to-r from-gray-400/20 to-gray-300/20 rounded-lg text-center border border-gray-400/50">
+                <span className="text-gray-300 text-sm font-bold">🥈 실버</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "100~149" : "230~299"}</span>
               </div>
-              <div className="p-3 bg-orange-500/10 border border-orange-400/30 rounded-lg text-center">
-                <p className="text-2xl mb-1">🥉</p>
-                <p className="text-orange-400 text-sm font-bold">브론즈</p>
-                <p className="text-white text-xs">{isMobile ? "50~99" : "150~229"}타</p>
+              <div className="w-80 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
+                <span className="text-orange-400 text-sm font-bold">🥉 브론즈</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "50~99" : "150~229"}</span>
               </div>
-              <div className="p-3 bg-stone-500/10 border border-stone-400/30 rounded-lg text-center">
-                <p className="text-2xl mb-1">🪨</p>
-                <p className="text-stone-400 text-sm font-bold">아이언</p>
-                <p className="text-white text-xs">~{isMobile ? "49" : "149"}타</p>
+              <div className="w-[22rem] p-2 bg-gradient-to-r from-stone-500/20 to-stone-400/20 rounded-lg text-center border border-stone-400/50">
+                <span className="text-stone-400 text-sm font-bold">🪨 아이언</span>
+                <span className="text-white text-xs ml-2">~{isMobile ? "49" : "149"}</span>
               </div>
             </div>
           </div>

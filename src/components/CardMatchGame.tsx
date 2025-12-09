@@ -900,54 +900,42 @@ export default function CardMatchGame() {
 
           {/* 🏆 등급표 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
-            <h3 className="text-white font-medium mb-3 flex items-center gap-2">
-              <span>🏆</span> 등급표
-            </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
-              <div className="bg-cyan-500/10 border border-cyan-400/30 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">👑</p>
-                <p className="text-cyan-300 font-bold">챌린저</p>
-                <p className="text-dark-400 text-xs">1500점+</p>
+            <h3 className="text-white font-medium mb-2 text-center">🏆 등급표</h3>
+            <p className="text-dark-400 text-xs text-center mb-6">💡 점수 = 기본 1000점 + (남은시간 × 5) - (클릭수 × 5) + (최대콤보 × 50)</p>
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
+                <span className="text-cyan-300 text-sm font-bold">👑 챌린저</span>
+                <span className="text-white text-xs ml-2">1500+</span>
               </div>
-              <div className="bg-purple-500/10 border border-purple-400/30 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">💎</p>
-                <p className="text-purple-400 font-bold">마스터</p>
-                <p className="text-dark-400 text-xs">1200점+</p>
+              <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
+                <span className="text-purple-400 text-sm font-bold">💎 마스터</span>
+                <span className="text-white text-xs ml-2">1200+</span>
               </div>
-              <div className="bg-blue-500/10 border border-blue-400/30 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">💠</p>
-                <p className="text-blue-400 font-bold">다이아몬드</p>
-                <p className="text-dark-400 text-xs">1000점+</p>
+              <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
+                <span className="text-blue-400 text-sm font-bold">💠 다이아몬드</span>
+                <span className="text-white text-xs ml-2">1000+</span>
               </div>
-              <div className="bg-teal-500/10 border border-teal-400/30 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">🏆</p>
-                <p className="text-teal-400 font-bold">플래티넘</p>
-                <p className="text-dark-400 text-xs">800점+</p>
+              <div className="w-56 p-2 bg-gradient-to-r from-teal-500/20 to-teal-400/20 rounded-lg text-center border border-teal-400/50">
+                <span className="text-teal-400 text-sm font-bold">🏆 플래티넘</span>
+                <span className="text-white text-xs ml-2">800+</span>
               </div>
-              <div className="bg-yellow-500/10 border border-yellow-400/30 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">🥇</p>
-                <p className="text-yellow-400 font-bold">골드</p>
-                <p className="text-dark-400 text-xs">600점+</p>
+              <div className="w-64 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
+                <span className="text-yellow-400 text-sm font-bold">🥇 골드</span>
+                <span className="text-white text-xs ml-2">600+</span>
               </div>
-              <div className="bg-gray-400/10 border border-gray-400/30 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">🥈</p>
-                <p className="text-gray-300 font-bold">실버</p>
-                <p className="text-dark-400 text-xs">400점+</p>
+              <div className="w-72 p-2 bg-gradient-to-r from-gray-400/20 to-gray-300/20 rounded-lg text-center border border-gray-400/50">
+                <span className="text-gray-300 text-sm font-bold">🥈 실버</span>
+                <span className="text-white text-xs ml-2">400+</span>
               </div>
-              <div className="bg-orange-500/10 border border-orange-400/30 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">🥉</p>
-                <p className="text-orange-400 font-bold">브론즈</p>
-                <p className="text-dark-400 text-xs">200점+</p>
+              <div className="w-80 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
+                <span className="text-orange-400 text-sm font-bold">🥉 브론즈</span>
+                <span className="text-white text-xs ml-2">200+</span>
               </div>
-              <div className="bg-stone-500/10 border border-stone-400/30 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">🪨</p>
-                <p className="text-stone-400 font-bold">아이언</p>
-                <p className="text-dark-400 text-xs">200점 미만</p>
+              <div className="w-[22rem] p-2 bg-gradient-to-r from-stone-500/20 to-stone-400/20 rounded-lg text-center border border-stone-400/50">
+                <span className="text-stone-400 text-sm font-bold">🪨 아이언</span>
+                <span className="text-white text-xs ml-2">0+</span>
               </div>
             </div>
-            <p className="text-dark-500 text-xs mt-3 text-center">
-              💡 점수 = 기본 1000점 + (남은시간 × 5) - (클릭수 × 5) + (최대콤보 × 50)
-            </p>
           </div>
 
           {/* 다른 도구 링크 */}

@@ -1049,39 +1049,40 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
 
           {/* 등급 안내 */}
           <div className="glass-card p-6 rounded-xl mb-8">
-            <h3 className="text-white font-medium mb-6 text-center">{t.tierTable}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <div className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-lg text-center">
-                <span className="text-cyan-300 font-bold">👑 16+ CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.challenger}</p>
+            <h3 className="text-white font-medium mb-2 text-center">{t.tierTable}</h3>
+            <p className="text-dark-400 text-xs text-center mb-6">💡 CPS = 초당 클릭 횟수</p>
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
+                <span className="text-cyan-300 text-sm font-bold">👑 {t.challenger}</span>
+                <span className="text-white text-xs ml-2">16+ CPS</span>
               </div>
-              <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg text-center">
-                <span className="text-purple-400 font-bold">💎 12-15 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.master}</p>
+              <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
+                <span className="text-purple-400 text-sm font-bold">💎 {t.master}</span>
+                <span className="text-white text-xs ml-2">12~15 CPS</span>
               </div>
-              <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg text-center">
-                <span className="text-blue-400 font-bold">💠 9-11 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.diamond}</p>
+              <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
+                <span className="text-blue-400 text-sm font-bold">💠 {t.diamond}</span>
+                <span className="text-white text-xs ml-2">9~11 CPS</span>
               </div>
-              <div className="p-3 bg-teal-500/10 border border-teal-400/30 rounded-lg text-center">
-                <span className="text-teal-400 font-bold">🏆 7-8 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.platinum}</p>
+              <div className="w-56 p-2 bg-gradient-to-r from-teal-500/20 to-teal-400/20 rounded-lg text-center border border-teal-400/50">
+                <span className="text-teal-400 text-sm font-bold">🏆 {t.platinum}</span>
+                <span className="text-white text-xs ml-2">7~8 CPS</span>
               </div>
-              <div className="p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg text-center">
-                <span className="text-yellow-400 font-bold">🥇 5-6 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.gold}</p>
+              <div className="w-64 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
+                <span className="text-yellow-400 text-sm font-bold">🥇 {t.gold}</span>
+                <span className="text-white text-xs ml-2">5~6 CPS</span>
               </div>
-              <div className="p-3 bg-gray-400/10 border border-gray-400/30 rounded-lg text-center">
-                <span className="text-gray-300 font-bold">🥈 3-4 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.silver}</p>
+              <div className="w-72 p-2 bg-gradient-to-r from-gray-400/20 to-gray-300/20 rounded-lg text-center border border-gray-400/50">
+                <span className="text-gray-300 text-sm font-bold">🥈 {t.silver}</span>
+                <span className="text-white text-xs ml-2">3~4 CPS</span>
               </div>
-              <div className="p-3 bg-orange-500/10 border border-orange-400/30 rounded-lg text-center">
-                <span className="text-orange-400 font-bold">🥉 2 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.bronze}</p>
+              <div className="w-80 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
+                <span className="text-orange-400 text-sm font-bold">🥉 {t.bronze}</span>
+                <span className="text-white text-xs ml-2">2 CPS</span>
               </div>
-              <div className="p-3 bg-stone-500/10 border border-stone-400/30 rounded-lg text-center">
-                <span className="text-stone-400 font-bold">🪨 1 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.iron}</p>
+              <div className="w-[22rem] p-2 bg-gradient-to-r from-stone-500/20 to-stone-400/20 rounded-lg text-center border border-stone-400/50">
+                <span className="text-stone-400 text-sm font-bold">🪨 {t.iron}</span>
+                <span className="text-white text-xs ml-2">1 CPS</span>
               </div>
             </div>
             
