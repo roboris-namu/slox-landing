@@ -1279,6 +1279,47 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                     {getPercentile(reactionTime) <= 5 && getPercentile(reactionTime) > 1 && <span className="text-xs">⭐</span>}
                   </div>
                   
+                  {/* 🏆 현재 랭킹 표시 */}
+                  {leaderboard.length === 0 ? (
+                    <div className="mb-3 px-6 py-3 bg-gradient-to-r from-yellow-500/30 to-red-500/30 border-2 border-yellow-500/50 rounded-2xl animate-pulse">
+                      <div className="text-2xl mb-1">🏆👑🏆</div>
+                      <p className="text-yellow-400 font-black text-lg">첫 번째 도전자!</p>
+                      <p className="text-yellow-300/80 text-sm">등록하면 바로 1등!</p>
+                    </div>
+                  ) : reactionTime < leaderboard[0].score ? (
+                    <div className="mb-3 px-6 py-3 bg-gradient-to-r from-yellow-500/30 to-red-500/30 border-2 border-yellow-500/50 rounded-2xl animate-pulse">
+                      <div className="text-2xl mb-1">🔥👑🔥</div>
+                      <p className="text-yellow-400 font-black text-lg">신기록! 새로운 1등!</p>
+                      <p className="text-yellow-300/80 text-sm">기존 1위 {leaderboard[0].nickname} ({leaderboard[0].score}ms) 돌파!</p>
+                    </div>
+                  ) : reactionTime === leaderboard[0].score ? (
+                    <div className="mb-3 px-5 py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-xl">
+                      <p className="text-yellow-400 font-bold">👑 현재 1위와 동점!</p>
+                      <p className="text-dark-400 text-xs">{leaderboard[0].nickname} ({leaderboard[0].score}ms)</p>
+                    </div>
+                  ) : (
+                    <div className="mb-3 px-5 py-2 bg-dark-800/50 border border-dark-700 rounded-xl">
+                      <div className="flex items-center justify-center gap-4">
+                        <div className="text-center">
+                          <p className="text-dark-500 text-xs">현재 1위</p>
+                          <p className="text-white font-bold">👑 {leaderboard[0].nickname}</p>
+                          <p className="text-yellow-400 font-bold">{leaderboard[0].score}ms</p>
+                        </div>
+                        <div className="text-dark-600">vs</div>
+                        <div className="text-center">
+                          <p className="text-dark-500 text-xs">내 순위</p>
+                          <p className="text-purple-400 font-bold">
+                            {(() => {
+                              const rank = leaderboard.findIndex(e => reactionTime < e.score);
+                              return rank === -1 ? leaderboard.length + 1 : rank + 1;
+                            })()}위
+                          </p>
+                          <p className="text-dark-400 text-sm">{reactionTime - leaderboard[0].score}ms 차이</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
                   <p className="text-dark-400 mb-4">{getGrade(reactionTime).message}</p>
                   <p className="text-dark-500 text-sm animate-pulse">{t.clickToRetry}</p>
                 </>
