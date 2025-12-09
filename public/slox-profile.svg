@@ -15,15 +15,14 @@
   <!-- 배경 원 -->
   <circle cx="200" cy="200" r="200" fill="url(#bgGrad)"/>
   
-  <!-- S 글자 - 굵고 둥근 폰트 스타일 -->
-  <text x="200" y="280" 
+  <!-- S 글자 - 정중앙 배치 -->
+  <text x="200" y="200" 
         font-family="Arial Black, Arial, sans-serif" 
-        font-size="280" 
+        font-size="260" 
         font-weight="900" 
         fill="url(#sGrad)" 
         text-anchor="middle"
-        style="filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.3))">
-    S
-  </text>
+        dominant-baseline="central"
+        style="filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.3))">S</text>
 </svg>
 
