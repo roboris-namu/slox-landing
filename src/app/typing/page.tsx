@@ -2,6 +2,17 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
+import { supabase } from "@/lib/supabase";
+
+interface TypingLeaderboardEntry {
+  id: string;
+  nickname: string;
+  wpm: number;
+  accuracy: number;
+  device_type: string;
+  created_at: string;
+}
 
 /**
  * 타자 연습용 문장들
@@ -90,25 +101,91 @@ export default function TypingTest() {
   const [startTime, setStartTime] = useState<number>(0);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
   const [result, setResult] = useState<TypingResult | null>(null);
+  const [currentCpm, setCurrentCpm] = useState<number>(0); // 실시간 타수 🔥
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const shareCardRef = useRef<HTMLDivElement>(null);
+  
+  // 리더보드 상태
+  const [leaderboard, setLeaderboard] = useState<TypingLeaderboardEntry[]>([]);
+  const [showNicknameModal, setShowNicknameModal] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
 
   // 초기 문장 설정
   useEffect(() => {
     setSentence(getRandomSentence());
   }, []);
 
-  // 타이머
+  // 타이머 + 실시간 타수 계산 🔥
   useEffect(() => {
     if (isStarted && !isFinished) {
       timerRef.current = setInterval(() => {
-        setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
+        const now = Date.now();
+        const elapsed = Math.floor((now - startTime) / 1000);
+        setElapsedTime(elapsed);
+        
+        // 실시간 타수 계산!
+        if (input.length > 0 && elapsed > 0) {
+          const timeInMinutes = (now - startTime) / 1000 / 60;
+          const keyStrokes = getKeyStrokes(input);
+          const cpm = Math.round(keyStrokes / timeInMinutes);
+          setCurrentCpm(cpm);
+        }
       }, 100);
     }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isStarted, isFinished, startTime]);
+  }, [isStarted, isFinished, startTime, input]);
+
+  // 리더보드 가져오기
+  const fetchLeaderboard = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.from("typing_leaderboard").select("*").order("wpm", { ascending: false }).limit(10);
+      if (error) throw error;
+      if (data) setLeaderboard(data);
+    } catch (err) { console.error("리더보드 로드 실패:", err); }
+  }, []);
+
+  // 점수 등록
+  const submitScore = async () => {
+    if (!nickname.trim() || isSubmitting || !result) return;
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase.from("typing_leaderboard").insert({ 
+        nickname: nickname.trim().slice(0, 20), 
+        wpm: result.cpm,  // 타/분
+        accuracy: result.accuracy, 
+        device_type: isMobile ? "mobile" : "pc" 
+      });
+      if (error) throw error;
+      setHasSubmittedScore(true);
+      setShowNicknameModal(false);
+      setNickname("");
+      fetchLeaderboard();
+    } catch (err) { console.error("등록 실패:", err); alert("등록 실패!"); }
+    finally { setIsSubmitting(false); }
+  };
+
+  useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
+
+  // 이미지 생성
+  const generateImage = async (): Promise<Blob | null> => {
+    if (!shareCardRef.current) return null;
+    try {
+      shareCardRef.current.style.display = "block";
+      const canvas = await html2canvas(shareCardRef.current, { backgroundColor: "#0f0d1a", scale: 2, useCORS: true });
+      shareCardRef.current.style.display = "none";
+      return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), "image/png"));
+    } catch { if (shareCardRef.current) shareCardRef.current.style.display = "none"; return null; }
+  };
+
+  const saveAsImage = async () => {
+    const blob = await generateImage();
+    if (blob) { const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.download = `typing-${result?.cpm || 0}.png`; link.href = url; link.click(); URL.revokeObjectURL(url); }
+  };
 
   // 결과 계산
   const calculateResult = useCallback((): TypingResult => {
@@ -168,19 +245,31 @@ export default function TypingTest() {
     setStartTime(0);
     setElapsedTime(0);
     setResult(null);
+    setCurrentCpm(0);
+    setHasSubmittedScore(false);
     setTimeout(() => inputRef.current?.focus(), 100);
   };
 
-  // 결과 공유
-  const shareResult = () => {
+  // 결과 공유 (이미지로)
+  const shareResult = async () => {
     if (!result) return;
-    const text = `🎯 타자 속도 테스트 결과!\n\n⌨️ ${result.cpm}타/분\n🎯 정확도 ${result.accuracy}%\n⏱️ ${result.time}초\n\n나도 테스트하기 👉 https://www.slox.co.kr/typing`;
-    
-    if (navigator.share) {
-      navigator.share({ text });
-    } else {
-      navigator.clipboard.writeText(text);
-      alert("결과가 클립보드에 복사되었습니다!");
+    const blob = await generateImage();
+    if (blob && navigator.share && navigator.canShare) {
+      const file = new File([blob], `typing-${result.cpm}.png`, { type: "image/png" });
+      if (navigator.canShare({ files: [file] })) { 
+        try { 
+          await navigator.share({ files: [file], title: "타자 속도 테스트 결과!", text: "나도 테스트하기 👉 https://www.slox.co.kr/typing" }); 
+          return; 
+        } catch { /* 취소 */ } 
+      }
+    }
+    if (blob) { 
+      const url = URL.createObjectURL(blob); 
+      const link = document.createElement("a"); 
+      link.download = `typing-test-${result.cpm}.png`; 
+      link.href = url; 
+      link.click(); 
+      URL.revokeObjectURL(url); 
     }
   };
 
@@ -298,15 +387,22 @@ export default function TypingTest() {
             </div>
           </div>
 
-          {/* 타이머 & 상태 */}
-          <div className="flex justify-center gap-8 mb-8">
+          {/* 타이머 & 상태 + 🔥 실시간 타수 */}
+          <div className="flex justify-center gap-6 sm:gap-8 mb-8">
             <div className="text-center">
               <p className="text-dark-400 text-sm mb-1">경과 시간</p>
-              <p className="text-3xl font-bold text-white">{elapsedTime}<span className="text-lg text-dark-400">초</span></p>
+              <p className="text-2xl sm:text-3xl font-bold text-white">{elapsedTime}<span className="text-lg text-dark-400">초</span></p>
+            </div>
+            {/* 🔥 실시간 타수 - 박진감! */}
+            <div className="text-center">
+              <p className="text-dark-400 text-sm mb-1">🔥 현재 속도</p>
+              <p className={`text-2xl sm:text-3xl font-bold transition-all ${currentCpm >= 500 ? "text-purple-400 animate-pulse" : currentCpm >= 400 ? "text-cyan-400" : currentCpm >= 300 ? "text-green-400" : "text-yellow-400"}`}>
+                {currentCpm}<span className="text-lg text-dark-400">타</span>
+              </p>
             </div>
             <div className="text-center">
               <p className="text-dark-400 text-sm mb-1">진행률</p>
-              <p className="text-3xl font-bold text-accent-cyan">
+              <p className="text-2xl sm:text-3xl font-bold text-accent-cyan">
                 {Math.round((input.length / sentence.length) * 100)}<span className="text-lg text-dark-400">%</span>
               </p>
             </div>
@@ -379,23 +475,72 @@ export default function TypingTest() {
 
                   {/* 버튼들 */}
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button
-                      onClick={restart}
-                      className="px-8 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all"
-                    >
-                      🔄 다시 하기
-                    </button>
-                    <button
-                      onClick={shareResult}
-                      className="px-8 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
-                    >
-                      📤 결과 공유하기
-                    </button>
+                    <button onClick={shareResult} className="px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all">📤 공유</button>
+                    <button onClick={saveAsImage} className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-medium rounded-xl transition-all">🖼️ 저장</button>
+                    <button onClick={restart} className="px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all">🔄 다시</button>
                   </div>
+                  {!hasSubmittedScore && result && (
+                    <button onClick={() => setShowNicknameModal(true)} className="w-full max-w-sm mx-auto mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl">🏆 랭킹 등록!</button>
+                  )}
                 </div>
               )
             )}
           </div>
+
+          {/* 🏆 리더보드 */}
+          <div className="glass-card p-6 rounded-2xl mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-white font-bold text-lg flex items-center gap-2"><span className="text-2xl">🏆</span> 타자 속도 랭킹</h3>
+              <button onClick={fetchLeaderboard} className="text-dark-400 hover:text-white text-sm">🔄</button>
+            </div>
+            {leaderboard.length === 0 ? (
+              <div className="text-center py-8"><div className="text-4xl mb-3">⌨️</div><p className="text-dark-400">아직 기록이 없습니다!</p></div>
+            ) : (
+              <div className="space-y-2">
+                {leaderboard.map((entry, index) => (
+                  <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
+                    <div className="flex-1"><span className="text-white font-medium">{entry.nickname}</span><span className="text-xs ml-2 text-dark-400">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span><div className="text-xs text-dark-400">정확도 {entry.accuracy}%</div></div>
+                    <div className="text-white font-bold">{entry.wpm}타/분</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 공유 카드 */}
+          <div ref={shareCardRef} style={{ display: "none", position: "absolute", left: "-9999px", width: "360px", padding: "20px", backgroundColor: "#0f0d1a" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}><span style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>SLOX</span><span style={{ color: "#a78bfa", fontSize: "12px" }}>⌨️ 타자 속도 테스트</span></div>
+            <div style={{ textAlign: "center", padding: "20px", backgroundColor: "#1a1625", borderRadius: "12px", marginBottom: "10px" }}>
+              <div style={{ fontSize: "44px" }}>{result ? getGrade(result.cpm).emoji : "⌨️"}</div>
+              <div style={{ fontSize: "26px", fontWeight: "bold", marginTop: "8px", color: result && result.cpm >= 600 ? "#c084fc" : result && result.cpm >= 500 ? "#22d3ee" : "#4ade80" }}>{result ? getGrade(result.cpm).grade : ""}</div>
+              <div style={{ fontSize: "44px", fontWeight: "bold", color: "#a78bfa", marginTop: "8px" }}>{result?.cpm || 0}<span style={{ fontSize: "18px", color: "#7c3aed" }}> 타/분</span></div>
+              <div style={{ color: "#9ca3af", fontSize: "11px", marginTop: "6px" }}>정확도 {result?.accuracy || 0}% / {result?.time || 0}초</div>
+            </div>
+            <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+              <div style={{ flex: 1, backgroundColor: "#0c1a1a", borderRadius: "10px", padding: "10px", textAlign: "center" }}><div style={{ color: "#67e8f9", fontSize: "10px" }}>🎯 정확도</div><div style={{ color: "#22d3ee", fontSize: "18px", fontWeight: "bold" }}>{result?.accuracy || 0}%</div></div>
+              <div style={{ backgroundColor: "#ffffff", borderRadius: "10px", padding: "8px", width: "100px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${encodeURIComponent("https://www.slox.co.kr/typing")}`} alt="QR" width={70} height={70} crossOrigin="anonymous" />
+                <div style={{ fontSize: "8px", color: "#6366f1", marginTop: "4px" }}>📱 나도 도전!</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderTop: "1px solid #1e1b4b", fontSize: "10px", color: "#6b7280" }}><span>{new Date().toLocaleDateString("ko-KR")}</span><span style={{ color: "#8b5cf6" }}>slox.co.kr/typing</span></div>
+          </div>
+
+          {/* 닉네임 모달 */}
+          {showNicknameModal && result && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full">
+                <div className="text-center mb-6"><div className="text-5xl mb-3">{getGrade(result.cpm).emoji}</div><h3 className="text-white text-xl font-bold">🏆 랭킹 등록</h3><p className="text-dark-400 text-sm">{result.cpm}타/분 (정확도 {result.accuracy}%)</p></div>
+                <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder="닉네임..." className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+                <div className="flex gap-3">
+                  <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 text-white rounded-xl">취소</button>
+                  <button onClick={submitScore} disabled={!nickname.trim() || isSubmitting} className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl disabled:opacity-50">{isSubmitting ? "..." : "등록!"}</button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* 📝 타자 테스트란? */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
