@@ -82,14 +82,12 @@ export default function DesktopToolsDropdown() {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 손가락 힌트 - 항상 표시 (호버 시 숨김) */}
+      {/* 손가락 힌트 - 항상 표시 (호버 시 숨김, 삼성 인터넷 호환) */}
       {!isHovered && (
         <div className="absolute -top-6 -left-6 pointer-events-none z-50">
-          <div className="animate-poke-finger">
-            <span className="text-2xl drop-shadow-lg inline-block" style={{ transform: "rotate(135deg)" }}>
-              👆
-            </span>
-          </div>
+          <span className="animate-poke-finger text-2xl">
+            👆
+          </span>
         </div>
       )}
 

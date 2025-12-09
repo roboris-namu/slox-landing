@@ -87,14 +87,12 @@ export default function MobileToolsButton() {
     <>
       {/* 손가락 + 버튼 컨테이너 - 함께 플로팅 */}
       <div className="lg:hidden fixed bottom-6 right-6 z-40">
-        {/* 손가락 포인터 - 버튼 왼쪽 위에서 통통 찌르기 */}
+        {/* 손가락 포인터 - 버튼 왼쪽 위에서 통통 찌르기 (삼성 인터넷 호환) */}
         {showHint && !isOpen && (
           <div className="absolute -top-8 -left-4 pointer-events-none z-50">
-            <div className="animate-poke-finger">
-              <span className="text-3xl drop-shadow-lg inline-block" style={{ transform: "rotate(135deg)" }}>
-                👆
-              </span>
-            </div>
+            <span className="animate-poke-finger text-3xl">
+              👆
+            </span>
           </div>
         )}
 

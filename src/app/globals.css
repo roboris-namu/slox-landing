@@ -293,18 +293,22 @@ body {
   }
 }
 
-/* 통통 찌르는 손가락 애니메이션 */
+/* 통통 찌르는 손가락 애니메이션 - 삼성 인터넷 호환 */
 @keyframes poke-finger {
   0%, 100% {
-    transform: translate(0, 0) scale(1);
+    -webkit-transform: translate(0, 0) scale(1) rotate(135deg);
+    transform: translate(0, 0) scale(1) rotate(135deg);
   }
   50% {
-    transform: translate(8px, 8px) scale(1.1);
+    -webkit-transform: translate(8px, 8px) scale(1.1) rotate(135deg);
+    transform: translate(8px, 8px) scale(1.1) rotate(135deg);
   }
 }
 
 .animate-poke-finger {
+  -webkit-animation: poke-finger 0.6s ease-in-out infinite;
   animation: poke-finger 0.6s ease-in-out infinite;
+  display: inline-block;
 }
 
 /* BEST/NEW 배지 은은한 애니메이션 */
