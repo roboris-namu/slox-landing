@@ -873,7 +873,7 @@ export default function CardMatchGame() {
                     </div>
                     <div className="text-right">
                       <div className="text-white font-bold">{entry.score || 0}점</div>
-                      <div className="text-xs text-dark-400">상위 {entry.percentile || Math.round(100 - ((entry.score || 0) / 1500) * 100)}%</div>
+                      <div className="text-xs text-dark-500">{index + 1}위 / {leaderboard.length}명</div>
                     </div>
                   </div>
                 ))}

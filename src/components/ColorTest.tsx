@@ -783,7 +783,7 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
                     </div>
                     <div className="text-right">
                       <div className="text-white font-bold">Lv.{entry.level}</div>
-                      <div className="text-xs text-dark-400">{lang === "ko" ? "상위" : "Top"} {entry.percentile || Math.round(100 - (entry.level / 35) * 100)}%</div>
+                      <div className="text-xs text-dark-500">{index + 1}위 / {leaderboard.length}명</div>
                     </div>
                   </div>
                 ))}

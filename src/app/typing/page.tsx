@@ -537,7 +537,7 @@ export default function TypingTest() {
                     </div>
                     <div className="text-right">
                       <div className="text-white font-bold">{entry.wpm}타/분</div>
-                      <div className="text-xs text-dark-400">상위 {entry.percentile || Math.round(100 - (entry.wpm / 650) * 100)}%</div>
+                      <div className="text-xs text-dark-500">{index + 1}위 / {leaderboard.length}명</div>
                     </div>
                   </div>
                 ))}

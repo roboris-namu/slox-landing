@@ -850,7 +850,7 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
                     </div>
                     <div className="text-right">
                       <div className="text-white font-bold">{entry.score} {t.digits}</div>
-                      <div className="text-xs text-dark-400">{lang === "ko" ? "상위" : "Top"} {entry.percentile || Math.round(100 - (entry.score / 13) * 100)}%</div>
+                      <div className="text-xs text-dark-500">{index + 1}위 / {leaderboard.length}명</div>
                     </div>
                   </div>
                 ))}
