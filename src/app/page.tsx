@@ -103,9 +103,9 @@ function Footer() {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-accent-500/50 to-transparent" />
       
       <div className="max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* 브랜드 */}
-          <div className="sm:col-span-2 lg:col-span-1">
+          <div className="md:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-accent-500 to-cyan-500 flex items-center justify-center shadow-glow-sm">
                 <span className="text-white font-bold">S</span>
@@ -132,116 +132,52 @@ function Footer() {
             </ul>
           </div>
           
-          {/* 무료 도구 */}
-          <div>
+          {/* 무료 도구 - 카테고리별 그룹핑 */}
+          <div className="md:col-span-2 lg:col-span-3">
             <h4 className="font-semibold text-sm mb-4 text-dark-300 uppercase tracking-wider">무료 도구</h4>
-            <ul className="space-y-3">
-              <li>
-                <a href="/reaction" className="text-sm text-purple-400 hover:text-purple-300 transition-colors duration-300 font-medium">
-                  ⚡ 반응속도 테스트 ⭐
-                </a>
-              </li>
-              <li>
-                <a href="/typing" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  ⌨️ 타자 테스트
-                </a>
-              </li>
-              <li>
-                <a href="/cps" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🖱️ CPS 테스트
-                </a>
-              </li>
-              <li>
-                <a href="/aim" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🎯 에임 트레이너
-                </a>
-              </li>
-              <li>
-                <a href="/card-match" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors duration-300 font-medium">
-                  🃏 카드 짝 맞추기 ✨
-                </a>
-              </li>
-              <li>
-                <a href="/salary" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  💰 연봉 계산기
-                </a>
-              </li>
-              <li>
-                <a href="/memory" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🧠 숫자 기억 게임
-                </a>
-              </li>
-              <li>
-                <a href="/color" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🎨 색상 찾기 게임
-                </a>
-              </li>
-              <li>
-                <a href="/slox-test" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🐂 나와 닮은 황소
-                </a>
-              </li>
-              <li>
-                <a href="/severance" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  💼 퇴직금 계산기
-                </a>
-              </li>
-              <li>
-                <a href="/loan" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🏦 대출이자 계산기
-                </a>
-              </li>
-              <li>
-                <a href="/savings" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🏧 적금이자 계산기
-                </a>
-              </li>
-              <li>
-                <a href="/character-count" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  ✍️ 글자수 세기
-                </a>
-              </li>
-              <li>
-                <a href="/bmi" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  ⚖️ BMI 계산기
-                </a>
-              </li>
-              <li>
-                <a href="/dday" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  📅 D-day 계산기
-                </a>
-              </li>
-              <li>
-                <a href="/age" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🎂 나이 계산기
-                </a>
-              </li>
-              <li>
-                <a href="/percent" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🔢 퍼센트 계산기
-                </a>
-              </li>
-              <li>
-                <a href="/random" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🎲 랜덤 뽑기
-                </a>
-              </li>
-              <li>
-                <a href="/qr" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  📱 QR코드 생성기
-                </a>
-              </li>
-              <li>
-                <a href="/password" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🔐 비밀번호 생성기
-                </a>
-              </li>
-              <li>
-                <a href="/lotto" className="text-sm text-dark-400 hover:text-accent-400 transition-colors duration-300">
-                  🎰 로또 번호 생성기
-                </a>
-              </li>
-            </ul>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+              {/* 🎮 게임 & 테스트 */}
+              <div>
+                <p className="text-xs text-dark-500 mb-2 font-medium">🎮 게임 & 테스트</p>
+                <ul className="space-y-1.5">
+                  <li><a href="/reaction" className="text-sm text-purple-400 hover:text-purple-300 transition-colors">⚡ 반응속도 ⭐</a></li>
+                  <li><a href="/typing" className="text-sm text-dark-400 hover:text-white transition-colors">⌨️ 타자</a></li>
+                  <li><a href="/cps" className="text-sm text-dark-400 hover:text-white transition-colors">🖱️ CPS</a></li>
+                  <li><a href="/aim" className="text-sm text-dark-400 hover:text-white transition-colors">🎯 에임</a></li>
+                  <li><a href="/memory" className="text-sm text-dark-400 hover:text-white transition-colors">🧠 숫자기억</a></li>
+                  <li><a href="/color" className="text-sm text-dark-400 hover:text-white transition-colors">🎨 색상찾기</a></li>
+                  <li><a href="/card-match" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">🃏 카드매칭 ✨</a></li>
+                  <li><a href="/slox-test" className="text-sm text-dark-400 hover:text-white transition-colors">🐂 황소테스트</a></li>
+                </ul>
+              </div>
+              
+              {/* 🧮 금융 계산기 */}
+              <div>
+                <p className="text-xs text-dark-500 mb-2 font-medium">🧮 금융 계산기</p>
+                <ul className="space-y-1.5">
+                  <li><a href="/salary" className="text-sm text-dark-400 hover:text-white transition-colors">💰 연봉</a></li>
+                  <li><a href="/severance" className="text-sm text-dark-400 hover:text-white transition-colors">💼 퇴직금</a></li>
+                  <li><a href="/loan" className="text-sm text-dark-400 hover:text-white transition-colors">🏦 대출이자</a></li>
+                  <li><a href="/savings" className="text-sm text-dark-400 hover:text-white transition-colors">🏧 적금이자</a></li>
+                </ul>
+              </div>
+              
+              {/* 🛠️ 유틸리티 */}
+              <div>
+                <p className="text-xs text-dark-500 mb-2 font-medium">🛠️ 유틸리티</p>
+                <ul className="space-y-1.5">
+                  <li><a href="/qr" className="text-sm text-dark-400 hover:text-white transition-colors">📱 QR생성</a></li>
+                  <li><a href="/password" className="text-sm text-dark-400 hover:text-white transition-colors">🔐 비밀번호</a></li>
+                  <li><a href="/character-count" className="text-sm text-dark-400 hover:text-white transition-colors">✍️ 글자수</a></li>
+                  <li><a href="/random" className="text-sm text-dark-400 hover:text-white transition-colors">🎲 랜덤뽑기</a></li>
+                  <li><a href="/lotto" className="text-sm text-dark-400 hover:text-white transition-colors">🎰 로또번호</a></li>
+                  <li><a href="/bmi" className="text-sm text-dark-400 hover:text-white transition-colors">⚖️ BMI</a></li>
+                  <li><a href="/dday" className="text-sm text-dark-400 hover:text-white transition-colors">📅 D-day</a></li>
+                  <li><a href="/age" className="text-sm text-dark-400 hover:text-white transition-colors">🎂 나이</a></li>
+                  <li><a href="/percent" className="text-sm text-dark-400 hover:text-white transition-colors">🔢 퍼센트</a></li>
+                </ul>
+              </div>
+            </div>
           </div>
           
           {/* 연락처 */}
