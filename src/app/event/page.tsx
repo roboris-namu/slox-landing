@@ -31,9 +31,16 @@ interface EventConfig {
   prize_amount: number;
 }
 
+interface CurrentLeader {
+  nickname: string;
+  score: number;
+  email: string | null;
+}
+
 export default function EventPage() {
   const [winners, setWinners] = useState<Winner[]>([]);
   const [, setEventConfig] = useState<EventConfig | null>(null); // 나중에 사용 예정
+  const [currentLeader, setCurrentLeader] = useState<CurrentLeader | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [daysUntilNextDraw, setDaysUntilNextDraw] = useState(0);
 
@@ -66,6 +73,22 @@ export default function EventPage() {
 
         if (configData) {
           setEventConfig(configData);
+        }
+
+        // 현재 1등 정보 로드
+        const { data: leaderData } = await supabase
+          .from("reaction_leaderboard")
+          .select("nickname, score, email")
+          .order("score", { ascending: true })
+          .limit(1)
+          .single();
+
+        if (leaderData) {
+          setCurrentLeader({
+            nickname: leaderData.nickname,
+            score: leaderData.score,
+            email: leaderData.email,
+          });
         }
 
         // 당첨자 로드
@@ -152,6 +175,13 @@ export default function EventPage() {
                 매달 1일 오전 10시 기준 <span className="text-yellow-400 font-bold">반응속도 테스트 1등</span>에게
                 <span className="text-yellow-400 font-bold"> 문화상품권 5,000원</span>을 드립니다!
               </p>
+              {currentLeader && (
+                <div className="mt-3 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
+                  <p className="text-sm text-yellow-300">
+                    👑 현재 1등: <span className="font-bold text-yellow-400">{currentLeader.nickname}</span>님 ({currentLeader.score}ms)
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -212,10 +242,16 @@ export default function EventPage() {
                 </h4>
                 
                 <div className="mb-1">
-                  <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-500">142</span>
+                  <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-500">
+                    {currentLeader ? currentLeader.score : "---"}
+                  </span>
                   <span className="text-dark-400 text-xl ml-1">ms</span>
                 </div>
-                <p className="text-sm text-dark-500 mb-6">반응속도 테스트 역대 1등!</p>
+                <p className="text-sm text-dark-500 mb-6">
+                  {currentLeader 
+                    ? `현재 1등: ${currentLeader.nickname}님의 기록!` 
+                    : "반응속도 테스트 역대 1등!"}
+                </p>
                 
                 {/* 이메일 등록 미리보기 */}
                 <div className="bg-dark-900/60 backdrop-blur-sm rounded-xl p-4 max-w-sm mx-auto border border-white/5">
