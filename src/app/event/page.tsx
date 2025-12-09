@@ -42,17 +42,40 @@ export default function EventPage() {
   const [, setEventConfig] = useState<EventConfig | null>(null); // 나중에 사용 예정
   const [currentLeader, setCurrentLeader] = useState<CurrentLeader | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [daysUntilNextDraw, setDaysUntilNextDraw] = useState(0);
+  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   const supabase = useMemo(() => getSupabase(), []);
 
-  // 다음 추첨일까지 남은 일수 계산
+  // 다음 추첨일까지 실시간 카운트다운
   useEffect(() => {
-    const now = new Date();
-    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1, 10, 0, 0);
-    const diffTime = nextMonth.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    setDaysUntilNextDraw(diffDays);
+    const calculateCountdown = () => {
+      const now = new Date();
+      // 다음 달 1일 오전 10시
+      let nextDraw = new Date(now.getFullYear(), now.getMonth() + 1, 1, 10, 0, 0);
+      
+      // 이미 이번 달 1일 10시가 지났으면 다음 달로
+      if (now.getDate() === 1 && now.getHours() < 10) {
+        nextDraw = new Date(now.getFullYear(), now.getMonth(), 1, 10, 0, 0);
+      }
+      
+      const diff = nextDraw.getTime() - now.getTime();
+      
+      if (diff <= 0) {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+      
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      setCountdown({ days, hours, minutes, seconds });
+    };
+
+    calculateCountdown();
+    const interval = setInterval(calculateCountdown, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   // 데이터 로드
@@ -278,21 +301,44 @@ export default function EventPage() {
             </p>
           </div>
 
-          {/* 다음 추첨일 */}
-          <div className="flex items-center justify-between bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-2xl p-4">
-            <div className="flex items-center gap-3">
-              <span className="text-3xl">⏰</span>
-              <div>
-                <p className="text-sm text-dark-400">다음 추첨까지</p>
-                <p className="text-2xl font-black text-yellow-400">D-{daysUntilNextDraw}</p>
+          {/* 다음 추첨일 - 실시간 카운트다운 */}
+          <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-2xl p-5">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-center sm:text-left">
+                <p className="text-sm text-dark-400 mb-2">⏰ 다음 추첨까지</p>
+                <div className="flex items-center gap-2">
+                  {/* 일 */}
+                  <div className="bg-black/30 rounded-lg px-3 py-2 min-w-[60px]">
+                    <p className="text-2xl font-black text-yellow-400 tabular-nums">{countdown.days}</p>
+                    <p className="text-[10px] text-dark-500 uppercase">days</p>
+                  </div>
+                  <span className="text-yellow-500 font-bold text-xl">:</span>
+                  {/* 시간 */}
+                  <div className="bg-black/30 rounded-lg px-3 py-2 min-w-[60px]">
+                    <p className="text-2xl font-black text-yellow-400 tabular-nums">{String(countdown.hours).padStart(2, '0')}</p>
+                    <p className="text-[10px] text-dark-500 uppercase">hours</p>
+                  </div>
+                  <span className="text-yellow-500 font-bold text-xl">:</span>
+                  {/* 분 */}
+                  <div className="bg-black/30 rounded-lg px-3 py-2 min-w-[60px]">
+                    <p className="text-2xl font-black text-yellow-400 tabular-nums">{String(countdown.minutes).padStart(2, '0')}</p>
+                    <p className="text-[10px] text-dark-500 uppercase">min</p>
+                  </div>
+                  <span className="text-yellow-500 font-bold text-xl animate-pulse">:</span>
+                  {/* 초 */}
+                  <div className="bg-black/30 rounded-lg px-3 py-2 min-w-[60px]">
+                    <p className="text-2xl font-black text-cyan-400 tabular-nums animate-pulse">{String(countdown.seconds).padStart(2, '0')}</p>
+                    <p className="text-[10px] text-dark-500 uppercase">sec</p>
+                  </div>
+                </div>
               </div>
+              <Link
+                href="/reaction"
+                className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold rounded-xl hover:opacity-90 transition-all hover:scale-105 shadow-lg shadow-yellow-500/30 whitespace-nowrap"
+              >
+                🎮 지금 도전하기
+              </Link>
             </div>
-            <Link
-              href="/reaction"
-              className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold rounded-xl hover:opacity-90 transition-all hover:scale-105 shadow-lg shadow-yellow-500/30"
-            >
-              🎮 지금 도전하기
-            </Link>
           </div>
         </div>
 
