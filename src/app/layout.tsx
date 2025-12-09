@@ -73,6 +73,18 @@ export default function RootLayout({
         <meta name="naver-site-verification" content="c674c400fde18181c55d1613538d9c5308b707cf" />
         <meta name="google-site-verification" content="RLeEptoySR_WdUTzUnkHQtAFjmHZvdFB4mEfEQPAdtA" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4738855756690019" crossOrigin="anonymous"></script>
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-E6PS0MJ9ZT"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-E6PS0MJ9ZT');
+            `,
+          }}
+        />
         <link
           rel="preconnect"
           href="https://cdn.jsdelivr.net"
