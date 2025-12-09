@@ -17,8 +17,8 @@ export default function Home() {
     <main className="relative overflow-hidden">
       <Navigation />
       <Hero />
-      <FreeTools />
       <HallOfFameCarousel />
+      <FreeTools />
       <Services />
       <Pricing />
       <Portfolio />
