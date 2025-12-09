@@ -79,14 +79,14 @@ export default function RootLayout({
         <meta name="google-site-verification" content="RLeEptoySR_WdUTzUnkHQtAFjmHZvdFB4mEfEQPAdtA" />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4738855756690019" crossOrigin="anonymous"></script>
         {/* Google Analytics */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-E6PS0MJ9ZT"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-G6944GZPB3"></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-E6PS0MJ9ZT');
+              gtag('config', 'G-G6944GZPB3');
             `,
           }}
         />
