@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import FreeTools from "@/components/FreeTools";
+import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 import Services from "@/components/Services";
 import Pricing from "@/components/Pricing";
 import Portfolio from "@/components/Portfolio";
@@ -17,6 +18,7 @@ export default function Home() {
       <Navigation />
       <Hero />
       <FreeTools />
+      <HallOfFameCarousel />
       <Services />
       <Pricing />
       <Portfolio />
