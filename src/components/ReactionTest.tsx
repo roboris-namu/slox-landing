@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import html2canvas from "html2canvas";
+import confetti from "canvas-confetti";
 import { supabase, LeaderboardEntry } from "@/lib/supabase";
 
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
@@ -592,6 +593,14 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
   
+  // 🎉 1등 이벤트 관련 상태
+  const [showFirstPlaceModal, setShowFirstPlaceModal] = useState(false);
+  const [isFirstPlace, setIsFirstPlace] = useState(false);
+  const [email, setEmail] = useState("");
+  const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
+  const [emailSubmitted, setEmailSubmitted] = useState(false);
+  const [myEntryId, setMyEntryId] = useState<string | null>(null);
+  
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const gameAreaRef = useRef<HTMLDivElement>(null);
@@ -787,6 +796,44 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     }
   }, []);
 
+  // 🎆 폭죽 효과 발사
+  const fireConfetti = useCallback(() => {
+    const duration = 3000;
+    const end = Date.now() + duration;
+
+    const frame = () => {
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0, y: 0.7 },
+        colors: ["#FFD700", "#FFA500", "#FF6347", "#FFE4B5"],
+      });
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1, y: 0.7 },
+        colors: ["#FFD700", "#FFA500", "#FF6347", "#FFE4B5"],
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    };
+    frame();
+    
+    // 중앙 폭죽도 추가
+    setTimeout(() => {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { x: 0.5, y: 0.5 },
+        colors: ["#FFD700", "#FFA500", "#FF6347", "#FFE4B5", "#00CED1"],
+      });
+    }, 500);
+  }, []);
+
   // 점수 등록
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting) return;
@@ -796,7 +843,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
       const gradeInfo = getGrade(reactionTime);
       const percentile = getPercentile(reactionTime);
       
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("reaction_leaderboard")
         .insert({
           nickname: nickname.trim().slice(0, 20),
@@ -804,19 +851,74 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
           grade: gradeInfo.grade,
           percentile: percentile,
           device_type: isMobile ? "mobile" : "pc",
-        });
+        })
+        .select()
+        .single();
       
       if (error) throw error;
       
       setHasSubmittedScore(true);
       setShowNicknameModal(false);
       setNickname("");
+      
+      // 등록된 엔트리 ID 저장
+      if (data) {
+        setMyEntryId(data.id);
+      }
+      
+      // 리더보드 다시 로드 후 1등인지 확인
+      const { data: topScore } = await supabase
+        .from("reaction_leaderboard")
+        .select("id, score")
+        .order("score", { ascending: true })
+        .limit(1)
+        .single();
+      
+      // 내가 1등인지 확인
+      if (topScore && data && topScore.id === data.id) {
+        setIsFirstPlace(true);
+        setShowFirstPlaceModal(true);
+        fireConfetti();
+      }
+      
       fetchLeaderboard();
     } catch (err) {
       console.error("점수 등록 실패:", err);
       alert(lang === "ko" ? "등록 실패! 다시 시도해주세요." : "Failed to submit. Please try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+  
+  // 📧 이메일 등록 (1등 전용)
+  const submitEmail = async () => {
+    if (!email.trim() || !myEntryId || isEmailSubmitting) return;
+    
+    // 이메일 유효성 검사
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      alert(lang === "ko" ? "올바른 이메일 형식을 입력해주세요." : "Please enter a valid email.");
+      return;
+    }
+    
+    setIsEmailSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from("reaction_leaderboard")
+        .update({ email: email.trim() })
+        .eq("id", myEntryId);
+      
+      if (error) throw error;
+      
+      setEmailSubmitted(true);
+      setTimeout(() => {
+        setShowFirstPlaceModal(false);
+      }, 2000);
+    } catch (err) {
+      console.error("이메일 등록 실패:", err);
+      alert(lang === "ko" ? "이메일 등록 실패! 다시 시도해주세요." : "Failed to submit email.");
+    } finally {
+      setIsEmailSubmitting(false);
     }
   };
 
@@ -1415,6 +1517,91 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                   >
                     {isSubmitting ? "..." : lang === "ko" ? "등록하기!" : "Submit!"}
                   </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 🎉 1등 축하 모달 */}
+          {showFirstPlaceModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+              <div className="bg-gradient-to-b from-yellow-900/40 via-dark-900 to-dark-900 border border-yellow-500/30 rounded-3xl p-8 max-w-md w-full relative overflow-hidden animate-scale-in">
+                {/* 상단 글로우 */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-gradient-to-b from-yellow-500/30 to-transparent blur-2xl" />
+                
+                {/* 닫기 버튼 */}
+                <button
+                  onClick={() => setShowFirstPlaceModal(false)}
+                  className="absolute top-4 right-4 text-dark-400 hover:text-white transition-colors z-10"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                
+                <div className="relative z-10 text-center">
+                  {/* 왕관 */}
+                  <div className="relative inline-block mb-4">
+                    <div className="text-7xl animate-bounce">👑</div>
+                    <div className="absolute inset-0 text-7xl blur-md opacity-50">👑</div>
+                  </div>
+                  
+                  <h3 className="text-3xl font-black mb-2">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-orange-400">
+                      {lang === "ko" ? "축하합니다!" : "Congratulations!"}
+                    </span>
+                  </h3>
+                  <p className="text-xl text-yellow-400 font-bold mb-4">
+                    🏆 {lang === "ko" ? "1등입니다!" : "You are #1!"}
+                  </p>
+                  
+                  <div className="mb-6">
+                    <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-500">
+                      {reactionTime}
+                    </span>
+                    <span className="text-dark-400 text-xl ml-1">ms</span>
+                  </div>
+                  
+                  {!emailSubmitted ? (
+                    <div className="bg-dark-900/60 backdrop-blur-sm rounded-xl p-5 border border-white/5">
+                      <p className="text-dark-300 mb-4 flex items-center justify-center gap-2">
+                        <span className="text-xl">🎁</span>
+                        <span>{lang === "ko" ? "상품 수령을 위해 이메일을 등록하세요!" : "Enter your email to receive the prize!"}</span>
+                      </p>
+                      
+                      <div className="flex gap-2">
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="your@email.com"
+                          className="flex-1 px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white placeholder-dark-500 focus:outline-none focus:border-yellow-500 transition-colors"
+                          onKeyDown={(e) => e.key === "Enter" && submitEmail()}
+                        />
+                        <button
+                          onClick={submitEmail}
+                          disabled={!email.trim() || isEmailSubmitting}
+                          className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-bold rounded-xl transition-all disabled:opacity-50 shadow-lg shadow-yellow-500/20"
+                        >
+                          {isEmailSubmitting ? "..." : lang === "ko" ? "등록" : "Submit"}
+                        </button>
+                      </div>
+                      
+                      <p className="text-xs text-dark-500 mt-3">
+                        💡 {lang === "ko" ? "매달 1일 오전 10시 기준 1등에게 문화상품권 발송!" : "Prize sent to #1 on the 1st of each month!"}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="bg-green-500/20 border border-green-500/30 rounded-xl p-5">
+                      <div className="text-4xl mb-3">✅</div>
+                      <p className="text-green-400 font-bold">
+                        {lang === "ko" ? "이메일 등록 완료!" : "Email registered!"}
+                      </p>
+                      <p className="text-dark-400 text-sm mt-2">
+                        {lang === "ko" ? "1등 유지 시 매달 1일 상품 발송!" : "Prize sent on the 1st if you stay #1!"}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
