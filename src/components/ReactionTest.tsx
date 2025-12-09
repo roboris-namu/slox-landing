@@ -1838,17 +1838,48 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
               </div>
             </div>
 
-            {/* 🎁 이벤트 안내 */}
+            {/* 🎁 이벤트 안내 + 카운트다운 */}
             <div style={{ 
-              background: "linear-gradient(90deg, rgba(234, 179, 8, 0.2), rgba(239, 68, 68, 0.15))",
-              borderRadius: "8px",
-              padding: "8px 10px",
+              background: "linear-gradient(180deg, rgba(234, 179, 8, 0.15), rgba(239, 68, 68, 0.1))",
+              borderRadius: "10px",
+              padding: "10px 12px",
               marginBottom: "8px",
               textAlign: "center",
               border: "1px solid rgba(234, 179, 8, 0.3)"
             }}>
-              <div style={{ color: "#fbbf24", fontSize: "11px", fontWeight: "bold" }}>🎁 EVENT! 1등에게 문화상품권 5천원!</div>
-              <div style={{ color: "#d1d5db", fontSize: "9px", marginTop: "2px" }}>너도 도전해서 1등 뺏어봐! 👊</div>
+              <div style={{ color: "#fbbf24", fontSize: "11px", fontWeight: "bold", marginBottom: "6px" }}>🎁 EVENT! 1등에게 문화상품권 5천원!</div>
+              
+              {/* 남은 시간 카운트다운 */}
+              {(() => {
+                const now = new Date();
+                const nextDraw = new Date(now.getFullYear(), now.getMonth() + 1, 1, 10, 0, 0);
+                const diff = nextDraw.getTime() - now.getTime();
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                
+                return (
+                  <div style={{ 
+                    display: "flex", 
+                    justifyContent: "center", 
+                    alignItems: "center", 
+                    gap: "4px",
+                    marginBottom: "6px"
+                  }}>
+                    <span style={{ color: "#9ca3af", fontSize: "9px" }}>⏰ 마감까지</span>
+                    <span style={{ 
+                      color: "#22d3ee", 
+                      fontSize: "12px", 
+                      fontWeight: "bold",
+                      fontFamily: "monospace"
+                    }}>
+                      {days}일 {hours}시간
+                    </span>
+                    <span style={{ color: "#9ca3af", fontSize: "9px" }}>남음!</span>
+                  </div>
+                );
+              })()}
+              
+              <div style={{ color: "#d1d5db", fontSize: "9px" }}>너도 도전해서 1등 뺏어봐! 👊</div>
             </div>
 
             {/* 하단 */}
