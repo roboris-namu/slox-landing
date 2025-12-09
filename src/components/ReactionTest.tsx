@@ -1151,62 +1151,96 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
           {/* 🖼️ 공유용 카드 (숨김 - 이미지 생성용) */}
           <div
             ref={shareCardRef}
-            style={{ display: "none", position: "absolute", left: "-9999px" }}
-            className="w-[400px] p-6 rounded-3xl bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900"
+            style={{ 
+              display: "none", 
+              position: "absolute", 
+              left: "-9999px",
+              width: "400px",
+              padding: "24px",
+              borderRadius: "24px",
+              background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%)",
+            }}
           >
             {/* 상단 SLOX 브랜딩 */}
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">S</span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <div style={{ 
+                  width: "32px", 
+                  height: "32px", 
+                  background: "linear-gradient(135deg, #a855f7, #06b6d4)", 
+                  borderRadius: "8px", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center" 
+                }}>
+                  <span style={{ color: "white", fontWeight: "bold", fontSize: "14px" }}>S</span>
                 </div>
-                <span className="text-white font-bold text-lg">SLOX</span>
+                <span style={{ color: "white", fontWeight: "bold", fontSize: "18px" }}>SLOX</span>
               </div>
-              <span className="text-purple-400 text-xs">⚡ 반응속도 테스트</span>
+              <span style={{ color: "#c084fc", fontSize: "12px" }}>⚡ 반응속도 테스트</span>
             </div>
 
             {/* 메인 결과 */}
-            <div className="text-center py-6 bg-black/30 rounded-2xl mb-4">
-              <div className="text-5xl mb-2">{getGrade(reactionTime).emoji}</div>
-              <div className={`text-xl font-bold mb-1 ${getGrade(reactionTime).color}`}>
+            <div style={{ 
+              textAlign: "center", 
+              padding: "24px", 
+              background: "rgba(0,0,0,0.3)", 
+              borderRadius: "16px", 
+              marginBottom: "16px" 
+            }}>
+              <div style={{ fontSize: "48px", marginBottom: "8px" }}>{getGrade(reactionTime).emoji}</div>
+              <div style={{ 
+                fontSize: "20px", 
+                fontWeight: "bold", 
+                marginBottom: "8px",
+                color: reactionTime < 200 ? "#f472b6" : reactionTime < 250 ? "#a855f7" : reactionTime < 300 ? "#fbbf24" : reactionTime < 350 ? "#22d3ee" : reactionTime < 400 ? "#4ade80" : "#94a3b8"
+              }}>
                 {getGrade(reactionTime).grade}
               </div>
-              <div className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+              <div style={{ fontSize: "48px", fontWeight: "900", color: "#c084fc" }}>
                 {reactionTime}ms
               </div>
-              <div className="text-slate-400 text-xs mt-2">{getGrade(reactionTime).message}</div>
+              <div style={{ color: "#94a3b8", fontSize: "12px", marginTop: "8px" }}>{getGrade(reactionTime).message}</div>
             </div>
 
             {/* 통계 + QR코드 */}
-            <div className="flex gap-4 mb-4">
+            <div style={{ display: "flex", gap: "16px", marginBottom: "16px" }}>
               {/* 통계 */}
-              <div className="flex-1 space-y-2">
-                <div className="bg-black/20 rounded-xl p-3 text-center">
-                  <div className="text-slate-400 text-[10px] mb-0.5">평균</div>
-                  <div className="text-cyan-400 text-lg font-bold">{getAverage()}ms</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: "12px", padding: "12px", textAlign: "center", marginBottom: "8px" }}>
+                  <div style={{ color: "#94a3b8", fontSize: "10px", marginBottom: "2px" }}>평균</div>
+                  <div style={{ color: "#22d3ee", fontSize: "18px", fontWeight: "bold" }}>{getAverage()}ms</div>
                 </div>
-                <div className="bg-black/20 rounded-xl p-3 text-center">
-                  <div className="text-slate-400 text-[10px] mb-0.5">최고 기록</div>
-                  <div className="text-purple-400 text-lg font-bold">{getBest()}ms</div>
+                <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: "12px", padding: "12px", textAlign: "center" }}>
+                  <div style={{ color: "#94a3b8", fontSize: "10px", marginBottom: "2px" }}>최고 기록</div>
+                  <div style={{ color: "#a855f7", fontSize: "18px", fontWeight: "bold" }}>{getBest()}ms</div>
                 </div>
               </div>
               
               {/* QR코드 */}
-              <div className="flex flex-col items-center justify-center bg-white rounded-xl p-2">
+              <div style={{ 
+                display: "flex", 
+                flexDirection: "column", 
+                alignItems: "center", 
+                justifyContent: "center", 
+                background: "white", 
+                borderRadius: "12px", 
+                padding: "8px" 
+              }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent("https://www.slox.co.kr/reaction")}&bgcolor=ffffff&color=7c3aed`}
                   alt="QR Code"
                   width={80}
                   height={80}
-                  className="rounded"
+                  style={{ borderRadius: "4px" }}
                 />
-                <span className="text-[8px] text-slate-600 mt-1">나도 도전!</span>
+                <span style={{ fontSize: "8px", color: "#475569", marginTop: "4px" }}>나도 도전!</span>
               </div>
             </div>
 
             {/* 하단 */}
-            <div className="flex items-center justify-between text-[10px] text-slate-500">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "10px", color: "#64748b" }}>
               <span>{new Date().toLocaleDateString("ko-KR")}</span>
               <span>www.slox.co.kr/reaction</span>
             </div>
