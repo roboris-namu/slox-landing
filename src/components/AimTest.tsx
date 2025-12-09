@@ -2,6 +2,18 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
+import { supabase } from "@/lib/supabase";
+
+interface AimLeaderboardEntry {
+  id: string;
+  nickname: string;
+  score: number;
+  accuracy: number;
+  avg_time: number | null;
+  device_type: string;
+  created_at: string;
+}
 
 type GameState = "waiting" | "playing" | "result";
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
@@ -456,9 +468,47 @@ export default function AimTest({ initialLang }: AimTestProps) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const shareCardRef = useRef<HTMLDivElement>(null);
+
+  // 리더보드 상태
+  const [isMobile, setIsMobile] = useState(false);
+  const [leaderboard, setLeaderboard] = useState<AimLeaderboardEntry[]>([]);
+  const [showNicknameModal, setShowNicknameModal] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
 
   const t = translations[lang];
   const settings = difficultySettings[difficulty];
+
+  useEffect(() => { setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window); }, []);
+
+  const fetchLeaderboard = useCallback(async () => {
+    try {
+      const { data, error } = await supabase.from("aim_leaderboard").select("*").order("score", { ascending: false }).limit(10);
+      if (error) throw error;
+      if (data) setLeaderboard(data);
+    } catch (err) { console.error("리더보드 로드 실패:", err); }
+  }, []);
+
+  const submitScore = async () => {
+    if (!nickname.trim() || isSubmitting) return;
+    setIsSubmitting(true);
+    const currentScore = hits * 100 - misses * 50 + maxCombo * 10;
+    const accuracy = hits + misses > 0 ? Math.round((hits / (hits + misses)) * 100) : 0;
+    const avgTime = reactionTimes.length > 0 ? Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length) : null;
+    try {
+      const { error } = await supabase.from("aim_leaderboard").insert({ nickname: nickname.trim().slice(0, 20), score: currentScore, accuracy, avg_time: avgTime, device_type: isMobile ? "mobile" : "pc" });
+      if (error) throw error;
+      setHasSubmittedScore(true);
+      setShowNicknameModal(false);
+      setNickname("");
+      fetchLeaderboard();
+    } catch (err) { console.error("등록 실패:", err); alert("등록 실패!"); }
+    finally { setIsSubmitting(false); }
+  };
+
+  useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
 
   // 🔊 오디오 컨텍스트 초기화
   const getAudioContext = useCallback(() => {
@@ -653,6 +703,7 @@ export default function AimTest({ initialLang }: AimTestProps) {
     setMisses(0);
     setCombo(0);
     setMaxCombo(0);
+    setHasSubmittedScore(false);
     setTimeLeft(settings.duration);
     setReactionTimes([]);
     setParticles([]);
@@ -765,28 +816,30 @@ export default function AimTest({ initialLang }: AimTestProps) {
     setCombo(0);
   };
 
-  // 공유
+  // 이미지 생성
+  const generateImage = async (): Promise<Blob | null> => {
+    if (!shareCardRef.current) return null;
+    try {
+      shareCardRef.current.style.display = "block";
+      const canvas = await html2canvas(shareCardRef.current, { backgroundColor: "#0f0d1a", scale: 2, useCORS: true });
+      shareCardRef.current.style.display = "none";
+      return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), "image/png"));
+    } catch { if (shareCardRef.current) shareCardRef.current.style.display = "none"; return null; }
+  };
+
   const shareResult = async () => {
-    const score = getScore();
-    const grade = getGrade(score);
     const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
-    const shareText = `${t.shareText}
-
-${grade.emoji} ${grade.grade}
-🎯 ${t.score}: ${score}
-✅ ${t.accuracy}: ${getAccuracy()}%
-⏱️ ${t.avgTime}: ${getAvgTime()}ms
-
-${t.shareTestIt}`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ text: shareText, url: shareUrl });
-      } catch { /* 취소 */ }
-    } else {
-      navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
-      alert(t.copied);
+    const blob = await generateImage();
+    if (blob && navigator.share && navigator.canShare) {
+      const file = new File([blob], `aim-${getScore()}.png`, { type: "image/png" });
+      if (navigator.canShare({ files: [file] })) { try { await navigator.share({ files: [file], title: t.shareText, text: `${t.shareTestIt} ${shareUrl}` }); return; } catch { /* 취소 */ } }
     }
+    if (blob) { const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.download = `aim-test-${getScore()}.png`; link.href = url; link.click(); URL.revokeObjectURL(url); }
+  };
+
+  const saveAsImage = async () => {
+    const blob = await generateImage();
+    if (blob) { const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.download = `aim-test-${getScore()}.png`; link.href = url; link.click(); URL.revokeObjectURL(url); }
   };
 
   // cleanup
@@ -1073,18 +1126,67 @@ ${t.shareTestIt}`;
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={shareResult}
-                  className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all"
-                >
-                  {t.share}
-                </button>
-                <button
-                  onClick={resetGame}
-                  className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
-                >
-                  {t.tryAgain}
-                </button>
+                <button onClick={shareResult} className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all">{t.share}</button>
+                <button onClick={saveAsImage} className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-medium rounded-xl transition-all">🖼️ 이미지</button>
+                <button onClick={resetGame} className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all">{t.tryAgain}</button>
+              </div>
+              {!hasSubmittedScore && getScore() > 0 && (
+                <button onClick={() => setShowNicknameModal(true)} className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl">🏆 랭킹 등록!</button>
+              )}
+            </div>
+          )}
+
+          {/* 🏆 리더보드 */}
+          <div className="glass-card p-6 rounded-2xl mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-white font-bold text-lg flex items-center gap-2"><span className="text-2xl">🏆</span> 에임 랭킹</h3>
+              <button onClick={fetchLeaderboard} className="text-dark-400 hover:text-white text-sm">🔄</button>
+            </div>
+            {leaderboard.length === 0 ? (
+              <div className="text-center py-8"><div className="text-4xl mb-3">🎯</div><p className="text-dark-400">아직 기록이 없습니다!</p></div>
+            ) : (
+              <div className="space-y-2">
+                {leaderboard.map((entry, index) => (
+                  <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
+                    <div className="flex-1"><span className="text-white font-medium">{entry.nickname}</span><span className="text-xs ml-2 text-dark-400">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span><div className="text-xs text-dark-400">{entry.accuracy}% / {entry.avg_time}ms</div></div>
+                    <div className="text-white font-bold">{entry.score}점</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 공유 카드 */}
+          <div ref={shareCardRef} style={{ display: "none", position: "absolute", left: "-9999px", width: "360px", padding: "20px", backgroundColor: "#0f0d1a" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}><span style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>SLOX</span><span style={{ color: "#a78bfa", fontSize: "12px" }}>🎯 에임 테스트</span></div>
+            <div style={{ textAlign: "center", padding: "20px", backgroundColor: "#1a1625", borderRadius: "12px", marginBottom: "10px" }}>
+              <div style={{ fontSize: "44px" }}>{getGrade(getScore()).emoji}</div>
+              <div style={{ fontSize: "26px", fontWeight: "bold", marginTop: "8px", color: getScore() >= 7000 ? "#67e8f9" : getScore() >= 5000 ? "#c084fc" : "#60a5fa" }}>{getGrade(getScore()).grade}</div>
+              <div style={{ fontSize: "44px", fontWeight: "bold", color: "#a78bfa", marginTop: "8px" }}>{getScore()}<span style={{ fontSize: "18px", color: "#7c3aed" }}> 점</span></div>
+              <div style={{ color: "#9ca3af", fontSize: "11px", marginTop: "6px" }}>정확도 {getAccuracy()}% / 평균 {getAvgTime()}ms</div>
+            </div>
+            <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+              <div style={{ flex: 1, backgroundColor: "#0c1a1a", borderRadius: "10px", padding: "10px", textAlign: "center" }}><div style={{ color: "#67e8f9", fontSize: "10px" }}>🔥 최대 콤보</div><div style={{ color: "#22d3ee", fontSize: "18px", fontWeight: "bold" }}>{maxCombo}x</div></div>
+              <div style={{ backgroundColor: "#ffffff", borderRadius: "10px", padding: "8px", width: "100px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${encodeURIComponent("https://www.slox.co.kr/aim")}`} alt="QR" width={70} height={70} crossOrigin="anonymous" />
+                <div style={{ fontSize: "8px", color: "#6366f1", marginTop: "4px" }}>📱 나도 도전!</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderTop: "1px solid #1e1b4b", fontSize: "10px", color: "#6b7280" }}><span>{new Date().toLocaleDateString("ko-KR")}</span><span style={{ color: "#8b5cf6" }}>slox.co.kr/aim</span></div>
+          </div>
+
+          {/* 닉네임 모달 */}
+          {showNicknameModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full">
+                <div className="text-center mb-6"><div className="text-5xl mb-3">{getGrade(getScore()).emoji}</div><h3 className="text-white text-xl font-bold">🏆 랭킹 등록</h3><p className="text-dark-400 text-sm">{getScore()}점</p></div>
+                <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder="닉네임..." className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+                <div className="flex gap-3">
+                  <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 text-white rounded-xl">취소</button>
+                  <button onClick={submitScore} disabled={!nickname.trim() || isSubmitting} className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl disabled:opacity-50">{isSubmitting ? "..." : "등록!"}</button>
+                </div>
               </div>
             </div>
           )}
