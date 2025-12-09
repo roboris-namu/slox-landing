@@ -147,10 +147,10 @@ export default function MobileToolsButton() {
 
         {/* 카테고리별 도구 리스트 */}
         <div className="p-4 pb-8 overflow-y-auto" style={{ maxHeight: "calc(85vh - 100px)" }}>
-          {toolCategories.map((category) => (
-            <div key={category.name} className="mb-5">
+          {toolCategories.map((category, index) => (
+            <div key={category.name} className={`${index !== 0 ? "mt-6 pt-5 border-t border-white/[0.06]" : ""}`}>
               {/* 카테고리 헤더 */}
-              <h4 className={`text-xs font-semibold mb-2 px-1 ${
+              <h4 className={`text-xs font-semibold mb-3 px-1 flex items-center gap-2 ${
                 category.color === "purple" ? "text-purple-400" :
                 category.color === "emerald" ? "text-emerald-400" :
                 category.color === "blue" ? "text-blue-400" :
@@ -158,6 +158,7 @@ export default function MobileToolsButton() {
                 "text-pink-400"
               }`}>
                 {category.name}
+                <span className="text-dark-600 text-[10px] font-normal">({category.tools.length})</span>
               </h4>
               
               {/* 도구 그리드 */}
