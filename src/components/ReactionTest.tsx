@@ -1152,45 +1152,61 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
           <div
             ref={shareCardRef}
             style={{ display: "none", position: "absolute", left: "-9999px" }}
-            className="w-[400px] p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900"
+            className="w-[400px] p-6 rounded-3xl bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900"
           >
             {/* 상단 SLOX 브랜딩 */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">S</span>
+                <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">S</span>
                 </div>
-                <span className="text-white font-bold text-xl">SLOX</span>
+                <span className="text-white font-bold text-lg">SLOX</span>
               </div>
-              <span className="text-purple-400 text-sm">⚡ 반응속도 테스트</span>
+              <span className="text-purple-400 text-xs">⚡ 반응속도 테스트</span>
             </div>
 
             {/* 메인 결과 */}
-            <div className="text-center py-8 bg-black/30 rounded-2xl mb-6">
-              <div className="text-6xl mb-3">{getGrade(reactionTime).emoji}</div>
-              <div className={`text-2xl font-bold mb-2 ${getGrade(reactionTime).color}`}>
+            <div className="text-center py-6 bg-black/30 rounded-2xl mb-4">
+              <div className="text-5xl mb-2">{getGrade(reactionTime).emoji}</div>
+              <div className={`text-xl font-bold mb-1 ${getGrade(reactionTime).color}`}>
                 {getGrade(reactionTime).grade}
               </div>
-              <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+              <div className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
                 {reactionTime}ms
               </div>
-              <div className="text-slate-400 text-sm mt-2">{getGrade(reactionTime).message}</div>
+              <div className="text-slate-400 text-xs mt-2">{getGrade(reactionTime).message}</div>
             </div>
 
-            {/* 통계 */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-black/20 rounded-xl p-4 text-center">
-                <div className="text-slate-400 text-xs mb-1">평균</div>
-                <div className="text-cyan-400 text-xl font-bold">{getAverage()}ms</div>
+            {/* 통계 + QR코드 */}
+            <div className="flex gap-4 mb-4">
+              {/* 통계 */}
+              <div className="flex-1 space-y-2">
+                <div className="bg-black/20 rounded-xl p-3 text-center">
+                  <div className="text-slate-400 text-[10px] mb-0.5">평균</div>
+                  <div className="text-cyan-400 text-lg font-bold">{getAverage()}ms</div>
+                </div>
+                <div className="bg-black/20 rounded-xl p-3 text-center">
+                  <div className="text-slate-400 text-[10px] mb-0.5">최고 기록</div>
+                  <div className="text-purple-400 text-lg font-bold">{getBest()}ms</div>
+                </div>
               </div>
-              <div className="bg-black/20 rounded-xl p-4 text-center">
-                <div className="text-slate-400 text-xs mb-1">최고 기록</div>
-                <div className="text-purple-400 text-xl font-bold">{getBest()}ms</div>
+              
+              {/* QR코드 */}
+              <div className="flex flex-col items-center justify-center bg-white rounded-xl p-2">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent("https://www.slox.co.kr/reaction")}&bgcolor=ffffff&color=7c3aed`}
+                  alt="QR Code"
+                  width={80}
+                  height={80}
+                  className="rounded"
+                />
+                <span className="text-[8px] text-slate-600 mt-1">나도 도전!</span>
               </div>
             </div>
 
             {/* 하단 */}
-            <div className="flex items-center justify-between text-xs text-slate-500">
+            <div className="flex items-center justify-between text-[10px] text-slate-500">
               <span>{new Date().toLocaleDateString("ko-KR")}</span>
               <span>www.slox.co.kr/reaction</span>
             </div>
