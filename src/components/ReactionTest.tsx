@@ -1225,149 +1225,101 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
               display: "none", 
               position: "absolute", 
               left: "-9999px",
-              width: "380px",
-              padding: "24px",
-              borderRadius: "20px",
-              background: "linear-gradient(160deg, #0c0618 0%, #1a0f35 50%, #0a0d1a 100%)",
-              border: "1px solid rgba(139, 92, 246, 0.15)",
+              width: "360px",
+              padding: "20px",
+              backgroundColor: "#0f0d1a",
             }}
           >
-            {/* 상단 헤더 */}
-            <table style={{ width: "100%", marginBottom: "16px", borderCollapse: "collapse" }}>
-              <tbody>
-                <tr>
-                  <td style={{ verticalAlign: "middle" }}>
-                    <table style={{ borderCollapse: "collapse" }}>
-                      <tbody>
-                        <tr>
-                          <td style={{ 
-                            width: "32px", 
-                            height: "32px", 
-                            background: "linear-gradient(135deg, #8b5cf6, #06b6d4)", 
-                            borderRadius: "8px", 
-                            textAlign: "center",
-                            verticalAlign: "middle"
-                          }}>
-                            <span style={{ color: "white", fontWeight: "800", fontSize: "16px" }}>S</span>
-                          </td>
-                          <td style={{ paddingLeft: "8px", verticalAlign: "middle" }}>
-                            <span style={{ color: "white", fontWeight: "700", fontSize: "18px" }}>SLOX</span>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
-                  <td style={{ textAlign: "right", verticalAlign: "middle" }}>
-                    <span style={{ 
-                      display: "inline-block",
-                      background: "rgba(139, 92, 246, 0.2)", 
-                      padding: "6px 12px", 
-                      borderRadius: "16px",
-                      border: "1px solid rgba(139, 92, 246, 0.25)",
-                      color: "#a78bfa", 
-                      fontSize: "11px", 
-                      fontWeight: "600"
-                    }}>⚡ 반응속도 테스트</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            {/* 헤더 */}
+            <div style={{ marginBottom: "16px" }}>
+              <span style={{ 
+                display: "inline-block",
+                backgroundColor: "#7c3aed", 
+                color: "white", 
+                fontWeight: "bold", 
+                fontSize: "14px",
+                padding: "6px 10px",
+                borderRadius: "6px",
+                marginRight: "8px"
+              }}>S</span>
+              <span style={{ color: "white", fontWeight: "bold", fontSize: "18px", verticalAlign: "middle" }}>SLOX</span>
+              <span style={{ 
+                float: "right",
+                backgroundColor: "#1e1b4b", 
+                color: "#a78bfa", 
+                fontSize: "11px", 
+                fontWeight: "600",
+                padding: "6px 10px",
+                borderRadius: "12px"
+              }}>⚡ 반응속도 테스트</span>
+            </div>
 
             {/* 메인 결과 */}
             <div style={{ 
               textAlign: "center", 
-              padding: "20px 16px", 
-              background: "rgba(139,92,246,0.08)", 
-              borderRadius: "16px", 
-              marginBottom: "12px",
-              border: "1px solid rgba(139,92,246,0.12)"
+              padding: "24px 16px", 
+              backgroundColor: "#1a1625",
+              borderRadius: "12px", 
+              marginBottom: "12px"
             }}>
-              <div style={{ fontSize: "44px", marginBottom: "4px" }}>{getGrade(reactionTime).emoji}</div>
+              <div style={{ fontSize: "48px", lineHeight: "1" }}>{getGrade(reactionTime).emoji}</div>
               <div style={{ 
-                fontSize: "24px", 
-                fontWeight: "800", 
-                marginBottom: "8px",
+                fontSize: "28px", 
+                fontWeight: "bold", 
+                margin: "12px 0",
                 color: reactionTime < 130 ? "#67e8f9" : reactionTime < 160 ? "#c084fc" : reactionTime < 200 ? "#60a5fa" : reactionTime < 250 ? "#2dd4bf" : reactionTime < 310 ? "#fbbf24" : "#9ca3af"
               }}>
                 {getGrade(reactionTime).grade}
               </div>
               <div style={{ 
                 display: "inline-block",
-                padding: "5px 14px",
-                background: "rgba(250,204,21,0.15)",
-                border: "1px solid rgba(250, 204, 21, 0.25)",
-                borderRadius: "20px",
+                padding: "4px 12px",
+                backgroundColor: "#3d3200",
+                borderRadius: "12px",
                 marginBottom: "16px"
               }}>
-                <span style={{ color: "#fbbf24", fontSize: "12px", fontWeight: "700" }}>🔥 상위 {getPercentile(reactionTime)}%</span>
+                <span style={{ color: "#fbbf24", fontSize: "12px", fontWeight: "bold" }}>🔥 상위 {getPercentile(reactionTime)}%</span>
               </div>
-              <div style={{ fontSize: "44px", fontWeight: "900", color: "#a78bfa", letterSpacing: "-1px" }}>
-                {reactionTime}<span style={{ fontSize: "20px", color: "#7c3aed", marginLeft: "2px" }}>ms</span>
+              <div style={{ fontSize: "48px", fontWeight: "bold", color: "#a78bfa" }}>
+                {reactionTime}<span style={{ fontSize: "20px", color: "#7c3aed" }}>ms</span>
               </div>
-              <div style={{ color: "#9ca3af", fontSize: "12px", marginTop: "6px" }}>{getGrade(reactionTime).message}</div>
+              <div style={{ color: "#9ca3af", fontSize: "12px", marginTop: "8px" }}>{getGrade(reactionTime).message}</div>
             </div>
 
-            {/* 통계 + QR코드 */}
-            <table style={{ width: "100%", marginBottom: "12px", borderCollapse: "separate", borderSpacing: "10px 0" }}>
-              <tbody>
-                <tr>
-                  <td style={{ verticalAlign: "top", width: "50%" }}>
-                    <div style={{ 
-                      background: "rgba(6,182,212,0.1)", 
-                      borderRadius: "12px", 
-                      padding: "10px", 
-                      textAlign: "center",
-                      marginBottom: "8px",
-                      border: "1px solid rgba(6,182,212,0.15)"
-                    }}>
-                      <div style={{ color: "#67e8f9", fontSize: "10px", fontWeight: "600" }}>🎯 평균</div>
-                      <div style={{ color: "#22d3ee", fontSize: "18px", fontWeight: "800", marginTop: "2px" }}>{getAverage()}<span style={{ fontSize: "10px" }}>ms</span></div>
-                    </div>
-                    <div style={{ 
-                      background: "rgba(168,85,247,0.1)", 
-                      borderRadius: "12px", 
-                      padding: "10px", 
-                      textAlign: "center",
-                      border: "1px solid rgba(168,85,247,0.15)"
-                    }}>
-                      <div style={{ color: "#c4b5fd", fontSize: "10px", fontWeight: "600" }}>🏆 최고 기록</div>
-                      <div style={{ color: "#a855f7", fontSize: "18px", fontWeight: "800", marginTop: "2px" }}>{getBest()}<span style={{ fontSize: "10px" }}>ms</span></div>
-                    </div>
-                  </td>
-                  <td style={{ verticalAlign: "middle", textAlign: "center" }}>
-                    <div style={{ 
-                      display: "inline-block",
-                      background: "#ffffff", 
-                      borderRadius: "12px", 
-                      padding: "8px",
-                      boxShadow: "0 2px 12px rgba(0,0,0,0.2)"
-                    }}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img 
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent("https://www.slox.co.kr/reaction")}&bgcolor=ffffff&color=1a1a2e&margin=0`}
-                        alt="QR"
-                        width={80}
-                        height={80}
-                        style={{ display: "block", borderRadius: "4px" }}
-                      />
-                      <div style={{ fontSize: "9px", color: "#6366f1", marginTop: "4px", fontWeight: "600", textAlign: "center" }}>📱 나도 도전!</div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            {/* 통계 */}
+            <div style={{ display: "flex", gap: "8px", marginBottom: "12px" }}>
+              <div style={{ 
+                flex: 1,
+                backgroundColor: "#0c1a1a",
+                borderRadius: "10px", 
+                padding: "12px", 
+                textAlign: "center"
+              }}>
+                <div style={{ color: "#67e8f9", fontSize: "10px", fontWeight: "bold" }}>🎯 평균</div>
+                <div style={{ color: "#22d3ee", fontSize: "20px", fontWeight: "bold", marginTop: "4px" }}>{getAverage()}ms</div>
+              </div>
+              <div style={{ 
+                flex: 1,
+                backgroundColor: "#1a0c1a",
+                borderRadius: "10px", 
+                padding: "12px", 
+                textAlign: "center"
+              }}>
+                <div style={{ color: "#c4b5fd", fontSize: "10px", fontWeight: "bold" }}>🏆 최고기록</div>
+                <div style={{ color: "#a855f7", fontSize: "20px", fontWeight: "bold", marginTop: "4px" }}>{getBest()}ms</div>
+              </div>
+            </div>
 
-            {/* 하단 */}
+            {/* URL */}
             <div style={{ 
-              display: "flex", 
-              justifyContent: "space-between", 
-              fontSize: "10px", 
-              color: "#6b7280",
-              paddingTop: "10px",
-              borderTop: "1px solid rgba(139,92,246,0.08)"
+              textAlign: "center",
+              padding: "10px",
+              backgroundColor: "#1a1625",
+              borderRadius: "8px"
             }}>
-              <span>{new Date().toLocaleDateString("ko-KR")}</span>
-              <span style={{ color: "#8b5cf6", fontWeight: "600" }}>slox.co.kr/reaction</span>
+              <span style={{ color: "#6b7280", fontSize: "10px" }}>👆 </span>
+              <span style={{ color: "#8b5cf6", fontSize: "12px", fontWeight: "bold" }}>slox.co.kr/reaction</span>
+              <span style={{ color: "#6b7280", fontSize: "10px" }}> 에서 도전하세요!</span>
             </div>
           </div>
 
