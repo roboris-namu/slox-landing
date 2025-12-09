@@ -3,8 +3,26 @@
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 
+// 도구 타입 정의
+interface Tool {
+  href: string;
+  emoji: string;
+  label: string;
+  desc: string;
+  best?: boolean;
+  isNew?: boolean;
+}
+
+interface ToolCategory {
+  name: string;
+  icon: string;
+  color: string;
+  gradient: string;
+  tools: Tool[];
+}
+
 // 카테고리별 도구 분류
-const toolCategories = [
+const toolCategories: ToolCategory[] = [
   {
     name: "게임 & 테스트",
     icon: "🎮",
