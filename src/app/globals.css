@@ -57,7 +57,7 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
-/* 그리드 패턴 배경 */
+/* 그리드 패턴 배경 - 삼성 인터넷 호환 */
 .grid-pattern {
   position: fixed;
   inset: 0;
@@ -66,6 +66,7 @@ body {
     linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
   background-size: 60px 60px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, black, transparent);
   mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, black, transparent);
 }
 
@@ -242,17 +243,20 @@ body {
   }
 }
 
-/* 안전한 그라디언트 텍스트 - 삼성 브라우저 호환 */
+/* 안전한 그라디언트 텍스트 - 삼성 브라우저 호환 강화 */
 .gradient-text-safe {
-  color: #a78bfa; /* fallback 보라색 */
-  background: linear-gradient(to right, #a78bfa, #c084fc, #22d3ee);
-  -webkit-background-clip: text;
-  background-clip: text;
+  /* 기본: 밝은 보라색 (fallback) */
+  color: #c084fc;
 }
 
-@supports (-webkit-background-clip: text) {
+/* 그라데이션 지원 브라우저만 적용 */
+@supports (-webkit-background-clip: text) and (-webkit-text-fill-color: transparent) {
   .gradient-text-safe {
+    background: linear-gradient(to right, #a78bfa, #c084fc, #22d3ee);
+    -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: transparent;
   }
 }
 
