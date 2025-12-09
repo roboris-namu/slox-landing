@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import Link from "next/link";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// Supabase 클라이언트를 lazy하게 생성 (빌드 시 환경변수 없을 때 에러 방지)
+const getSupabase = (): SupabaseClient | null => {
+  if (typeof window === "undefined") return null;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key);
+};
 
 interface LeaderboardEntry {
   nickname: string;
@@ -61,7 +65,16 @@ export default function HallOfFameCarousel() {
   const [leaderboards, setLeaderboards] = useState<GameLeaderboard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // 클라이언트 사이드에서만 Supabase 클라이언트 생성
+  const supabase = useMemo(() => getSupabase(), []);
+
   const fetchAllLeaderboards = useCallback(async () => {
+    // Supabase 클라이언트가 없으면 스킵
+    if (!supabase) {
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const results = await Promise.all(
         gameConfigs.map(async (config) => {
@@ -101,7 +114,7 @@ export default function HallOfFameCarousel() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     fetchAllLeaderboards();
