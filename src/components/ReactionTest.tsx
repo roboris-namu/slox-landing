@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import html2canvas from "html2canvas";
+import { supabase, LeaderboardEntry } from "@/lib/supabase";
 
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
@@ -584,6 +585,13 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   const [particles, setParticles] = useState<Particle[]>([]);
   const [showExplosion, setShowExplosion] = useState(false);
   const [balloonScale, setBalloonScale] = useState(1);
+  // 명예의전당 관련 상태
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [showNicknameModal, setShowNicknameModal] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
+  
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const gameAreaRef = useRef<HTMLDivElement>(null);
@@ -763,11 +771,66 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     return 95;
   };
 
+  // 리더보드 가져오기
+  const fetchLeaderboard = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("reaction_leaderboard")
+        .select("*")
+        .order("score", { ascending: true })
+        .limit(10);
+      
+      if (error) throw error;
+      if (data) setLeaderboard(data);
+    } catch (err) {
+      console.error("리더보드 로드 실패:", err);
+    }
+  }, []);
+
+  // 점수 등록
+  const submitScore = async () => {
+    if (!nickname.trim() || isSubmitting) return;
+    
+    setIsSubmitting(true);
+    try {
+      const gradeInfo = getGrade(reactionTime);
+      const percentile = getPercentile(reactionTime);
+      
+      const { error } = await supabase
+        .from("reaction_leaderboard")
+        .insert({
+          nickname: nickname.trim().slice(0, 20),
+          score: reactionTime,
+          grade: gradeInfo.grade,
+          percentile: percentile,
+          device_type: isMobile ? "mobile" : "pc",
+        });
+      
+      if (error) throw error;
+      
+      setHasSubmittedScore(true);
+      setShowNicknameModal(false);
+      setNickname("");
+      fetchLeaderboard();
+    } catch (err) {
+      console.error("점수 등록 실패:", err);
+      alert(lang === "ko" ? "등록 실패! 다시 시도해주세요." : "Failed to submit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // 페이지 로드시 리더보드 가져오기
+  useEffect(() => {
+    fetchLeaderboard();
+  }, [fetchLeaderboard]);
+
   // 게임 시작
   const startGame = useCallback(() => {
     setState("ready");
     playSound("ready");
     setBalloonScale(1);
+    setHasSubmittedScore(false); // 새 게임시 등록 상태 리셋
     
     const delay = Math.random() * 3000 + 2000;
     timeoutRef.current = setTimeout(() => {
@@ -1215,6 +1278,144 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                 >
                   {t.reset}
                 </button>
+              </div>
+              
+              {/* 🏆 명예의전당 등록 버튼 */}
+              {!hasSubmittedScore && reactionTime > 0 && getPercentile(reactionTime) <= 30 && (
+                <button
+                  onClick={() => setShowNicknameModal(true)}
+                  className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-xl transition-all animate-pulse"
+                >
+                  🏆 {lang === "ko" ? "명예의전당 등록하기!" : lang === "ja" ? "殿堂入り登録！" : lang === "zh" ? "名人堂登记！" : "Enter Hall of Fame!"}
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* 🏆 명예의전당 */}
+          <div className="glass-card p-6 rounded-2xl mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-white font-bold text-lg flex items-center gap-2">
+                <span className="text-2xl">🏆</span>
+                {lang === "ko" ? "명예의전당" : lang === "ja" ? "殿堂入り" : lang === "zh" ? "名人堂" : "Hall of Fame"}
+              </h3>
+              <button
+                onClick={fetchLeaderboard}
+                className="text-dark-400 hover:text-white text-sm transition-colors"
+              >
+                🔄 {lang === "ko" ? "새로고침" : "Refresh"}
+              </button>
+            </div>
+            
+            {leaderboard.length === 0 ? (
+              <div className="text-center py-8">
+                <div className="text-4xl mb-3">🎮</div>
+                <p className="text-dark-400">
+                  {lang === "ko" ? "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!" : 
+                   lang === "ja" ? "まだ記録がありません。最初の挑戦者になりましょう！" :
+                   lang === "zh" ? "还没有记录。成为第一个挑战者吧！" :
+                   "No records yet. Be the first challenger!"}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {leaderboard.map((entry, index) => (
+                  <div
+                    key={entry.id}
+                    className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
+                      index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" :
+                      index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" :
+                      index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" :
+                      "bg-dark-800/50"
+                    }`}
+                  >
+                    {/* 순위 */}
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                      index === 0 ? "bg-yellow-500 text-black" :
+                      index === 1 ? "bg-gray-300 text-black" :
+                      index === 2 ? "bg-orange-500 text-black" :
+                      "bg-dark-700 text-dark-300"
+                    }`}>
+                      {index + 1}
+                    </div>
+                    
+                    {/* 정보 */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-medium truncate">{entry.nickname}</span>
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">
+                          {entry.device_type === "mobile" ? "📱" : "🖥️"}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-dark-400">
+                        <span className={
+                          entry.grade === t.challenger ? "text-cyan-300" :
+                          entry.grade === t.master ? "text-purple-400" :
+                          entry.grade === t.diamond ? "text-blue-400" :
+                          entry.grade === t.platinum ? "text-teal-400" :
+                          "text-yellow-400"
+                        }>{entry.grade}</span>
+                        <span>•</span>
+                        <span>{new Date(entry.created_at).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    
+                    {/* 점수 */}
+                    <div className="text-right">
+                      <div className="text-white font-bold">{entry.score}ms</div>
+                      <div className="text-xs text-dark-400">{lang === "ko" ? "상위" : "Top"} {entry.percentile}%</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 닉네임 입력 모달 */}
+          {showNicknameModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full animate-scale-in">
+                <div className="text-center mb-6">
+                  <div className="text-5xl mb-3">{getGrade(reactionTime).emoji}</div>
+                  <h3 className="text-white text-xl font-bold mb-2">
+                    {lang === "ko" ? "🏆 명예의전당 등록" : lang === "ja" ? "🏆 殿堂入り登録" : lang === "zh" ? "🏆 名人堂登记" : "🏆 Hall of Fame"}
+                  </h3>
+                  <p className="text-dark-400 text-sm">
+                    {lang === "ko" ? `${reactionTime}ms로 상위 ${getPercentile(reactionTime)}%!` :
+                     `${reactionTime}ms - Top ${getPercentile(reactionTime)}%!`}
+                  </p>
+                </div>
+                
+                <div className="mb-4">
+                  <label className="block text-dark-300 text-sm mb-2">
+                    {lang === "ko" ? "닉네임 (최대 20자)" : lang === "ja" ? "ニックネーム (最大20文字)" : lang === "zh" ? "昵称 (最多20字)" : "Nickname (max 20 chars)"}
+                  </label>
+                  <input
+                    type="text"
+                    value={nickname}
+                    onChange={(e) => setNickname(e.target.value.slice(0, 20))}
+                    placeholder={lang === "ko" ? "닉네임 입력..." : "Enter nickname..."}
+                    className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white placeholder-dark-500 focus:outline-none focus:border-accent-purple transition-colors"
+                    autoFocus
+                    onKeyDown={(e) => e.key === "Enter" && submitScore()}
+                  />
+                </div>
+                
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowNicknameModal(false)}
+                    className="flex-1 px-4 py-3 bg-dark-800 hover:bg-dark-700 text-white rounded-xl transition-all"
+                  >
+                    {lang === "ko" ? "취소" : "Cancel"}
+                  </button>
+                  <button
+                    onClick={submitScore}
+                    disabled={!nickname.trim() || isSubmitting}
+                    className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? "..." : lang === "ko" ? "등록하기!" : "Submit!"}
+                  </button>
+                </div>
               </div>
             </div>
           )}
