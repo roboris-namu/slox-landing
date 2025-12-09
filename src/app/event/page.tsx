@@ -186,50 +186,59 @@ export default function EventPage() {
               ✨ 1등 달성 시 이런 화면이!
             </h3>
             
-            {/* 축하 팝업 미리보기 */}
-            <div className="relative bg-gradient-to-br from-yellow-500/20 via-orange-500/20 to-red-500/20 border-2 border-yellow-500/50 rounded-2xl p-6 text-center">
-              {/* 폭죽 이모지들 - 애니메이션 */}
-              <div className="absolute -top-2 left-4 text-3xl animate-bounce" style={{ animationDelay: "0s" }}>🎉</div>
-              <div className="absolute -top-2 right-4 text-3xl animate-bounce" style={{ animationDelay: "0.2s" }}>🎊</div>
-              <div className="absolute top-1/2 -left-2 text-2xl animate-bounce" style={{ animationDelay: "0.4s" }}>✨</div>
-              <div className="absolute top-1/2 -right-2 text-2xl animate-bounce" style={{ animationDelay: "0.6s" }}>🌟</div>
-              <div className="absolute -bottom-2 left-1/4 text-2xl animate-bounce" style={{ animationDelay: "0.3s" }}>🎆</div>
-              <div className="absolute -bottom-2 right-1/4 text-2xl animate-bounce" style={{ animationDelay: "0.5s" }}>🎇</div>
+            {/* 축하 팝업 미리보기 - 세련된 버전 */}
+            <div className="relative bg-gradient-to-b from-yellow-900/40 via-orange-900/30 to-dark-900/80 border border-yellow-500/30 rounded-2xl p-8 text-center overflow-hidden">
+              {/* 상단 글로우 효과 */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-gradient-to-b from-yellow-500/20 to-transparent blur-2xl" />
+              
+              {/* 사이드 라인 장식 */}
+              <div className="absolute top-4 left-4 w-12 h-px bg-gradient-to-r from-yellow-500/50 to-transparent" />
+              <div className="absolute top-4 right-4 w-12 h-px bg-gradient-to-l from-yellow-500/50 to-transparent" />
+              <div className="absolute bottom-4 left-4 w-12 h-px bg-gradient-to-r from-yellow-500/50 to-transparent" />
+              <div className="absolute bottom-4 right-4 w-12 h-px bg-gradient-to-l from-yellow-500/50 to-transparent" />
               
               {/* 메인 컨텐츠 */}
               <div className="relative z-10">
-                <div className="text-6xl mb-4 animate-pulse">👑</div>
-                <h4 className="text-2xl font-black text-yellow-400 mb-2">
-                  🎉 축하합니다! 1등입니다!
+                {/* 왕관 - 글로우 효과 */}
+                <div className="relative inline-block mb-4">
+                  <div className="text-6xl">👑</div>
+                  <div className="absolute inset-0 text-6xl blur-md opacity-50">👑</div>
+                </div>
+                
+                <h4 className="text-2xl font-black mb-2">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-orange-400">
+                    축하합니다! 1등입니다!
+                  </span>
                 </h4>
-                <p className="text-white mb-1">
-                  <span className="text-yellow-400 font-bold text-3xl">142</span>
-                  <span className="text-dark-400 text-lg">ms</span>
-                </p>
-                <p className="text-sm text-dark-400 mb-4">반응속도 테스트 역대 1등!</p>
+                
+                <div className="mb-1">
+                  <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-500">142</span>
+                  <span className="text-dark-400 text-xl ml-1">ms</span>
+                </div>
+                <p className="text-sm text-dark-500 mb-6">반응속도 테스트 역대 1등!</p>
                 
                 {/* 이메일 등록 미리보기 */}
-                <div className="bg-black/40 rounded-xl p-4 max-w-xs mx-auto">
-                  <p className="text-sm text-dark-300 mb-3">
-                    🎁 상품 수령을 위해 이메일을 등록하세요!
+                <div className="bg-dark-900/60 backdrop-blur-sm rounded-xl p-4 max-w-sm mx-auto border border-white/5">
+                  <p className="text-sm text-dark-300 mb-3 flex items-center justify-center gap-2">
+                    <span className="text-lg">🎁</span>
+                    <span>상품 수령을 위해 이메일을 등록하세요!</span>
                   </p>
                   <div className="flex gap-2">
-                    <div className="flex-1 bg-dark-800 rounded-lg px-3 py-2 text-left text-dark-500 text-sm border border-white/10">
-                      example@email.com
+                    <div className="flex-1 bg-dark-800/80 rounded-lg px-4 py-2.5 text-left text-dark-500 text-sm border border-white/5">
+                      your@email.com
                     </div>
-                    <div className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold rounded-lg text-sm">
+                    <div className="px-5 py-2.5 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold rounded-lg text-sm shadow-lg shadow-yellow-500/20">
                       등록
                     </div>
                   </div>
                 </div>
               </div>
-              
-              {/* 반짝이는 효과 */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
             </div>
             
-            <p className="text-center text-dark-500 text-sm mt-4">
-              👆 실제로 1등 달성 시 화려한 폭죽 효과와 함께 이 화면이 나타나요!
+            <p className="text-center text-dark-500 text-sm mt-4 flex items-center justify-center gap-2">
+              <span className="inline-block w-8 h-px bg-gradient-to-r from-transparent to-dark-600" />
+              실제로 1등 달성 시 폭죽 효과와 함께 나타나요
+              <span className="inline-block w-8 h-px bg-gradient-to-l from-transparent to-dark-600" />
             </p>
           </div>
 
