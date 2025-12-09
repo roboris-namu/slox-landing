@@ -733,14 +733,14 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
    */
   const getGrade = (ms: number): { grade: string; color: string; emoji: string; message: string } => {
     if (isMobile) {
-      // 모바일: 터치 딜레이 고려하여 PC보다 관대하게
-      if (ms < 160) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
-      if (ms < 200) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
-      if (ms < 250) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
-      if (ms < 310) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
-      if (ms < 380) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
-      if (ms < 480) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
-      if (ms < 600) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+      // 모바일: 터치 딜레이 고려하되 어렵게 조정
+      if (ms < 140) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+      if (ms < 170) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+      if (ms < 210) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+      if (ms < 260) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
+      if (ms < 320) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+      if (ms < 400) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+      if (ms < 520) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
       return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
     }
     // PC: 마우스 클릭 기준 엄격하게
@@ -760,13 +760,14 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
    */
   const getPercentile = (ms: number): number => {
     if (isMobile) {
-      if (ms < 160) return 0.1;
-      if (ms < 200) return 1;
-      if (ms < 250) return 5;
-      if (ms < 310) return 15;
-      if (ms < 380) return 35;
-      if (ms < 480) return 60;
-      if (ms < 600) return 80;
+      // 모바일: 어렵게 조정된 기준에 맞춤
+      if (ms < 140) return 0.1;
+      if (ms < 170) return 1;
+      if (ms < 210) return 5;
+      if (ms < 260) return 15;
+      if (ms < 320) return 35;
+      if (ms < 400) return 60;
+      if (ms < 520) return 80;
       return 95;
     }
     if (ms < 100) return 0.1;
