@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
 
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
@@ -39,6 +40,7 @@ const translations = {
     recentRecords: "최근 기록",
     times: "회",
     share: "📤 공유하기",
+    saveImage: "🖼️ 이미지 저장",
     reset: "🔄 기록 초기화",
     tierTable: "🎮 반응속도 티어표",
     mobileStandard: "📱 모바일 기준",
@@ -103,6 +105,7 @@ const translations = {
     recentRecords: "Recent Records",
     times: " tries",
     share: "📤 Share",
+    saveImage: "🖼️ Save Image",
     reset: "🔄 Reset",
     tierTable: "🎮 Reaction Speed Tiers",
     mobileStandard: "📱 Mobile Standard",
@@ -166,6 +169,7 @@ const translations = {
     recentRecords: "最近の記録",
     times: "回",
     share: "📤 共有",
+    saveImage: "🖼️ 画像保存",
     reset: "🔄 リセット",
     tierTable: "🎮 反応速度ティア表",
     mobileStandard: "📱 モバイル基準",
@@ -229,6 +233,7 @@ const translations = {
     recentRecords: "最近记录",
     times: "次",
     share: "📤 分享",
+    saveImage: "🖼️ 保存图片",
     reset: "🔄 重置",
     tierTable: "🎮 反应速度等级表",
     mobileStandard: "📱 移动端标准",
@@ -292,6 +297,7 @@ const translations = {
     recentRecords: "Registros recientes",
     times: " intentos",
     share: "📤 Compartir",
+    saveImage: "🖼️ Guardar Imagen",
     reset: "🔄 Reiniciar",
     tierTable: "🎮 Tabla de Rangos",
     mobileStandard: "📱 Estándar Móvil",
@@ -355,6 +361,7 @@ const translations = {
     recentRecords: "Registros recentes",
     times: " tentativas",
     share: "📤 Compartilhar",
+    saveImage: "🖼️ Salvar Imagem",
     reset: "🔄 Reiniciar",
     tierTable: "🎮 Tabela de Ranks",
     mobileStandard: "📱 Padrão Mobile",
@@ -418,6 +425,7 @@ const translations = {
     recentRecords: "Letzte Ergebnisse",
     times: " Versuche",
     share: "📤 Teilen",
+    saveImage: "🖼️ Bild speichern",
     reset: "🔄 Zurücksetzen",
     tierTable: "🎮 Rang-Tabelle",
     mobileStandard: "📱 Mobil-Standard",
@@ -481,6 +489,7 @@ const translations = {
     recentRecords: "Résultats récents",
     times: " essais",
     share: "📤 Partager",
+    saveImage: "🖼️ Enregistrer l'image",
     reset: "🔄 Réinitialiser",
     tierTable: "🎮 Tableau des Rangs",
     mobileStandard: "📱 Standard Mobile",
@@ -578,6 +587,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const gameAreaRef = useRef<HTMLDivElement>(null);
+  const shareCardRef = useRef<HTMLDivElement>(null);
   
   const t = translations[lang];
 
@@ -816,6 +826,34 @@ ${t.shareTestIt}`;
     } else {
       navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
       alert(t.copied);
+    }
+  };
+
+  // 이미지로 저장하기
+  const saveAsImage = async () => {
+    if (!shareCardRef.current) return;
+    
+    try {
+      // 카드를 잠시 보이게
+      shareCardRef.current.style.display = "block";
+      
+      const canvas = await html2canvas(shareCardRef.current, {
+        backgroundColor: "#0f172a",
+        scale: 2,
+        logging: false,
+        useCORS: true,
+      });
+      
+      // 다시 숨기기
+      shareCardRef.current.style.display = "none";
+      
+      // 다운로드
+      const link = document.createElement("a");
+      link.download = `reaction-test-${reactionTime}ms.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    } catch (error) {
+      console.error("이미지 생성 실패:", error);
     }
   };
 
@@ -1079,6 +1117,12 @@ ${t.shareTestIt}`;
                   {t.share}
                 </button>
                 <button
+                  onClick={saveAsImage}
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium rounded-xl transition-all"
+                >
+                  {t.saveImage}
+                </button>
+                <button
                   onClick={resetGame}
                   className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
                 >
@@ -1087,6 +1131,54 @@ ${t.shareTestIt}`;
               </div>
             </div>
           )}
+
+          {/* 🖼️ 공유용 카드 (숨김 - 이미지 생성용) */}
+          <div
+            ref={shareCardRef}
+            style={{ display: "none", position: "absolute", left: "-9999px" }}
+            className="w-[400px] p-8 rounded-3xl bg-gradient-to-br from-slate-900 via-purple-900/50 to-slate-900"
+          >
+            {/* 상단 SLOX 브랜딩 */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">S</span>
+                </div>
+                <span className="text-white font-bold text-xl">SLOX</span>
+              </div>
+              <span className="text-purple-400 text-sm">⚡ 반응속도 테스트</span>
+            </div>
+
+            {/* 메인 결과 */}
+            <div className="text-center py-8 bg-black/30 rounded-2xl mb-6">
+              <div className="text-6xl mb-3">{getGrade(reactionTime).emoji}</div>
+              <div className={`text-2xl font-bold mb-2 ${getGrade(reactionTime).color}`}>
+                {getGrade(reactionTime).grade}
+              </div>
+              <div className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+                {reactionTime}ms
+              </div>
+              <div className="text-slate-400 text-sm mt-2">{getGrade(reactionTime).message}</div>
+            </div>
+
+            {/* 통계 */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="bg-black/20 rounded-xl p-4 text-center">
+                <div className="text-slate-400 text-xs mb-1">평균</div>
+                <div className="text-cyan-400 text-xl font-bold">{getAverage()}ms</div>
+              </div>
+              <div className="bg-black/20 rounded-xl p-4 text-center">
+                <div className="text-slate-400 text-xs mb-1">최고 기록</div>
+                <div className="text-purple-400 text-xl font-bold">{getBest()}ms</div>
+              </div>
+            </div>
+
+            {/* 하단 */}
+            <div className="flex items-center justify-between text-xs text-slate-500">
+              <span>{new Date().toLocaleDateString("ko-KR")}</span>
+              <span>www.slox.co.kr/reaction</span>
+            </div>
+          </div>
 
           {/* 🎮 반응속도란? */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
