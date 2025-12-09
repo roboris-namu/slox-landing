@@ -120,11 +120,11 @@ export default function DesktopToolsDropdown() {
           </div>
 
           {/* 카테고리 그리드 */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-5">
             {toolCategories.map((category) => (
-              <div key={category.name} className={category.name === "🎭 심리 테스트" ? "col-span-2" : ""}>
+              <div key={category.name} className={`${category.name === "🎭 심리 테스트" ? "col-span-2" : ""} pb-4 border-b border-white/[0.04] last:border-0 last:pb-0`}>
                 {/* 카테고리 헤더 */}
-                <h4 className={`text-xs font-semibold mb-2 ${
+                <h4 className={`text-xs font-semibold mb-2.5 flex items-center gap-1.5 ${
                   category.color === "purple" ? "text-purple-400" :
                   category.color === "emerald" ? "text-emerald-400" :
                   category.color === "blue" ? "text-blue-400" :
@@ -132,6 +132,7 @@ export default function DesktopToolsDropdown() {
                   "text-pink-400"
                 }`}>
                   {category.name}
+                  <span className="text-dark-600 text-[10px] font-normal">({category.tools.length})</span>
                 </h4>
                 
                 {/* 도구 리스트 */}
