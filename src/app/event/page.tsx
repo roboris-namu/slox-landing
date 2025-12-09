@@ -160,20 +160,31 @@ export default function EventPage() {
             <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
               📋 참여 방법
             </h3>
-            <ol className="space-y-3 text-dark-300">
+            <ol className="space-y-4 text-dark-300">
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-yellow-500 text-black text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
                 <span>반응속도 테스트에서 <strong className="text-white">최고 기록</strong>을 달성하세요!</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-yellow-500 text-black text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
-                <span><strong className="text-white">1등 달성 시</strong> 이메일을 등록하세요.</span>
+                <div>
+                  <span><strong className="text-white">1등 달성 시</strong> 축하 팝업이 뜨며 이메일을 등록할 수 있어요!</span>
+                  <p className="text-xs text-dark-500 mt-1">💡 이메일 미등록 시 상품 수령이 불가합니다.</p>
+                </div>
               </li>
               <li className="flex items-start gap-3">
                 <span className="w-6 h-6 rounded-full bg-yellow-500 text-black text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
-                <span>매달 1일 오전 10시 기준 <strong className="text-white">최종 1등</strong>에게 상품 발송!</span>
+                <span>매달 1일 오전 10시 기준 <strong className="text-white">최종 1등</strong>에게 오후 2시 상품 발송!</span>
               </li>
             </ol>
+            
+            {/* 추가 안내 */}
+            <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
+              <p className="text-sm text-yellow-400 flex items-center gap-2">
+                <span>💡</span>
+                <span>1등을 달성하면 <strong>🎉 축하 팝업</strong>과 함께 이메일 등록 버튼이 나타납니다!</span>
+              </p>
+            </div>
           </div>
 
           {/* 다음 추첨일 */}
