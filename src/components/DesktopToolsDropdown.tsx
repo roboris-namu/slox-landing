@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 // 도구 타입 정의
@@ -74,40 +74,16 @@ const toolCategories: ToolCategory[] = [
 ];
 
 export default function DesktopToolsDropdown() {
-  const [showHint, setShowHint] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    // localStorage에서 힌트 본 적 있는지 확인
-    const hintSeen = localStorage.getItem("slox_pc_tools_hint");
-    if (!hintSeen) {
-      // 처음 방문이면 1초 후에 힌트 표시
-      const timer = setTimeout(() => {
-        setShowHint(true);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
-  const handleHover = () => {
-    setIsHovered(true);
-    if (showHint) {
-      // 호버하면 잠시 후 힌트 숨기고 저장
-      setTimeout(() => {
-        setShowHint(false);
-        localStorage.setItem("slox_pc_tools_hint", "true");
-      }, 300);
-    }
-  };
 
   return (
     <div 
       className="relative group"
-      onMouseEnter={handleHover}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* 손가락 힌트 - 왼쪽 위에서 찌르는 모양 (모바일과 동일) */}
-      {showHint && !isHovered && (
+      {/* 손가락 힌트 - 항상 표시 (호버 시 숨김) */}
+      {!isHovered && (
         <div className="absolute -top-6 -left-6 pointer-events-none z-50">
           <div className="animate-poke-finger">
             <span className="text-2xl drop-shadow-lg inline-block" style={{ transform: "rotate(135deg)" }}>
@@ -119,11 +95,7 @@ export default function DesktopToolsDropdown() {
 
       {/* 도구 버튼 */}
       <button 
-        className={`px-4 py-2 text-sm font-medium rounded-xl transition-all duration-300 flex items-center gap-1 ${
-          showHint && !isHovered 
-            ? "text-purple-400 bg-purple-500/10 ring-2 ring-purple-500/40 animate-pulse-gentle" 
-            : "text-dark-300 hover:text-white hover:bg-white/[0.05]"
-        }`}
+        className="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-300 flex items-center gap-1 text-dark-300 hover:text-white hover:bg-white/[0.05]"
       >
         도구
         <svg className="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
