@@ -1743,6 +1743,70 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
               </div>
             </div>
 
+            {/* 🏆 현재 1위 vs 내 순위 */}
+            <div style={{ 
+              display: "flex",
+              gap: "6px",
+              marginBottom: "8px"
+            }}>
+              {/* 현재 1위 */}
+              <div style={{ 
+                flex: 1,
+                backgroundColor: "rgba(234, 179, 8, 0.15)",
+                borderRadius: "8px",
+                padding: "8px",
+                textAlign: "center"
+              }}>
+                <div style={{ color: "#fbbf24", fontSize: "9px", fontWeight: "bold" }}>👑 현재 1위</div>
+                {leaderboard.length > 0 ? (
+                  <>
+                    <div style={{ color: "white", fontSize: "11px", fontWeight: "bold", marginTop: "2px" }}>{leaderboard[0].nickname}</div>
+                    <div style={{ color: "#fbbf24", fontSize: "14px", fontWeight: "bold" }}>{leaderboard[0].score}ms</div>
+                  </>
+                ) : (
+                  <>
+                    <div style={{ color: "white", fontSize: "11px", fontWeight: "bold", marginTop: "2px" }}>도전자 없음</div>
+                    <div style={{ color: "#9ca3af", fontSize: "10px" }}>첫 1등 되기!</div>
+                  </>
+                )}
+              </div>
+              
+              {/* 내 순위 */}
+              <div style={{ 
+                flex: 1,
+                backgroundColor: reactionTime <= (leaderboard[0]?.score || 9999) ? "rgba(34, 197, 94, 0.15)" : "rgba(139, 92, 246, 0.15)",
+                borderRadius: "8px",
+                padding: "8px",
+                textAlign: "center"
+              }}>
+                <div style={{ color: reactionTime <= (leaderboard[0]?.score || 9999) ? "#22c55e" : "#a78bfa", fontSize: "9px", fontWeight: "bold" }}>
+                  {reactionTime <= (leaderboard[0]?.score || 9999) ? "🔥 내 순위" : "📊 내 순위"}
+                </div>
+                <div style={{ 
+                  color: reactionTime <= (leaderboard[0]?.score || 9999) ? "#22c55e" : "white", 
+                  fontSize: "14px", 
+                  fontWeight: "bold", 
+                  marginTop: "2px" 
+                }}>
+                  {leaderboard.length === 0 ? "1위!" : reactionTime <= leaderboard[0].score ? "1위!" : `${Math.min(leaderboard.findIndex(e => reactionTime < e.score) + 1 || leaderboard.length + 1, 10)}위`}
+                </div>
+                <div style={{ color: "#9ca3af", fontSize: "10px" }}>{reactionTime}ms</div>
+              </div>
+            </div>
+
+            {/* 🎁 이벤트 안내 */}
+            <div style={{ 
+              background: "linear-gradient(90deg, rgba(234, 179, 8, 0.2), rgba(239, 68, 68, 0.15))",
+              borderRadius: "8px",
+              padding: "8px 10px",
+              marginBottom: "8px",
+              textAlign: "center",
+              border: "1px solid rgba(234, 179, 8, 0.3)"
+            }}>
+              <div style={{ color: "#fbbf24", fontSize: "11px", fontWeight: "bold" }}>🎁 EVENT! 1등에게 문화상품권 5천원!</div>
+              <div style={{ color: "#d1d5db", fontSize: "9px", marginTop: "2px" }}>너도 도전해서 1등 뺏어봐! 👊</div>
+            </div>
+
             {/* 하단 */}
             <div style={{ 
               display: "flex",
