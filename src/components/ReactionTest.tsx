@@ -1231,35 +1231,10 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
               backgroundColor: "#0f0d1a",
             }}
           >
-            {/* 헤더 - 여백 최소화 */}
+            {/* 헤더 - 심플하게 */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <span style={{ 
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "32px",
-                  height: "32px",
-                  backgroundColor: "#7c3aed", 
-                  color: "white", 
-                  fontWeight: "bold", 
-                  fontSize: "14px",
-                  borderRadius: "6px",
-                  marginRight: "8px"
-                }}>S</span>
-                <span style={{ color: "white", fontWeight: "bold", fontSize: "18px" }}>SLOX</span>
-              </div>
-              <span style={{ 
-                display: "inline-flex",
-                alignItems: "center",
-                height: "28px",
-                backgroundColor: "#1e1b4b", 
-                color: "#a78bfa", 
-                fontSize: "11px", 
-                fontWeight: "600",
-                padding: "0 10px",
-                borderRadius: "14px"
-              }}>⚡ 반응속도 테스트</span>
+              <span style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>SLOX</span>
+              <span style={{ color: "#a78bfa", fontSize: "12px", fontWeight: "600" }}>⚡ 반응속도 테스트</span>
             </div>
 
             {/* 메인 결과 */}
@@ -1275,21 +1250,13 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                 fontSize: "26px", 
                 fontWeight: "bold", 
                 marginTop: "8px",
-                marginBottom: "6px",
+                marginBottom: "8px",
                 color: reactionTime < 130 ? "#67e8f9" : reactionTime < 160 ? "#c084fc" : reactionTime < 200 ? "#60a5fa" : reactionTime < 250 ? "#2dd4bf" : reactionTime < 310 ? "#fbbf24" : "#9ca3af"
               }}>
                 {getGrade(reactionTime).grade}
               </div>
-              <div style={{ 
-                display: "inline-flex",
-                alignItems: "center",
-                height: "26px",
-                padding: "0 12px",
-                backgroundColor: "#3d3200",
-                borderRadius: "13px",
-                marginBottom: "12px"
-              }}>
-                <span style={{ color: "#fbbf24", fontSize: "12px", fontWeight: "bold" }}>🔥 상위 {getPercentile(reactionTime)}%</span>
+              <div style={{ color: "#fbbf24", fontSize: "13px", fontWeight: "bold", marginBottom: "14px" }}>
+                🔥 상위 {getPercentile(reactionTime)}%
               </div>
               <div style={{ fontSize: "44px", fontWeight: "bold", color: "#a78bfa" }}>
                 {reactionTime}<span style={{ fontSize: "18px", color: "#7c3aed" }}>ms</span>
