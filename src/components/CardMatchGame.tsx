@@ -13,6 +13,9 @@ interface CardMatchLeaderboardEntry {
   pairs: number;
   device_type: string;
   created_at: string;
+  grade?: string;
+  percentile?: number;
+  score?: number;
 }
 
 type GameState = "waiting" | "memorize" | "countdown" | "playing" | "result";

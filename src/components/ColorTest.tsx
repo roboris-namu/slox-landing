@@ -12,6 +12,8 @@ interface ColorLeaderboardEntry {
   level: number;
   device_type: string;
   created_at: string;
+  grade?: string;
+  percentile?: number;
 }
 
 type GameState = "waiting" | "playing" | "wrong" | "result";
