@@ -1,9 +1,11 @@
 import Hero from "@/components/Hero";
+import FreeTools from "@/components/FreeTools";
 import Services from "@/components/Services";
 import Pricing from "@/components/Pricing";
 import Portfolio from "@/components/Portfolio";
 import Contact from "@/components/Contact";
 import MobileToolsButton from "@/components/MobileToolsButton";
+import DesktopToolsDropdown from "@/components/DesktopToolsDropdown";
 
 /**
  * SLOX 메인 랜딩페이지
@@ -14,6 +16,7 @@ export default function Home() {
     <main className="relative overflow-hidden">
       <Navigation />
       <Hero />
+      <FreeTools />
       <Services />
       <Pricing />
       <Portfolio />
@@ -52,82 +55,8 @@ function Navigation() {
               <a href="#portfolio" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
                 포트폴리오
               </a>
-              {/* 도구 드롭다운 */}
-              <div className="relative group">
-                <button className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300 flex items-center gap-1">
-                  도구
-                  <svg className="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div className="absolute top-full left-0 mt-2 w-56 bg-dark-900/95 backdrop-blur-xl rounded-xl border border-white/[0.08] shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                  <div className="p-2">
-                    <a href="/reaction" className="flex items-center gap-2 px-3 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      ⚡ 반응속도 테스트 <span className="text-[10px] bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-400">BEST</span>
-                    </a>
-                    <a href="/typing" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      ⌨️ 타자 테스트
-                    </a>
-                    <a href="/cps" className="flex items-center gap-2 px-3 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      🖱️ CPS 테스트 <span className="text-[10px] bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-400">BEST</span>
-                    </a>
-                    <a href="/aim" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🎯 에임 트레이너
-                    </a>
-                    <a href="/card-match" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🃏 카드 짝 맞추기
-                    </a>
-                    <a href="/salary" className="flex items-center gap-2 px-3 py-2 text-sm text-purple-400 hover:text-purple-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      💰 연봉 계산기 <span className="text-[10px] bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-400">BEST</span>
-                    </a>
-                    <a href="/memory" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🧠 숫자 기억 게임
-                    </a>
-                    <a href="/color" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🎨 색상 찾기 게임
-                    </a>
-                    <a href="/slox-test" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all whitespace-nowrap">
-                      🐂 나와 닮은 황소
-                    </a>
-                    <a href="/severance" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      💼 퇴직금 계산기
-                    </a>
-                    <a href="/loan" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🏦 대출이자 계산기
-                    </a>
-                    <a href="/savings" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🏧 적금이자 계산기
-                    </a>
-                    <a href="/character-count" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      ✍️ 글자수 세기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
-                    </a>
-                    <a href="/bmi" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      ⚖️ BMI 계산기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
-                    </a>
-                    <a href="/dday" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      📅 D-day 계산기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
-                    </a>
-                    <a href="/age" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      🎂 나이 계산기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
-                    </a>
-                    <a href="/percent" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🔢 퍼센트 계산기
-                    </a>
-                    <a href="/random" className="flex items-center gap-2 px-3 py-2 text-sm text-dark-300 hover:text-white hover:bg-white/[0.05] rounded-lg transition-all">
-                      🎲 랜덤 뽑기
-                    </a>
-                    <a href="/qr" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      📱 QR코드 생성기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
-                    </a>
-                    <a href="/password" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      🔐 비밀번호 생성기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
-                    </a>
-                    <a href="/lotto" className="flex items-center gap-2 px-3 py-2 text-sm text-cyan-400 hover:text-cyan-300 hover:bg-white/[0.05] rounded-lg transition-all font-medium whitespace-nowrap">
-                      🎰 로또 번호 생성기 <span className="text-[10px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
+              {/* 도구 드롭다운 - 카테고리 분류 + 힌트 */}
+              <DesktopToolsDropdown />
               <a href="#contact" className="ml-3 px-5 py-2.5 bg-gradient-to-r from-indigo-500 via-accent-500 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:shadow-glow-sm transition-all duration-300 hover:-translate-y-0.5">
                 문의하기
               </a>
