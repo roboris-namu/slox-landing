@@ -1500,7 +1500,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                     {/* 점수 */}
                     <div className="text-right">
                       <div className="text-white font-bold">{entry.score}ms</div>
-                      <div className="text-xs text-dark-400">{lang === "ko" ? "상위" : "Top"} {entry.percentile}%</div>
+                      <div className="text-xs text-dark-500">{index + 1}위 / {leaderboard.length}명</div>
                     </div>
                   </div>
                 ))}
@@ -1518,8 +1518,13 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                     {lang === "ko" ? "🏆 명예의전당 등록" : lang === "ja" ? "🏆 殿堂入り登録" : lang === "zh" ? "🏆 名人堂登记" : "🏆 Hall of Fame"}
                   </h3>
                   <p className="text-dark-400 text-sm">
-                    {lang === "ko" ? `${reactionTime}ms로 상위 ${getPercentile(reactionTime)}%!` :
-                     `${reactionTime}ms - Top ${getPercentile(reactionTime)}%!`}
+                    {lang === "ko" 
+                      ? `${reactionTime}ms로 ${leaderboard.length > 0 
+                          ? `${leaderboard.findIndex(e => reactionTime < e.score) === -1 
+                              ? leaderboard.length + 1 
+                              : leaderboard.findIndex(e => reactionTime < e.score) + 1}위 예상!` 
+                          : "1위 도전!"}` 
+                      : `${reactionTime}ms`}
                   </p>
                 </div>
                 
