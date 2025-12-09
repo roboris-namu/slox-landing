@@ -837,6 +837,9 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting) return;
     
+    // 등록 전에 1등 될지 미리 체크 (현재 리더보드 기준)
+    const willBeFirstPlace = leaderboard.length === 0 || reactionTime < leaderboard[0].score;
+    
     setIsSubmitting(true);
     try {
       const gradeInfo = getGrade(reactionTime);
@@ -863,19 +866,12 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
       // 등록된 엔트리 ID 저장
       if (data) {
         setMyEntryId(data.id);
-        
-        // 1등인지 확인: 내 점수보다 낮은 점수가 있는지 체크
-        const { data: betterScores } = await supabase
-          .from("reaction_leaderboard")
-          .select("id")
-          .lt("score", reactionTime)
-          .limit(1);
-        
-        // 내 점수보다 낮은(빠른) 점수가 없으면 = 내가 1등!
-        if (!betterScores || betterScores.length === 0) {
-          setShowFirstPlaceModal(true);
-          fireConfetti();
-        }
+      }
+      
+      // 1등이면 축하 팝업!
+      if (willBeFirstPlace) {
+        setShowFirstPlaceModal(true);
+        fireConfetti();
       }
       
       fetchLeaderboard();
@@ -1485,6 +1481,41 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                   </p>
                 </div>
                 
+                {/* 🔥 현재 1등 vs 내 점수 비교 */}
+                {leaderboard.length > 0 ? (
+                  <div className={`mb-4 p-3 rounded-xl text-center ${
+                    reactionTime < leaderboard[0].score 
+                      ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" 
+                      : "bg-dark-800/50"
+                  }`}>
+                    {reactionTime < leaderboard[0].score ? (
+                      <>
+                        <div className="text-2xl mb-1">🔥👑🔥</div>
+                        <p className="text-yellow-400 font-bold text-lg">새로운 1등!</p>
+                        <p className="text-dark-400 text-sm">
+                          기존 1등: {leaderboard[0].nickname} ({leaderboard[0].score}ms)
+                        </p>
+                      </>
+                    ) : (
+                      <>
+                        <p className="text-dark-400 text-sm mb-1">현재 1등</p>
+                        <p className="text-white font-bold">
+                          👑 {leaderboard[0].nickname} <span className="text-yellow-400">{leaderboard[0].score}ms</span>
+                        </p>
+                        <p className="text-dark-500 text-xs mt-1">
+                          1등까지 {reactionTime - leaderboard[0].score}ms 차이
+                        </p>
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <div className="mb-4 p-3 rounded-xl text-center bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30">
+                    <div className="text-2xl mb-1">🏆✨🏆</div>
+                    <p className="text-yellow-400 font-bold">첫 번째 도전자!</p>
+                    <p className="text-dark-400 text-sm">등록하면 바로 1등!</p>
+                  </div>
+                )}
+                
                 <div className="mb-4">
                   <label className="block text-dark-300 text-sm mb-2">
                     {lang === "ko" ? "닉네임 (최대 20자)" : lang === "ja" ? "ニックネーム (最大20文字)" : lang === "zh" ? "昵称 (最多20字)" : "Nickname (max 20 chars)"}
@@ -1500,6 +1531,15 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                   />
                 </div>
                 
+                {/* 이벤트 안내 */}
+                {(leaderboard.length === 0 || reactionTime < leaderboard[0].score) && (
+                  <div className="mb-4 p-2 bg-yellow-500/10 rounded-lg">
+                    <p className="text-yellow-400 text-xs text-center">
+                      🎁 1등은 매달 문화상품권 이벤트 참여 가능!
+                    </p>
+                  </div>
+                )}
+                
                 <div className="flex gap-3">
                   <button
                     onClick={() => setShowNicknameModal(false)}
@@ -1510,9 +1550,15 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                   <button
                     onClick={submitScore}
                     disabled={!nickname.trim() || isSubmitting}
-                    className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`flex-1 px-4 py-3 font-bold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+                      leaderboard.length === 0 || reactionTime < leaderboard[0].score
+                        ? "bg-gradient-to-r from-yellow-500 to-red-500 hover:from-yellow-400 hover:to-red-400 text-white animate-pulse"
+                        : "bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white"
+                    }`}
                   >
-                    {isSubmitting ? "..." : lang === "ko" ? "등록하기!" : "Submit!"}
+                    {isSubmitting ? "..." : leaderboard.length === 0 || reactionTime < leaderboard[0].score 
+                      ? "🔥 1등 등록!" 
+                      : lang === "ko" ? "등록하기!" : "Submit!"}
                   </button>
                 </div>
               </div>
