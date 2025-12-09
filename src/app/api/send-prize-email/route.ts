@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "SLOX <noreply@slox.co.kr>", // 실제 발신 이메일 (도메인 인증 필요)
+          from: "SLOX Event <onboarding@resend.dev>", // Resend 기본 도메인 (인증 불필요)
           to: email,
           subject: "🎉 [SLOX] 반응속도 테스트 1등 축하드립니다!",
           html: `
