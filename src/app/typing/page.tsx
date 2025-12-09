@@ -312,18 +312,24 @@ export default function TypingTest() {
   const getGrade = (cpm: number): { grade: string; color: string; emoji: string } => {
     if (isMobile) {
       // 모바일 등급 기준 (약 60% 수준)
-      if (cpm >= 350) return { grade: "전문가", color: "text-purple-400", emoji: "👑" };
-      if (cpm >= 280) return { grade: "고급", color: "text-cyan-400", emoji: "🚀" };
-      if (cpm >= 220) return { grade: "중급", color: "text-green-400", emoji: "⚡" };
-      if (cpm >= 150) return { grade: "초급", color: "text-yellow-400", emoji: "📝" };
-      return { grade: "입문", color: "text-dark-400", emoji: "🌱" };
+      if (cpm >= 400) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑" };
+      if (cpm >= 320) return { grade: "마스터", color: "text-purple-400", emoji: "💎" };
+      if (cpm >= 260) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠" };
+      if (cpm >= 200) return { grade: "플래티넘", color: "text-teal-400", emoji: "🏆" };
+      if (cpm >= 150) return { grade: "골드", color: "text-yellow-400", emoji: "🥇" };
+      if (cpm >= 100) return { grade: "실버", color: "text-gray-300", emoji: "🥈" };
+      if (cpm >= 50) return { grade: "브론즈", color: "text-orange-400", emoji: "🥉" };
+      return { grade: "아이언", color: "text-stone-400", emoji: "🪨" };
     }
     // 데스크톱 등급 기준
-    if (cpm >= 600) return { grade: "전문가", color: "text-purple-400", emoji: "👑" };
-    if (cpm >= 500) return { grade: "고급", color: "text-cyan-400", emoji: "🚀" };
-    if (cpm >= 400) return { grade: "중급", color: "text-green-400", emoji: "⚡" };
-    if (cpm >= 300) return { grade: "초급", color: "text-yellow-400", emoji: "📝" };
-    return { grade: "입문", color: "text-dark-400", emoji: "🌱" };
+    if (cpm >= 650) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑" };
+    if (cpm >= 550) return { grade: "마스터", color: "text-purple-400", emoji: "💎" };
+    if (cpm >= 450) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠" };
+    if (cpm >= 370) return { grade: "플래티넘", color: "text-teal-400", emoji: "🏆" };
+    if (cpm >= 300) return { grade: "골드", color: "text-yellow-400", emoji: "🥇" };
+    if (cpm >= 230) return { grade: "실버", color: "text-gray-300", emoji: "🥈" };
+    if (cpm >= 150) return { grade: "브론즈", color: "text-orange-400", emoji: "🥉" };
+    return { grade: "아이언", color: "text-stone-400", emoji: "🪨" };
   };
 
   return (
@@ -571,31 +577,46 @@ export default function TypingTest() {
                 ({isMobile ? "📱 모바일" : "💻 데스크톱"} 기준)
               </span>
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center">
-                <p className="text-2xl mb-1">🌱</p>
-                <p className="text-dark-400 text-sm">입문</p>
-                <p className="text-white text-xs">~{isMobile ? "149" : "299"}타</p>
-              </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center">
-                <p className="text-2xl mb-1">📝</p>
-                <p className="text-yellow-400 text-sm">초급</p>
-                <p className="text-white text-xs">{isMobile ? "150~219" : "300~399"}타</p>
-              </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center">
-                <p className="text-2xl mb-1">⚡</p>
-                <p className="text-green-400 text-sm">중급</p>
-                <p className="text-white text-xs">{isMobile ? "220~279" : "400~499"}타</p>
-              </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center">
-                <p className="text-2xl mb-1">🚀</p>
-                <p className="text-cyan-400 text-sm">고급</p>
-                <p className="text-white text-xs">{isMobile ? "280~349" : "500~599"}타</p>
-              </div>
-              <div className="p-3 bg-dark-800/50 rounded-lg text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-lg text-center">
                 <p className="text-2xl mb-1">👑</p>
-                <p className="text-purple-400 text-sm">전문가</p>
-                <p className="text-white text-xs">{isMobile ? "350" : "600"}타+</p>
+                <p className="text-cyan-300 text-sm font-bold">챌린저</p>
+                <p className="text-white text-xs">{isMobile ? "400" : "650"}타+</p>
+              </div>
+              <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg text-center">
+                <p className="text-2xl mb-1">💎</p>
+                <p className="text-purple-400 text-sm font-bold">마스터</p>
+                <p className="text-white text-xs">{isMobile ? "320~399" : "550~649"}타</p>
+              </div>
+              <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg text-center">
+                <p className="text-2xl mb-1">💠</p>
+                <p className="text-blue-400 text-sm font-bold">다이아몬드</p>
+                <p className="text-white text-xs">{isMobile ? "260~319" : "450~549"}타</p>
+              </div>
+              <div className="p-3 bg-teal-500/10 border border-teal-400/30 rounded-lg text-center">
+                <p className="text-2xl mb-1">🏆</p>
+                <p className="text-teal-400 text-sm font-bold">플래티넘</p>
+                <p className="text-white text-xs">{isMobile ? "200~259" : "370~449"}타</p>
+              </div>
+              <div className="p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg text-center">
+                <p className="text-2xl mb-1">🥇</p>
+                <p className="text-yellow-400 text-sm font-bold">골드</p>
+                <p className="text-white text-xs">{isMobile ? "150~199" : "300~369"}타</p>
+              </div>
+              <div className="p-3 bg-gray-400/10 border border-gray-400/30 rounded-lg text-center">
+                <p className="text-2xl mb-1">🥈</p>
+                <p className="text-gray-300 text-sm font-bold">실버</p>
+                <p className="text-white text-xs">{isMobile ? "100~149" : "230~299"}타</p>
+              </div>
+              <div className="p-3 bg-orange-500/10 border border-orange-400/30 rounded-lg text-center">
+                <p className="text-2xl mb-1">🥉</p>
+                <p className="text-orange-400 text-sm font-bold">브론즈</p>
+                <p className="text-white text-xs">{isMobile ? "50~99" : "150~229"}타</p>
+              </div>
+              <div className="p-3 bg-stone-500/10 border border-stone-400/30 rounded-lg text-center">
+                <p className="text-2xl mb-1">🪨</p>
+                <p className="text-stone-400 text-sm font-bold">아이언</p>
+                <p className="text-white text-xs">~{isMobile ? "49" : "149"}타</p>
               </div>
             </div>
           </div>

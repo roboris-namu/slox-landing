@@ -432,12 +432,14 @@ export default function CardMatchGame() {
   // 🎖️ 등급 계산
   const getGrade = useCallback(() => {
     const score = getScore();
-    if (score >= 1200) return { grade: "S+", color: "text-yellow-300", emoji: "👑" };
-    if (score >= 1000) return { grade: "S", color: "text-yellow-400", emoji: "🏆" };
-    if (score >= 800) return { grade: "A", color: "text-purple-400", emoji: "💎" };
-    if (score >= 600) return { grade: "B", color: "text-blue-400", emoji: "⭐" };
-    if (score >= 400) return { grade: "C", color: "text-green-400", emoji: "👍" };
-    return { grade: "D", color: "text-gray-400", emoji: "💪" };
+    if (score >= 1500) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑" };
+    if (score >= 1200) return { grade: "마스터", color: "text-purple-400", emoji: "💎" };
+    if (score >= 1000) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠" };
+    if (score >= 800) return { grade: "플래티넘", color: "text-teal-400", emoji: "🏆" };
+    if (score >= 600) return { grade: "골드", color: "text-yellow-400", emoji: "🥇" };
+    if (score >= 400) return { grade: "실버", color: "text-gray-300", emoji: "🥈" };
+    if (score >= 200) return { grade: "브론즈", color: "text-orange-400", emoji: "🥉" };
+    return { grade: "아이언", color: "text-stone-400", emoji: "🪨" };
   }, [getScore]);
 
   // ⏱️ 시간 포맷
@@ -901,42 +903,46 @@ export default function CardMatchGame() {
             <h3 className="text-white font-medium mb-3 flex items-center gap-2">
               <span>🏆</span> 등급표
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 text-sm">
-              <div className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 p-3 rounded-lg text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+              <div className="bg-cyan-500/10 border border-cyan-400/30 p-3 rounded-lg text-center">
                 <p className="text-2xl mb-1">👑</p>
-                <p className="text-yellow-300 font-bold">S+</p>
-                <p className="text-dark-400 text-xs">1200점+</p>
-                <p className="text-yellow-400/70 text-xs mt-1">전설</p>
+                <p className="text-cyan-300 font-bold">챌린저</p>
+                <p className="text-dark-400 text-xs">1500점+</p>
               </div>
-              <div className="bg-gradient-to-br from-yellow-500/10 to-amber-500/10 border border-yellow-500/20 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">🏆</p>
-                <p className="text-yellow-400 font-bold">S</p>
-                <p className="text-dark-400 text-xs">1000점+</p>
-                <p className="text-yellow-500/70 text-xs mt-1">챔피언</p>
-              </div>
-              <div className="bg-gradient-to-br from-purple-500/10 to-violet-500/10 border border-purple-500/20 p-3 rounded-lg text-center">
+              <div className="bg-purple-500/10 border border-purple-400/30 p-3 rounded-lg text-center">
                 <p className="text-2xl mb-1">💎</p>
-                <p className="text-purple-400 font-bold">A</p>
+                <p className="text-purple-400 font-bold">마스터</p>
+                <p className="text-dark-400 text-xs">1200점+</p>
+              </div>
+              <div className="bg-blue-500/10 border border-blue-400/30 p-3 rounded-lg text-center">
+                <p className="text-2xl mb-1">💠</p>
+                <p className="text-blue-400 font-bold">다이아몬드</p>
+                <p className="text-dark-400 text-xs">1000점+</p>
+              </div>
+              <div className="bg-teal-500/10 border border-teal-400/30 p-3 rounded-lg text-center">
+                <p className="text-2xl mb-1">🏆</p>
+                <p className="text-teal-400 font-bold">플래티넘</p>
                 <p className="text-dark-400 text-xs">800점+</p>
-                <p className="text-purple-400/70 text-xs mt-1">고수</p>
               </div>
-              <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/20 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">⭐</p>
-                <p className="text-blue-400 font-bold">B</p>
+              <div className="bg-yellow-500/10 border border-yellow-400/30 p-3 rounded-lg text-center">
+                <p className="text-2xl mb-1">🥇</p>
+                <p className="text-yellow-400 font-bold">골드</p>
                 <p className="text-dark-400 text-xs">600점+</p>
-                <p className="text-blue-400/70 text-xs mt-1">숙련자</p>
               </div>
-              <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">👍</p>
-                <p className="text-green-400 font-bold">C</p>
+              <div className="bg-gray-400/10 border border-gray-400/30 p-3 rounded-lg text-center">
+                <p className="text-2xl mb-1">🥈</p>
+                <p className="text-gray-300 font-bold">실버</p>
                 <p className="text-dark-400 text-xs">400점+</p>
-                <p className="text-green-400/70 text-xs mt-1">중수</p>
               </div>
-              <div className="bg-dark-800/50 border border-dark-700 p-3 rounded-lg text-center">
-                <p className="text-2xl mb-1">💪</p>
-                <p className="text-gray-400 font-bold">D</p>
-                <p className="text-dark-400 text-xs">400점 미만</p>
-                <p className="text-gray-500/70 text-xs mt-1">초보</p>
+              <div className="bg-orange-500/10 border border-orange-400/30 p-3 rounded-lg text-center">
+                <p className="text-2xl mb-1">🥉</p>
+                <p className="text-orange-400 font-bold">브론즈</p>
+                <p className="text-dark-400 text-xs">200점+</p>
+              </div>
+              <div className="bg-stone-500/10 border border-stone-400/30 p-3 rounded-lg text-center">
+                <p className="text-2xl mb-1">🪨</p>
+                <p className="text-stone-400 font-bold">아이언</p>
+                <p className="text-dark-400 text-xs">200점 미만</p>
               </div>
             </div>
             <p className="text-dark-500 text-xs mt-3 text-center">

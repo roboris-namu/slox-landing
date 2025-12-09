@@ -80,18 +80,22 @@ const translations = {
     shareTestIt: "나도 테스트하기 👉",
     copied: "결과가 클립보드에 복사되었습니다!",
     targetSize: "타겟 크기",
-    legendary: "전설",
-    proGamer: "프로게이머",
-    diamond: "다이아",
+    challenger: "챌린저",
+    master: "마스터",
+    diamond: "다이아몬드",
+    platinum: "플래티넘",
     gold: "골드",
     silver: "실버",
     bronze: "브론즈",
-    msgLegendary: "발로란트 레디언트급!",
-    msgProGamer: "프로게이머 수준!",
+    iron: "아이언",
+    msgChallenger: "발로란트 레디언트급!",
+    msgMaster: "프로게이머 수준!",
     msgDiamond: "상위권 에임!",
+    msgPlatinum: "좋은 에임!",
     msgGold: "괜찮은 에임!",
     msgSilver: "평균적인 에임",
-    msgBronze: "연습이 필요해요!",
+    msgBronze: "조금 더 연습해봐요",
+    msgIron: "연습이 필요해요!",
   },
   en: {
     title: "Aim",
@@ -126,18 +130,22 @@ const translations = {
     shareTestIt: "Try it yourself 👉",
     copied: "Result copied to clipboard!",
     targetSize: "Target Size",
-    legendary: "Legendary",
-    proGamer: "Pro Gamer",
+    challenger: "Challenger",
+    master: "Master",
     diamond: "Diamond",
+    platinum: "Platinum",
     gold: "Gold",
     silver: "Silver",
     bronze: "Bronze",
-    msgLegendary: "Valorant Radiant level!",
-    msgProGamer: "Pro gamer skills!",
+    iron: "Iron",
+    msgChallenger: "Valorant Radiant level!",
+    msgMaster: "Pro gamer skills!",
     msgDiamond: "Top-tier aim!",
-    msgGold: "Good aim!",
+    msgPlatinum: "Good aim!",
+    msgGold: "Decent aim!",
     msgSilver: "Average aim",
     msgBronze: "Keep practicing!",
+    msgIron: "More practice needed!",
   },
   ja: {
     title: "エイム",
@@ -172,18 +180,22 @@ const translations = {
     shareTestIt: "あなたも挑戦 👉",
     copied: "結果がクリップボードにコピーされました！",
     targetSize: "ターゲットサイズ",
-    legendary: "レジェンド",
-    proGamer: "プロゲーマー",
+    challenger: "チャレンジャー",
+    master: "マスター",
     diamond: "ダイヤモンド",
+    platinum: "プラチナ",
     gold: "ゴールド",
     silver: "シルバー",
     bronze: "ブロンズ",
-    msgLegendary: "ヴァロラント レディアント級！",
-    msgProGamer: "プロゲーマーレベル！",
+    iron: "アイアン",
+    msgChallenger: "ヴァロラント レディアント級！",
+    msgMaster: "プロゲーマーレベル！",
     msgDiamond: "上位のエイム！",
-    msgGold: "良いエイム！",
+    msgPlatinum: "良いエイム！",
+    msgGold: "なかなかのエイム！",
     msgSilver: "平均的なエイム",
-    msgBronze: "練習が必要！",
+    msgBronze: "練習を続けて！",
+    msgIron: "もっと練習が必要！",
   },
   zh: {
     title: "瞄准",
@@ -218,18 +230,22 @@ const translations = {
     shareTestIt: "你也来试试 👉",
     copied: "结果已复制到剪贴板！",
     targetSize: "目标大小",
-    legendary: "传说",
-    proGamer: "职业选手",
+    challenger: "挑战者",
+    master: "大师",
     diamond: "钻石",
+    platinum: "铂金",
     gold: "黄金",
     silver: "白银",
     bronze: "青铜",
-    msgLegendary: "无畏契约 光芒级！",
-    msgProGamer: "职业选手水平！",
+    iron: "黑铁",
+    msgChallenger: "无畏契约 光芒级！",
+    msgMaster: "职业选手水平！",
     msgDiamond: "顶级瞄准！",
+    msgPlatinum: "好瞄准！",
     msgGold: "不错的瞄准！",
     msgSilver: "平均水平",
-    msgBronze: "需要练习！",
+    msgBronze: "继续练习！",
+    msgIron: "需要更多练习！",
   },
   es: {
     title: "Entrenador",
@@ -264,18 +280,22 @@ const translations = {
     shareTestIt: "¡Pruébalo tú también! 👉",
     copied: "¡Resultado copiado al portapapeles!",
     targetSize: "Tamaño del Objetivo",
-    legendary: "Legendario",
-    proGamer: "Pro Gamer",
+    challenger: "Aspirante",
+    master: "Maestro",
     diamond: "Diamante",
+    platinum: "Platino",
     gold: "Oro",
     silver: "Plata",
     bronze: "Bronce",
-    msgLegendary: "¡Nivel Radiante de Valorant!",
-    msgProGamer: "¡Nivel de pro gamer!",
+    iron: "Hierro",
+    msgChallenger: "¡Nivel Radiante de Valorant!",
+    msgMaster: "¡Nivel de pro gamer!",
     msgDiamond: "¡Puntería de élite!",
-    msgGold: "¡Buena puntería!",
+    msgPlatinum: "¡Buena puntería!",
+    msgGold: "¡Puntería decente!",
     msgSilver: "Puntería promedio",
     msgBronze: "¡Sigue practicando!",
+    msgIron: "¡Necesitas más práctica!",
   },
   pt: {
     title: "Treinador",
@@ -310,18 +330,22 @@ const translations = {
     shareTestIt: "Experimente você também! 👉",
     copied: "Resultado copiado para a área de transferência!",
     targetSize: "Tamanho do Alvo",
-    legendary: "Lendário",
-    proGamer: "Pro Gamer",
+    challenger: "Desafiante",
+    master: "Mestre",
     diamond: "Diamante",
+    platinum: "Platina",
     gold: "Ouro",
     silver: "Prata",
     bronze: "Bronze",
-    msgLegendary: "Nível Radiante do Valorant!",
-    msgProGamer: "Nível de pro gamer!",
+    iron: "Ferro",
+    msgChallenger: "Nível Radiante do Valorant!",
+    msgMaster: "Nível de pro gamer!",
     msgDiamond: "Mira de elite!",
-    msgGold: "Boa mira!",
+    msgPlatinum: "Boa mira!",
+    msgGold: "Mira decente!",
     msgSilver: "Mira média",
     msgBronze: "Continue praticando!",
+    msgIron: "Precisa de mais prática!",
   },
   de: {
     title: "Aim",
@@ -356,18 +380,22 @@ const translations = {
     shareTestIt: "Probiere es selbst! 👉",
     copied: "Ergebnis in Zwischenablage kopiert!",
     targetSize: "Zielgröße",
-    legendary: "Legendär",
-    proGamer: "Pro Gamer",
+    challenger: "Herausforderer",
+    master: "Meister",
     diamond: "Diamant",
+    platinum: "Platin",
     gold: "Gold",
     silver: "Silber",
     bronze: "Bronze",
-    msgLegendary: "Valorant Radiant Level!",
-    msgProGamer: "Pro-Gamer Niveau!",
+    iron: "Eisen",
+    msgChallenger: "Valorant Radiant Level!",
+    msgMaster: "Pro-Gamer Niveau!",
     msgDiamond: "Elite-Aim!",
-    msgGold: "Guter Aim!",
+    msgPlatinum: "Guter Aim!",
+    msgGold: "Ordentlicher Aim!",
     msgSilver: "Durchschnittlicher Aim",
     msgBronze: "Weiter üben!",
+    msgIron: "Mehr Übung nötig!",
   },
   fr: {
     title: "Entraîneur",
@@ -402,18 +430,22 @@ const translations = {
     shareTestIt: "Essayez vous aussi ! 👉",
     copied: "Résultat copié dans le presse-papiers !",
     targetSize: "Taille de la Cible",
-    legendary: "Légendaire",
-    proGamer: "Pro Gamer",
+    challenger: "Challenger",
+    master: "Maître",
     diamond: "Diamant",
+    platinum: "Platine",
     gold: "Or",
     silver: "Argent",
     bronze: "Bronze",
-    msgLegendary: "Niveau Radiant Valorant !",
-    msgProGamer: "Niveau pro-gamer !",
+    iron: "Fer",
+    msgChallenger: "Niveau Radiant Valorant !",
+    msgMaster: "Niveau pro-gamer !",
     msgDiamond: "Visée d'élite !",
-    msgGold: "Bonne visée !",
+    msgPlatinum: "Bonne visée !",
+    msgGold: "Visée correcte !",
     msgSilver: "Visée moyenne",
     msgBronze: "Continuez à pratiquer !",
+    msgIron: "Plus de pratique nécessaire !",
   },
 };
 
@@ -676,12 +708,14 @@ export default function AimTest({ initialLang }: AimTestProps) {
   // 골드: 30초에 30+ 타겟, 80%+ 정확도 = ~2500점
   // 실버: 30초에 20+ 타겟, 70%+ 정확도 = ~1500점
   const getGrade = useCallback((score: number): { grade: string; color: string; emoji: string; message: string } => {
-    if (score >= 7000) return { grade: t.legendary, color: "text-cyan-300", emoji: "🏆", message: t.msgLegendary };
-    if (score >= 5000) return { grade: t.proGamer, color: "text-purple-400", emoji: "👑", message: t.msgProGamer };
-    if (score >= 3500) return { grade: t.diamond, color: "text-blue-400", emoji: "💎", message: t.msgDiamond };
+    if (score >= 8000) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+    if (score >= 6000) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+    if (score >= 4500) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+    if (score >= 3000) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
     if (score >= 2000) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
     if (score >= 1000) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
-    return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+    if (score >= 500) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+    return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
   }, [t]);
 
   // 새 타겟 위치 생성
@@ -1219,18 +1253,22 @@ export default function AimTest({ initialLang }: AimTestProps) {
           {/* 등급 안내 */}
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-6 text-center">{t.tierTable}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-lg text-center">
-                <span className="text-cyan-300 font-bold">🏆 7000+</span>
-                <p className="text-dark-400 text-xs mt-1">{t.legendary}</p>
+                <span className="text-cyan-300 font-bold">👑 8000+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.challenger}</p>
               </div>
               <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg text-center">
-                <span className="text-purple-400 font-bold">👑 5000+</span>
-                <p className="text-dark-400 text-xs mt-1">{t.proGamer}</p>
+                <span className="text-purple-400 font-bold">💎 6000+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.master}</p>
               </div>
               <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg text-center">
-                <span className="text-blue-400 font-bold">💎 3500+</span>
+                <span className="text-blue-400 font-bold">💠 4500+</span>
                 <p className="text-dark-400 text-xs mt-1">{t.diamond}</p>
+              </div>
+              <div className="p-3 bg-teal-500/10 border border-teal-400/30 rounded-lg text-center">
+                <span className="text-teal-400 font-bold">🏆 3000+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.platinum}</p>
               </div>
               <div className="p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg text-center">
                 <span className="text-yellow-400 font-bold">🥇 2000+</span>
@@ -1241,8 +1279,12 @@ export default function AimTest({ initialLang }: AimTestProps) {
                 <p className="text-dark-400 text-xs mt-1">{t.silver}</p>
               </div>
               <div className="p-3 bg-orange-500/10 border border-orange-400/30 rounded-lg text-center">
-                <span className="text-orange-400 font-bold">🥉 0+</span>
+                <span className="text-orange-400 font-bold">🥉 500+</span>
                 <p className="text-dark-400 text-xs mt-1">{t.bronze}</p>
+              </div>
+              <div className="p-3 bg-stone-500/10 border border-stone-400/30 rounded-lg text-center">
+                <span className="text-stone-400 font-bold">🪨 0+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.iron}</p>
               </div>
             </div>
             <p className="text-dark-500 text-xs mt-4 text-center">

@@ -47,16 +47,22 @@ const translations = {
     shareTestIt: "나도 테스트하기 👉",
     copied: "결과가 클립보드에 복사되었습니다!",
     nextLevel: "다음 레벨로!",
-    genius: "천재",
-    excellent: "뛰어남",
-    good: "우수",
-    average: "평균",
-    beginner: "초보",
-    msgGenius: "멘사 회원급 기억력!",
-    msgExcellent: "상위 1% 기억력!",
-    msgGood: "평균 이상의 기억력!",
-    msgAverage: "일반적인 기억력",
-    msgBeginner: "연습이 필요해요!",
+    challenger: "챌린저",
+    master: "마스터",
+    diamond: "다이아몬드",
+    platinum: "플래티넘",
+    gold: "골드",
+    silver: "실버",
+    bronze: "브론즈",
+    iron: "아이언",
+    msgChallenger: "멘사 회원급 기억력!",
+    msgMaster: "상위 1% 기억력!",
+    msgDiamond: "최상위권 기억력!",
+    msgPlatinum: "평균 이상의 기억력!",
+    msgGold: "좋은 기억력이에요!",
+    msgSilver: "일반적인 기억력",
+    msgBronze: "조금 더 연습해봐요",
+    msgIron: "연습이 필요해요!",
     digits: "자리",
     tipTitle: "기억력 향상 팁",
     tipContent: "숫자를 묶어서 기억해보세요. 예: 1234567890을 123-456-7890으로 나누면 더 쉽게 기억할 수 있어요!",
@@ -93,16 +99,22 @@ const translations = {
     shareTestIt: "Try it yourself 👉",
     copied: "Result copied to clipboard!",
     nextLevel: "Next Level!",
-    genius: "Genius",
-    excellent: "Excellent",
-    good: "Good",
-    average: "Average",
-    beginner: "Beginner",
-    msgGenius: "Mensa-level memory!",
-    msgExcellent: "Top 1% memory!",
-    msgGood: "Above average memory!",
-    msgAverage: "Average memory",
-    msgBeginner: "Keep practicing!",
+    challenger: "Challenger",
+    master: "Master",
+    diamond: "Diamond",
+    platinum: "Platinum",
+    gold: "Gold",
+    silver: "Silver",
+    bronze: "Bronze",
+    iron: "Iron",
+    msgChallenger: "Mensa-level memory!",
+    msgMaster: "Top 1% memory!",
+    msgDiamond: "Elite memory skills!",
+    msgPlatinum: "Above average memory!",
+    msgGold: "Good memory!",
+    msgSilver: "Average memory",
+    msgBronze: "Keep practicing!",
+    msgIron: "More practice needed!",
     digits: "digits",
     tipTitle: "Memory Improvement Tips",
     tipContent: "Try chunking numbers. For example: remembering 1234567890 as 123-456-7890 makes it easier!",
@@ -139,16 +151,22 @@ const translations = {
     shareTestIt: "あなたも挑戦 👉",
     copied: "結果がクリップボードにコピーされました！",
     nextLevel: "次のレベルへ！",
-    genius: "天才",
-    excellent: "優秀",
-    good: "良い",
-    average: "平均",
-    beginner: "初心者",
-    msgGenius: "メンサ級の記憶力！",
-    msgExcellent: "上位1%の記憶力！",
-    msgGood: "平均以上の記憶力！",
-    msgAverage: "平均的な記憶力",
-    msgBeginner: "練習が必要！",
+    challenger: "チャレンジャー",
+    master: "マスター",
+    diamond: "ダイヤモンド",
+    platinum: "プラチナ",
+    gold: "ゴールド",
+    silver: "シルバー",
+    bronze: "ブロンズ",
+    iron: "アイアン",
+    msgChallenger: "メンサ級の記憶力！",
+    msgMaster: "上位1%の記憶力！",
+    msgDiamond: "エリート記憶力！",
+    msgPlatinum: "平均以上の記憶力！",
+    msgGold: "良い記憶力！",
+    msgSilver: "平均的な記憶力",
+    msgBronze: "練習を続けて！",
+    msgIron: "もっと練習が必要！",
     digits: "桁",
     tipTitle: "記憶力向上のコツ",
     tipContent: "数字をまとめて覚えてみてください。例：1234567890を123-456-7890として覚えると簡単です！",
@@ -185,16 +203,22 @@ const translations = {
     shareTestIt: "你也来试试 👉",
     copied: "结果已复制到剪贴板！",
     nextLevel: "下一关！",
-    genius: "天才",
-    excellent: "优秀",
-    good: "良好",
-    average: "平均",
-    beginner: "初学者",
-    msgGenius: "门萨级记忆力！",
-    msgExcellent: "前1%记忆力！",
-    msgGood: "高于平均记忆力！",
-    msgAverage: "平均记忆力",
-    msgBeginner: "需要练习！",
+    challenger: "挑战者",
+    master: "大师",
+    diamond: "钻石",
+    platinum: "铂金",
+    gold: "黄金",
+    silver: "白银",
+    bronze: "青铜",
+    iron: "黑铁",
+    msgChallenger: "门萨级记忆力！",
+    msgMaster: "前1%记忆力！",
+    msgDiamond: "精英记忆力！",
+    msgPlatinum: "高于平均记忆力！",
+    msgGold: "良好记忆力！",
+    msgSilver: "平均记忆力",
+    msgBronze: "继续练习！",
+    msgIron: "需要更多练习！",
     digits: "位",
     tipTitle: "记忆力提升技巧",
     tipContent: "尝试分组记忆数字。例如：把1234567890记成123-456-7890会更容易！",
@@ -231,16 +255,22 @@ const translations = {
     shareTestIt: "¡Pruébalo tú también! 👉",
     copied: "¡Resultado copiado!",
     nextLevel: "¡Siguiente Nivel!",
-    genius: "Genio",
-    excellent: "Excelente",
-    good: "Bueno",
-    average: "Promedio",
-    beginner: "Principiante",
-    msgGenius: "¡Memoria nivel Mensa!",
-    msgExcellent: "¡Top 1% de memoria!",
-    msgGood: "¡Memoria superior!",
-    msgAverage: "Memoria promedio",
-    msgBeginner: "¡Sigue practicando!",
+    challenger: "Aspirante",
+    master: "Maestro",
+    diamond: "Diamante",
+    platinum: "Platino",
+    gold: "Oro",
+    silver: "Plata",
+    bronze: "Bronce",
+    iron: "Hierro",
+    msgChallenger: "¡Memoria nivel Mensa!",
+    msgMaster: "¡Top 1% de memoria!",
+    msgDiamond: "¡Memoria de élite!",
+    msgPlatinum: "¡Memoria superior!",
+    msgGold: "¡Buena memoria!",
+    msgSilver: "Memoria promedio",
+    msgBronze: "¡Sigue practicando!",
+    msgIron: "¡Necesitas más práctica!",
     digits: "dígitos",
     tipTitle: "Consejos para mejorar la memoria",
     tipContent: "Intenta agrupar números. Por ejemplo: recordar 1234567890 como 123-456-7890 es más fácil!",
@@ -277,16 +307,22 @@ const translations = {
     shareTestIt: "Experimente você também! 👉",
     copied: "Resultado copiado!",
     nextLevel: "Próximo Nível!",
-    genius: "Gênio",
-    excellent: "Excelente",
-    good: "Bom",
-    average: "Médio",
-    beginner: "Iniciante",
-    msgGenius: "Memória nível Mensa!",
-    msgExcellent: "Top 1% de memória!",
-    msgGood: "Memória acima da média!",
-    msgAverage: "Memória média",
-    msgBeginner: "Continue praticando!",
+    challenger: "Desafiante",
+    master: "Mestre",
+    diamond: "Diamante",
+    platinum: "Platina",
+    gold: "Ouro",
+    silver: "Prata",
+    bronze: "Bronze",
+    iron: "Ferro",
+    msgChallenger: "Memória nível Mensa!",
+    msgMaster: "Top 1% de memória!",
+    msgDiamond: "Memória de elite!",
+    msgPlatinum: "Memória acima da média!",
+    msgGold: "Boa memória!",
+    msgSilver: "Memória média",
+    msgBronze: "Continue praticando!",
+    msgIron: "Precisa de mais prática!",
     digits: "dígitos",
     tipTitle: "Dicas para melhorar a memória",
     tipContent: "Tente agrupar números. Por exemplo: lembrar 1234567890 como 123-456-7890 é mais fácil!",
@@ -323,16 +359,22 @@ const translations = {
     shareTestIt: "Probiere es selbst! 👉",
     copied: "Ergebnis kopiert!",
     nextLevel: "Nächstes Level!",
-    genius: "Genie",
-    excellent: "Ausgezeichnet",
-    good: "Gut",
-    average: "Durchschnitt",
-    beginner: "Anfänger",
-    msgGenius: "Mensa-Level Gedächtnis!",
-    msgExcellent: "Top 1% Gedächtnis!",
-    msgGood: "Überdurchschnittliches Gedächtnis!",
-    msgAverage: "Durchschnittliches Gedächtnis",
-    msgBeginner: "Weiter üben!",
+    challenger: "Herausforderer",
+    master: "Meister",
+    diamond: "Diamant",
+    platinum: "Platin",
+    gold: "Gold",
+    silver: "Silber",
+    bronze: "Bronze",
+    iron: "Eisen",
+    msgChallenger: "Mensa-Level Gedächtnis!",
+    msgMaster: "Top 1% Gedächtnis!",
+    msgDiamond: "Elite Gedächtnis!",
+    msgPlatinum: "Überdurchschnittliches Gedächtnis!",
+    msgGold: "Gutes Gedächtnis!",
+    msgSilver: "Durchschnittliches Gedächtnis",
+    msgBronze: "Weiter üben!",
+    msgIron: "Mehr Übung nötig!",
     digits: "Ziffern",
     tipTitle: "Tipps zur Gedächtnisverbesserung",
     tipContent: "Versuche Zahlen zu gruppieren. Beispiel: 1234567890 als 123-456-7890 zu merken ist einfacher!",
@@ -369,16 +411,22 @@ const translations = {
     shareTestIt: "Essayez vous aussi ! 👉",
     copied: "Résultat copié !",
     nextLevel: "Niveau Suivant !",
-    genius: "Génie",
-    excellent: "Excellent",
-    good: "Bon",
-    average: "Moyen",
-    beginner: "Débutant",
-    msgGenius: "Mémoire niveau Mensa !",
-    msgExcellent: "Top 1% de mémoire !",
-    msgGood: "Mémoire supérieure !",
-    msgAverage: "Mémoire moyenne",
-    msgBeginner: "Continuez à pratiquer !",
+    challenger: "Challenger",
+    master: "Maître",
+    diamond: "Diamant",
+    platinum: "Platine",
+    gold: "Or",
+    silver: "Argent",
+    bronze: "Bronze",
+    iron: "Fer",
+    msgChallenger: "Mémoire niveau Mensa !",
+    msgMaster: "Top 1% de mémoire !",
+    msgDiamond: "Mémoire d'élite !",
+    msgPlatinum: "Mémoire supérieure !",
+    msgGold: "Bonne mémoire !",
+    msgSilver: "Mémoire moyenne",
+    msgBronze: "Continuez à pratiquer !",
+    msgIron: "Plus de pratique nécessaire !",
     digits: "chiffres",
     tipTitle: "Conseils pour améliorer la mémoire",
     tipContent: "Essayez de regrouper les nombres. Par exemple: retenir 1234567890 comme 123-456-7890 est plus facile !",
@@ -464,11 +512,14 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
 
   // 등급 계산 (일반인 평균 7±2 자리)
   const getGrade = useCallback((lvl: number): { grade: string; color: string; emoji: string; message: string } => {
-    if (lvl >= 12) return { grade: t.genius, color: "text-cyan-300", emoji: "🧠", message: t.msgGenius };
-    if (lvl >= 9) return { grade: t.excellent, color: "text-purple-400", emoji: "⭐", message: t.msgExcellent };
-    if (lvl >= 7) return { grade: t.good, color: "text-blue-400", emoji: "👍", message: t.msgGood };
-    if (lvl >= 5) return { grade: t.average, color: "text-yellow-400", emoji: "👌", message: t.msgAverage };
-    return { grade: t.beginner, color: "text-orange-400", emoji: "🌱", message: t.msgBeginner };
+    if (lvl >= 13) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+    if (lvl >= 11) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+    if (lvl >= 9) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+    if (lvl >= 7) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
+    if (lvl >= 6) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+    if (lvl >= 5) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+    if (lvl >= 4) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+    return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
   }, [t]);
 
   // 새 숫자 생성
@@ -825,26 +876,38 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
           {/* 등급 안내 */}
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-6 text-center">{t.tierTable}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-lg text-center">
-                <span className="text-cyan-300 font-bold">🧠 12+ {t.digits}</span>
-                <p className="text-dark-400 text-xs mt-1">{t.genius}</p>
+                <span className="text-cyan-300 font-bold">👑 13+ {t.digits}</span>
+                <p className="text-dark-400 text-xs mt-1">{t.challenger}</p>
               </div>
               <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg text-center">
-                <span className="text-purple-400 font-bold">⭐ 9-11 {t.digits}</span>
-                <p className="text-dark-400 text-xs mt-1">{t.excellent}</p>
+                <span className="text-purple-400 font-bold">💎 11-12 {t.digits}</span>
+                <p className="text-dark-400 text-xs mt-1">{t.master}</p>
               </div>
               <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg text-center">
-                <span className="text-blue-400 font-bold">👍 7-8 {t.digits}</span>
-                <p className="text-dark-400 text-xs mt-1">{t.good}</p>
+                <span className="text-blue-400 font-bold">💠 9-10 {t.digits}</span>
+                <p className="text-dark-400 text-xs mt-1">{t.diamond}</p>
+              </div>
+              <div className="p-3 bg-teal-500/10 border border-teal-400/30 rounded-lg text-center">
+                <span className="text-teal-400 font-bold">🏆 7-8 {t.digits}</span>
+                <p className="text-dark-400 text-xs mt-1">{t.platinum}</p>
               </div>
               <div className="p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg text-center">
-                <span className="text-yellow-400 font-bold">👌 5-6 {t.digits}</span>
-                <p className="text-dark-400 text-xs mt-1">{t.average}</p>
+                <span className="text-yellow-400 font-bold">🥇 6 {t.digits}</span>
+                <p className="text-dark-400 text-xs mt-1">{t.gold}</p>
+              </div>
+              <div className="p-3 bg-gray-400/10 border border-gray-400/30 rounded-lg text-center">
+                <span className="text-gray-300 font-bold">🥈 5 {t.digits}</span>
+                <p className="text-dark-400 text-xs mt-1">{t.silver}</p>
               </div>
               <div className="p-3 bg-orange-500/10 border border-orange-400/30 rounded-lg text-center">
-                <span className="text-orange-400 font-bold">🌱 1-4 {t.digits}</span>
-                <p className="text-dark-400 text-xs mt-1">{t.beginner}</p>
+                <span className="text-orange-400 font-bold">🥉 4 {t.digits}</span>
+                <p className="text-dark-400 text-xs mt-1">{t.bronze}</p>
+              </div>
+              <div className="p-3 bg-stone-500/10 border border-stone-400/30 rounded-lg text-center">
+                <span className="text-stone-400 font-bold">🪨 1-3 {t.digits}</span>
+                <p className="text-dark-400 text-xs mt-1">{t.iron}</p>
               </div>
             </div>
             <p className="text-dark-500 text-xs mt-4 text-center">

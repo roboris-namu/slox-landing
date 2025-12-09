@@ -46,16 +46,22 @@ const translations = {
     shareText: "👁️ 색상 찾기 게임 결과!",
     shareTestIt: "나도 테스트하기 👉",
     copied: "결과가 클립보드에 복사되었습니다!",
-    eagle: "독수리 눈",
-    expert: "전문가",
-    good: "우수",
-    average: "평균",
-    beginner: "초보",
-    msgEagle: "완벽한 색각! 디자이너급!",
-    msgExpert: "뛰어난 색 구별 능력!",
-    msgGood: "평균 이상의 색각!",
-    msgAverage: "일반적인 색각",
-    msgBeginner: "연습이 필요해요!",
+    challenger: "챌린저",
+    master: "마스터",
+    diamond: "다이아몬드",
+    platinum: "플래티넘",
+    gold: "골드",
+    silver: "실버",
+    bronze: "브론즈",
+    iron: "아이언",
+    msgChallenger: "완벽한 색각! 디자이너급!",
+    msgMaster: "뛰어난 색 구별 능력!",
+    msgDiamond: "최상위권 색각!",
+    msgPlatinum: "평균 이상의 색각!",
+    msgGold: "좋은 색각이에요!",
+    msgSilver: "일반적인 색각",
+    msgBronze: "조금 더 연습해봐요",
+    msgIron: "연습이 필요해요!",
     tipTitle: "색상 구별 팁",
     tipContent: "화면 중앙에 시선을 고정하고, 주변시를 활용해보세요. 밝기 차이에 주목하면 더 쉽게 찾을 수 있습니다!",
     whatIsColor: "색각 테스트란?",
@@ -89,16 +95,22 @@ const translations = {
     shareText: "👁️ Color Vision Test Result!",
     shareTestIt: "Try it yourself 👉",
     copied: "Result copied to clipboard!",
-    eagle: "Eagle Eye",
-    expert: "Expert",
-    good: "Good",
-    average: "Average",
-    beginner: "Beginner",
-    msgEagle: "Perfect color vision! Designer level!",
-    msgExpert: "Excellent color discrimination!",
-    msgGood: "Above average color vision!",
-    msgAverage: "Normal color vision",
-    msgBeginner: "Keep practicing!",
+    challenger: "Challenger",
+    master: "Master",
+    diamond: "Diamond",
+    platinum: "Platinum",
+    gold: "Gold",
+    silver: "Silver",
+    bronze: "Bronze",
+    iron: "Iron",
+    msgChallenger: "Perfect color vision! Designer level!",
+    msgMaster: "Excellent color discrimination!",
+    msgDiamond: "Elite color vision!",
+    msgPlatinum: "Above average color vision!",
+    msgGold: "Good color vision!",
+    msgSilver: "Normal color vision",
+    msgBronze: "Keep practicing!",
+    msgIron: "More practice needed!",
     tipTitle: "Color Differentiation Tips",
     tipContent: "Focus your gaze on the center of the screen and use peripheral vision. Paying attention to brightness differences makes it easier to find!",
     whatIsColor: "What is Color Vision Test?",
@@ -132,16 +144,22 @@ const translations = {
     shareText: "👁️ 色探しゲーム結果！",
     shareTestIt: "あなたも挑戦 👉",
     copied: "結果がコピーされました！",
-    eagle: "鷹の目",
-    expert: "エキスパート",
-    good: "優秀",
-    average: "平均",
-    beginner: "初心者",
-    msgEagle: "完璧な色覚！デザイナー級！",
-    msgExpert: "優れた色識別能力！",
-    msgGood: "平均以上の色覚！",
-    msgAverage: "一般的な色覚",
-    msgBeginner: "練習が必要！",
+    challenger: "チャレンジャー",
+    master: "マスター",
+    diamond: "ダイヤモンド",
+    platinum: "プラチナ",
+    gold: "ゴールド",
+    silver: "シルバー",
+    bronze: "ブロンズ",
+    iron: "アイアン",
+    msgChallenger: "完璧な色覚！デザイナー級！",
+    msgMaster: "優れた色識別能力！",
+    msgDiamond: "エリート色覚！",
+    msgPlatinum: "平均以上の色覚！",
+    msgGold: "良い色覚！",
+    msgSilver: "一般的な色覚",
+    msgBronze: "練習を続けて！",
+    msgIron: "もっと練習が必要！",
     tipTitle: "色の区別のコツ",
     tipContent: "画面の中心に視線を固定し、周辺視野を活用してください。明るさの違いに注目すると見つけやすくなります！",
     whatIsColor: "色覚テストとは？",
@@ -175,16 +193,22 @@ const translations = {
     shareText: "👁️ 找不同颜色结果！",
     shareTestIt: "你也来试试 👉",
     copied: "结果已复制！",
-    eagle: "鹰眼",
-    expert: "专家",
-    good: "良好",
-    average: "平均",
-    beginner: "初学者",
-    msgEagle: "完美色觉！设计师级别！",
-    msgExpert: "出色的颜色辨别能力！",
-    msgGood: "高于平均的色觉！",
-    msgAverage: "正常色觉",
-    msgBeginner: "需要练习！",
+    challenger: "挑战者",
+    master: "大师",
+    diamond: "钻石",
+    platinum: "铂金",
+    gold: "黄金",
+    silver: "白银",
+    bronze: "青铜",
+    iron: "黑铁",
+    msgChallenger: "完美色觉！设计师级别！",
+    msgMaster: "出色的颜色辨别能力！",
+    msgDiamond: "精英色觉！",
+    msgPlatinum: "高于平均的色觉！",
+    msgGold: "良好色觉！",
+    msgSilver: "正常色觉",
+    msgBronze: "继续练习！",
+    msgIron: "需要更多练习！",
     tipTitle: "颜色区分技巧",
     tipContent: "将视线固定在屏幕中央，利用周边视野。注意亮度差异可以更容易找到！",
     whatIsColor: "什么是色觉测试？",
@@ -218,16 +242,22 @@ const translations = {
     shareText: "👁️ ¡Resultado del Test de Color!",
     shareTestIt: "¡Pruébalo tú también! 👉",
     copied: "¡Resultado copiado!",
-    eagle: "Ojo de Águila",
-    expert: "Experto",
-    good: "Bueno",
-    average: "Promedio",
-    beginner: "Principiante",
-    msgEagle: "¡Visión de color perfecta!",
-    msgExpert: "¡Excelente discriminación de color!",
-    msgGood: "¡Visión superior al promedio!",
-    msgAverage: "Visión de color normal",
-    msgBeginner: "¡Sigue practicando!",
+    challenger: "Aspirante",
+    master: "Maestro",
+    diamond: "Diamante",
+    platinum: "Platino",
+    gold: "Oro",
+    silver: "Plata",
+    bronze: "Bronce",
+    iron: "Hierro",
+    msgChallenger: "¡Visión de color perfecta!",
+    msgMaster: "¡Excelente discriminación de color!",
+    msgDiamond: "¡Visión de élite!",
+    msgPlatinum: "¡Visión superior al promedio!",
+    msgGold: "¡Buena visión de color!",
+    msgSilver: "Visión de color normal",
+    msgBronze: "¡Sigue practicando!",
+    msgIron: "¡Necesitas más práctica!",
     tipTitle: "Consejos para distinguir colores",
     tipContent: "Fija la mirada en el centro de la pantalla y usa la visión periférica. ¡Prestar atención a las diferencias de brillo facilita encontrarlo!",
     whatIsColor: "¿Qué es el test de visión de colores?",
@@ -261,16 +291,22 @@ const translations = {
     shareText: "👁️ Resultado do Teste de Cores!",
     shareTestIt: "Experimente você também! 👉",
     copied: "Resultado copiado!",
-    eagle: "Olho de Águia",
-    expert: "Especialista",
-    good: "Bom",
-    average: "Médio",
-    beginner: "Iniciante",
-    msgEagle: "Visão de cores perfeita!",
-    msgExpert: "Excelente discriminação de cores!",
-    msgGood: "Visão acima da média!",
-    msgAverage: "Visão de cores normal",
-    msgBeginner: "Continue praticando!",
+    challenger: "Desafiante",
+    master: "Mestre",
+    diamond: "Diamante",
+    platinum: "Platina",
+    gold: "Ouro",
+    silver: "Prata",
+    bronze: "Bronze",
+    iron: "Ferro",
+    msgChallenger: "Visão de cores perfeita!",
+    msgMaster: "Excelente discriminação de cores!",
+    msgDiamond: "Visão de elite!",
+    msgPlatinum: "Visão acima da média!",
+    msgGold: "Boa visão de cores!",
+    msgSilver: "Visão de cores normal",
+    msgBronze: "Continue praticando!",
+    msgIron: "Precisa de mais prática!",
     tipTitle: "Dicas para distinguir cores",
     tipContent: "Fixe o olhar no centro da tela e use a visão periférica. Prestar atenção às diferenças de brilho facilita encontrar!",
     whatIsColor: "O que é o teste de visão de cores?",
@@ -304,16 +340,22 @@ const translations = {
     shareText: "👁️ Farbsehtest Ergebnis!",
     shareTestIt: "Probiere es selbst! 👉",
     copied: "Ergebnis kopiert!",
-    eagle: "Adlerauge",
-    expert: "Experte",
-    good: "Gut",
-    average: "Durchschnitt",
-    beginner: "Anfänger",
-    msgEagle: "Perfektes Farbsehen!",
-    msgExpert: "Ausgezeichnete Farbunterscheidung!",
-    msgGood: "Überdurchschnittliches Farbsehen!",
-    msgAverage: "Normales Farbsehen",
-    msgBeginner: "Weiter üben!",
+    challenger: "Herausforderer",
+    master: "Meister",
+    diamond: "Diamant",
+    platinum: "Platin",
+    gold: "Gold",
+    silver: "Silber",
+    bronze: "Bronze",
+    iron: "Eisen",
+    msgChallenger: "Perfektes Farbsehen!",
+    msgMaster: "Ausgezeichnete Farbunterscheidung!",
+    msgDiamond: "Elite Farbsehen!",
+    msgPlatinum: "Überdurchschnittliches Farbsehen!",
+    msgGold: "Gutes Farbsehen!",
+    msgSilver: "Normales Farbsehen",
+    msgBronze: "Weiter üben!",
+    msgIron: "Mehr Übung nötig!",
     tipTitle: "Tipps zur Farbunterscheidung",
     tipContent: "Fixiere den Blick auf die Bildschirmmitte und nutze das periphere Sehen. Auf Helligkeitsunterschiede zu achten macht es einfacher zu finden!",
     whatIsColor: "Was ist ein Farbsehentest?",
@@ -347,16 +389,22 @@ const translations = {
     shareText: "👁️ Résultat du Test de Couleurs !",
     shareTestIt: "Essayez vous aussi ! 👉",
     copied: "Résultat copié !",
-    eagle: "Œil d'Aigle",
-    expert: "Expert",
-    good: "Bon",
-    average: "Moyen",
-    beginner: "Débutant",
-    msgEagle: "Vision des couleurs parfaite !",
-    msgExpert: "Excellente discrimination des couleurs !",
-    msgGood: "Vision supérieure à la moyenne !",
-    msgAverage: "Vision des couleurs normale",
-    msgBeginner: "Continuez à pratiquer !",
+    challenger: "Challenger",
+    master: "Maître",
+    diamond: "Diamant",
+    platinum: "Platine",
+    gold: "Or",
+    silver: "Argent",
+    bronze: "Bronze",
+    iron: "Fer",
+    msgChallenger: "Vision des couleurs parfaite !",
+    msgMaster: "Excellente discrimination des couleurs !",
+    msgDiamond: "Vision d'élite !",
+    msgPlatinum: "Vision supérieure à la moyenne !",
+    msgGold: "Bonne vision des couleurs !",
+    msgSilver: "Vision des couleurs normale",
+    msgBronze: "Continuez à pratiquer !",
+    msgIron: "Plus de pratique nécessaire !",
     tipTitle: "Conseils pour distinguer les couleurs",
     tipContent: "Fixez le regard au centre de l'écran et utilisez la vision périphérique. Faire attention aux différences de luminosité facilite la recherche !",
     whatIsColor: "Qu'est-ce que le test de vision des couleurs ?",
@@ -433,11 +481,14 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
 
   // 등급 계산
   const getGrade = useCallback((lvl: number): { grade: string; color: string; emoji: string; message: string } => {
-    if (lvl >= 30) return { grade: t.eagle, color: "text-cyan-300", emoji: "🦅", message: t.msgEagle };
-    if (lvl >= 20) return { grade: t.expert, color: "text-purple-400", emoji: "👁️", message: t.msgExpert };
-    if (lvl >= 12) return { grade: t.good, color: "text-blue-400", emoji: "👍", message: t.msgGood };
-    if (lvl >= 6) return { grade: t.average, color: "text-yellow-400", emoji: "👌", message: t.msgAverage };
-    return { grade: t.beginner, color: "text-orange-400", emoji: "🌱", message: t.msgBeginner };
+    if (lvl >= 35) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+    if (lvl >= 28) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+    if (lvl >= 20) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+    if (lvl >= 14) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
+    if (lvl >= 9) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+    if (lvl >= 5) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+    if (lvl >= 3) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+    return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
   }, [t]);
 
   // 새 라운드 생성
@@ -753,26 +804,38 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
           {/* 등급 안내 */}
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-6 text-center">{t.tierTable}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-lg text-center">
-                <span className="text-cyan-300 font-bold">🦅 Lv.30+</span>
-                <p className="text-dark-400 text-xs mt-1">{t.eagle}</p>
+                <span className="text-cyan-300 font-bold">👑 Lv.35+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.challenger}</p>
               </div>
               <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg text-center">
-                <span className="text-purple-400 font-bold">👁️ Lv.20+</span>
-                <p className="text-dark-400 text-xs mt-1">{t.expert}</p>
+                <span className="text-purple-400 font-bold">💎 Lv.28+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.master}</p>
               </div>
               <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg text-center">
-                <span className="text-blue-400 font-bold">👍 Lv.12+</span>
-                <p className="text-dark-400 text-xs mt-1">{t.good}</p>
+                <span className="text-blue-400 font-bold">💠 Lv.20+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.diamond}</p>
+              </div>
+              <div className="p-3 bg-teal-500/10 border border-teal-400/30 rounded-lg text-center">
+                <span className="text-teal-400 font-bold">🏆 Lv.14+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.platinum}</p>
               </div>
               <div className="p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg text-center">
-                <span className="text-yellow-400 font-bold">👌 Lv.6+</span>
-                <p className="text-dark-400 text-xs mt-1">{t.average}</p>
+                <span className="text-yellow-400 font-bold">🥇 Lv.9+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.gold}</p>
+              </div>
+              <div className="p-3 bg-gray-400/10 border border-gray-400/30 rounded-lg text-center">
+                <span className="text-gray-300 font-bold">🥈 Lv.5+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.silver}</p>
               </div>
               <div className="p-3 bg-orange-500/10 border border-orange-400/30 rounded-lg text-center">
-                <span className="text-orange-400 font-bold">🌱 Lv.1+</span>
-                <p className="text-dark-400 text-xs mt-1">{t.beginner}</p>
+                <span className="text-orange-400 font-bold">🥉 Lv.3+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.bronze}</p>
+              </div>
+              <div className="p-3 bg-stone-500/10 border border-stone-400/30 rounded-lg text-center">
+                <span className="text-stone-400 font-bold">🪨 Lv.1+</span>
+                <p className="text-dark-400 text-xs mt-1">{t.iron}</p>
               </div>
             </div>
           </div>

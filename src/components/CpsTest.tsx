@@ -72,18 +72,22 @@ const translations = {
     shareText: "🖱️ CPS 테스트 결과!",
     shareTestIt: "나도 테스트하기 👉",
     copied: "결과가 클립보드에 복사되었습니다!",
-    legendary: "전설",
-    proGamer: "프로게이머",
-    veryFast: "매우 빠름",
-    fast: "빠름",
-    average: "평균",
-    slow: "느림",
-    msgLegendary: "드래그 클릭 마스터!",
-    msgProGamer: "버터플라이 클릭 수준!",
-    msgVeryFast: "지터 클릭 실력이네요!",
-    msgFast: "꽤 빠른 편이에요!",
-    msgAverage: "평균적인 속도예요",
-    msgSlow: "연습이 필요해요!",
+    challenger: "챌린저",
+    master: "마스터",
+    diamond: "다이아몬드",
+    platinum: "플래티넘",
+    gold: "골드",
+    silver: "실버",
+    bronze: "브론즈",
+    iron: "아이언",
+    msgChallenger: "드래그 클릭 마스터!",
+    msgMaster: "버터플라이 클릭 수준!",
+    msgDiamond: "지터 클릭 실력이네요!",
+    msgPlatinum: "상위권 클릭 속도!",
+    msgGold: "꽤 빠른 편이에요!",
+    msgSilver: "평균적인 속도예요",
+    msgBronze: "조금 느린 편이에요",
+    msgIron: "연습이 필요해요!",
     clickMethods: "💡 클릭 방법",
     normalClick: "일반 클릭: 4-6 CPS",
     jitterClick: "지터 클릭: 8-12 CPS",
@@ -118,18 +122,22 @@ const translations = {
     shareText: "🖱️ CPS Test Result!",
     shareTestIt: "Try it yourself 👉",
     copied: "Result copied to clipboard!",
-    legendary: "Legendary",
-    proGamer: "Pro Gamer",
-    veryFast: "Very Fast",
-    fast: "Fast",
-    average: "Average",
-    slow: "Slow",
-    msgLegendary: "Drag click master!",
-    msgProGamer: "Butterfly click level!",
-    msgVeryFast: "Jitter click skills!",
-    msgFast: "Pretty fast!",
-    msgAverage: "Average speed",
-    msgSlow: "Keep practicing!",
+    challenger: "Challenger",
+    master: "Master",
+    diamond: "Diamond",
+    platinum: "Platinum",
+    gold: "Gold",
+    silver: "Silver",
+    bronze: "Bronze",
+    iron: "Iron",
+    msgChallenger: "Drag click master!",
+    msgMaster: "Butterfly click level!",
+    msgDiamond: "Jitter click skills!",
+    msgPlatinum: "Top-tier click speed!",
+    msgGold: "Pretty fast!",
+    msgSilver: "Average speed",
+    msgBronze: "A bit slow",
+    msgIron: "Keep practicing!",
     clickMethods: "💡 Click Methods",
     normalClick: "Normal Click: 4-6 CPS",
     jitterClick: "Jitter Click: 8-12 CPS",
@@ -164,18 +172,22 @@ const translations = {
     shareText: "🖱️ CPSテスト結果！",
     shareTestIt: "あなたも挑戦 👉",
     copied: "結果がクリップボードにコピーされました！",
-    legendary: "レジェンド",
-    proGamer: "プロゲーマー",
-    veryFast: "超速い",
-    fast: "速い",
-    average: "平均",
-    slow: "遅い",
-    msgLegendary: "ドラッグクリックマスター！",
-    msgProGamer: "バタフライクリックレベル！",
-    msgVeryFast: "ジッタークリックスキル！",
-    msgFast: "なかなか速い！",
-    msgAverage: "平均的な速度",
-    msgSlow: "練習が必要！",
+    challenger: "チャレンジャー",
+    master: "マスター",
+    diamond: "ダイヤモンド",
+    platinum: "プラチナ",
+    gold: "ゴールド",
+    silver: "シルバー",
+    bronze: "ブロンズ",
+    iron: "アイアン",
+    msgChallenger: "ドラッグクリックマスター！",
+    msgMaster: "バタフライクリックレベル！",
+    msgDiamond: "ジッタークリックスキル！",
+    msgPlatinum: "上位クリック速度！",
+    msgGold: "なかなか速い！",
+    msgSilver: "平均的な速度",
+    msgBronze: "少し遅い",
+    msgIron: "練習が必要！",
     clickMethods: "💡 クリック方法",
     normalClick: "通常クリック: 4-6 CPS",
     jitterClick: "ジッター: 8-12 CPS",
@@ -210,18 +222,22 @@ const translations = {
     shareText: "🖱️ CPS测试结果！",
     shareTestIt: "你也来试试 👉",
     copied: "结果已复制到剪贴板！",
-    legendary: "传说",
-    proGamer: "职业选手",
-    veryFast: "非常快",
-    fast: "快",
-    average: "平均",
-    slow: "慢",
-    msgLegendary: "拖拽点击大师！",
-    msgProGamer: "蝴蝶点击水平！",
-    msgVeryFast: "抖动点击技巧！",
-    msgFast: "相当快！",
-    msgAverage: "平均速度",
-    msgSlow: "需要练习！",
+    challenger: "挑战者",
+    master: "大师",
+    diamond: "钻石",
+    platinum: "铂金",
+    gold: "黄金",
+    silver: "白银",
+    bronze: "青铜",
+    iron: "黑铁",
+    msgChallenger: "拖拽点击大师！",
+    msgMaster: "蝴蝶点击水平！",
+    msgDiamond: "抖动点击技巧！",
+    msgPlatinum: "顶级点击速度！",
+    msgGold: "相当快！",
+    msgSilver: "平均速度",
+    msgBronze: "有点慢",
+    msgIron: "需要练习！",
     clickMethods: "💡 点击方法",
     normalClick: "普通点击: 4-6 CPS",
     jitterClick: "抖动点击: 8-12 CPS",
@@ -256,18 +272,22 @@ const translations = {
     shareText: "🖱️ ¡Resultado del Test CPS!",
     shareTestIt: "¡Pruébalo tú también! 👉",
     copied: "¡Resultado copiado al portapapeles!",
-    legendary: "Legendario",
-    proGamer: "Pro Gamer",
-    veryFast: "Muy Rápido",
-    fast: "Rápido",
-    average: "Promedio",
-    slow: "Lento",
-    msgLegendary: "¡Maestro del drag click!",
-    msgProGamer: "¡Nivel butterfly click!",
-    msgVeryFast: "¡Habilidades de jitter click!",
-    msgFast: "¡Bastante rápido!",
-    msgAverage: "Velocidad promedio",
-    msgSlow: "¡Sigue practicando!",
+    challenger: "Aspirante",
+    master: "Maestro",
+    diamond: "Diamante",
+    platinum: "Platino",
+    gold: "Oro",
+    silver: "Plata",
+    bronze: "Bronce",
+    iron: "Hierro",
+    msgChallenger: "¡Maestro del drag click!",
+    msgMaster: "¡Nivel butterfly click!",
+    msgDiamond: "¡Habilidades de jitter click!",
+    msgPlatinum: "¡Velocidad de élite!",
+    msgGold: "¡Bastante rápido!",
+    msgSilver: "Velocidad promedio",
+    msgBronze: "Un poco lento",
+    msgIron: "¡Sigue practicando!",
     clickMethods: "💡 Métodos de Clic",
     normalClick: "Clic Normal: 4-6 CPS",
     jitterClick: "Jitter Click: 8-12 CPS",
@@ -302,18 +322,22 @@ const translations = {
     shareText: "🖱️ Resultado do Teste CPS!",
     shareTestIt: "Experimente você também! 👉",
     copied: "Resultado copiado para a área de transferência!",
-    legendary: "Lendário",
-    proGamer: "Pro Gamer",
-    veryFast: "Muito Rápido",
-    fast: "Rápido",
-    average: "Médio",
-    slow: "Lento",
-    msgLegendary: "Mestre do drag click!",
-    msgProGamer: "Nível butterfly click!",
-    msgVeryFast: "Habilidades de jitter click!",
-    msgFast: "Bem rápido!",
-    msgAverage: "Velocidade média",
-    msgSlow: "Continue praticando!",
+    challenger: "Desafiante",
+    master: "Mestre",
+    diamond: "Diamante",
+    platinum: "Platina",
+    gold: "Ouro",
+    silver: "Prata",
+    bronze: "Bronze",
+    iron: "Ferro",
+    msgChallenger: "Mestre do drag click!",
+    msgMaster: "Nível butterfly click!",
+    msgDiamond: "Habilidades de jitter click!",
+    msgPlatinum: "Velocidade de elite!",
+    msgGold: "Bem rápido!",
+    msgSilver: "Velocidade média",
+    msgBronze: "Um pouco lento",
+    msgIron: "Continue praticando!",
     clickMethods: "💡 Métodos de Clique",
     normalClick: "Clique Normal: 4-6 CPS",
     jitterClick: "Jitter Click: 8-12 CPS",
@@ -348,18 +372,22 @@ const translations = {
     shareText: "🖱️ CPS Test Ergebnis!",
     shareTestIt: "Probiere es selbst! 👉",
     copied: "Ergebnis in Zwischenablage kopiert!",
-    legendary: "Legendär",
-    proGamer: "Pro Gamer",
-    veryFast: "Sehr Schnell",
-    fast: "Schnell",
-    average: "Durchschnitt",
-    slow: "Langsam",
-    msgLegendary: "Drag-Click-Meister!",
-    msgProGamer: "Butterfly-Click-Level!",
-    msgVeryFast: "Jitter-Click-Fähigkeiten!",
-    msgFast: "Ziemlich schnell!",
-    msgAverage: "Durchschnittliche Geschwindigkeit",
-    msgSlow: "Weiter üben!",
+    challenger: "Herausforderer",
+    master: "Meister",
+    diamond: "Diamant",
+    platinum: "Platin",
+    gold: "Gold",
+    silver: "Silber",
+    bronze: "Bronze",
+    iron: "Eisen",
+    msgChallenger: "Drag-Click-Meister!",
+    msgMaster: "Butterfly-Click-Level!",
+    msgDiamond: "Jitter-Click-Fähigkeiten!",
+    msgPlatinum: "Elite-Geschwindigkeit!",
+    msgGold: "Ziemlich schnell!",
+    msgSilver: "Durchschnittliche Geschwindigkeit",
+    msgBronze: "Etwas langsam",
+    msgIron: "Weiter üben!",
     clickMethods: "💡 Klickmethoden",
     normalClick: "Normal Klick: 4-6 CPS",
     jitterClick: "Jitter Klick: 8-12 CPS",
@@ -394,18 +422,22 @@ const translations = {
     shareText: "🖱️ Résultat du Test CPS !",
     shareTestIt: "Essayez vous aussi ! 👉",
     copied: "Résultat copié dans le presse-papiers !",
-    legendary: "Légendaire",
-    proGamer: "Pro Gamer",
-    veryFast: "Très Rapide",
-    fast: "Rapide",
-    average: "Moyen",
-    slow: "Lent",
-    msgLegendary: "Maître du drag click !",
-    msgProGamer: "Niveau butterfly click !",
-    msgVeryFast: "Compétences jitter click !",
-    msgFast: "Assez rapide !",
-    msgAverage: "Vitesse moyenne",
-    msgSlow: "Continuez à pratiquer !",
+    challenger: "Challenger",
+    master: "Maître",
+    diamond: "Diamant",
+    platinum: "Platine",
+    gold: "Or",
+    silver: "Argent",
+    bronze: "Bronze",
+    iron: "Fer",
+    msgChallenger: "Maître du drag click !",
+    msgMaster: "Niveau butterfly click !",
+    msgDiamond: "Compétences jitter click !",
+    msgPlatinum: "Vitesse d'élite !",
+    msgGold: "Assez rapide !",
+    msgSilver: "Vitesse moyenne",
+    msgBronze: "Un peu lent",
+    msgIron: "Continuez à pratiquer !",
     clickMethods: "💡 Méthodes de Clic",
     normalClick: "Clic Normal: 4-6 CPS",
     jitterClick: "Jitter Clic: 8-12 CPS",
@@ -553,12 +585,14 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
 
   // 등급 계산
   const getGrade = (cpsValue: number): { grade: string; color: string; emoji: string; message: string } => {
-    if (cpsValue >= 16) return { grade: t.legendary, color: "text-cyan-300", emoji: "🐉", message: t.msgLegendary };
-    if (cpsValue >= 12) return { grade: t.proGamer, color: "text-purple-400", emoji: "👑", message: t.msgProGamer };
-    if (cpsValue >= 9) return { grade: t.veryFast, color: "text-blue-400", emoji: "⚡", message: t.msgVeryFast };
-    if (cpsValue >= 7) return { grade: t.fast, color: "text-green-400", emoji: "🚀", message: t.msgFast };
-    if (cpsValue >= 4) return { grade: t.average, color: "text-yellow-400", emoji: "👍", message: t.msgAverage };
-    return { grade: t.slow, color: "text-orange-400", emoji: "🐢", message: t.msgSlow };
+    if (cpsValue >= 16) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+    if (cpsValue >= 12) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+    if (cpsValue >= 9) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+    if (cpsValue >= 7) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
+    if (cpsValue >= 5) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+    if (cpsValue >= 3) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+    if (cpsValue >= 2) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+    return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
   };
 
   // 게임 시작
@@ -1016,30 +1050,38 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
           {/* 등급 안내 */}
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-6 text-center">{t.tierTable}</h3>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               <div className="p-3 bg-cyan-500/10 border border-cyan-400/30 rounded-lg text-center">
-                <span className="text-cyan-300 font-bold">🐉 16+ CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.legendary}</p>
+                <span className="text-cyan-300 font-bold">👑 16+ CPS</span>
+                <p className="text-dark-400 text-xs mt-1">{t.challenger}</p>
               </div>
               <div className="p-3 bg-purple-500/10 border border-purple-400/30 rounded-lg text-center">
-                <span className="text-purple-400 font-bold">👑 12-15 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.proGamer}</p>
+                <span className="text-purple-400 font-bold">💎 12-15 CPS</span>
+                <p className="text-dark-400 text-xs mt-1">{t.master}</p>
               </div>
               <div className="p-3 bg-blue-500/10 border border-blue-400/30 rounded-lg text-center">
-                <span className="text-blue-400 font-bold">⚡ 9-11 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.veryFast}</p>
+                <span className="text-blue-400 font-bold">💠 9-11 CPS</span>
+                <p className="text-dark-400 text-xs mt-1">{t.diamond}</p>
               </div>
-              <div className="p-3 bg-green-500/10 border border-green-400/30 rounded-lg text-center">
-                <span className="text-green-400 font-bold">🚀 7-8 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.fast}</p>
+              <div className="p-3 bg-teal-500/10 border border-teal-400/30 rounded-lg text-center">
+                <span className="text-teal-400 font-bold">🏆 7-8 CPS</span>
+                <p className="text-dark-400 text-xs mt-1">{t.platinum}</p>
               </div>
               <div className="p-3 bg-yellow-500/10 border border-yellow-400/30 rounded-lg text-center">
-                <span className="text-yellow-400 font-bold">👍 4-6 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.average}</p>
+                <span className="text-yellow-400 font-bold">🥇 5-6 CPS</span>
+                <p className="text-dark-400 text-xs mt-1">{t.gold}</p>
+              </div>
+              <div className="p-3 bg-gray-400/10 border border-gray-400/30 rounded-lg text-center">
+                <span className="text-gray-300 font-bold">🥈 3-4 CPS</span>
+                <p className="text-dark-400 text-xs mt-1">{t.silver}</p>
               </div>
               <div className="p-3 bg-orange-500/10 border border-orange-400/30 rounded-lg text-center">
-                <span className="text-orange-400 font-bold">🐢 1-3 CPS</span>
-                <p className="text-dark-400 text-xs mt-1">{t.slow}</p>
+                <span className="text-orange-400 font-bold">🥉 2 CPS</span>
+                <p className="text-dark-400 text-xs mt-1">{t.bronze}</p>
+              </div>
+              <div className="p-3 bg-stone-500/10 border border-stone-400/30 rounded-lg text-center">
+                <span className="text-stone-400 font-bold">🪨 1 CPS</span>
+                <p className="text-dark-400 text-xs mt-1">{t.iron}</p>
               </div>
             </div>
             
