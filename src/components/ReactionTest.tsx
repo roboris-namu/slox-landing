@@ -864,21 +864,20 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
       // 등록된 엔트리 ID 저장
       if (data) {
         setMyEntryId(data.id);
-      }
-      
-      // 리더보드 다시 로드 후 1등인지 확인
-      const { data: topScore } = await supabase
-        .from("reaction_leaderboard")
-        .select("id, score")
-        .order("score", { ascending: true })
-        .limit(1)
-        .single();
-      
-      // 내가 1등인지 확인
-      if (topScore && data && topScore.id === data.id) {
-        setIsFirstPlace(true);
-        setShowFirstPlaceModal(true);
-        fireConfetti();
+        
+        // 1등인지 확인: 내 점수보다 낮은 점수가 있는지 체크
+        const { data: betterScores } = await supabase
+          .from("reaction_leaderboard")
+          .select("id")
+          .lt("score", reactionTime)
+          .limit(1);
+        
+        // 내 점수보다 낮은(빠른) 점수가 없으면 = 내가 1등!
+        if (!betterScores || betterScores.length === 0) {
+          setIsFirstPlace(true);
+          setShowFirstPlaceModal(true);
+          fireConfetti();
+        }
       }
       
       fetchLeaderboard();
