@@ -2,6 +2,18 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
+import { supabase } from "@/lib/supabase";
+
+interface CpsLeaderboardEntry {
+  id: string;
+  nickname: string;
+  score: number;
+  clicks: number;
+  duration: number;
+  device_type: string;
+  created_at: string;
+}
 
 type GameState = "waiting" | "playing" | "result";
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
@@ -432,12 +444,73 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [particles, setParticles] = useState<ClickParticle[]>([]);
   const [screenShake, setScreenShake] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  // 리더보드 상태
+  const [leaderboard, setLeaderboard] = useState<CpsLeaderboardEntry[]>([]);
+  const [showNicknameModal, setShowNicknameModal] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
+  
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
   const gameAreaRef = useRef<HTMLDivElement>(null);
   const particleIdRef = useRef(0);
+  const shareCardRef = useRef<HTMLDivElement>(null);
 
   const t = translations[lang];
+
+  // 모바일 감지
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window);
+  }, []);
+
+  // 리더보드 가져오기
+  const fetchLeaderboard = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from("cps_leaderboard")
+        .select("*")
+        .order("score", { ascending: false })
+        .limit(10);
+      if (error) throw error;
+      if (data) setLeaderboard(data);
+    } catch (err) {
+      console.error("리더보드 로드 실패:", err);
+    }
+  }, []);
+
+  // 점수 등록
+  const submitScore = async () => {
+    if (!nickname.trim() || isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      const { error } = await supabase
+        .from("cps_leaderboard")
+        .insert({
+          nickname: nickname.trim().slice(0, 20),
+          score: parseFloat(cps.toFixed(2)),
+          clicks: clicks,
+          duration: duration,
+          device_type: isMobile ? "mobile" : "pc",
+        });
+      if (error) throw error;
+      setHasSubmittedScore(true);
+      setShowNicknameModal(false);
+      setNickname("");
+      fetchLeaderboard();
+    } catch (err) {
+      console.error("점수 등록 실패:", err);
+      alert(lang === "ko" ? "등록 실패! 다시 시도해주세요." : "Failed to submit.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // 페이지 로드시 리더보드
+  useEffect(() => {
+    fetchLeaderboard();
+  }, [fetchLeaderboard]);
 
   // 클릭 파티클 생성
   const createClickParticles = useCallback((clientX: number, clientY: number) => {
@@ -493,6 +566,7 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
     setState("playing");
     setClicks(0);
     setTimeLeft(duration);
+    setHasSubmittedScore(false);
     startTimeRef.current = Date.now();
 
     timerRef.current = setInterval(() => {
@@ -538,25 +612,56 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
     setCps(0);
   };
 
-  // 공유
+  // 이미지 생성
+  const generateImage = async (): Promise<Blob | null> => {
+    if (!shareCardRef.current) return null;
+    try {
+      shareCardRef.current.style.display = "block";
+      const canvas = await html2canvas(shareCardRef.current, {
+        backgroundColor: "#0f0d1a",
+        scale: 2,
+        useCORS: true,
+      });
+      shareCardRef.current.style.display = "none";
+      return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), "image/png"));
+    } catch {
+      if (shareCardRef.current) shareCardRef.current.style.display = "none";
+      return null;
+    }
+  };
+
+  // 공유 (이미지로)
   const shareResult = async () => {
-    const grade = getGrade(cps);
     const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
-    const shareText = `${t.shareText}
+    const blob = await generateImage();
+    
+    if (blob && navigator.share && navigator.canShare) {
+      const file = new File([blob], `cps-${cps.toFixed(1)}.png`, { type: "image/png" });
+      const shareData = { files: [file], title: t.shareText, text: `${t.shareTestIt} ${shareUrl}` };
+      if (navigator.canShare(shareData)) {
+        try { await navigator.share(shareData); return; } catch { /* 취소 */ }
+      }
+    }
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `cps-test-${cps.toFixed(1)}.png`;
+      link.href = url;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+  };
 
-${grade.emoji} ${cps.toFixed(1)} CPS (${grade.grade})
-🖱️ ${t.totalClicks}: ${clicks}
-⏱️ ${t.duration}: ${duration}${t.seconds}
-
-${t.shareTestIt}`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ text: shareText, url: shareUrl });
-      } catch { /* 취소 */ }
-    } else {
-      navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
-      alert(t.copied);
+  // 이미지 저장
+  const saveAsImage = async () => {
+    const blob = await generateImage();
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `cps-test-${cps.toFixed(1)}.png`;
+      link.href = url;
+      link.click();
+      URL.revokeObjectURL(url);
     }
   };
 
@@ -768,18 +873,121 @@ ${t.shareTestIt}`;
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={shareResult}
-                  className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all"
-                >
+                <button onClick={shareResult} className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all">
                   {t.share}
                 </button>
-                <button
-                  onClick={resetGame}
-                  className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
-                >
+                <button onClick={saveAsImage} className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium rounded-xl transition-all">
+                  🖼️ 이미지 저장
+                </button>
+                <button onClick={resetGame} className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all">
                   {t.tryAgain}
                 </button>
+              </div>
+              
+              {/* 랭킹 등록 버튼 */}
+              {!hasSubmittedScore && cps > 0 && (
+                <button
+                  onClick={() => setShowNicknameModal(true)}
+                  className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-xl transition-all"
+                >
+                  🏆 {lang === "ko" ? "랭킹 등록하기!" : "Register Ranking!"}
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* 🏆 리더보드 */}
+          <div className="glass-card p-6 rounded-2xl mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-white font-bold text-lg flex items-center gap-2">
+                <span className="text-2xl">🏆</span>
+                {lang === "ko" ? "CPS 랭킹" : "CPS Ranking"}
+              </h3>
+              <button onClick={fetchLeaderboard} className="text-dark-400 hover:text-white text-sm transition-colors">
+                🔄 {lang === "ko" ? "새로고침" : "Refresh"}
+              </button>
+            </div>
+            {leaderboard.length === 0 ? (
+              <div className="text-center py-8">
+                <div className="text-4xl mb-3">🖱️</div>
+                <p className="text-dark-400">{lang === "ko" ? "아직 기록이 없습니다!" : "No records yet!"}</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {leaderboard.map((entry, index) => (
+                  <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl ${
+                    index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" :
+                    index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" :
+                    index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"
+                  }`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                      index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"
+                    }`}>{index + 1}</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-white font-medium truncate">{entry.nickname}</span>
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
+                      </div>
+                      <div className="text-xs text-dark-400">{entry.duration}초 / {entry.clicks}클릭</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-white font-bold">{entry.score.toFixed(1)} CPS</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* 공유용 카드 (숨김) */}
+          <div ref={shareCardRef} style={{ display: "none", position: "absolute", left: "-9999px", width: "360px", padding: "20px", backgroundColor: "#0f0d1a" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+              <span style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>SLOX</span>
+              <span style={{ color: "#a78bfa", fontSize: "12px", fontWeight: "600" }}>🖱️ CPS 테스트</span>
+            </div>
+            <div style={{ textAlign: "center", padding: "20px 16px", backgroundColor: "#1a1625", borderRadius: "12px", marginBottom: "10px" }}>
+              <div style={{ fontSize: "44px", lineHeight: "1" }}>{getGrade(cps).emoji}</div>
+              <div style={{ fontSize: "26px", fontWeight: "bold", marginTop: "8px", marginBottom: "8px", color: cps >= 16 ? "#67e8f9" : cps >= 12 ? "#c084fc" : cps >= 9 ? "#60a5fa" : "#fbbf24" }}>
+                {getGrade(cps).grade}
+              </div>
+              <div style={{ fontSize: "44px", fontWeight: "bold", color: "#a78bfa" }}>
+                {cps.toFixed(1)}<span style={{ fontSize: "18px", color: "#7c3aed" }}> CPS</span>
+              </div>
+              <div style={{ color: "#9ca3af", fontSize: "11px", marginTop: "6px" }}>{clicks} 클릭 / {duration}초</div>
+            </div>
+            <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+              <div style={{ flex: 1, backgroundColor: "#0c1a1a", borderRadius: "10px", padding: "10px", textAlign: "center" }}>
+                <div style={{ color: "#67e8f9", fontSize: "10px", fontWeight: "bold" }}>🏆 Best CPS</div>
+                <div style={{ color: "#22d3ee", fontSize: "18px", fontWeight: "bold", marginTop: "2px" }}>{bestCps.toFixed(1)}</div>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", backgroundColor: "#ffffff", borderRadius: "10px", padding: "8px", width: "100px" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${encodeURIComponent("https://www.slox.co.kr/cps")}&bgcolor=ffffff&color=1a1a2e&margin=0`} alt="QR" width={70} height={70} crossOrigin="anonymous" style={{ display: "block" }} />
+                <div style={{ fontSize: "8px", color: "#6366f1", marginTop: "4px", fontWeight: "600" }}>📱 나도 도전!</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderTop: "1px solid #1e1b4b", fontSize: "10px", color: "#6b7280" }}>
+              <span>{new Date().toLocaleDateString("ko-KR")}</span>
+              <span style={{ color: "#8b5cf6", fontWeight: "600" }}>slox.co.kr/cps</span>
+            </div>
+          </div>
+
+          {/* 닉네임 모달 */}
+          {showNicknameModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full animate-scale-in">
+                <div className="text-center mb-6">
+                  <div className="text-5xl mb-3">{getGrade(cps).emoji}</div>
+                  <h3 className="text-white text-xl font-bold mb-2">🏆 {lang === "ko" ? "랭킹 등록" : "Register Ranking"}</h3>
+                  <p className="text-dark-400 text-sm">{cps.toFixed(1)} CPS ({duration}초)</p>
+                </div>
+                <div className="mb-4">
+                  <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder={lang === "ko" ? "닉네임 입력..." : "Enter nickname..."} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white placeholder-dark-500 focus:outline-none focus:border-accent-purple" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+                </div>
+                <div className="flex gap-3">
+                  <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 hover:bg-dark-700 text-white rounded-xl">{lang === "ko" ? "취소" : "Cancel"}</button>
+                  <button onClick={submitScore} disabled={!nickname.trim() || isSubmitting} className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl disabled:opacity-50">{isSubmitting ? "..." : lang === "ko" ? "등록!" : "Submit!"}</button>
+                </div>
               </div>
             </div>
           )}
