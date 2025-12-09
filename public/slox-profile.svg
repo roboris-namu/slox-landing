@@ -16,7 +16,7 @@
   <circle cx="200" cy="200" r="200" fill="url(#bgGrad)"/>
   
   <!-- S 글자 - 정중앙 배치 -->
-  <text x="200" y="200" 
+  <text x="200" y="190" 
         font-family="Arial Black, Arial, sans-serif" 
         font-size="260" 
         font-weight="900" 
