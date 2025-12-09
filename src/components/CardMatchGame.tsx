@@ -97,8 +97,21 @@ export default function CardMatchGame() {
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting) return;
     setIsSubmitting(true);
+    const currentScore = getScore();
+    const gradeInfo = getGrade();
+    // 백분위: 1500+ = 1%, 1200+ = 5%, 1000+ = 15%, 800+ = 30%, 600+ = 50%, 400+ = 70%, 200+ = 85%, 나머지 = 95%
+    const percentile = currentScore >= 1500 ? 1 : currentScore >= 1200 ? 5 : currentScore >= 1000 ? 15 : currentScore >= 800 ? 30 : currentScore >= 600 ? 50 : currentScore >= 400 ? 70 : currentScore >= 200 ? 85 : 95;
     try {
-      const { error } = await supabase.from("cardmatch_leaderboard").insert({ nickname: nickname.trim().slice(0, 20), time_seconds: timer, moves, pairs: totalPairs, device_type: isMobile ? "mobile" : "pc" });
+      const { error } = await supabase.from("cardmatch_leaderboard").insert({ 
+        nickname: nickname.trim().slice(0, 20), 
+        time_seconds: timer, 
+        moves, 
+        pairs: totalPairs, 
+        device_type: isMobile ? "mobile" : "pc",
+        score: currentScore,
+        grade: gradeInfo.grade,
+        percentile: percentile,
+      });
       if (error) throw error;
       setHasSubmittedScore(true);
       setShowNicknameModal(false);

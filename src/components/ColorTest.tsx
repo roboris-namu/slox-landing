@@ -468,8 +468,18 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting) return;
     setIsSubmitting(true);
+    const gradeInfo = getGrade(level);
+    // 백분위: Lv35+ = 1%, 28+ = 5%, 20+ = 15%, 14+ = 30%, 9+ = 50%, 5+ = 70%, 3+ = 85%, 나머지 = 95%
+    const percentile = level >= 35 ? 1 : level >= 28 ? 5 : level >= 20 ? 15 : level >= 14 ? 30 : level >= 9 ? 50 : level >= 5 ? 70 : level >= 3 ? 85 : 95;
     try {
-      const { error } = await supabase.from("color_leaderboard").insert({ nickname: nickname.trim().slice(0, 20), score, level, device_type: isMobile ? "mobile" : "pc" });
+      const { error } = await supabase.from("color_leaderboard").insert({ 
+        nickname: nickname.trim().slice(0, 20), 
+        score, 
+        level, 
+        device_type: isMobile ? "mobile" : "pc",
+        grade: gradeInfo.grade,
+        percentile: percentile,
+      });
       if (error) throw error;
       setHasSubmittedScore(true);
       setShowNicknameModal(false);

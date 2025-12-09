@@ -519,6 +519,9 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
     if (!nickname.trim() || isSubmitting) return;
     setIsSubmitting(true);
     try {
+      const gradeInfo = getGrade(cps);
+      // CPS 백분위: 16+ = 상위 1%, 12-15 = 5%, 9-11 = 15%, 7-8 = 30%, 5-6 = 50%, 3-4 = 70%, 2 = 85%, 1 = 95%
+      const percentile = cps >= 16 ? 1 : cps >= 12 ? 5 : cps >= 9 ? 15 : cps >= 7 ? 30 : cps >= 5 ? 50 : cps >= 3 ? 70 : cps >= 2 ? 85 : 95;
       const { error } = await supabase
         .from("cps_leaderboard")
         .insert({
@@ -527,6 +530,8 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
           clicks: clicks,
           duration: duration,
           device_type: isMobile ? "mobile" : "pc",
+          grade: gradeInfo.grade,
+          percentile: percentile,
         });
       if (error) throw error;
       setHasSubmittedScore(true);

@@ -528,11 +528,22 @@ export default function AimTest({ initialLang }: AimTestProps) {
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting) return;
     setIsSubmitting(true);
-    const currentScore = hits * 100 - misses * 50 + maxCombo * 10;
+    const currentScore = getScore(); // getScore() 사용!
+    const gradeInfo = getGrade(currentScore);
     const accuracy = hits + misses > 0 ? Math.round((hits / (hits + misses)) * 100) : 0;
     const avgTime = reactionTimes.length > 0 ? Math.round(reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length) : null;
+    // 백분위 계산: 8000+ = 1%, 6000+ = 5%, 4500+ = 15%, 3000+ = 30%, 2000+ = 50%, 1000+ = 70%, 500+ = 85%, 나머지 = 95%
+    const percentile = currentScore >= 8000 ? 1 : currentScore >= 6000 ? 5 : currentScore >= 4500 ? 15 : currentScore >= 3000 ? 30 : currentScore >= 2000 ? 50 : currentScore >= 1000 ? 70 : currentScore >= 500 ? 85 : 95;
     try {
-      const { error } = await supabase.from("aim_leaderboard").insert({ nickname: nickname.trim().slice(0, 20), score: currentScore, accuracy, avg_time: avgTime, device_type: isMobile ? "mobile" : "pc" });
+      const { error } = await supabase.from("aim_leaderboard").insert({ 
+        nickname: nickname.trim().slice(0, 20), 
+        score: currentScore, 
+        accuracy, 
+        avg_time: avgTime, 
+        device_type: isMobile ? "mobile" : "pc",
+        grade: gradeInfo.grade,
+        percentile: percentile,
+      });
       if (error) throw error;
       setHasSubmittedScore(true);
       setShowNicknameModal(false);

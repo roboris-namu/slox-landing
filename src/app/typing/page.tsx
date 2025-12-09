@@ -155,12 +155,19 @@ export default function TypingTest() {
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting || !result) return;
     setIsSubmitting(true);
+    const gradeInfo = getGrade(result.cpm);
+    // 백분위 (데스크톱 기준): 650+ = 1%, 550+ = 5%, 450+ = 15%, 370+ = 30%, 300+ = 50%, 230+ = 70%, 150+ = 85%, 나머지 = 95%
+    const percentile = isMobile 
+      ? (result.cpm >= 400 ? 1 : result.cpm >= 320 ? 5 : result.cpm >= 260 ? 15 : result.cpm >= 200 ? 30 : result.cpm >= 150 ? 50 : result.cpm >= 100 ? 70 : result.cpm >= 50 ? 85 : 95)
+      : (result.cpm >= 650 ? 1 : result.cpm >= 550 ? 5 : result.cpm >= 450 ? 15 : result.cpm >= 370 ? 30 : result.cpm >= 300 ? 50 : result.cpm >= 230 ? 70 : result.cpm >= 150 ? 85 : 95);
     try {
       const { error } = await supabase.from("typing_leaderboard").insert({ 
         nickname: nickname.trim().slice(0, 20), 
         wpm: result.cpm,  // 타/분
         accuracy: result.accuracy, 
-        device_type: isMobile ? "mobile" : "pc" 
+        device_type: isMobile ? "mobile" : "pc",
+        grade: gradeInfo.grade,
+        percentile: percentile,
       });
       if (error) throw error;
       setHasSubmittedScore(true);

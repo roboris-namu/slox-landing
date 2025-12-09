@@ -492,12 +492,17 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting) return;
     setIsSubmitting(true);
+    const gradeInfo = getGrade(bestLevel);
+    // 백분위: 13+ = 1%, 11+ = 5%, 9+ = 15%, 7+ = 30%, 6 = 50%, 5 = 70%, 4 = 85%, 나머지 = 95%
+    const percentile = bestLevel >= 13 ? 1 : bestLevel >= 11 ? 5 : bestLevel >= 9 ? 15 : bestLevel >= 7 ? 30 : bestLevel >= 6 ? 50 : bestLevel >= 5 ? 70 : bestLevel >= 4 ? 85 : 95;
     try {
       const { error } = await supabase.from("memory_leaderboard").insert({
         nickname: nickname.trim().slice(0, 20),
         score: bestLevel,
         level: bestLevel,
         device_type: isMobile ? "mobile" : "pc",
+        grade: gradeInfo.grade,
+        percentile: percentile,
       });
       if (error) throw error;
       setHasSubmittedScore(true);
