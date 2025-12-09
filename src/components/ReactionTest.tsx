@@ -595,7 +595,6 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   
   // 🎉 1등 이벤트 관련 상태
   const [showFirstPlaceModal, setShowFirstPlaceModal] = useState(false);
-  const [isFirstPlace, setIsFirstPlace] = useState(false);
   const [email, setEmail] = useState("");
   const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
   const [emailSubmitted, setEmailSubmitted] = useState(false);
@@ -874,7 +873,6 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
         
         // 내 점수보다 낮은(빠른) 점수가 없으면 = 내가 1등!
         if (!betterScores || betterScores.length === 0) {
-          setIsFirstPlace(true);
           setShowFirstPlaceModal(true);
           fireConfetti();
         }
