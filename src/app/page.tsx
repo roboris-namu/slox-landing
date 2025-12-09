@@ -59,6 +59,14 @@ function Navigation() {
               </a>
               {/* 도구 드롭다운 - 카테고리 분류 + 힌트 */}
               <DesktopToolsDropdown />
+              {/* EVENT 버튼 */}
+              <a href="/event" className="relative px-4 py-2 text-sm font-bold text-yellow-400 hover:text-yellow-300 rounded-xl hover:bg-yellow-500/10 transition-all duration-300 flex items-center gap-1.5">
+                <span className="text-base">🎁</span>
+                <span>EVENT</span>
+                {/* 깜빡이는 점 */}
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full animate-ping" />
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full" />
+              </a>
               <a href="#contact" className="ml-3 px-5 py-2.5 bg-gradient-to-r from-indigo-500 via-accent-500 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:shadow-glow-sm transition-all duration-300 hover:-translate-y-0.5">
                 문의하기
               </a>

@@ -10,6 +10,7 @@ interface Tool {
   label: string;
   best?: boolean;
   isNew?: boolean;
+  event?: boolean; // 이벤트 진행 중
 }
 
 interface ToolCategory {
@@ -24,7 +25,7 @@ const toolCategories: ToolCategory[] = [
     name: "🎮 게임 & 테스트",
     color: "purple",
     tools: [
-  { href: "/reaction", emoji: "⚡", label: "반응속도 테스트", best: true },
+      { href: "/reaction", emoji: "⚡", label: "반응속도 테스트", best: true, event: true },
       { href: "/cps", emoji: "🖱️", label: "CPS 테스트", best: true },
   { href: "/typing", emoji: "⌨️", label: "타자 테스트" },
   { href: "/aim", emoji: "🎯", label: "에임 트레이너" },
@@ -172,9 +173,14 @@ export default function MobileToolsButton() {
                       tool.best ? "border-purple-500/50 bg-purple-500/10" : "border-white/[0.05] hover:border-white/[0.1]"
                 }`}
               >
-                {tool.best && (
+                {tool.best && !tool.event && (
                       <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[9px] font-bold rounded-full shadow-lg">
                     BEST
+                  </span>
+                )}
+                {tool.event && (
+                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 bg-gradient-to-r from-yellow-500 to-red-500 text-white text-[9px] font-bold rounded-full shadow-lg animate-pulse">
+                    🎁 EVENT
                   </span>
                 )}
                 {tool.isNew && (

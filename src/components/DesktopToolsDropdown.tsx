@@ -10,6 +10,7 @@ interface Tool {
   label: string;
   best?: boolean;
   isNew?: boolean;
+  event?: boolean; // 이벤트 진행 중
 }
 
 interface ToolCategory {
@@ -24,7 +25,7 @@ const toolCategories: ToolCategory[] = [
     name: "🎮 게임 & 테스트",
     color: "purple",
     tools: [
-      { href: "/reaction", emoji: "⚡", label: "반응속도 테스트", best: true },
+      { href: "/reaction", emoji: "⚡", label: "반응속도 테스트", best: true, event: true },
       { href: "/cps", emoji: "🖱️", label: "CPS 테스트", best: true },
       { href: "/typing", emoji: "⌨️", label: "타자 테스트" },
       { href: "/aim", emoji: "🎯", label: "에임 트레이너" },
@@ -153,6 +154,9 @@ export default function DesktopToolsDropdown() {
                       <span className="text-xs">{tool.label}</span>
                       {tool.best && (
                         <span className="text-[9px] bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-400">BEST</span>
+                      )}
+                      {tool.event && (
+                        <span className="text-[9px] bg-gradient-to-r from-yellow-500/30 to-red-500/30 px-1.5 py-0.5 rounded text-yellow-400 animate-pulse">🎁 EVENT</span>
                       )}
                       {tool.isNew && (
                         <span className="text-[9px] bg-cyan-500/20 px-1.5 py-0.5 rounded text-cyan-400">NEW</span>
