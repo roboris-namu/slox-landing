@@ -1281,12 +1281,12 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
               </div>
               
               {/* 🏆 명예의전당 등록 버튼 */}
-              {!hasSubmittedScore && reactionTime > 0 && getPercentile(reactionTime) <= 30 && (
+              {!hasSubmittedScore && reactionTime > 0 && (
                 <button
                   onClick={() => setShowNicknameModal(true)}
-                  className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-xl transition-all animate-pulse"
+                  className="w-full mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white font-bold rounded-xl transition-all"
                 >
-                  🏆 {lang === "ko" ? "명예의전당 등록하기!" : lang === "ja" ? "殿堂入り登録！" : lang === "zh" ? "名人堂登记！" : "Enter Hall of Fame!"}
+                  🏆 {lang === "ko" ? "랭킹 등록하기!" : lang === "ja" ? "ランキング登録！" : lang === "zh" ? "排名登记！" : "Register Ranking!"}
                 </button>
               )}
             </div>
