@@ -12,6 +12,8 @@ interface TypingLeaderboardEntry {
   accuracy: number;
   device_type: string;
   created_at: string;
+  grade?: string;
+  percentile?: number;
 }
 
 /**
