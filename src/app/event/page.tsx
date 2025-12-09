@@ -329,13 +329,37 @@ export default function EventPage() {
           )}
         </div>
 
+        {/* 🔥 중복 당첨 안내 */}
+        <div className="mt-8 p-6 bg-gradient-to-r from-red-500/10 to-orange-500/10 rounded-2xl border border-red-500/20">
+          <div className="flex items-start gap-4">
+            <div className="text-4xl">😈</div>
+            <div>
+              <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                ⚠️ 중복 당첨 가능!
+              </h3>
+              <p className="text-dark-300 text-sm mb-3">
+                연속으로 1등을 지키면 <span className="text-yellow-400 font-bold">계속 상품을 받을 수 있어요.</span>
+              </p>
+              <p className="text-dark-400 text-sm">
+                누군가 당신의 기록을 깨기 전까지는... 👑
+              </p>
+              <div className="mt-3 p-3 bg-black/30 rounded-xl">
+                <p className="text-xs text-dark-500">
+                  💡 현재 챔피언을 끌어내리고 새로운 1등이 되어보세요!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* 유의사항 */}
-        <div className="mt-8 p-6 bg-dark-900/30 rounded-2xl border border-white/5">
+        <div className="mt-6 p-6 bg-dark-900/30 rounded-2xl border border-white/5">
           <h3 className="text-sm font-bold text-dark-400 mb-3">📌 유의사항</h3>
           <ul className="space-y-1 text-xs text-dark-500">
             <li>• 매달 1일 오전 10시 기준으로 1등을 선정합니다.</li>
             <li>• 1등 달성 시 반드시 이메일을 등록해야 상품 수령이 가능합니다.</li>
             <li>• 상품은 매달 1일 오후 2시에 등록된 이메일로 발송됩니다.</li>
+            <li>• <span className="text-yellow-500">중복 당첨이 가능합니다.</span> 기록이 깨지지 않으면 연속 당첨!</li>
             <li>• 부정한 방법으로 기록 달성 시 당첨이 취소될 수 있습니다.</li>
             <li>• 이벤트 내용은 사전 공지 없이 변경될 수 있습니다.</li>
           </ul>
