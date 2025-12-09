@@ -194,9 +194,9 @@ export default function HallOfFameCarousel() {
         <div className="absolute left-0 top-0 bottom-0 w-48 bg-gradient-to-r from-dark-950 via-dark-950/90 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-dark-950 via-dark-950/90 to-transparent z-10 pointer-events-none" />
 
-        {/* 스크롤 컨테이너 - 왼쪽 패딩으로 화면 밖에서 시작 */}
+        {/* 스크롤 컨테이너 - 살짝 오른쪽에서 시작 */}
         <div 
-          className="flex gap-8 animate-scroll-left pl-[100vw]"
+          className="flex gap-8 animate-scroll-left pl-[20vw]"
           style={{ width: "max-content" }}
         >
           {duplicatedLeaderboards.map((lb, idx) => (
