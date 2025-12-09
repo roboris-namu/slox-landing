@@ -73,9 +73,19 @@ function Navigation() {
             </div>
             
             {/* 모바일 CTA */}
-            <a href="#contact" className="md:hidden px-4 py-2 bg-gradient-to-r from-accent-500 to-cyan-500 text-white text-sm font-semibold rounded-xl">
-              문의
-            </a>
+            <div className="md:hidden flex items-center gap-2">
+              {/* 모바일 EVENT 버튼 */}
+              <a href="/event" className="relative px-3 py-2 text-sm font-bold text-yellow-400 rounded-xl bg-yellow-500/10 flex items-center gap-1">
+                <span>🎁</span>
+                <span className="text-xs">EVENT</span>
+                {/* 깜빡이는 점 */}
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full animate-ping" />
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full" />
+              </a>
+              <a href="#contact" className="px-3 py-2 bg-gradient-to-r from-accent-500 to-cyan-500 text-white text-sm font-semibold rounded-xl">
+                문의
+              </a>
+            </div>
           </div>
         </div>
       </div>
