@@ -792,10 +792,15 @@ body {
 }
 
 .animate-scroll-left {
-  animation: scroll-left 30s linear infinite;
+  animation: scroll-left 60s linear infinite; /* 60초로 느리게 */
 }
 
 .animate-scroll-left:hover,
 .pause-animation {
   animation-play-state: paused;
+}
+
+/* 캐러셀 시작 위치 조정 */
+.carousel-wrapper {
+  padding-left: 100vw; /* 화면 밖에서 시작 */
 }

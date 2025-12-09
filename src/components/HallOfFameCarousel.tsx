@@ -110,7 +110,7 @@ export default function HallOfFameCarousel() {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             entries: (data || []).map((entry: any) => ({
               nickname: entry.nickname as string,
-              score: entry[config.scoreField] as number,
+              score: parseFloat(entry[config.scoreField]) || 0, // 문자열도 숫자로 변환
               grade: entry.grade as string,
               percentile: entry.percentile as number,
               device_type: entry.device_type as string,
@@ -189,14 +189,14 @@ export default function HallOfFameCarousel() {
       </div>
 
       {/* 필름 스트립 스타일 캐러셀 */}
-      <div className="relative">
+      <div className="relative overflow-hidden">
         {/* 좌우 페이드 효과 - 더 강하게 */}
-        <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-dark-950 via-dark-950/80 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-dark-950 via-dark-950/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-48 bg-gradient-to-r from-dark-950 via-dark-950/90 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-48 bg-gradient-to-l from-dark-950 via-dark-950/90 to-transparent z-10 pointer-events-none" />
 
-        {/* 스크롤 컨테이너 */}
+        {/* 스크롤 컨테이너 - 왼쪽 패딩으로 화면 밖에서 시작 */}
         <div 
-          className="flex gap-6 animate-scroll-left"
+          className="flex gap-8 animate-scroll-left pl-[100vw]"
           style={{ width: "max-content" }}
         >
           {duplicatedLeaderboards.map((lb, idx) => (
