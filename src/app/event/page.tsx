@@ -178,13 +178,59 @@ export default function EventPage() {
               </li>
             </ol>
             
-            {/* 추가 안내 */}
-            <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-xl">
-              <p className="text-sm text-yellow-400 flex items-center gap-2">
-                <span>💡</span>
-                <span>1등을 달성하면 <strong>🎉 축하 팝업</strong>과 함께 이메일 등록 버튼이 나타납니다!</span>
-              </p>
+          </div>
+
+          {/* 🎆 1등 달성 시 미리보기 */}
+          <div className="bg-black/30 rounded-2xl p-6 mb-6 relative overflow-hidden">
+            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+              ✨ 1등 달성 시 이런 화면이!
+            </h3>
+            
+            {/* 축하 팝업 미리보기 */}
+            <div className="relative bg-gradient-to-br from-yellow-500/20 via-orange-500/20 to-red-500/20 border-2 border-yellow-500/50 rounded-2xl p-6 text-center">
+              {/* 폭죽 이모지들 - 애니메이션 */}
+              <div className="absolute -top-2 left-4 text-3xl animate-bounce" style={{ animationDelay: "0s" }}>🎉</div>
+              <div className="absolute -top-2 right-4 text-3xl animate-bounce" style={{ animationDelay: "0.2s" }}>🎊</div>
+              <div className="absolute top-1/2 -left-2 text-2xl animate-bounce" style={{ animationDelay: "0.4s" }}>✨</div>
+              <div className="absolute top-1/2 -right-2 text-2xl animate-bounce" style={{ animationDelay: "0.6s" }}>🌟</div>
+              <div className="absolute -bottom-2 left-1/4 text-2xl animate-bounce" style={{ animationDelay: "0.3s" }}>🎆</div>
+              <div className="absolute -bottom-2 right-1/4 text-2xl animate-bounce" style={{ animationDelay: "0.5s" }}>🎇</div>
+              
+              {/* 메인 컨텐츠 */}
+              <div className="relative z-10">
+                <div className="text-6xl mb-4 animate-pulse">👑</div>
+                <h4 className="text-2xl font-black text-yellow-400 mb-2">
+                  🎉 축하합니다! 1등입니다!
+                </h4>
+                <p className="text-white mb-1">
+                  <span className="text-yellow-400 font-bold text-3xl">142</span>
+                  <span className="text-dark-400 text-lg">ms</span>
+                </p>
+                <p className="text-sm text-dark-400 mb-4">반응속도 테스트 역대 1등!</p>
+                
+                {/* 이메일 등록 미리보기 */}
+                <div className="bg-black/40 rounded-xl p-4 max-w-xs mx-auto">
+                  <p className="text-sm text-dark-300 mb-3">
+                    🎁 상품 수령을 위해 이메일을 등록하세요!
+                  </p>
+                  <div className="flex gap-2">
+                    <div className="flex-1 bg-dark-800 rounded-lg px-3 py-2 text-left text-dark-500 text-sm border border-white/10">
+                      example@email.com
+                    </div>
+                    <div className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-bold rounded-lg text-sm">
+                      등록
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* 반짝이는 효과 */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse" />
             </div>
+            
+            <p className="text-center text-dark-500 text-sm mt-4">
+              👆 실제로 1등 달성 시 화려한 폭죽 효과와 함께 이 화면이 나타나요!
+            </p>
           </div>
 
           {/* 다음 추첨일 */}
