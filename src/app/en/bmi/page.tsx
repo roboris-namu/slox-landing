@@ -4,3 +4,5 @@ export default function BMIPageEn() {
   return <BMICalculator lang="en" />;
 }
 
+
+

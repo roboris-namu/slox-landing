@@ -4,3 +4,5 @@ export default function BMIPageZh() {
   return <BMICalculator lang="zh" />;
 }
 
+
+

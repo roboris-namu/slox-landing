@@ -319,6 +319,9 @@ function Footer() {
             <p className="text-sm text-dark-500">
               © {new Date().getFullYear()} SLOX. All rights reserved.
             </p>
+            <a href="/about" className="text-sm text-dark-500 hover:text-dark-300 transition-colors">
+              회사소개
+            </a>
             <a href="/privacy" className="text-sm text-dark-500 hover:text-dark-300 transition-colors">
               개인정보처리방침
             </a>

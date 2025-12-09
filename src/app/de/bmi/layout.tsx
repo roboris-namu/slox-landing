@@ -33,3 +33,5 @@ export default function BMILayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+
+

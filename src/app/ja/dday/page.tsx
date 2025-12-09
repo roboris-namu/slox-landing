@@ -4,3 +4,5 @@ export default function DdayPageJa() {
   return <DdayCalculator lang="ja" />;
 }
 
+
+

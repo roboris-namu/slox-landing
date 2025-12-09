@@ -4,3 +4,5 @@ export default function AgePageEn() {
   return <AgeCalculator lang="en" />;
 }
 
+
+

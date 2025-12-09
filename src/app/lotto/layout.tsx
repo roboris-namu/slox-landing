@@ -30,3 +30,5 @@ export default function LottoLayout({ children }: { children: React.ReactNode })
   return <>{children}</>;
 }
 
+
+

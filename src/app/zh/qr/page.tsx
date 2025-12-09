@@ -4,3 +4,5 @@ export default function QRPageZh() {
   return <QRGenerator lang="zh" />;
 }
 
+
+

@@ -32,3 +32,5 @@ export default function PercentLayout({ children }: { children: React.ReactNode 
   return <>{children}</>;
 }
 
+
+

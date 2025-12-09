@@ -928,16 +928,16 @@ ${t.shareTestIt}`;
               const tx = Math.cos(particle.angle) * particle.velocity;
               const ty = Math.sin(particle.angle) * particle.velocity;
               return (
-                <div
-                  key={particle.id}
+              <div
+                key={particle.id}
                   className="absolute pointer-events-none animate-aim-particle"
-                  style={{
-                    left: particle.x,
-                    top: particle.y,
-                    width: particle.size,
-                    height: particle.size,
-                    backgroundColor: particle.color,
-                    borderRadius: "50%",
+                style={{
+                  left: particle.x,
+                  top: particle.y,
+                  width: particle.size,
+                  height: particle.size,
+                  backgroundColor: particle.color,
+                  borderRadius: "50%",
                     boxShadow: `0 0 ${particle.size * 2}px ${particle.color}`,
                     "--tx": `${tx}px`,
                     "--ty": `${ty}px`,

@@ -4,3 +4,5 @@ export default function CharacterCountPageFr() {
   return <CharacterCounter lang="fr" />;
 }
 
+
+

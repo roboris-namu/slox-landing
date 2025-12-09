@@ -4,3 +4,5 @@ export default function PasswordPageFr() {
   return <PasswordGenerator lang="fr" />;
 }
 
+
+

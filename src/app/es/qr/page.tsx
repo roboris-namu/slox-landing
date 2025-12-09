@@ -4,3 +4,5 @@ export default function QRPageEs() {
   return <QRGenerator lang="es" />;
 }
 
+
+

@@ -4,3 +4,5 @@ export default function PasswordPageZh() {
   return <PasswordGenerator lang="zh" />;
 }
 
+
+

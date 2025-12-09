@@ -4,3 +4,5 @@ export default function RandomPageJa() {
   return <RandomPicker lang="ja" />;
 }
 
+
+

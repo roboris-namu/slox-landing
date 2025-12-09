@@ -4,3 +4,5 @@ export default function PercentPageZh() {
   return <PercentCalculator lang="zh" />;
 }
 
+
+

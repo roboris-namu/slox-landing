@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://slox.kr",
+    url: "https://www.slox.co.kr",
     siteName: "SLOX",
     title: "SLOX - 홈페이지 · 앱 제작 · AI 챗봇 구축",
     description:

@@ -4,3 +4,5 @@ export default function PercentPageEs() {
   return <PercentCalculator lang="es" />;
 }
 
+
+

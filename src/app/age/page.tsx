@@ -4,3 +4,5 @@ export default function AgePage() {
   return <AgeCalculator lang="ko" />;
 }
 
+
+

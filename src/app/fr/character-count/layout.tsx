@@ -31,3 +31,5 @@ export default function CharacterCountLayout({ children }: { children: React.Rea
   return <>{children}</>;
 }
 
+
+

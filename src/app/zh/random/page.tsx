@@ -4,3 +4,5 @@ export default function RandomPageZh() {
   return <RandomPicker lang="zh" />;
 }
 
+
+
