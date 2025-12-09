@@ -1682,6 +1682,9 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                       <p className="text-xs text-dark-500 mt-3">
                         💡 {lang === "ko" ? "매달 1일 오전 10시 기준 1등에게 문화상품권 발송!" : "Prize sent to #1 on the 1st of each month!"}
                       </p>
+                      <p className="text-xs text-red-400/70 mt-1">
+                        📬 {lang === "ko" ? "메일이 안 보이면 스팸함을 확인하세요!" : "Check spam folder if you don't see the email!"}
+                      </p>
                     </div>
                   ) : (
                     <div className="bg-green-500/20 border border-green-500/30 rounded-xl p-5">
