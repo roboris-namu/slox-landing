@@ -33,7 +33,7 @@ interface EventConfig {
 
 export default function EventPage() {
   const [winners, setWinners] = useState<Winner[]>([]);
-  const [eventConfig, setEventConfig] = useState<EventConfig | null>(null);
+  const [, setEventConfig] = useState<EventConfig | null>(null); // 나중에 사용 예정
   const [isLoading, setIsLoading] = useState(true);
   const [daysUntilNextDraw, setDaysUntilNextDraw] = useState(0);
 
