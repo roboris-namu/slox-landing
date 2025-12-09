@@ -800,41 +800,11 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     return Math.min(...attempts);
   };
 
-  // 공유하기
-  const shareResult = async () => {
-    const avg = getAverage();
-    const best = getBest();
-    const lastGrade = getGrade(reactionTime);
-    const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
-    const shareText = `${t.shareText}
-
-${lastGrade.emoji} ${t.current}: ${reactionTime}ms (${lastGrade.grade})
-🎯 ${t.average}: ${avg}ms
-🏆 ${t.best}: ${best}ms
-
-${t.shareTestIt}`;
-    
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          text: shareText,
-          url: shareUrl
-        });
-      } catch {
-        // 공유 취소시 무시
-      }
-    } else {
-      navigator.clipboard.writeText(`${shareText} ${shareUrl}`);
-      alert(t.copied);
-    }
-  };
-
-  // 이미지로 저장하기
-  const saveAsImage = async () => {
-    if (!shareCardRef.current) return;
+  // 이미지 생성 함수
+  const generateImage = async (): Promise<Blob | null> => {
+    if (!shareCardRef.current) return null;
     
     try {
-      // 카드를 잠시 보이게
       shareCardRef.current.style.display = "block";
       
       const canvas = await html2canvas(shareCardRef.current, {
@@ -844,16 +814,62 @@ ${t.shareTestIt}`;
         useCORS: true,
       });
       
-      // 다시 숨기기
       shareCardRef.current.style.display = "none";
       
-      // 다운로드
-      const link = document.createElement("a");
-      link.download = `reaction-test-${reactionTime}ms.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
+      return new Promise((resolve) => {
+        canvas.toBlob((blob) => resolve(blob), "image/png");
+      });
     } catch (error) {
       console.error("이미지 생성 실패:", error);
+      shareCardRef.current.style.display = "none";
+      return null;
+    }
+  };
+
+  // 공유하기 (이미지로)
+  const shareResult = async () => {
+    const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
+    const blob = await generateImage();
+    
+    if (blob && navigator.share && navigator.canShare) {
+      const file = new File([blob], `reaction-${reactionTime}ms.png`, { type: "image/png" });
+      const shareData = {
+        files: [file],
+        title: t.shareText,
+        text: `${t.shareTestIt} ${shareUrl}`,
+      };
+      
+      if (navigator.canShare(shareData)) {
+        try {
+          await navigator.share(shareData);
+          return;
+        } catch {
+          // 공유 취소시 무시
+        }
+      }
+    }
+    
+    // 이미지 공유 불가능시 다운로드
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `reaction-test-${reactionTime}ms.png`;
+      link.href = url;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  // 이미지로 저장하기
+  const saveAsImage = async () => {
+    const blob = await generateImage();
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `reaction-test-${reactionTime}ms.png`;
+      link.href = url;
+      link.click();
+      URL.revokeObjectURL(url);
     }
   };
 
