@@ -713,26 +713,54 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
 
   /**
    * 등급 계산 (롤 스타일) - 모바일/데스크톱 분리 + 다국어
+   * 난이도 상향: 챌린저/마스터는 진짜 고수만 가능하도록
    */
   const getGrade = (ms: number): { grade: string; color: string; emoji: string; message: string } => {
     if (isMobile) {
-      if (ms < 200) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
-      if (ms < 280) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
-      if (ms < 360) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
-      if (ms < 450) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
-      if (ms < 550) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
-      if (ms < 700) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
-      if (ms < 900) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+      // 모바일: 터치 딜레이 고려하여 PC보다 관대하게
+      if (ms < 160) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+      if (ms < 200) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+      if (ms < 250) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+      if (ms < 310) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
+      if (ms < 380) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+      if (ms < 480) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+      if (ms < 600) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
       return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
     }
-    if (ms < 120) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
-    if (ms < 150) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
-    if (ms < 180) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
-    if (ms < 220) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
-    if (ms < 270) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
-    if (ms < 330) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+    // PC: 마우스 클릭 기준 엄격하게
+    if (ms < 100) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+    if (ms < 130) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+    if (ms < 160) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+    if (ms < 200) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
+    if (ms < 250) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+    if (ms < 310) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
     if (ms < 400) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
     return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
+  };
+  
+  /**
+   * 상위 퍼센트 계산 (정규분포 기반 추정)
+   * 평균 반응속도: PC ~250ms, 모바일 ~350ms
+   */
+  const getPercentile = (ms: number): number => {
+    if (isMobile) {
+      if (ms < 160) return 0.1;
+      if (ms < 200) return 1;
+      if (ms < 250) return 5;
+      if (ms < 310) return 15;
+      if (ms < 380) return 35;
+      if (ms < 480) return 60;
+      if (ms < 600) return 80;
+      return 95;
+    }
+    if (ms < 100) return 0.1;
+    if (ms < 130) return 1;
+    if (ms < 160) return 3;
+    if (ms < 200) return 10;
+    if (ms < 250) return 30;
+    if (ms < 310) return 55;
+    if (ms < 400) return 80;
+    return 95;
   };
 
   // 게임 시작
@@ -1078,6 +1106,20 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                   <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2 animate-scale-in">
                     {reactionTime}ms
                   </p>
+                  
+                  {/* 상위 퍼센트 뱃지 */}
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-full mb-3 animate-fade-in">
+                    <span className="text-yellow-400">🔥</span>
+                    <span className="text-yellow-300 font-bold text-sm">
+                      {lang === "ko" ? `상위 ${getPercentile(reactionTime)}%` : 
+                       lang === "ja" ? `上位 ${getPercentile(reactionTime)}%` :
+                       lang === "zh" ? `前 ${getPercentile(reactionTime)}%` :
+                       `Top ${getPercentile(reactionTime)}%`}
+                    </span>
+                    {getPercentile(reactionTime) <= 1 && <span className="text-xs">👑</span>}
+                    {getPercentile(reactionTime) <= 5 && getPercentile(reactionTime) > 1 && <span className="text-xs">⭐</span>}
+                  </div>
+                  
                   <p className="text-dark-400 mb-4">{getGrade(reactionTime).message}</p>
                   <p className="text-dark-500 text-sm animate-pulse">{t.clickToRetry}</p>
                 </>
@@ -1124,25 +1166,53 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                 </div>
               </div>
 
+              {/* 도전 메시지 */}
+              <div className="mb-6 p-4 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 rounded-xl">
+                <p className="text-center text-sm">
+                  {getBest() >= 200 ? (
+                    <span className="text-purple-300">
+                      💪 {lang === "ko" ? "200ms 이하로 도전해보세요! 다이아몬드 등급이 기다립니다!" : 
+                          lang === "ja" ? "200ms以下に挑戦！ダイヤモンドランクが待っています！" :
+                          lang === "zh" ? "挑战200ms以下！钻石等级在等着你！" :
+                          "Try to beat 200ms! Diamond rank awaits!"}
+                    </span>
+                  ) : getBest() >= 130 ? (
+                    <span className="text-cyan-300">
+                      🔥 {lang === "ko" ? "대단해요! 130ms 이하면 마스터! 도전하세요!" : 
+                          lang === "ja" ? "すごい！130ms以下でマスター！挑戦しよう！" :
+                          lang === "zh" ? "太棒了！130ms以下就是大师！挑战吧！" :
+                          "Amazing! Under 130ms for Master! Keep trying!"}
+                    </span>
+                  ) : (
+                    <span className="text-yellow-300">
+                      👑 {lang === "ko" ? "전설이 되었습니다! 친구에게 자랑하세요!" : 
+                          lang === "ja" ? "伝説になった！友達に自慢しよう！" :
+                          lang === "zh" ? "你成为了传奇！向朋友炫耀吧！" :
+                          "You're a legend! Show off to your friends!"}
+                    </span>
+                  )}
+                </p>
+              </div>
+
               {/* 버튼들 */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={shareResult}
-                  className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all"
+                  className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2"
                 >
-                  {t.share}
+                  <span>📤</span> {t.share}
                 </button>
                 <button
                   onClick={saveAsImage}
-                  className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium rounded-xl transition-all"
+                  className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2"
                 >
-                  {t.saveImage}
+                  <span>🖼️</span> {t.saveImage}
                 </button>
                 <button
                   onClick={resetGame}
-                  className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
+                  className="flex-1 px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all flex items-center justify-center gap-2"
                 >
-                  {t.reset}
+                  <span>🔄</span> {t.reset}
                 </button>
               </div>
             </div>
@@ -1192,10 +1262,25 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
               <div style={{ 
                 fontSize: "20px", 
                 fontWeight: "bold", 
-                marginBottom: "8px",
-                color: reactionTime < 200 ? "#f472b6" : reactionTime < 250 ? "#a855f7" : reactionTime < 300 ? "#fbbf24" : reactionTime < 350 ? "#22d3ee" : reactionTime < 400 ? "#4ade80" : "#94a3b8"
+                marginBottom: "4px",
+                color: reactionTime < 130 ? "#67e8f9" : reactionTime < 160 ? "#c084fc" : reactionTime < 200 ? "#60a5fa" : reactionTime < 250 ? "#2dd4bf" : reactionTime < 310 ? "#fbbf24" : "#94a3b8"
               }}>
                 {getGrade(reactionTime).grade}
+              </div>
+              {/* 상위 퍼센트 */}
+              <div style={{ 
+                display: "inline-flex", 
+                alignItems: "center", 
+                gap: "4px",
+                padding: "4px 12px",
+                background: "rgba(250, 204, 21, 0.2)",
+                border: "1px solid rgba(250, 204, 21, 0.3)",
+                borderRadius: "9999px",
+                marginBottom: "8px"
+              }}>
+                <span style={{ color: "#fbbf24", fontSize: "12px", fontWeight: "bold" }}>
+                  🔥 상위 {getPercentile(reactionTime)}%
+                </span>
               </div>
               <div style={{ fontSize: "48px", fontWeight: "900", color: "#c084fc" }}>
                 {reactionTime}ms
