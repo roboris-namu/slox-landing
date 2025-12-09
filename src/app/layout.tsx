@@ -5,17 +5,22 @@ import "./globals.css";
  * SEO 메타데이터 설정
  */
 export const metadata: Metadata = {
-  title: "SLOX - 홈페이지 · 앱 제작 · AI 챗봇 구축",
+  title: "SLOX(슬록스) - 홈페이지 · 앱 제작 · AI 챗봇 구축 · 무료 도구",
   description:
-    "홈페이지·앱·AI 챗봇 전문 개발사 SLOX. 합리적 비용으로 고품질 개발 서비스를 제공합니다.",
+    "SLOX(슬록스) - 홈페이지·앱·AI 챗봇 전문 개발사. 반응속도 테스트, CPS 테스트, 타자연습 등 무료 도구 21종 제공. 합리적 비용으로 고품질 개발 서비스.",
   keywords: [
+    "슬록스",
+    "SLOX",
+    "반응속도 테스트",
+    "CPS 테스트",
+    "타자연습",
     "홈페이지 제작",
     "앱 개발",
     "AI 챗봇",
     "웹사이트 개발",
     "Flutter 앱",
     "개발 스튜디오",
-    "SLOX",
+    "무료 도구",
   ],
   authors: [{ name: "SLOX" }],
   creator: "SLOX",
@@ -28,10 +33,10 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     url: "https://www.slox.co.kr",
-    siteName: "SLOX",
-    title: "SLOX - 홈페이지 · 앱 제작 · AI 챗봇 구축",
+    siteName: "SLOX(슬록스)",
+    title: "SLOX(슬록스) - 홈페이지 · 앱 제작 · 무료 도구 21종",
     description:
-      "SLOX는 홈페이지 제작, 앱 개발, AI 챗봇 구축을 전문으로 하는 개발 스튜디오입니다.",
+      "SLOX(슬록스) - 반응속도 테스트, CPS 테스트 등 무료 도구 21종과 홈페이지·앱·AI 챗봇 개발 서비스.",
     images: [
       {
         url: "/og-image.png",
@@ -43,9 +48,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SLOX - 홈페이지 · 앱 제작 · AI 챗봇 구축",
+    title: "SLOX(슬록스) - 홈페이지 · 앱 제작 · 무료 도구 21종",
     description:
-      "SLOX는 홈페이지 제작, 앱 개발, AI 챗봇 구축을 전문으로 하는 개발 스튜디오입니다.",
+      "SLOX(슬록스) - 반응속도 테스트, CPS 테스트 등 무료 도구 21종과 홈페이지·앱·AI 챗봇 개발 서비스.",
     images: ["/og-image.png"],
   },
   icons: {
