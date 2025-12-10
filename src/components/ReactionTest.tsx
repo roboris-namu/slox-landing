@@ -575,8 +575,8 @@ interface ReactionTestProps {
   initialLang: Language;
 }
 
-// 🎁 이벤트 배너 컴포넌트 (실시간 카운트다운)
-function EventBanner({ lang }: { lang: Language }) {
+// 🎁 이벤트 배너 컴포넌트 (실시간 카운트다운 + 현재 1등)
+function EventBanner({ lang, leader }: { lang: Language; leader?: { nickname: string; score: number } | null }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
@@ -663,9 +663,25 @@ function EventBanner({ lang }: { lang: Language }) {
           </div>
         </div>
         
-        {/* 도전 문구 */}
-        <p className="text-center text-dark-400 text-xs mt-2">
-          🔥 {lang === "ko" ? "지금 1등에 도전하세요!" : "Challenge for #1 now!"}
+        {/* 현재 1등 정보 + 도전 문구 */}
+        <div className="flex items-center justify-center gap-3 mt-3">
+          {leader ? (
+            <div className="flex items-center gap-2 bg-black/40 rounded-full px-4 py-1.5 border border-yellow-500/20">
+              <span className="text-yellow-400">👑</span>
+              <span className="text-dark-300 text-sm">
+                {lang === "ko" ? "현재 1등" : "Current #1"}:
+              </span>
+              <span className="text-white font-bold text-sm">{leader.nickname}</span>
+              <span className="text-cyan-400 font-black text-sm">{leader.score}ms</span>
+            </div>
+          ) : (
+            <div className="text-dark-400 text-sm">
+              🏆 {lang === "ko" ? "아직 1등이 없어요! 첫 1등에 도전하세요!" : "No #1 yet! Be the first!"}
+            </div>
+          )}
+        </div>
+        <p className="text-center text-yellow-400/80 text-xs mt-2 font-medium animate-pulse">
+          🔥 {lang === "ko" ? "지금 도전해서 1등을 뺏어보세요!" : "Challenge now and take the crown!"}
         </p>
       </div>
     </Link>
@@ -1264,8 +1280,8 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
             </p>
           </div>
 
-          {/* 🎁 이벤트 배너 - 실시간 카운트다운 */}
-          <EventBanner lang={lang} />
+          {/* 🎁 이벤트 배너 - 실시간 카운트다운 + 현재 1등 */}
+          <EventBanner lang={lang} leader={leaderboard.length > 0 ? { nickname: leaderboard[0].nickname, score: leaderboard[0].score } : null} />
 
           {/* 💡 반응속도 향상 팁 */}
           <div className="mb-8 p-4 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 rounded-xl">
