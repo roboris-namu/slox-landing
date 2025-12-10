@@ -471,7 +471,8 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
     setIsSubmitting(true);
     const gradeInfo = getGrade(level);
     // 백분위: Lv35+ = 1%, 28+ = 5%, 20+ = 15%, 14+ = 30%, 9+ = 50%, 5+ = 70%, 3+ = 85%, 나머지 = 95%
-    const percentile = level >= 35 ? 1 : level >= 28 ? 5 : level >= 20 ? 15 : level >= 14 ? 30 : level >= 9 ? 50 : level >= 5 ? 70 : level >= 3 ? 85 : 95;
+    // 백분위 (난이도 상향으로 기준 조정)
+    const percentile = level >= 25 ? 1 : level >= 20 ? 5 : level >= 15 ? 15 : level >= 11 ? 30 : level >= 7 ? 50 : level >= 4 ? 70 : level >= 2 ? 85 : 95;
     try {
       const { error } = await supabase.from("color_leaderboard").insert({ 
         nickname: nickname.trim().slice(0, 20), 
@@ -500,26 +501,26 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
     }
   }, [state, hasSubmittedScore, score]);
 
-  // 등급 계산
+  // 등급 계산 (난이도 상향으로 기준 조정)
   const getGrade = useCallback((lvl: number): { grade: string; color: string; emoji: string; message: string } => {
-    if (lvl >= 35) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
-    if (lvl >= 28) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
-    if (lvl >= 20) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
-    if (lvl >= 14) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
-    if (lvl >= 9) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
-    if (lvl >= 5) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
-    if (lvl >= 3) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+    if (lvl >= 25) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+    if (lvl >= 20) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+    if (lvl >= 15) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+    if (lvl >= 11) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
+    if (lvl >= 7) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+    if (lvl >= 4) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+    if (lvl >= 2) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
     return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
   }, [t]);
 
   // 새 라운드 생성
   const generateRound = useCallback((lvl: number) => {
-    // 그리드 크기: 레벨에 따라 증가 (2x2 → 3x3 → 4x4 → 5x5 → 6x6)
-    const size = Math.min(2 + Math.floor(lvl / 5), 6);
+    // 그리드 크기: 레벨에 따라 증가 (2x2 → 3x3 → 4x4 → 5x5 → 6x6) - 4레벨마다 증가
+    const size = Math.min(2 + Math.floor(lvl / 4), 6);
     setGridSize(size);
 
-    // 색상 차이: 레벨 올라갈수록 감소
-    const diff = Math.max(3, 30 - lvl * 1.5);
+    // 색상 차이: 레벨 올라갈수록 감소 (난이도 상향: 25에서 시작, 레벨당 2씩 감소, 최소 2)
+    const diff = Math.max(2, 25 - lvl * 2);
     setColorDiff(diff);
 
     // 랜덤 기본 색상
@@ -899,38 +900,38 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
             </p>
           </div>
 
-          {/* 등급 안내 */}
+          {/* 등급 안내 (난이도 상향으로 기준 조정) */}
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-2 text-center">{t.tierTable}</h3>
-            <p className="text-dark-400 text-xs text-center mb-6">💡 레벨이 높을수록 색상 차이가 미세해집니다</p>
+            <p className="text-dark-400 text-xs text-center mb-6">💡 레벨이 높을수록 색상 차이가 미세해집니다 (난이도 상향!)</p>
             <div className="flex flex-col items-center gap-2">
               <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
                 <span className="text-cyan-300 text-sm font-bold">👑 {t.challenger}</span>
-                <span className="text-white text-xs ml-2">Lv.35+</span>
+                <span className="text-white text-xs ml-2">Lv.25+</span>
               </div>
               <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
                 <span className="text-purple-400 text-sm font-bold">💎 {t.master}</span>
-                <span className="text-white text-xs ml-2">Lv.28+</span>
+                <span className="text-white text-xs ml-2">Lv.20+</span>
               </div>
               <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
                 <span className="text-blue-400 text-sm font-bold">💠 {t.diamond}</span>
-                <span className="text-white text-xs ml-2">Lv.20+</span>
+                <span className="text-white text-xs ml-2">Lv.15+</span>
               </div>
               <div className="w-56 p-2 bg-gradient-to-r from-teal-500/20 to-teal-400/20 rounded-lg text-center border border-teal-400/50">
                 <span className="text-teal-400 text-sm font-bold">🏆 {t.platinum}</span>
-                <span className="text-white text-xs ml-2">Lv.14+</span>
+                <span className="text-white text-xs ml-2">Lv.11+</span>
               </div>
               <div className="w-64 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
                 <span className="text-yellow-400 text-sm font-bold">🥇 {t.gold}</span>
-                <span className="text-white text-xs ml-2">Lv.9+</span>
+                <span className="text-white text-xs ml-2">Lv.7+</span>
               </div>
               <div className="w-72 p-2 bg-gradient-to-r from-gray-400/20 to-gray-300/20 rounded-lg text-center border border-gray-400/50">
                 <span className="text-gray-300 text-sm font-bold">🥈 {t.silver}</span>
-                <span className="text-white text-xs ml-2">Lv.5+</span>
+                <span className="text-white text-xs ml-2">Lv.4+</span>
               </div>
               <div className="w-80 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
                 <span className="text-orange-400 text-sm font-bold">🥉 {t.bronze}</span>
-                <span className="text-white text-xs ml-2">Lv.3+</span>
+                <span className="text-white text-xs ml-2">Lv.2+</span>
               </div>
               <div className="w-[22rem] p-2 bg-gradient-to-r from-stone-500/20 to-stone-400/20 rounded-lg text-center border border-stone-400/50">
                 <span className="text-stone-400 text-sm font-bold">🪨 {t.iron}</span>
