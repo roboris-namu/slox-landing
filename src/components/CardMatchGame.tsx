@@ -432,10 +432,10 @@ export default function CardMatchGame() {
           triggerShake();
           setCombo(0);
           
-          // 🔥 시간 3초 차감 + 패널티 표시!
+          // 🔥 시간 3초 차감 + 패널티 표시! (빠르게 휙!)
           setTimer(prev => Math.max(0, prev - 3));
           setShowTimePenalty(true);
-          setTimeout(() => setShowTimePenalty(false), 1200); // 1.2초간 표시
+          setTimeout(() => setShowTimePenalty(false), 500); // 0.5초 - 빠르게!
           
           setCards(prev => prev.map(c => 
             c.id === first || c.id === second ? { ...c, isFlipped: false } : c
@@ -663,8 +663,8 @@ export default function CardMatchGame() {
             {/* 시간 패널티 표시 - 대비 강하게! */}
             {showTimePenalty && (
               <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
-                {/* 어두운 오버레이 */}
-                <div className="absolute inset-0 bg-black/70 rounded-2xl" />
+                {/* 어두운 오버레이 (눈 편하게 50%) */}
+                <div className="absolute inset-0 bg-black/50 rounded-2xl" />
                 {/* 패널티 텍스트 */}
                 <div className="relative animate-time-penalty-pop">
                   <div className="text-7xl md:text-9xl font-black text-center"
