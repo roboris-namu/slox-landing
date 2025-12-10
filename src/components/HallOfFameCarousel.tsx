@@ -188,8 +188,8 @@ export default function HallOfFameCarousel() {
         </div>
       </div>
 
-      {/* 필름 스트립 스타일 캐러셀 */}
-      <div className="relative overflow-hidden">
+      {/* 필름 스트립 스타일 캐러셀 - 위아래 여백으로 호버 확장 공간 확보 */}
+      <div className="relative overflow-x-hidden overflow-y-visible py-8">
         {/* 좌우 페이드 효과 */}
         <div className="absolute left-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-r from-dark-950 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-l from-dark-950 to-transparent z-10 pointer-events-none" />
