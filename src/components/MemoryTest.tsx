@@ -520,7 +520,7 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
 
   // 🚀 게임 오버 0.8초 후 자동 랭킹 등록 팝업
   useEffect(() => {
-    if (state === "wrong" && !hasSubmittedScore && bestLevel > 1) {
+    if (state === "wrong" && !hasSubmittedScore && bestLevel >= 1) {
       const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
       return () => clearTimeout(timer);
     }

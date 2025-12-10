@@ -554,13 +554,13 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
 
   // 🚀 결과 나오면 0.8초 후 자동 랭킹 등록 팝업 표시
   useEffect(() => {
-    if (state === "result" && !hasSubmittedScore && cps > 0) {
+    if (state === "result" && !hasSubmittedScore && clicks > 0) {
       const timer = setTimeout(() => {
         setShowRankingPrompt(true);
       }, 800);
       return () => clearTimeout(timer);
     }
-  }, [state, hasSubmittedScore, cps]);
+  }, [state, hasSubmittedScore, clicks]);
 
   // 클릭 파티클 생성
   const createClickParticles = useCallback((clientX: number, clientY: number) => {

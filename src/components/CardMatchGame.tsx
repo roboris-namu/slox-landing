@@ -124,13 +124,13 @@ export default function CardMatchGame() {
 
   useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
 
-  // 🚀 게임 완료 0.8초 후 자동 랭킹 등록 팝업
+  // 🚀 게임 완료/시간초과 0.8초 후 자동 랭킹 등록 팝업
   useEffect(() => {
-    if (matchedPairs === totalPairs && matchedPairs > 0 && !hasSubmittedScore) {
+    if (state === "result" && !hasSubmittedScore && matchedPairs > 0) {
       const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
       return () => clearTimeout(timer);
     }
-  }, [matchedPairs, totalPairs, hasSubmittedScore]);
+  }, [state, hasSubmittedScore, matchedPairs]);
 
   // 🔊 오디오 컨텍스트
   const getAudioContext = useCallback(() => {
