@@ -575,6 +575,103 @@ interface ReactionTestProps {
   initialLang: Language;
 }
 
+// 🎁 이벤트 배너 컴포넌트 (실시간 카운트다운)
+function EventBanner({ lang }: { lang: Language }) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      let nextDraw = new Date(now.getFullYear(), now.getMonth() + 1, 1, 10, 0, 0);
+      if (now.getDate() === 1 && now.getHours() < 10) {
+        nextDraw = new Date(now.getFullYear(), now.getMonth(), 1, 10, 0, 0);
+      }
+      const diff = nextDraw.getTime() - now.getTime();
+      if (diff < 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+      return {
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        minutes: Math.floor((diff / 1000 / 60) % 60),
+        seconds: Math.floor((diff / 1000) % 60),
+      };
+    };
+    setTimeLeft(calculateTimeLeft());
+    const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <Link 
+      href="/event"
+      className="block mb-6 p-4 bg-gradient-to-r from-yellow-500/20 via-orange-500/20 to-red-500/20 border border-yellow-500/40 rounded-2xl hover:border-yellow-400/60 transition-all group relative overflow-hidden"
+    >
+      {/* 반짝이 효과 */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+      
+      <div className="relative">
+        {/* 상단: EVENT + 마감까지 */}
+        <div className="flex items-center justify-between gap-4 mb-3">
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <span className="text-3xl animate-bounce">🎁</span>
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping" />
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-yellow-400 font-black text-lg">EVENT</span>
+                <span className="px-2 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded animate-pulse">진행중</span>
+              </div>
+              <p className="text-dark-300 text-sm">
+                <span className="text-white font-bold">1등</span>에게 <span className="text-yellow-400 font-bold">문화상품권 5천원</span>!
+              </p>
+            </div>
+          </div>
+          
+          {/* 자세히 보기 - PC만 */}
+          <div className="hidden sm:flex items-center gap-2 text-yellow-400/80 group-hover:text-yellow-300 transition-colors">
+            <span className="text-sm font-medium">{lang === "ko" ? "자세히 보기" : "Learn more"}</span>
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+        
+        {/* 실시간 카운트다운 */}
+        <div className="flex items-center justify-center gap-1 sm:gap-2 bg-black/30 rounded-xl p-2 sm:p-3">
+          <span className="text-dark-400 text-xs sm:text-sm">⏰ 마감까지</span>
+          <div className="flex items-center gap-1">
+            <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
+              <span className="text-yellow-400 font-black text-lg sm:text-xl">{timeLeft.days}</span>
+              <span className="text-dark-500 text-[10px] block -mt-1">일</span>
+            </div>
+            <span className="text-dark-500 font-bold">:</span>
+            <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
+              <span className="text-yellow-400 font-black text-lg sm:text-xl">{String(timeLeft.hours).padStart(2, '0')}</span>
+              <span className="text-dark-500 text-[10px] block -mt-1">시간</span>
+            </div>
+            <span className="text-dark-500 font-bold">:</span>
+            <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
+              <span className="text-yellow-400 font-black text-lg sm:text-xl">{String(timeLeft.minutes).padStart(2, '0')}</span>
+              <span className="text-dark-500 text-[10px] block -mt-1">분</span>
+            </div>
+            <span className="text-dark-500 font-bold">:</span>
+            <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
+              <span className="text-cyan-400 font-black text-lg sm:text-xl animate-pulse">{String(timeLeft.seconds).padStart(2, '0')}</span>
+              <span className="text-dark-500 text-[10px] block -mt-1">초</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* 도전 문구 */}
+        <p className="text-center text-dark-400 text-xs mt-2">
+          🔥 {lang === "ko" ? "지금 1등에 도전하세요!" : "Challenge for #1 now!"}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
 export default function ReactionTest({ initialLang }: ReactionTestProps) {
   const [state, setState] = useState<GameState>("waiting");
   const [reactionTime, setReactionTime] = useState<number>(0);
@@ -1167,39 +1264,8 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
             </p>
           </div>
 
-          {/* 🎁 이벤트 배너 - 눈에 띄게! */}
-          <Link 
-            href="/event"
-            className="block mb-6 p-4 bg-gradient-to-r from-yellow-500/20 via-orange-500/20 to-red-500/20 border border-yellow-500/40 rounded-2xl hover:border-yellow-400/60 transition-all group relative overflow-hidden"
-          >
-            {/* 반짝이 효과 */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-            
-            <div className="relative flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <span className="text-3xl animate-bounce">🎁</span>
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping" />
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-yellow-400 font-black text-lg">EVENT</span>
-                    <span className="px-2 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded animate-pulse">진행중</span>
-                  </div>
-                  <p className="text-dark-300 text-sm">
-                    <span className="text-white font-bold">1등</span>에게 매달 <span className="text-yellow-400 font-bold">문화상품권 5천원</span> 지급!
-                  </p>
-                </div>
-              </div>
-              <div className="hidden sm:flex items-center gap-2 text-yellow-400/80 group-hover:text-yellow-300 transition-colors">
-                <span className="text-sm font-medium">{lang === "ko" ? "자세히 보기" : "Learn more"}</span>
-                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
-          </Link>
+          {/* 🎁 이벤트 배너 - 실시간 카운트다운 */}
+          <EventBanner lang={lang} />
 
           {/* 💡 반응속도 향상 팁 */}
           <div className="mb-8 p-4 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 rounded-xl">
