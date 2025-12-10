@@ -268,14 +268,11 @@ export default function HallOfFameCarousel() {
                                 : "bg-gradient-to-r from-orange-600/20 to-orange-700/10 border border-orange-600/20"
                         }`}
                       >
-                        {/* 👉 1등 손가락 포인팅 (이벤트 게임만) */}
+                        {/* 🎁 1등 당첨 유력 배지 (이벤트 게임만) */}
                         {rank === 0 && isEventGame && (
-                          <div className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 animate-point-horizontal">
-                            <div className="flex items-center gap-1">
-                              <span className="text-[10px] font-bold text-yellow-300 bg-black/80 px-2 py-1 rounded-full whitespace-nowrap">
-                                🔥 도전!
-                              </span>
-                              <span className="text-xl">👈</span>
+                          <div className="absolute -top-2 -right-2 z-10">
+                            <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg animate-pulse whitespace-nowrap">
+                              🎁 당첨 유력!
                             </div>
                           </div>
                         )}
