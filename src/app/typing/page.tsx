@@ -156,9 +156,9 @@ export default function TypingTest() {
     if (!nickname.trim() || isSubmitting || !result) return;
     setIsSubmitting(true);
     const gradeInfo = getGrade(result.cpm);
-    // 백분위 (데스크톱 기준): 650+ = 1%, 550+ = 5%, 450+ = 15%, 370+ = 30%, 300+ = 50%, 230+ = 70%, 150+ = 85%, 나머지 = 95%
+    // 백분위 (난이도 상향)
     const percentile = isMobile 
-      ? (result.cpm >= 400 ? 1 : result.cpm >= 320 ? 5 : result.cpm >= 260 ? 15 : result.cpm >= 200 ? 30 : result.cpm >= 150 ? 50 : result.cpm >= 100 ? 70 : result.cpm >= 50 ? 85 : 95)
+      ? (result.cpm >= 480 ? 1 : result.cpm >= 400 ? 5 : result.cpm >= 330 ? 15 : result.cpm >= 270 ? 30 : result.cpm >= 210 ? 50 : result.cpm >= 150 ? 70 : result.cpm >= 90 ? 85 : 95)
       : (result.cpm >= 650 ? 1 : result.cpm >= 550 ? 5 : result.cpm >= 450 ? 15 : result.cpm >= 370 ? 30 : result.cpm >= 300 ? 50 : result.cpm >= 230 ? 70 : result.cpm >= 150 ? 85 : 95);
     try {
       const { error } = await supabase.from("typing_leaderboard").insert({ 
@@ -317,17 +317,17 @@ export default function TypingTest() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // 등급 계산 (모바일은 기준 낮춤)
+  // 등급 계산 (모바일은 약 75% 수준 - 난이도 상향)
   const getGrade = (cpm: number): { grade: string; color: string; emoji: string } => {
     if (isMobile) {
-      // 모바일 등급 기준 (약 60% 수준)
-      if (cpm >= 400) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑" };
-      if (cpm >= 320) return { grade: "마스터", color: "text-purple-400", emoji: "💎" };
-      if (cpm >= 260) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠" };
-      if (cpm >= 200) return { grade: "플래티넘", color: "text-teal-400", emoji: "🏆" };
-      if (cpm >= 150) return { grade: "골드", color: "text-yellow-400", emoji: "🥇" };
-      if (cpm >= 100) return { grade: "실버", color: "text-gray-300", emoji: "🥈" };
-      if (cpm >= 50) return { grade: "브론즈", color: "text-orange-400", emoji: "🥉" };
+      // 모바일 등급 기준 (난이도 상향: 약 75% 수준)
+      if (cpm >= 480) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑" };
+      if (cpm >= 400) return { grade: "마스터", color: "text-purple-400", emoji: "💎" };
+      if (cpm >= 330) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠" };
+      if (cpm >= 270) return { grade: "플래티넘", color: "text-teal-400", emoji: "🏆" };
+      if (cpm >= 210) return { grade: "골드", color: "text-yellow-400", emoji: "🥇" };
+      if (cpm >= 150) return { grade: "실버", color: "text-gray-300", emoji: "🥈" };
+      if (cpm >= 90) return { grade: "브론즈", color: "text-orange-400", emoji: "🥉" };
       return { grade: "아이언", color: "text-stone-400", emoji: "🪨" };
     }
     // 데스크톱 등급 기준
@@ -609,35 +609,35 @@ export default function TypingTest() {
             <div className="flex flex-col items-center gap-2">
               <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
                 <span className="text-cyan-300 text-sm font-bold">👑 챌린저</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "400" : "650"}+</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "480" : "650"}+</span>
               </div>
               <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
                 <span className="text-purple-400 text-sm font-bold">💎 마스터</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "320~399" : "550~649"}</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "400~479" : "550~649"}</span>
               </div>
               <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
                 <span className="text-blue-400 text-sm font-bold">💠 다이아몬드</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "260~319" : "450~549"}</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "330~399" : "450~549"}</span>
               </div>
               <div className="w-56 p-2 bg-gradient-to-r from-teal-500/20 to-teal-400/20 rounded-lg text-center border border-teal-400/50">
                 <span className="text-teal-400 text-sm font-bold">🏆 플래티넘</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "200~259" : "370~449"}</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "270~329" : "370~449"}</span>
               </div>
               <div className="w-64 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
                 <span className="text-yellow-400 text-sm font-bold">🥇 골드</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "150~199" : "300~369"}</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "210~269" : "300~369"}</span>
               </div>
               <div className="w-72 p-2 bg-gradient-to-r from-gray-400/20 to-gray-300/20 rounded-lg text-center border border-gray-400/50">
                 <span className="text-gray-300 text-sm font-bold">🥈 실버</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "100~149" : "230~299"}</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "150~209" : "230~299"}</span>
               </div>
               <div className="w-80 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
                 <span className="text-orange-400 text-sm font-bold">🥉 브론즈</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "50~99" : "150~229"}</span>
+                <span className="text-white text-xs ml-2">{isMobile ? "90~149" : "150~229"}</span>
               </div>
               <div className="w-[22rem] p-2 bg-gradient-to-r from-stone-500/20 to-stone-400/20 rounded-lg text-center border border-stone-400/50">
                 <span className="text-stone-400 text-sm font-bold">🪨 아이언</span>
-                <span className="text-white text-xs ml-2">~{isMobile ? "49" : "149"}</span>
+                <span className="text-white text-xs ml-2">~{isMobile ? "89" : "149"}</span>
               </div>
             </div>
           </div>

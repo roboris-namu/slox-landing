@@ -558,11 +558,11 @@ export default function AimTest({ initialLang }: AimTestProps) {
 
   // 🚀 게임 오버 0.8초 후 자동 랭킹 등록 팝업
   useEffect(() => {
-    if (state === "result" && !hasSubmittedScore && getScore() > 0) {
+    if (state === "result" && !hasSubmittedScore && hits > 0) {
       const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
       return () => clearTimeout(timer);
     }
-  }, [state, hasSubmittedScore]);
+  }, [state, hasSubmittedScore, hits]);
 
   // 🔊 오디오 컨텍스트 초기화
   const getAudioContext = useCallback(() => {

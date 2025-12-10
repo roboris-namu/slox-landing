@@ -126,7 +126,7 @@ export default function CardMatchGame() {
 
   // 🚀 게임 완료 0.8초 후 자동 랭킹 등록 팝업
   useEffect(() => {
-    if (matchedPairs === totalPairs && !hasSubmittedScore && getScore() > 0) {
+    if (matchedPairs === totalPairs && matchedPairs > 0 && !hasSubmittedScore) {
       const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
       return () => clearTimeout(timer);
     }
