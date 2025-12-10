@@ -169,7 +169,7 @@ export default function PrivacyPolicy() {
               <span className="text-purple-400">9.</span> 시행일
             </h2>
             <div className="bg-dark-900/50 border border-dark-800 rounded-xl p-5 text-dark-300 leading-relaxed">
-              <p>본 개인정보 처리방침은 <strong className="text-white">2024년 12월 10일</strong>부터 시행됩니다.</p>
+              <p>본 개인정보 처리방침은 <strong className="text-white">2025년 12월 10일</strong>부터 시행됩니다.</p>
             </div>
           </section>
         </div>
@@ -177,7 +177,7 @@ export default function PrivacyPolicy() {
         {/* 하단 */}
         <div className="mt-12 pt-8 border-t border-dark-800 text-center">
           <p className="text-dark-500 text-sm">
-            © 2024 SLOX. All rights reserved.
+            © 2025 SLOX. All rights reserved.
           </p>
           <Link href="/" className="inline-block mt-4 text-purple-400 hover:text-purple-300 transition-colors">
             ← 홈으로 돌아가기
