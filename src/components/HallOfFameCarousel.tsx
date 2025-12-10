@@ -209,7 +209,7 @@ export default function HallOfFameCarousel() {
                 href={lb.href}
                 className="flex-shrink-0 w-72 sm:w-76 md:w-80 group"
               >
-              <div className={`relative bg-gradient-to-br ${lb.bgColor} backdrop-blur-xl rounded-3xl p-6 transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden ${
+              <div className={`relative bg-gradient-to-br ${lb.bgColor} backdrop-blur-xl rounded-3xl p-6 transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:z-20 overflow-hidden ${
                 isEventGame 
                   ? "border-2 border-yellow-400/70 shadow-lg shadow-yellow-500/30 hover:border-yellow-300 hover:shadow-yellow-500/50" 
                   : "border border-white/10 hover:border-white/30 hover:shadow-purple-500/20"
