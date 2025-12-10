@@ -207,12 +207,12 @@ export default function HallOfFameCarousel() {
             <div key={`${lb.game}-${idx}`} className={`flex-shrink-0 flex items-center ${isSecondLoopStart ? "ml-4" : ""}`}>
               {/* 🔄 두 번째 루프 시작 구분선 */}
               {isSecondLoopStart && (
-                <div className="flex flex-col items-center mr-6 sm:mr-8 md:mr-10">
-                  <div className="w-px h-16 bg-gradient-to-b from-transparent via-purple-500/50 to-transparent" />
-                  <div className="my-2 px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full">
-                    <span className="text-purple-400 text-xs font-medium">🔄 다시</span>
+                <div className="flex flex-col items-center justify-center mr-8 sm:mr-12 md:mr-16 h-full min-h-[300px]">
+                  <div className="w-1 h-20 bg-gradient-to-b from-transparent via-yellow-500 to-transparent rounded-full" />
+                  <div className="my-3 px-4 py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-2 border-yellow-500/50 rounded-xl shadow-lg shadow-yellow-500/20">
+                    <span className="text-yellow-400 text-sm font-bold">🔄 다시 시작!</span>
                   </div>
-                  <div className="w-px h-16 bg-gradient-to-b from-transparent via-purple-500/50 to-transparent" />
+                  <div className="w-1 h-20 bg-gradient-to-b from-transparent via-yellow-500 to-transparent rounded-full" />
                 </div>
               )}
               <Link
