@@ -494,7 +494,7 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
 
   // 🚀 게임 오버 0.8초 후 자동 랭킹 등록 팝업
   useEffect(() => {
-    if (state === "wrong" && !hasSubmittedScore && score > 0) {
+    if (state === "result" && !hasSubmittedScore && score > 0) {
       const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
       return () => clearTimeout(timer);
     }

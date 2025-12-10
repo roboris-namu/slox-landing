@@ -946,7 +946,7 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
                   🏆 {lang === "ko" ? "랭킹 등록하기!" : "Register Ranking!"}
                 </button>
               )}
-            </div>
+              </div>
           )}
 
           {/* 🏆 명예의전당 */}

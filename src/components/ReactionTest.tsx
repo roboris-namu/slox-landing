@@ -1153,14 +1153,14 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
         title: t.shareText,
         text: `${t.shareTestIt} ${shareUrl}`,
       };
-      
+    
       if (navigator.canShare(shareData)) {
-        try {
+      try {
           await navigator.share(shareData);
           return;
-        } catch {
-          // 공유 취소시 무시
-        }
+      } catch {
+        // 공유 취소시 무시
+      }
       }
     }
     
