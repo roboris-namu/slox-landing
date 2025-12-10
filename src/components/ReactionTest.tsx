@@ -924,12 +924,12 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     fetchLeaderboard();
   }, [fetchLeaderboard]);
   
-  // 🚀 결과 나오면 1.5초 후 자동 랭킹 등록 팝업 표시
+  // 🚀 결과 나오면 0.8초 후 자동 랭킹 등록 팝업 표시
   useEffect(() => {
     if (state === "result" && !hasSubmittedScore && reactionTime > 0) {
       const timer = setTimeout(() => {
         setShowRankingPrompt(true);
-      }, 1500);
+      }, 800);
       return () => clearTimeout(timer);
     }
   }, [state, hasSubmittedScore, reactionTime]);

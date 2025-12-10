@@ -471,6 +471,7 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
+  const [showRankingPrompt, setShowRankingPrompt] = useState(false);
   
   const inputRef = useRef<HTMLInputElement>(null);
   const shareCardRef = useRef<HTMLDivElement>(null);
@@ -517,6 +518,14 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
 
   useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
 
+  // 🚀 게임 오버 0.8초 후 자동 랭킹 등록 팝업
+  useEffect(() => {
+    if (state === "wrong" && !hasSubmittedScore && bestLevel > 1) {
+      const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
+      return () => clearTimeout(timer);
+    }
+  }, [state, hasSubmittedScore, bestLevel]);
+
   // 등급 계산 (일반인 평균 7±2 자리)
   const getGrade = useCallback((lvl: number): { grade: string; color: string; emoji: string; message: string } => {
     if (lvl >= 13) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
@@ -543,6 +552,7 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
     setLevel(1);
     setUserInput("");
     setHasSubmittedScore(false);
+    setShowRankingPrompt(false);
     const nums = generateNumbers(1);
     setNumbers(nums);
     setState("showing");
@@ -877,6 +887,60 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderTop: "1px solid #1e1b4b", fontSize: "10px", color: "#6b7280" }}><span>{new Date().toLocaleDateString("ko-KR")}</span><span style={{ color: "#8b5cf6" }}>slox.co.kr/memory</span></div>
           </div>
+
+          {/* 🚀 자동 랭킹 등록 팝업 */}
+          {showRankingPrompt && !showNicknameModal && !hasSubmittedScore && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-sm w-full animate-scale-in relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-transparent pointer-events-none" />
+                <button onClick={() => setShowRankingPrompt(false)} className="absolute top-3 right-3 text-dark-500 hover:text-white transition-colors z-10">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+                <div className="relative z-10">
+                  <div className="text-center mb-4">
+                    {(() => {
+                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => bestLevel > e.score) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => bestLevel > e.score) + 1;
+                      const isFirstPlace = leaderboard.length === 0 || bestLevel > leaderboard[0].score;
+                      return (
+                        <>
+                          <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
+                            {isFirstPlace ? "👑" : myRank <= 3 ? "🏆" : myRank <= 10 ? "🔥" : "📊"}
+                          </div>
+                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : myRank <= 3 ? "text-yellow-400" : "text-white"}`}>
+                            {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${myRank}위!`}
+                          </h3>
+                          <p className="text-dark-400 text-sm">{bestLevel} {t.digits}</p>
+                        </>
+                      );
+                    })()}
+                  </div>
+                  {leaderboard.length > 0 && bestLevel <= leaderboard[0].score && (
+                    <div className="bg-dark-800/70 rounded-xl p-3 mb-4">
+                      <div className="flex items-center justify-between">
+                        <div className="text-center flex-1">
+                          <p className="text-[10px] text-dark-500 uppercase">현재 1위</p>
+                          <p className="text-yellow-400 font-bold">{leaderboard[0].score} {t.digits}</p>
+                          <p className="text-xs text-dark-400">{leaderboard[0].nickname}</p>
+                        </div>
+                        <div className="text-dark-600 px-2">vs</div>
+                        <div className="text-center flex-1">
+                          <p className="text-[10px] text-dark-500 uppercase">내 기록</p>
+                          <p className="text-purple-400 font-bold">{bestLevel} {t.digits}</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  <button onClick={() => { setShowRankingPrompt(false); setShowNicknameModal(true); }} className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-black text-lg rounded-xl transition-all shadow-lg shadow-yellow-500/30 animate-pulse hover:animate-none hover:scale-[1.02]">
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="text-xl">🏆</span>
+                      랭킹 등록하기!
+                    </span>
+                  </button>
+                  <button onClick={() => setShowRankingPrompt(false)} className="w-full mt-3 py-2 text-dark-500 hover:text-dark-300 text-sm transition-colors">나중에 할게요</button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* 닉네임 모달 */}
           {showNicknameModal && (
