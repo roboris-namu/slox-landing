@@ -269,11 +269,11 @@ export default function HallOfFameCarousel() {
                                 : "bg-gradient-to-r from-orange-600/20 to-orange-700/10 border border-orange-600/20"
                         }`}
                       >
-                        {/* 🎁 1등 당첨 유력 배지 (이벤트 게임만) */}
+                        {/* 💎 1등 당첨 유력 배지 (이벤트 게임만) - 시안 색상 */}
                         {rank === 0 && isEventGame && (
                           <div className="absolute -top-2 -right-2 z-10">
-                            <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg animate-pulse whitespace-nowrap">
-                              🎁 당첨 유력!
+                            <div className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-cyan-500/30 animate-pulse whitespace-nowrap">
+                              💎 당첨 유력!
                             </div>
                           </div>
                         )}
