@@ -190,9 +190,9 @@ export default function HallOfFameCarousel() {
 
       {/* 필름 스트립 스타일 캐러셀 */}
       <div className="relative overflow-hidden">
-        {/* 좌우 페이드 효과 - 호버 카드(z-30)보다 낮게 */}
-        <div className="absolute left-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-r from-dark-950 to-transparent z-20 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-l from-dark-950 to-transparent z-20 pointer-events-none" />
+        {/* 좌우 페이드 효과 - 폭 절반으로 줄여서 호버 카드 덜 묻히게 */}
+        <div className="absolute left-0 top-0 bottom-0 w-2 sm:w-8 md:w-16 lg:w-24 bg-gradient-to-r from-dark-950 to-transparent z-20 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-2 sm:w-8 md:w-16 lg:w-24 bg-gradient-to-l from-dark-950 to-transparent z-20 pointer-events-none" />
 
         {/* 스크롤 컨테이너 - 모바일에서도 살짝 멀리서 시작 */}
         <div 
