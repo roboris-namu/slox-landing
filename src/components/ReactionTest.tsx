@@ -1167,6 +1167,40 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
             </p>
           </div>
 
+          {/* 🎁 이벤트 배너 - 눈에 띄게! */}
+          <Link 
+            href="/event"
+            className="block mb-6 p-4 bg-gradient-to-r from-yellow-500/20 via-orange-500/20 to-red-500/20 border border-yellow-500/40 rounded-2xl hover:border-yellow-400/60 transition-all group relative overflow-hidden"
+          >
+            {/* 반짝이 효과 */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+            
+            <div className="relative flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <span className="text-3xl animate-bounce">🎁</span>
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping" />
+                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-yellow-400 font-black text-lg">EVENT</span>
+                    <span className="px-2 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded animate-pulse">진행중</span>
+                  </div>
+                  <p className="text-dark-300 text-sm">
+                    <span className="text-white font-bold">1등</span>에게 매달 <span className="text-yellow-400 font-bold">문화상품권 5천원</span> 지급!
+                  </p>
+                </div>
+              </div>
+              <div className="hidden sm:flex items-center gap-2 text-yellow-400/80 group-hover:text-yellow-300 transition-colors">
+                <span className="text-sm font-medium">{lang === "ko" ? "자세히 보기" : "Learn more"}</span>
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </Link>
+
           {/* 💡 반응속도 향상 팁 */}
           <div className="mb-8 p-4 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 rounded-xl">
             <div className="flex items-start gap-3">
