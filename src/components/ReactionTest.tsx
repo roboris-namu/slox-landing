@@ -1277,22 +1277,9 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                   <p className={`text-xl font-bold ${getGrade(reactionTime).color} mb-2 animate-fade-in`}>
                     {getGrade(reactionTime).grade}
                   </p>
-                  <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-2 animate-scale-in">
+                  <p className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 mb-3 animate-scale-in">
                     {reactionTime}ms
                   </p>
-                  
-                  {/* 상위 퍼센트 뱃지 */}
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 rounded-full mb-3 animate-fade-in">
-                    <span className="text-yellow-400">🔥</span>
-                    <span className="text-yellow-300 font-bold text-sm">
-                      {lang === "ko" ? `상위 ${getPercentile(reactionTime)}%` : 
-                       lang === "ja" ? `上位 ${getPercentile(reactionTime)}%` :
-                       lang === "zh" ? `前 ${getPercentile(reactionTime)}%` :
-                       `Top ${getPercentile(reactionTime)}%`}
-                    </span>
-                    {getPercentile(reactionTime) <= 1 && <span className="text-xs">👑</span>}
-                    {getPercentile(reactionTime) <= 5 && getPercentile(reactionTime) > 1 && <span className="text-xs">⭐</span>}
-                  </div>
                   
                   {/* 🏆 현재 랭킹 표시 - 세련된 버전 */}
                   {leaderboard.length === 0 ? (
@@ -1858,13 +1845,10 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                 fontSize: "26px", 
                 fontWeight: "bold", 
                 marginTop: "8px",
-                marginBottom: "8px",
+                marginBottom: "14px",
                 color: reactionTime < 130 ? "#67e8f9" : reactionTime < 160 ? "#c084fc" : reactionTime < 200 ? "#60a5fa" : reactionTime < 250 ? "#2dd4bf" : reactionTime < 310 ? "#fbbf24" : "#9ca3af"
               }}>
                 {getGrade(reactionTime).grade}
-              </div>
-              <div style={{ color: "#fbbf24", fontSize: "13px", fontWeight: "bold", marginBottom: "14px" }}>
-                🔥 상위 {getPercentile(reactionTime)}%
               </div>
               <div style={{ fontSize: "44px", fontWeight: "bold", color: "#a78bfa" }}>
                 {reactionTime}<span style={{ fontSize: "18px", color: "#7c3aed" }}>ms</span>
