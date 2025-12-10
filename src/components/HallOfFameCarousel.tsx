@@ -201,13 +201,24 @@ export default function HallOfFameCarousel() {
         >
           {duplicatedLeaderboards.map((lb, idx) => {
             const isEventGame = lb.game === "reaction"; // 🎁 현재 이벤트 중인 게임
+            const isSecondLoopStart = idx === displayLeaderboards.length; // 🔄 두 번째 루프 시작점
             
             return (
-            <Link
-              key={`${lb.game}-${idx}`}
-              href={lb.href}
-              className="flex-shrink-0 w-72 sm:w-76 md:w-80 group"
-            >
+            <div key={`${lb.game}-${idx}`} className={`flex-shrink-0 flex items-center ${isSecondLoopStart ? "ml-4" : ""}`}>
+              {/* 🔄 두 번째 루프 시작 구분선 */}
+              {isSecondLoopStart && (
+                <div className="flex flex-col items-center mr-6 sm:mr-8 md:mr-10">
+                  <div className="w-px h-16 bg-gradient-to-b from-transparent via-purple-500/50 to-transparent" />
+                  <div className="my-2 px-3 py-1 bg-purple-500/20 border border-purple-500/30 rounded-full">
+                    <span className="text-purple-400 text-xs font-medium">🔄 다시</span>
+                  </div>
+                  <div className="w-px h-16 bg-gradient-to-b from-transparent via-purple-500/50 to-transparent" />
+                </div>
+              )}
+              <Link
+                href={lb.href}
+                className="flex-shrink-0 w-72 sm:w-76 md:w-80 group"
+              >
               <div className={`relative bg-gradient-to-br ${lb.bgColor} backdrop-blur-xl rounded-3xl p-6 transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden ${
                 isEventGame 
                   ? "border-2 border-yellow-400/70 shadow-lg shadow-yellow-500/30 hover:border-yellow-300 hover:shadow-yellow-500/50" 
@@ -342,6 +353,7 @@ export default function HallOfFameCarousel() {
                 </div>
               </div>
             </Link>
+            </div>
           );
           })}
         </div>
