@@ -800,6 +800,34 @@ body {
   animation-play-state: paused;
 }
 
+/* 👆 손가락 포인팅 바운스 */
+@keyframes point-bounce {
+  0%, 100% {
+    transform: translateY(0) rotate(-15deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-15deg);
+  }
+}
+
+.animate-point-bounce {
+  animation: point-bounce 0.8s ease-in-out infinite;
+}
+
+/* ✨ 반짝이 효과 (shimmer) */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
 /* 캐러셀 시작 위치 조정 */
 .carousel-wrapper {
   padding-left: 100vw; /* 화면 밖에서 시작 */

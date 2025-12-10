@@ -199,13 +199,37 @@ export default function HallOfFameCarousel() {
           className="flex gap-4 sm:gap-6 md:gap-8 animate-scroll-left pl-[30vw] sm:pl-[25vw] md:pl-[20vw] lg:pl-[20vw]"
           style={{ width: "max-content" }}
         >
-          {duplicatedLeaderboards.map((lb, idx) => (
+          {duplicatedLeaderboards.map((lb, idx) => {
+            const isEventGame = lb.game === "reaction"; // 🎁 현재 이벤트 중인 게임
+            
+            return (
             <Link
               key={`${lb.game}-${idx}`}
               href={lb.href}
               className="flex-shrink-0 w-72 sm:w-76 md:w-80 group"
             >
-              <div className={`relative bg-gradient-to-br ${lb.bgColor} backdrop-blur-xl border border-white/10 rounded-3xl p-6 transition-all duration-500 hover:scale-105 hover:border-white/30 hover:shadow-2xl hover:shadow-purple-500/20 overflow-hidden`}>
+              <div className={`relative bg-gradient-to-br ${lb.bgColor} backdrop-blur-xl rounded-3xl p-6 transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden ${
+                isEventGame 
+                  ? "border-2 border-yellow-400/70 shadow-lg shadow-yellow-500/30 hover:border-yellow-300 hover:shadow-yellow-500/50" 
+                  : "border border-white/10 hover:border-white/30 hover:shadow-purple-500/20"
+              }`}>
+                {/* 🎁 이벤트 리본 */}
+                {isEventGame && (
+                  <>
+                    <div className="absolute -top-1 -right-1 z-20">
+                      <div className="relative">
+                        <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white text-[10px] font-black px-3 py-1 rounded-bl-xl rounded-tr-2xl shadow-lg animate-pulse">
+                          🎁 EVENT
+                        </div>
+                        {/* 반짝이 효과 */}
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer" />
+                      </div>
+                    </div>
+                    {/* 이벤트 카드 글로우 테두리 */}
+                    <div className="absolute inset-0 rounded-3xl border-2 border-yellow-400/50 animate-pulse pointer-events-none" />
+                  </>
+                )}
+                
                 {/* 카드 내부 글로우 */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                 <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${lb.color} opacity-20 blur-3xl group-hover:opacity-40 transition-opacity`} />
@@ -221,8 +245,8 @@ export default function HallOfFameCarousel() {
                       <span className="text-dark-400 text-xs">테스트</span>
                     </div>
                   </div>
-                  <div className="px-3 py-1 bg-white/10 rounded-full">
-                    <span className="text-xs text-white/80 group-hover:text-cyan-400 transition-colors font-medium">
+                  <div className={`px-3 py-1 rounded-full ${isEventGame ? "bg-gradient-to-r from-yellow-500/30 to-orange-500/30 border border-yellow-500/50" : "bg-white/10"}`}>
+                    <span className={`text-xs font-medium transition-colors ${isEventGame ? "text-yellow-300" : "text-white/80 group-hover:text-cyan-400"}`}>
                       도전하기 →
                     </span>
                   </div>
@@ -234,12 +258,26 @@ export default function HallOfFameCarousel() {
                     lb.entries.map((entry, rank) => (
                       <div
                         key={rank}
-                        className={`flex items-center gap-3 p-3 rounded-2xl transition-all ${
+                        className={`relative flex items-center gap-3 p-3 rounded-2xl transition-all ${
                           rank === 0 ? "bg-gradient-to-r from-yellow-500/30 to-orange-500/20 border border-yellow-500/30" :
                           rank === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-500/10 border border-gray-400/20" :
                           "bg-gradient-to-r from-orange-600/20 to-orange-700/10 border border-orange-600/20"
                         }`}
                       >
+                        {/* 👆 1등 손가락 포인팅 (이벤트 게임만) */}
+                        {rank === 0 && isEventGame && (
+                          <div className="absolute -left-2 -top-2 z-10 animate-point-bounce">
+                            <div className="relative">
+                              <span className="text-2xl drop-shadow-lg">👆</span>
+                              <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                                <span className="text-[9px] font-bold text-yellow-300 bg-black/60 px-1.5 py-0.5 rounded-full animate-pulse">
+                                  도전!
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        
                         {/* 순위 메달 */}
                         <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black shadow-lg ${
                           rank === 0 ? "bg-gradient-to-br from-yellow-400 to-yellow-600 text-black" :
@@ -306,7 +344,8 @@ export default function HallOfFameCarousel() {
                 </div>
               </div>
             </Link>
-          ))}
+          );
+          })}
         </div>
       </div>
 
