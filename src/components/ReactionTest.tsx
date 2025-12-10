@@ -600,6 +600,9 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [myEntryId, setMyEntryId] = useState<string | null>(null);
   
+  // 🚀 자동 랭킹 등록 팝업 상태
+  const [showRankingPrompt, setShowRankingPrompt] = useState(false);
+  
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const gameAreaRef = useRef<HTMLDivElement>(null);
@@ -920,6 +923,16 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   useEffect(() => {
     fetchLeaderboard();
   }, [fetchLeaderboard]);
+  
+  // 🚀 결과 나오면 1.5초 후 자동 랭킹 등록 팝업 표시
+  useEffect(() => {
+    if (state === "result" && !hasSubmittedScore && reactionTime > 0) {
+      const timer = setTimeout(() => {
+        setShowRankingPrompt(true);
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [state, hasSubmittedScore, reactionTime]);
 
   // 게임 시작
   const startGame = useCallback(() => {
@@ -927,6 +940,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     playSound("ready");
     setBalloonScale(1);
     setHasSubmittedScore(false); // 새 게임시 등록 상태 리셋
+    setShowRankingPrompt(false); // 랭킹 팝업도 닫기
     
     const delay = Math.random() * 3000 + 2000;
     timeoutRef.current = setTimeout(() => {
@@ -1507,6 +1521,117 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
               </div>
             )}
           </div>
+
+          {/* 🚀 자동 랭킹 등록 팝업 (게임 끝나면 자동 표시) */}
+          {showRankingPrompt && !showNicknameModal && !hasSubmittedScore && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-sm w-full animate-scale-in relative overflow-hidden">
+                {/* 배경 그라데이션 */}
+                <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 to-transparent pointer-events-none" />
+                
+                {/* 닫기 버튼 */}
+                <button
+                  onClick={() => setShowRankingPrompt(false)}
+                  className="absolute top-3 right-3 text-dark-500 hover:text-white transition-colors z-10"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                
+                <div className="relative z-10">
+                  {/* 내 순위 표시 */}
+                  <div className="text-center mb-4">
+                    {(() => {
+                      const myRank = leaderboard.length === 0 
+                        ? 1 
+                        : leaderboard.findIndex(e => reactionTime < e.score) === -1 
+                          ? leaderboard.length + 1 
+                          : leaderboard.findIndex(e => reactionTime < e.score) + 1;
+                      const isFirstPlace = leaderboard.length === 0 || reactionTime < leaderboard[0].score;
+                      
+                      return (
+                        <>
+                          <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
+                            {isFirstPlace ? "👑" : myRank <= 3 ? "🏆" : myRank <= 10 ? "🔥" : "📊"}
+                          </div>
+                          <h3 className={`text-2xl font-black mb-1 ${
+                            isFirstPlace 
+                              ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" 
+                              : myRank <= 3 
+                                ? "text-yellow-400"
+                                : "text-white"
+                          }`}>
+                            {isFirstPlace 
+                              ? (lang === "ko" ? "🔥 새로운 1등!" : "🔥 New #1!") 
+                              : (lang === "ko" ? `현재 ${myRank}위!` : `Rank #${myRank}!`)}
+                          </h3>
+                          <p className="text-dark-400 text-sm">
+                            {isFirstPlace 
+                              ? (lang === "ko" ? "역대 최고 기록을 달성했어요!" : "You beat the record!") 
+                              : myRank <= 3
+                                ? (lang === "ko" ? "TOP 3 진입! 대단해요!" : "TOP 3! Amazing!")
+                                : myRank <= 10
+                                  ? (lang === "ko" ? "TOP 10 진입 가능!" : "TOP 10 potential!")
+                                  : (lang === "ko" ? "기록을 남겨보세요!" : "Save your record!")}
+                          </p>
+                        </>
+                      );
+                    })()}
+                  </div>
+                  
+                  {/* 1등과 비교 */}
+                  {leaderboard.length > 0 && reactionTime >= leaderboard[0].score && (
+                    <div className="bg-dark-800/70 rounded-xl p-3 mb-4">
+                      <div className="flex items-center justify-between">
+                        <div className="text-center flex-1">
+                          <p className="text-[10px] text-dark-500 uppercase">현재 1위</p>
+                          <p className="text-yellow-400 font-bold">{leaderboard[0].score}ms</p>
+                          <p className="text-xs text-dark-400">{leaderboard[0].nickname}</p>
+                        </div>
+                        <div className="text-dark-600 px-2">vs</div>
+                        <div className="text-center flex-1">
+                          <p className="text-[10px] text-dark-500 uppercase">내 기록</p>
+                          <p className="text-purple-400 font-bold">{reactionTime}ms</p>
+                          <p className="text-xs text-red-400">+{reactionTime - leaderboard[0].score}ms</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* 랭킹 등록 버튼 - 깜빡이는 효과 */}
+                  <button
+                    onClick={() => {
+                      setShowRankingPrompt(false);
+                      setShowNicknameModal(true);
+                    }}
+                    className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-black text-lg rounded-xl transition-all shadow-lg shadow-yellow-500/30 animate-pulse hover:animate-none hover:scale-[1.02]"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="text-xl">🏆</span>
+                      {lang === "ko" ? "랭킹 등록하기!" : "Register Ranking!"}
+                    </span>
+                  </button>
+                  
+                  {/* 이벤트 안내 */}
+                  <div className="mt-3 p-2 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
+                    <p className="text-yellow-400 text-xs text-center flex items-center justify-center gap-1">
+                      <span>🎁</span>
+                      <span>{lang === "ko" ? "1등은 매달 문화상품권 5천원 이벤트!" : "Monthly prize for #1!"}</span>
+                    </p>
+                  </div>
+                  
+                  {/* 나중에 버튼 */}
+                  <button
+                    onClick={() => setShowRankingPrompt(false)}
+                    className="w-full mt-3 py-2 text-dark-500 hover:text-dark-300 text-sm transition-colors"
+                  >
+                    {lang === "ko" ? "나중에 할게요" : "Maybe later"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* 닉네임 입력 모달 */}
           {showNicknameModal && (
