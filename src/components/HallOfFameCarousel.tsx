@@ -190,9 +190,9 @@ export default function HallOfFameCarousel() {
 
       {/* 필름 스트립 스타일 캐러셀 */}
       <div className="relative overflow-hidden">
-        {/* 좌우 페이드 효과 - 모바일에서는 좁게, PC에서는 넓게 */}
-        <div className="absolute left-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-r from-dark-950 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-l from-dark-950 to-transparent z-10 pointer-events-none" />
+        {/* 좌우 페이드 효과 - 호버 카드(z-30)보다 낮게 */}
+        <div className="absolute left-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-r from-dark-950 to-transparent z-20 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-l from-dark-950 to-transparent z-20 pointer-events-none" />
 
         {/* 스크롤 컨테이너 - 모바일에서도 살짝 멀리서 시작 */}
         <div 
@@ -209,7 +209,7 @@ export default function HallOfFameCarousel() {
                 href={lb.href}
                 className="flex-shrink-0 w-72 sm:w-76 md:w-80 group"
               >
-              <div className={`relative bg-gradient-to-br ${lb.bgColor} backdrop-blur-xl rounded-3xl p-6 transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:z-20 overflow-hidden ${
+              <div className={`relative bg-gradient-to-br ${lb.bgColor} backdrop-blur-xl rounded-3xl p-6 transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:z-30 overflow-hidden ${
                 isEventGame 
                   ? "border-2 border-yellow-400/70 shadow-lg shadow-yellow-500/30 hover:border-yellow-300 hover:shadow-yellow-500/50" 
                   : "border border-white/10 hover:border-white/30 hover:shadow-purple-500/20"
