@@ -259,25 +259,26 @@ export default function HallOfFameCarousel() {
                       <div
                         key={rank}
                         className={`relative flex items-center gap-3 p-3 rounded-2xl transition-all ${
-                          rank === 0 ? "bg-gradient-to-r from-yellow-500/30 to-orange-500/20 border border-yellow-500/30" :
-                          rank === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-500/10 border border-gray-400/20" :
-                          "bg-gradient-to-r from-orange-600/20 to-orange-700/10 border border-orange-600/20"
+                          rank === 0 && isEventGame 
+                            ? "bg-gradient-to-r from-yellow-500/40 to-orange-500/30 border-2 border-yellow-400 shadow-lg shadow-yellow-500/20" 
+                            : rank === 0 
+                              ? "bg-gradient-to-r from-yellow-500/30 to-orange-500/20 border border-yellow-500/30" 
+                              : rank === 1 
+                                ? "bg-gradient-to-r from-gray-400/20 to-gray-500/10 border border-gray-400/20" 
+                                : "bg-gradient-to-r from-orange-600/20 to-orange-700/10 border border-orange-600/20"
                         }`}
                       >
-                        {/* 👆 1등 손가락 포인팅 (이벤트 게임만) */}
+                        {/* 👉 1등 손가락 포인팅 (이벤트 게임만) */}
                         {rank === 0 && isEventGame && (
-                          <div className="absolute -left-2 -top-2 z-10 animate-point-bounce">
-                            <div className="relative">
-                              <span className="text-2xl drop-shadow-lg">👆</span>
-                              <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                                <span className="text-[9px] font-bold text-yellow-300 bg-black/60 px-1.5 py-0.5 rounded-full animate-pulse">
-                                  도전!
-                                </span>
-                              </div>
+                          <div className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 animate-point-horizontal">
+                            <div className="flex items-center gap-1">
+                              <span className="text-[10px] font-bold text-yellow-300 bg-black/80 px-2 py-1 rounded-full whitespace-nowrap">
+                                🔥 도전!
+                              </span>
+                              <span className="text-xl">👈</span>
                             </div>
                           </div>
                         )}
-                        
                         {/* 순위 메달 */}
                         <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm font-black shadow-lg ${
                           rank === 0 ? "bg-gradient-to-br from-yellow-400 to-yellow-600 text-black" :
