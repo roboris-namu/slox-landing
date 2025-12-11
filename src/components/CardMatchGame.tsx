@@ -472,15 +472,15 @@ export default function CardMatchGame() {
     return score + timeBonus + perfectBonus;
   }, [score, timer, mistakes, matchedPairs, totalPairs]);
 
-  // 🎖️ 등급 계산 (새 기준)
+  // 🎖️ 등급 계산 (하향 조정된 기준)
   const getGrade = useCallback(() => {
     const finalScore = getFinalScore();
     // 퍼펙트 플레이: 100+200+...+800 = 3600 + 시간보너스(~300) + 퍼펙트(500) = ~4400
-    if (finalScore >= 3500) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑" };
-    if (finalScore >= 2800) return { grade: "마스터", color: "text-purple-400", emoji: "💎" };
-    if (finalScore >= 2200) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠" };
-    if (finalScore >= 1600) return { grade: "플래티넘", color: "text-teal-400", emoji: "🏆" };
-    if (finalScore >= 1000) return { grade: "골드", color: "text-yellow-400", emoji: "🥇" };
+    if (finalScore >= 2500) return { grade: "챌린저", color: "text-cyan-300", emoji: "👑" };
+    if (finalScore >= 2000) return { grade: "마스터", color: "text-purple-400", emoji: "💎" };
+    if (finalScore >= 1600) return { grade: "다이아몬드", color: "text-blue-400", emoji: "💠" };
+    if (finalScore >= 1200) return { grade: "플래티넘", color: "text-teal-400", emoji: "🏆" };
+    if (finalScore >= 900) return { grade: "골드", color: "text-yellow-400", emoji: "🥇" };
     if (finalScore >= 600) return { grade: "실버", color: "text-gray-300", emoji: "🥈" };
     if (finalScore >= 300) return { grade: "브론즈", color: "text-orange-400", emoji: "🥉" };
     return { grade: "아이언", color: "text-stone-400", emoji: "🪨" };
@@ -1038,23 +1038,23 @@ export default function CardMatchGame() {
             <div className="flex flex-col items-center gap-2">
               <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
                 <span className="text-cyan-300 text-sm font-bold">👑 챌린저</span>
-                <span className="text-white text-xs ml-2">3500+</span>
+                <span className="text-white text-xs ml-2">2500+</span>
               </div>
               <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
                 <span className="text-purple-400 text-sm font-bold">💎 마스터</span>
-                <span className="text-white text-xs ml-2">2800+</span>
+                <span className="text-white text-xs ml-2">2000+</span>
               </div>
               <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
                 <span className="text-blue-400 text-sm font-bold">💠 다이아몬드</span>
-                <span className="text-white text-xs ml-2">2200+</span>
+                <span className="text-white text-xs ml-2">1600+</span>
               </div>
               <div className="w-56 p-2 bg-gradient-to-r from-teal-500/20 to-teal-400/20 rounded-lg text-center border border-teal-400/50">
                 <span className="text-teal-400 text-sm font-bold">🏆 플래티넘</span>
-                <span className="text-white text-xs ml-2">1600+</span>
+                <span className="text-white text-xs ml-2">1200+</span>
               </div>
               <div className="w-64 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
                 <span className="text-yellow-400 text-sm font-bold">🥇 골드</span>
-                <span className="text-white text-xs ml-2">1000+</span>
+                <span className="text-white text-xs ml-2">900+</span>
               </div>
               <div className="w-72 p-2 bg-gradient-to-r from-gray-400/20 to-gray-300/20 rounded-lg text-center border border-gray-400/50">
                 <span className="text-gray-300 text-sm font-bold">🥈 실버</span>
