@@ -130,15 +130,19 @@ export default function CardMatchGame() {
     }
   }, [state, hasSubmittedScore, matchedPairs]);
 
-  // 🏆 최고 점수 갱신
+  // 🏆 최고 점수 갱신 (getFinalScore 대신 직접 계산)
   useEffect(() => {
     if (state === "result" && matchedPairs === totalPairs) {
-      const finalScore = getFinalScore();
+      // 최종 점수 계산: 누적점수 + 시간보너스 + 퍼펙트보너스
+      const timeBonus = timer * 10;
+      const perfectBonus = mistakes === 0 ? 500 : 0;
+      const finalScore = score + timeBonus + perfectBonus;
+      
       if (bestScore === null || finalScore > bestScore) {
         setBestScore(finalScore);
       }
     }
-  }, [state, matchedPairs, totalPairs, getFinalScore, bestScore]);
+  }, [state, matchedPairs, totalPairs, score, timer, mistakes, bestScore]);
 
   // 🔊 오디오 컨텍스트
   const getAudioContext = useCallback(() => {
@@ -294,7 +298,7 @@ export default function CardMatchGame() {
       isFlipped: false,
       isMatched: false,
     }));
-  }, [settings]);
+  }, []);
 
   // 🎮 게임 시작
   const startGame = useCallback(() => {
