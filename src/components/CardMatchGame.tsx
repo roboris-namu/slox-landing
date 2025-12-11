@@ -89,7 +89,7 @@ export default function CardMatchGame() {
 
   const fetchLeaderboard = useCallback(async () => {
     try {
-      const { data, error } = await supabase.from("cardmatch_leaderboard").select("*").order("time_seconds", { ascending: true }).limit(10);
+      const { data, error } = await supabase.from("cardmatch_leaderboard").select("*").order("score", { ascending: false }).limit(10);
       if (error) throw error;
       if (data) setLeaderboard(data);
     } catch (err) { console.error("리더보드 로드 실패:", err); }
@@ -923,9 +923,9 @@ export default function CardMatchGame() {
                   <div className="text-center mb-4">
                     {(() => {
                       const currentScore = getScore();
-                      // 카드매칭은 시간 기준 오름차순 정렬이라 비교 로직이 다름
-                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => timer < e.time_seconds) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => timer < e.time_seconds) + 1;
-                      const isFirstPlace = leaderboard.length === 0 || timer < leaderboard[0].time_seconds;
+                      // 점수 기준 내림차순 정렬 - 높은 점수가 높은 순위
+                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => currentScore > (e.score || 0)) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => currentScore > (e.score || 0)) + 1;
+                      const isFirstPlace = leaderboard.length === 0 || currentScore > (leaderboard[0].score || 0);
                       return (
                         <>
                           <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
@@ -939,18 +939,18 @@ export default function CardMatchGame() {
                       );
                     })()}
                   </div>
-                  {leaderboard.length > 0 && timer >= leaderboard[0].time_seconds && (
+                  {leaderboard.length > 0 && getScore() <= (leaderboard[0].score || 0) && (
                     <div className="bg-dark-800/70 rounded-xl p-3 mb-4">
                       <div className="flex items-center justify-between">
                         <div className="text-center flex-1">
                           <p className="text-[10px] text-dark-500 uppercase">현재 1위</p>
-                          <p className="text-yellow-400 font-bold">{leaderboard[0].time_seconds}초</p>
+                          <p className="text-yellow-400 font-bold">{leaderboard[0].score || 0}점</p>
                           <p className="text-xs text-dark-400">{leaderboard[0].nickname}</p>
                         </div>
                         <div className="text-dark-600 px-2">vs</div>
                         <div className="text-center flex-1">
                           <p className="text-[10px] text-dark-500 uppercase">내 기록</p>
-                          <p className="text-purple-400 font-bold">{timer}초</p>
+                          <p className="text-purple-400 font-bold">{getScore()}점</p>
                         </div>
                       </div>
                     </div>
