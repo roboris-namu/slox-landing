@@ -117,7 +117,7 @@ export default function EventPage() {
     };
 
     fetchData();
-  }, [supabase]);
+  }, []);
 
   // 이메일 마스킹 함수
   const maskEmail = (email: string) => {
