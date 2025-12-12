@@ -1127,37 +1127,20 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     }
   };
 
-  // 공유하기 (링크로 - OG 미리보기 지원)
-  const shareResult = async () => {
-    const grade = getGrade(reactionTime).grade;
-    const shareUrl = `https://www.slox.co.kr/reaction/share?t=${reactionTime}&g=${encodeURIComponent(grade)}`;
+  // 공유하기 (텍스트 복사)
+  const [showCopied, setShowCopied] = useState(false);
+  
+  const shareResult = () => {
+    const grade = getGrade(reactionTime);
+    const shareUrl = "https://www.slox.co.kr/reaction";
     
-    // Web Share API 지원시 (모바일)
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: t.shareText,
-          text: `${t.shareTestIt}`,
-          url: shareUrl,
-        });
-        return; // 성공시 종료
-      } catch (error) {
-        // 사용자가 취소한 경우 (AbortError)는 그냥 종료
-        if (error instanceof Error && error.name === "AbortError") {
-          return;
-        }
-        // 다른 에러는 클립보드 복사로 폴백
-      }
-    }
+    const text = lang === "ko"
+      ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade}\n⏱️ ${reactionTime}ms\n\n${grade.message}\n\n🎮 나도 테스트하기 👉 ${shareUrl}`
+      : `⚡ Reaction Speed Test Result!\n\n${grade.emoji} ${grade.grade}\n⏱️ ${reactionTime}ms\n\n${grade.message}\n\n🎮 Try it yourself 👉 ${shareUrl}`;
     
-    // Web Share API 미지원시 또는 에러시 클립보드에 복사
-    try {
-      await navigator.clipboard.writeText(`${t.shareText}\n${t.shareTestIt}\n${shareUrl}`);
-      alert(t.copied);
-    } catch {
-      // 클립보드 복사 실패시 프롬프트
-      prompt("링크를 복사하세요:", shareUrl);
-    }
+    navigator.clipboard.writeText(text);
+    setShowCopied(true);
+    setTimeout(() => setShowCopied(false), 2000);
   };
 
   // 공유하기 (이미지로 - 기존 방식)
@@ -1524,7 +1507,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                   onClick={shareResult}
                   className="flex-1 px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all"
                 >
-                  {t.share}
+                  {showCopied ? t.copied : t.share}
                 </button>
                 <button
                   onClick={shareAsImage}
@@ -1719,6 +1702,17 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                     <span className="flex items-center justify-center gap-2">
                       <span className="text-xl">🏆</span>
                       {lang === "ko" ? "랭킹 등록하기!" : "Register Ranking!"}
+                    </span>
+                  </button>
+                  
+                  {/* 공유하기 버튼 */}
+                  <button
+                    onClick={shareResult}
+                    className="w-full mt-2 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all border border-dark-600"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <span>📤</span>
+                      {showCopied ? t.copied : (lang === "ko" ? "친구에게 공유하기" : "Share with friends")}
                     </span>
                   </button>
                   
