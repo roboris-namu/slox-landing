@@ -1127,8 +1127,37 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     }
   };
 
-  // 공유하기 (이미지로)
+  // 공유하기 (링크로 - OG 미리보기 지원)
   const shareResult = async () => {
+    const grade = getGrade(reactionTime).grade;
+    const shareUrl = `https://www.slox.co.kr/reaction/share?t=${reactionTime}&g=${encodeURIComponent(grade)}`;
+    
+    // Web Share API 지원시
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: t.shareText,
+          text: `${t.shareTestIt}`,
+          url: shareUrl,
+        });
+        return;
+      } catch {
+        // 공유 취소시 무시
+      }
+    }
+    
+    // Web Share API 미지원시 클립보드에 복사
+    try {
+      await navigator.clipboard.writeText(`${t.shareText}\n${t.shareTestIt}\n${shareUrl}`);
+      alert(t.copied);
+    } catch {
+      // 클립보드 복사 실패시 프롬프트
+      prompt("링크를 복사하세요:", shareUrl);
+    }
+  };
+
+  // 공유하기 (이미지로 - 기존 방식)
+  const shareAsImage = async () => {
     const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
     const blob = await generateImage();
     
@@ -1151,19 +1180,6 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     }
     
     // 이미지 공유 불가능시 다운로드
-    if (blob) {
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.download = `reaction-test-${reactionTime}ms.png`;
-      link.href = url;
-      link.click();
-      URL.revokeObjectURL(url);
-    }
-  };
-
-  // 이미지로 저장하기
-  const saveAsImage = async () => {
-    const blob = await generateImage();
     if (blob) {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -1507,7 +1523,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                   {t.share}
                 </button>
                 <button
-                  onClick={saveAsImage}
+                  onClick={shareAsImage}
                   className="flex-1 px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-medium rounded-xl transition-all"
                 >
                   {t.saveImage}
