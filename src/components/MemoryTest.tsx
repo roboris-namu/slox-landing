@@ -467,6 +467,7 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [leaderboard, setLeaderboard] = useState<MemoryLeaderboardEntry[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -485,8 +486,10 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
   const fetchLeaderboard = useCallback(async () => {
     try {
       const { data, error } = await supabase.from("memory_leaderboard").select("*").order("score", { ascending: false }).limit(10);
+      const { count } = await supabase.from("memory_leaderboard").select("*", { count: "exact", head: true });
       if (error) throw error;
       if (data) setLeaderboard(data);
+      if (count !== null) setTotalCount(count);
     } catch (err) { console.error("리더보드 로드 실패:", err); }
   }, []);
 
@@ -860,7 +863,7 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
                     </div>
                     <div className="text-right">
                       <div className="text-white font-bold">{entry.score} {t.digits}</div>
-                      <div className="text-xs text-dark-500">{index + 1}위 / {leaderboard.length}명</div>
+                      <div className="text-xs text-dark-500">{index + 1}위 / {totalCount}명</div>
                     </div>
                   </div>
                 ))}

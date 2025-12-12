@@ -507,6 +507,7 @@ export default function AimTest({ initialLang }: AimTestProps) {
   // 리더보드 상태
   const [isMobile, setIsMobile] = useState(false);
   const [leaderboard, setLeaderboard] = useState<AimLeaderboardEntry[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -521,8 +522,10 @@ export default function AimTest({ initialLang }: AimTestProps) {
   const fetchLeaderboard = useCallback(async () => {
     try {
       const { data, error } = await supabase.from("aim_leaderboard").select("*").order("score", { ascending: false }).limit(10);
+      const { count } = await supabase.from("aim_leaderboard").select("*", { count: "exact", head: true });
       if (error) throw error;
       if (data) setLeaderboard(data);
+      if (count !== null) setTotalCount(count);
     } catch (err) { console.error("리더보드 로드 실패:", err); }
   }, []);
 
@@ -1228,7 +1231,7 @@ export default function AimTest({ initialLang }: AimTestProps) {
                     </div>
                     <div className="text-right">
                       <div className="text-white font-bold">{entry.score}점</div>
-                      <div className="text-xs text-dark-500">{index + 1}위 / {leaderboard.length}명</div>
+                      <div className="text-xs text-dark-500">{index + 1}위 / {totalCount}명</div>
                     </div>
                   </div>
                 ))}

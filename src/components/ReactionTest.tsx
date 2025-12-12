@@ -701,6 +701,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   const [balloonScale, setBalloonScale] = useState(1);
   // 명예의전당 관련 상태
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [totalCount, setTotalCount] = useState(0); // 전체 참가자 수
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -899,14 +900,21 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   // 리더보드 가져오기
   const fetchLeaderboard = useCallback(async () => {
     try {
+      // Top 10 가져오기
       const { data, error } = await supabase
         .from("reaction_leaderboard")
         .select("*")
         .order("score", { ascending: true })
         .limit(10);
       
+      // 전체 참가자 수 가져오기
+      const { count } = await supabase
+        .from("reaction_leaderboard")
+        .select("*", { count: "exact", head: true });
+      
       if (error) throw error;
       if (data) setLeaderboard(data);
+      if (count !== null) setTotalCount(count);
     } catch (err) {
       console.error("리더보드 로드 실패:", err);
     }
@@ -1617,7 +1625,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                     {/* 점수 */}
                     <div className="text-right">
                       <div className="text-white font-bold">{entry.score}ms</div>
-                      <div className="text-xs text-dark-500">{index + 1}위 / {leaderboard.length}명</div>
+                      <div className="text-xs text-dark-500">{index + 1}위 / {totalCount}명</div>
                     </div>
                   </div>
                 ))}

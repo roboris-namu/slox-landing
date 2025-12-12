@@ -447,6 +447,7 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
   const [showCorrect, setShowCorrect] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [leaderboard, setLeaderboard] = useState<ColorLeaderboardEntry[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -461,8 +462,10 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
   const fetchLeaderboard = useCallback(async () => {
     try {
       const { data, error } = await supabase.from("color_leaderboard").select("*").order("score", { ascending: false }).limit(10);
+      const { count } = await supabase.from("color_leaderboard").select("*", { count: "exact", head: true });
       if (error) throw error;
       if (data) setLeaderboard(data);
+      if (count !== null) setTotalCount(count);
     } catch (err) { console.error("리더보드 로드 실패:", err); }
   }, []);
 
@@ -794,7 +797,7 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
                     </div>
                     <div className="text-right">
                       <div className="text-white font-bold">Lv.{entry.level}</div>
-                      <div className="text-xs text-dark-500">{index + 1}위 / {leaderboard.length}명</div>
+                      <div className="text-xs text-dark-500">{index + 1}위 / {totalCount}명</div>
                     </div>
                   </div>
                 ))}
