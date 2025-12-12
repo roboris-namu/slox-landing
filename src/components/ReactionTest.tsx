@@ -1152,17 +1152,26 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
       : `⚡ Reaction Speed Test!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 New #1!" : `📊 Rank #${myRank}`}\n\n🎁 EVENT! Win a $5 gift card!\n⏰ ${daysLeft} days left!\n\n🎮 Try it 👉 ${shareUrl}`;
     
     // Web Share API 지원시 (모바일)
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: lang === "ko" ? "⚡ 반응속도 테스트 결과!" : "⚡ Reaction Speed Test!",
-          text: text,
-          url: shareUrl,
-        });
-        return;
-      } catch (error) {
-        if (error instanceof Error && error.name === "AbortError") {
+    if (typeof navigator.share === "function") {
+      const shareData = {
+        text: text,
+        url: shareUrl,
+      };
+      
+      // canShare 체크 (지원하는 브라우저만)
+      const canShare = typeof navigator.canShare === "function" 
+        ? navigator.canShare(shareData) 
+        : true;
+      
+      if (canShare) {
+        try {
+          await navigator.share(shareData);
           return;
+        } catch (error) {
+          if (error instanceof Error && error.name === "AbortError") {
+            return;
+          }
+          console.log("Share error:", error);
         }
       }
     }
