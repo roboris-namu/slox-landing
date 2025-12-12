@@ -148,6 +148,7 @@ function Footer() {
                   <li><a href="/color" className="text-sm text-dark-400 hover:text-white transition-colors">🎨 색상찾기</a></li>
                   <li><a href="/card-match" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">🃏 카드매칭 ✨</a></li>
                   <li><a href="/slox-test" className="text-sm text-dark-400 hover:text-white transition-colors">🐂 황소테스트</a></li>
+                  <li><a href="/fortune" className="text-sm text-pink-400 hover:text-pink-300 transition-colors">🔮 오늘의 운세 ✨</a></li>
                 </ul>
               </div>
               
