@@ -193,7 +193,7 @@ const translations = {
 
 export default function DailyQuote({ initialLang = "ko" }: DailyQuoteProps) {
   const [lang] = useState<Language>(initialLang);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [, setSelectedCategory] = useState<string | null>(null);
   const [quote, setQuote] = useState<{ text: string; author: string; category: string } | null>(null);
   const [isRevealing, setIsRevealing] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
@@ -371,8 +371,8 @@ export default function DailyQuote({ initialLang = "ko" }: DailyQuoteProps) {
             {/* 명언 카드 */}
             <div className="p-8 md:p-12 bg-gradient-to-br from-amber-500/10 via-orange-500/10 to-red-500/10 border border-amber-500/30 rounded-3xl text-center relative overflow-hidden">
               {/* 따옴표 장식 */}
-              <div className="absolute top-4 left-6 text-6xl text-amber-500/20 font-serif">"</div>
-              <div className="absolute bottom-4 right-6 text-6xl text-amber-500/20 font-serif">"</div>
+              <div className="absolute top-4 left-6 text-6xl text-amber-500/20 font-serif">&ldquo;</div>
+              <div className="absolute bottom-4 right-6 text-6xl text-amber-500/20 font-serif">&rdquo;</div>
               
               <div className="relative z-10">
                 <p className="text-2xl md:text-3xl lg:text-4xl font-medium text-white leading-relaxed mb-8">
