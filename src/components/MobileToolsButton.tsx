@@ -48,9 +48,9 @@ const toolCategories: ToolCategory[] = [
     name: "🧮 생활 계산기",
     color: "blue",
     tools: [
-  { href: "/bmi", emoji: "⚖️", label: "BMI 계산기", isNew: true },
-  { href: "/dday", emoji: "📅", label: "D-day 계산기", isNew: true },
-  { href: "/age", emoji: "🎂", label: "나이 계산기", isNew: true },
+  { href: "/bmi", emoji: "⚖️", label: "BMI 계산기" },
+  { href: "/dday", emoji: "📅", label: "D-day 계산기" },
+  { href: "/age", emoji: "🎂", label: "나이 계산기" },
   { href: "/percent", emoji: "🔢", label: "퍼센트 계산기" },
     ],
   },
@@ -58,11 +58,11 @@ const toolCategories: ToolCategory[] = [
     name: "🛠️ 유틸리티",
     color: "cyan",
     tools: [
-      { href: "/character-count", emoji: "✍️", label: "글자수 세기", isNew: true },
-  { href: "/qr", emoji: "📱", label: "QR코드 생성기", isNew: true },
-  { href: "/password", emoji: "🔐", label: "비밀번호 생성기", isNew: true },
+      { href: "/character-count", emoji: "✍️", label: "글자수 세기" },
+      { href: "/qr", emoji: "📱", label: "QR코드 생성기" },
+      { href: "/password", emoji: "🔐", label: "비밀번호 생성기" },
       { href: "/random", emoji: "🎲", label: "랜덤 뽑기" },
-  { href: "/lotto", emoji: "🎰", label: "로또 번호 생성기", isNew: true },
+      { href: "/lotto", emoji: "🎰", label: "로또 번호 생성기" },
     ],
   },
   {
@@ -185,7 +185,7 @@ export default function MobileToolsButton() {
                   </span>
                 )}
                 {tool.isNew && (
-                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-[9px] font-bold rounded-full shadow-lg">
+                      <span className="absolute -top-1.5 -right-1.5 px-1.5 py-0.5 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-[9px] font-bold rounded-full shadow-lg animate-pulse">
                     NEW
                   </span>
                 )}
