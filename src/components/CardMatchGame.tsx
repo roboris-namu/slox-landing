@@ -521,12 +521,13 @@ export default function CardMatchGame() {
     
     // 1등 정보
     const firstPlace = leaderboard.length > 0 ? leaderboard[0] : null;
-    const isNewFirst = !firstPlace || finalScore > firstPlace.score;
-    const myRank = isNewFirst ? 1 : (leaderboard.findIndex(e => finalScore > e.score) === -1 
+    const firstPlaceScore = firstPlace?.score ?? 0;
+    const isNewFirst = !firstPlace || finalScore > firstPlaceScore;
+    const myRank = isNewFirst ? 1 : (leaderboard.findIndex(e => finalScore > (e.score ?? 0)) === -1 
       ? leaderboard.length + 1 
-      : leaderboard.findIndex(e => finalScore > e.score) + 1);
+      : leaderboard.findIndex(e => finalScore > (e.score ?? 0)) + 1);
     
-    const text = `🃏 카드 매칭 게임 결과!\n\n${gradeInfo.emoji} ${gradeInfo.name}\n📊 ${finalScore}점 ${isNewFirst ? "🔥 새로운 1등!" : `(현재 ${myRank}위)`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlace.score}점)\n\n` : ""}🎮 나도 도전하기 👉 ${shareUrl}`;
+    const text = `🃏 카드 매칭 게임 결과!\n\n${gradeInfo.emoji} ${gradeInfo.name}\n📊 ${finalScore}점 ${isNewFirst ? "🔥 새로운 1등!" : `(현재 ${myRank}위)`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlaceScore}점)\n\n` : ""}🎮 나도 도전하기 👉 ${shareUrl}`;
     
     const isKakao = isKakaoInApp();
     
