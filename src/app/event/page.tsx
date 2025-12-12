@@ -1,17 +1,8 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
-
-// Supabase 클라이언트
-const getSupabase = (): SupabaseClient | null => {
-  if (typeof window === "undefined") return null;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return null;
-  return createClient(url, key);
-};
+import { supabase } from "@/lib/supabase";
 
 interface Winner {
   id: string;
@@ -44,7 +35,6 @@ export default function EventPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
-  const supabase = useMemo(() => getSupabase(), []);
 
   // 다음 추첨일까지 실시간 카운트다운
   useEffect(() => {
@@ -81,11 +71,6 @@ export default function EventPage() {
   // 데이터 로드
   useEffect(() => {
     const fetchData = async () => {
-      if (!supabase) {
-        setIsLoading(false);
-        return;
-      }
-
       try {
         // 이벤트 설정 로드
         const { data: configData } = await supabase

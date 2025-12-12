@@ -1,16 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-// Supabase 클라이언트 초기화
-const getSupabase = () => {
-  if (typeof window === "undefined") return null;
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return null;
-  return createClient(url, key);
-};
+import { supabase } from "@/lib/supabase";
 
 // 관리자 비밀번호 (실제로는 환경변수로 관리하는 것이 좋음)
 const ADMIN_PASSWORD = "slox2024!";
@@ -67,9 +58,6 @@ export default function AdminEventPage() {
 
   // 데이터 로드
   const loadData = useCallback(async () => {
-    const supabase = getSupabase();
-    if (!supabase) return;
-
     setIsLoading(true);
 
     // 현재 1등 가져오기
@@ -127,9 +115,6 @@ export default function AdminEventPage() {
     setSendResult(null);
 
     try {
-      const supabase = getSupabase();
-      if (!supabase) throw new Error("Supabase 연결 실패");
-
       // 현재 월 계산
       const now = new Date();
       const monthYear = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
