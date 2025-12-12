@@ -1160,8 +1160,11 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
       ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 새로운 1등 달성!" : `📊 현재 ${myRank}위`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlace.score}ms)\n\n` : ""}🎁 EVENT! 1등에게 문화상품권 5천원!\n⏰ 마감까지 ${timeLeftText} 남음!\n\n🎮 나도 도전하기 👉 ${shareUrl}`
       : `⚡ Reaction Speed Test!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 New #1!" : `📊 Rank #${myRank}`}\n\n🎁 EVENT! Win a $5 gift card!\n⏰ ${timeLeftText} left!\n\n🎮 Try it 👉 ${shareUrl}`;
     
-    // Web Share API 지원시 (모바일)
-    if (typeof navigator.share === "function") {
+    // 카카오톡 인앱 브라우저면 바로 클립보드 복사 (Web Share API 미지원)
+    const isKakao = navigator.userAgent.toLowerCase().includes("kakaotalk");
+    
+    // Web Share API 지원시 (모바일, 카톡 제외)
+    if (!isKakao && typeof navigator.share === "function") {
       const shareData = {
         text: text,
       };
@@ -1179,23 +1182,41 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
           if (error instanceof Error && error.name === "AbortError") {
             return;
           }
-          console.log("Share error:", error);
         }
       }
     }
     
     // Web Share API 미지원시 클립보드 복사
-    navigator.clipboard.writeText(text);
-    setShowCopied(true);
-    setTimeout(() => setShowCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(text);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+    } catch {
+      // 클립보드도 안 되면 프롬프트
+      prompt(lang === "ko" ? "텍스트를 복사하세요:" : "Copy this text:", text);
+    }
   };
 
-  // 공유하기 (이미지로 - 기존 방식)
+  // 카카오톡 인앱 브라우저 감지
+  const isKakaoInApp = () => {
+    const ua = navigator.userAgent.toLowerCase();
+    return ua.includes("kakaotalk");
+  };
+
+  // 공유하기 (이미지로)
   const shareAsImage = async () => {
+    // 카카오톡 인앱 브라우저면 안내
+    if (isKakaoInApp()) {
+      alert(lang === "ko" 
+        ? "📱 카카오톡 앱에서는 이미지 공유가 제한됩니다.\n\n우측 상단 ⋮ → '다른 브라우저로 열기'를 눌러주세요!" 
+        : "📱 Image sharing is limited in KakaoTalk.\n\nTap ⋮ → 'Open in browser'");
+      return;
+    }
+
     const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
     const blob = await generateImage();
     
-    if (blob && navigator.share && navigator.canShare) {
+    if (blob && typeof navigator.share === "function") {
       const file = new File([blob], `reaction-${reactionTime}ms.png`, { type: "image/png" });
       const shareData = {
         files: [file],
@@ -1203,17 +1224,23 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
         text: `${t.shareTestIt} ${shareUrl}`,
       };
     
-      if (navigator.canShare(shareData)) {
-      try {
+      const canShare = typeof navigator.canShare === "function" 
+        ? navigator.canShare(shareData) 
+        : false;
+      
+      if (canShare) {
+        try {
           await navigator.share(shareData);
           return;
-      } catch {
-        // 공유 취소시 무시
-      }
+        } catch (error) {
+          if (error instanceof Error && error.name === "AbortError") {
+            return;
+          }
+        }
       }
     }
     
-    // 이미지 공유 불가능시 다운로드
+    // 이미지 공유 불가능시 다운로드 + 안내
     if (blob) {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -1221,6 +1248,13 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
       link.href = url;
       link.click();
       URL.revokeObjectURL(url);
+      
+      // 다운로드 안내
+      setTimeout(() => {
+        alert(lang === "ko" 
+          ? "📥 이미지가 다운로드되었습니다!\n\n갤러리에서 이미지를 직접 공유해주세요." 
+          : "📥 Image downloaded!\n\nShare it from your gallery.");
+      }, 500);
     }
   };
 
