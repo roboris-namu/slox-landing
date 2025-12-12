@@ -845,55 +845,33 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
   }, []);
 
   /**
-   * 등급 계산 (롤 스타일) - 모바일/데스크톱 분리 + 다국어
-   * 난이도 상향: 챌린저/마스터는 진짜 고수만 가능하도록
+   * 등급 계산 (롤 스타일) - PC/모바일 통일 기준
+   * 중간값 적용으로 단순화
    */
   const getGrade = (ms: number): { grade: string; color: string; emoji: string; message: string } => {
-    if (isMobile) {
-      // 모바일: 터치 딜레이 고려하되 어렵게 조정
-      if (ms < 140) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
-      if (ms < 170) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
-      if (ms < 210) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
-      if (ms < 260) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
-      if (ms < 320) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
-      if (ms < 400) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
-      if (ms < 520) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
-      return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
-    }
-    // PC: 마우스 클릭 기준 엄격하게
-    if (ms < 100) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
-    if (ms < 130) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
-    if (ms < 160) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
-    if (ms < 200) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
-    if (ms < 250) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
-    if (ms < 310) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
-    if (ms < 400) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
+    // 통일 기준 (PC/모바일 중간값)
+    if (ms < 120) return { grade: t.challenger, color: "text-cyan-300", emoji: "👑", message: t.msgChallenger };
+    if (ms < 150) return { grade: t.master, color: "text-purple-400", emoji: "💎", message: t.msgMaster };
+    if (ms < 190) return { grade: t.diamond, color: "text-blue-400", emoji: "💠", message: t.msgDiamond };
+    if (ms < 240) return { grade: t.platinum, color: "text-teal-400", emoji: "🏆", message: t.msgPlatinum };
+    if (ms < 300) return { grade: t.gold, color: "text-yellow-400", emoji: "🥇", message: t.msgGold };
+    if (ms < 380) return { grade: t.silver, color: "text-gray-300", emoji: "🥈", message: t.msgSilver };
+    if (ms < 480) return { grade: t.bronze, color: "text-orange-400", emoji: "🥉", message: t.msgBronze };
     return { grade: t.iron, color: "text-stone-400", emoji: "🪨", message: t.msgIron };
   };
   
   /**
-   * 상위 퍼센트 계산 (정규분포 기반 추정)
-   * 평균 반응속도: PC ~250ms, 모바일 ~350ms
+   * 상위 퍼센트 계산 - PC/모바일 통일 기준
    */
   const getPercentile = (ms: number): number => {
-    if (isMobile) {
-      // 모바일: 어렵게 조정된 기준에 맞춤
-      if (ms < 140) return 0.1;
-      if (ms < 170) return 1;
-      if (ms < 210) return 5;
-      if (ms < 260) return 15;
-      if (ms < 320) return 35;
-      if (ms < 400) return 60;
-      if (ms < 520) return 80;
-      return 95;
-    }
-    if (ms < 100) return 0.1;
-    if (ms < 130) return 1;
-    if (ms < 160) return 3;
-    if (ms < 200) return 10;
-    if (ms < 250) return 30;
-    if (ms < 310) return 55;
-    if (ms < 400) return 80;
+    // 통일 기준
+    if (ms < 120) return 0.1;
+    if (ms < 150) return 1;
+    if (ms < 190) return 5;
+    if (ms < 240) return 15;
+    if (ms < 300) return 35;
+    if (ms < 380) return 60;
+    if (ms < 480) return 80;
     return 95;
   };
 
@@ -2158,48 +2136,48 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
             </div>
           </div>
 
-          {/* 등급 안내 (롤 스타일 - 계층형) - 코드 로직과 일치 */}
+          {/* 등급 안내 (롤 스타일 - 계층형) - PC/모바일 통일 기준 */}
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-2 text-center">{t.tierTable}</h3>
             <p className="text-accent-cyan text-xs text-center mb-6">
-              {isMobile ? t.mobileStandard : t.desktopStandard}
+              📱 모바일 / 🖥️ PC 동일 기준
             </p>
             <div className="flex flex-col items-center gap-2">
               <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
                 <span className="text-cyan-300 text-sm font-bold">👑 {t.challenger}</span>
-                <span className="text-white text-xs ml-2">&lt;{isMobile ? "140" : "100"}ms</span>
+                <span className="text-white text-xs ml-2">&lt;120ms</span>
               </div>
               <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
                 <span className="text-purple-400 text-sm font-bold">💎 {t.master}</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "140~169" : "100~129"}ms</span>
+                <span className="text-white text-xs ml-2">120~149ms</span>
               </div>
               <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
                 <span className="text-blue-400 text-sm font-bold">💠 {t.diamond}</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "170~209" : "130~159"}ms</span>
+                <span className="text-white text-xs ml-2">150~189ms</span>
               </div>
               <div className="w-56 p-2 bg-gradient-to-r from-teal-500/20 to-teal-400/20 rounded-lg text-center border border-teal-400/50">
                 <span className="text-teal-400 text-sm font-bold">🏆 {t.platinum}</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "210~259" : "160~199"}ms</span>
+                <span className="text-white text-xs ml-2">190~239ms</span>
               </div>
               <div className="w-64 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
                 <span className="text-yellow-400 text-sm font-bold">🥇 {t.gold}</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "260~319" : "200~249"}ms</span>
+                <span className="text-white text-xs ml-2">240~299ms</span>
               </div>
               <div className="w-72 p-2 bg-gradient-to-r from-gray-400/20 to-gray-300/20 rounded-lg text-center border border-gray-400/50">
                 <span className="text-gray-300 text-sm font-bold">🥈 {t.silver}</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "320~399" : "250~309"}ms</span>
+                <span className="text-white text-xs ml-2">300~379ms</span>
               </div>
               <div className="w-80 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
                 <span className="text-orange-400 text-sm font-bold">🥉 {t.bronze}</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "400~519" : "310~399"}ms</span>
+                <span className="text-white text-xs ml-2">380~479ms</span>
               </div>
               <div className="w-[22rem] p-2 bg-gradient-to-r from-stone-500/20 to-stone-400/20 rounded-lg text-center border border-stone-400/50">
                 <span className="text-stone-400 text-sm font-bold">🪨 {t.iron}</span>
-                <span className="text-white text-xs ml-2">{isMobile ? "520" : "400"}ms+</span>
+                <span className="text-white text-xs ml-2">480ms+</span>
               </div>
             </div>
             <p className="text-dark-500 text-xs mt-6 text-center">
-              {isMobile ? t.mobileNote : t.desktopNote}
+              💡 평균 반응속도는 약 250~300ms (골드~실버) 입니다
             </p>
           </div>
 
