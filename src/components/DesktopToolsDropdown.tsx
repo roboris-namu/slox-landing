@@ -71,6 +71,7 @@ const toolCategories: ToolCategory[] = [
     tools: [
       { href: "/slox-test", emoji: "🐂", label: "나와 닮은 황소" },
       { href: "/fortune", emoji: "🔮", label: "오늘의 운세", isNew: true },
+      { href: "/quote", emoji: "💬", label: "오늘의 명언", isNew: true },
     ],
   },
 ];
