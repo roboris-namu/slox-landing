@@ -1127,10 +1127,10 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     }
   };
 
-  // 공유하기 (텍스트 복사)
+  // 공유하기 (Web Share API 우선, 없으면 클립보드)
   const [showCopied, setShowCopied] = useState(false);
   
-  const shareResult = () => {
+  const shareResult = async () => {
     const grade = getGrade(reactionTime);
     const shareUrl = "https://www.slox.co.kr/reaction";
     
@@ -1138,6 +1138,23 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
       ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade}\n⏱️ ${reactionTime}ms\n\n${grade.message}\n\n🎮 나도 테스트하기 👉 ${shareUrl}`
       : `⚡ Reaction Speed Test Result!\n\n${grade.emoji} ${grade.grade}\n⏱️ ${reactionTime}ms\n\n${grade.message}\n\n🎮 Try it yourself 👉 ${shareUrl}`;
     
+    // Web Share API 지원시 (모바일)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: lang === "ko" ? "⚡ 반응속도 테스트 결과!" : "⚡ Reaction Speed Test Result!",
+          text: text,
+        });
+        return;
+      } catch (error) {
+        // 사용자 취소시 무시
+        if (error instanceof Error && error.name === "AbortError") {
+          return;
+        }
+      }
+    }
+    
+    // Web Share API 미지원시 클립보드 복사
     navigator.clipboard.writeText(text);
     setShowCopied(true);
     setTimeout(() => setShowCopied(false), 2000);
