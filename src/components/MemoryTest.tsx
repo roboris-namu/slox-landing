@@ -625,28 +625,59 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
     } catch { if (shareCardRef.current) shareCardRef.current.style.display = "none"; return null; }
   };
 
-  // 공유
+  // 공유하기 상태
+  const [showCopied, setShowCopied] = useState(false);
+
+  // 카카오톡 인앱 브라우저 감지
+  const isKakaoInApp = () => navigator.userAgent.toLowerCase().includes("kakaotalk");
+
+  // 공유하기 (텍스트)
   const shareResult = async () => {
-    const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
-    const blob = await generateImage();
-    if (blob && navigator.share && navigator.canShare) {
-      const file = new File([blob], `memory-${bestLevel}.png`, { type: "image/png" });
-      if (navigator.canShare({ files: [file] })) {
-        try { await navigator.share({ files: [file], title: t.shareText, text: `${t.shareTestIt} ${shareUrl}` }); return; } catch { /* 취소 */ }
-      }
+    const gradeInfo = getGrade(bestLevel);
+    const shareUrl = "https://www.slox.co.kr/memory";
+    
+    const firstPlace = leaderboard.length > 0 ? leaderboard[0] : null;
+    const isNewFirst = !firstPlace || bestLevel > firstPlace.score;
+    const myRank = isNewFirst ? 1 : (leaderboard.findIndex(e => bestLevel > e.score) === -1 
+      ? leaderboard.length + 1 
+      : leaderboard.findIndex(e => bestLevel > e.score) + 1);
+    
+    const text = `🧠 기억력 테스트 결과!\n\n${gradeInfo.emoji} ${gradeInfo.grade}\n📊 레벨 ${bestLevel} ${isNewFirst ? "🔥 새로운 1등!" : `(현재 ${myRank}위)`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (Lv.${firstPlace.score})\n\n` : ""}🎮 나도 도전하기 👉 ${shareUrl}`;
+    
+    const isKakao = isKakaoInApp();
+    
+    if (!isKakao && typeof navigator.share === "function") {
+      try { await navigator.share({ text }); return; } 
+      catch (error) { if (error instanceof Error && error.name === "AbortError") return; }
     }
-    if (blob) {
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.download = `memory-test-${bestLevel}.png`;
-      link.href = url;
-      link.click();
-      URL.revokeObjectURL(url);
-    }
+    
+    try {
+      await navigator.clipboard.writeText(text);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+    } catch { prompt("텍스트를 복사하세요:", text); }
   };
 
-  const saveAsImage = async () => {
+  // 이미지 공유
+  const shareAsImage = async () => {
+    if (isKakaoInApp()) {
+      alert("📱 카카오톡 앱에서는 이미지 공유가 제한됩니다.\n\n우측 상단 ⋮ → '다른 브라우저로 열기'를 눌러주세요!");
+      return;
+    }
+
+    const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
     const blob = await generateImage();
+    
+    if (blob && typeof navigator.share === "function") {
+      const file = new File([blob], `memory-${bestLevel}.png`, { type: "image/png" });
+      const shareData = { files: [file], text: `🧠 기억력 테스트! ${shareUrl}` };
+      const canShare = typeof navigator.canShare === "function" ? navigator.canShare(shareData) : false;
+      if (canShare) {
+        try { await navigator.share(shareData); return; } 
+        catch (e) { if (e instanceof Error && e.name === "AbortError") return; }
+      }
+    }
+    
     if (blob) {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -654,6 +685,7 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
       link.href = url;
       link.click();
       URL.revokeObjectURL(url);
+      setTimeout(() => alert("📥 이미지가 다운로드되었습니다!\n갤러리에서 이미지를 직접 공유해주세요."), 500);
     }
   };
 
@@ -814,8 +846,8 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
                   </div>
 
                   <div className="flex flex-col sm:flex-row gap-3 mt-6">
-                    <button onClick={shareResult} className="px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all">{t.share}</button>
-                    <button onClick={saveAsImage} className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-medium rounded-xl transition-all">🖼️ 이미지</button>
+                    <button onClick={shareResult} className="px-6 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl transition-all">{showCopied ? "✅ 복사됨!" : t.share}</button>
+                    <button onClick={shareAsImage} className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-medium rounded-xl transition-all">🖼️ 이미지 공유</button>
                     <button onClick={resetGame} className="px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all">{t.tryAgain}</button>
                   </div>
                   {!hasSubmittedScore && level > 1 && (
@@ -939,6 +971,12 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
                       랭킹 등록하기!
                     </span>
                   </button>
+                  <button onClick={shareResult} className="w-full mt-2 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all border border-dark-600">
+                    <span className="flex items-center justify-center gap-2">
+                      <span>📤</span>
+                      {showCopied ? "✅ 복사됨!" : "친구에게 공유하기"}
+                    </span>
+                  </button>
                   <button onClick={() => setShowRankingPrompt(false)} className="w-full mt-3 py-2 text-dark-500 hover:text-dark-300 text-sm transition-colors">나중에 할게요</button>
                 </div>
               </div>
@@ -1044,4 +1082,5 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
     </div>
   );
 }
+
 
