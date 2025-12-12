@@ -515,7 +515,7 @@ export default function CardMatchGame() {
 
   // 공유하기 (텍스트)
   const shareResult = async () => {
-    const gradeInfo = getGrade(getFinalScore());
+    const gradeInfo = getGrade();
     const shareUrl = "https://www.slox.co.kr/card-match";
     const finalScore = getFinalScore();
     
