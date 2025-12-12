@@ -1144,6 +1144,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
         await navigator.share({
           title: lang === "ko" ? "⚡ 반응속도 테스트 결과!" : "⚡ Reaction Speed Test Result!",
           text: text,
+          url: shareUrl,
         });
         return;
       } catch (error) {
@@ -1151,6 +1152,8 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
         if (error instanceof Error && error.name === "AbortError") {
           return;
         }
+        // 다른 에러는 콘솔에 로그 (디버깅용)
+        console.log("Share failed:", error);
       }
     }
     
