@@ -1127,33 +1127,43 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     }
   };
 
-  // 공유하기 (Web Share API 우선, 없으면 클립보드)
+  // 공유하기 (텍스트 - 풍부한 정보 포함)
   const [showCopied, setShowCopied] = useState(false);
   
   const shareResult = async () => {
     const grade = getGrade(reactionTime);
     const shareUrl = "https://www.slox.co.kr/reaction";
     
+    // 1등 정보
+    const firstPlace = leaderboard.length > 0 ? leaderboard[0] : null;
+    const isNewFirst = !firstPlace || reactionTime < firstPlace.score;
+    const myRank = isNewFirst ? 1 : (leaderboard.findIndex(e => reactionTime < e.score) === -1 
+      ? leaderboard.length + 1 
+      : leaderboard.findIndex(e => reactionTime < e.score) + 1);
+    
+    // 이벤트 마감일 계산
+    const eventEnd = new Date("2025-01-31T23:59:59");
+    const now = new Date();
+    const daysLeft = Math.ceil((eventEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    
+    // 공유 텍스트 (풍부한 정보)
     const text = lang === "ko"
-      ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade}\n⏱️ ${reactionTime}ms\n\n${grade.message}\n\n🎮 나도 테스트하기 👉 ${shareUrl}`
-      : `⚡ Reaction Speed Test Result!\n\n${grade.emoji} ${grade.grade}\n⏱️ ${reactionTime}ms\n\n${grade.message}\n\n🎮 Try it yourself 👉 ${shareUrl}`;
+      ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 새로운 1등 달성!" : `📊 현재 ${myRank}위`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlace.score}ms)` : ""}\n\n🎁 EVENT! 1등에게 문화상품권 5천원!\n⏰ 마감까지 ${daysLeft}일 남음!\n\n🎮 나도 도전하기 👉 ${shareUrl}`
+      : `⚡ Reaction Speed Test!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 New #1!" : `📊 Rank #${myRank}`}\n\n🎁 EVENT! Win a $5 gift card!\n⏰ ${daysLeft} days left!\n\n🎮 Try it 👉 ${shareUrl}`;
     
     // Web Share API 지원시 (모바일)
     if (navigator.share) {
       try {
         await navigator.share({
-          title: lang === "ko" ? "⚡ 반응속도 테스트 결과!" : "⚡ Reaction Speed Test Result!",
+          title: lang === "ko" ? "⚡ 반응속도 테스트 결과!" : "⚡ Reaction Speed Test!",
           text: text,
           url: shareUrl,
         });
         return;
       } catch (error) {
-        // 사용자 취소시 무시
         if (error instanceof Error && error.name === "AbortError") {
           return;
         }
-        // 다른 에러는 콘솔에 로그 (디버깅용)
-        console.log("Share failed:", error);
       }
     }
     
