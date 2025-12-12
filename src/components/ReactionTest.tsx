@@ -1132,7 +1132,7 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
     const grade = getGrade(reactionTime).grade;
     const shareUrl = `https://www.slox.co.kr/reaction/share?t=${reactionTime}&g=${encodeURIComponent(grade)}`;
     
-    // Web Share API 지원시
+    // Web Share API 지원시 (모바일)
     if (navigator.share) {
       try {
         await navigator.share({
@@ -1140,13 +1140,17 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
           text: `${t.shareTestIt}`,
           url: shareUrl,
         });
-        return;
-      } catch {
-        // 공유 취소시 무시
+        return; // 성공시 종료
+      } catch (error) {
+        // 사용자가 취소한 경우 (AbortError)는 그냥 종료
+        if (error instanceof Error && error.name === "AbortError") {
+          return;
+        }
+        // 다른 에러는 클립보드 복사로 폴백
       }
     }
     
-    // Web Share API 미지원시 클립보드에 복사
+    // Web Share API 미지원시 또는 에러시 클립보드에 복사
     try {
       await navigator.clipboard.writeText(`${t.shareText}\n${t.shareTestIt}\n${shareUrl}`);
       alert(t.copied);
