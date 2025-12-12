@@ -1141,8 +1141,8 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
       ? leaderboard.length + 1 
       : leaderboard.findIndex(e => reactionTime < e.score) + 1);
     
-    // 이벤트 마감일 계산 (2026년 1월 31일)
-    const eventEnd = new Date("2026-01-31T23:59:59");
+    // 이벤트 마감일 계산 (2025년 12월 31일)
+    const eventEnd = new Date("2025-12-31T23:59:59");
     const now = new Date();
     const msLeft = eventEnd.getTime() - now.getTime();
     const daysLeft = Math.floor(msLeft / (1000 * 60 * 60 * 24));
