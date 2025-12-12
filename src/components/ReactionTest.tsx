@@ -1141,21 +1141,29 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
       ? leaderboard.length + 1 
       : leaderboard.findIndex(e => reactionTime < e.score) + 1);
     
-    // 이벤트 마감일 계산
-    const eventEnd = new Date("2025-01-31T23:59:59");
+    // 이벤트 마감일 계산 (2026년 1월 31일)
+    const eventEnd = new Date("2026-01-31T23:59:59");
     const now = new Date();
-    const daysLeft = Math.ceil((eventEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    const msLeft = eventEnd.getTime() - now.getTime();
+    const daysLeft = Math.floor(msLeft / (1000 * 60 * 60 * 24));
+    const hoursLeft = Math.floor((msLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    
+    // 남은 시간 표시 (7일 이하면 시간도 표시)
+    const timeLeftText = daysLeft <= 0 
+      ? `${hoursLeft}시간` 
+      : daysLeft <= 7 
+        ? `${daysLeft}일 ${hoursLeft}시간` 
+        : `${daysLeft}일`;
     
     // 공유 텍스트 (풍부한 정보)
     const text = lang === "ko"
-      ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 새로운 1등 달성!" : `📊 현재 ${myRank}위`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlace.score}ms)` : ""}\n\n🎁 EVENT! 1등에게 문화상품권 5천원!\n⏰ 마감까지 ${daysLeft}일 남음!\n\n🎮 나도 도전하기 👉 ${shareUrl}`
-      : `⚡ Reaction Speed Test!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 New #1!" : `📊 Rank #${myRank}`}\n\n🎁 EVENT! Win a $5 gift card!\n⏰ ${daysLeft} days left!\n\n🎮 Try it 👉 ${shareUrl}`;
+      ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 새로운 1등 달성!" : `📊 현재 ${myRank}위`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlace.score}ms)\n\n` : ""}🎁 EVENT! 1등에게 문화상품권 5천원!\n⏰ 마감까지 ${timeLeftText} 남음!\n\n🎮 나도 도전하기 👉 ${shareUrl}`
+      : `⚡ Reaction Speed Test!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 New #1!" : `📊 Rank #${myRank}`}\n\n🎁 EVENT! Win a $5 gift card!\n⏰ ${timeLeftText} left!\n\n🎮 Try it 👉 ${shareUrl}`;
     
     // Web Share API 지원시 (모바일)
     if (typeof navigator.share === "function") {
       const shareData = {
         text: text,
-        url: shareUrl,
       };
       
       // canShare 체크 (지원하는 브라우저만)
