@@ -527,7 +527,7 @@ export default function CardMatchGame() {
       ? leaderboard.length + 1 
       : leaderboard.findIndex(e => finalScore > (e.score ?? 0)) + 1);
     
-    const text = `🃏 카드 매칭 게임 결과!\n\n${gradeInfo.emoji} ${gradeInfo.name}\n📊 ${finalScore}점 ${isNewFirst ? "🔥 새로운 1등!" : `(현재 ${myRank}위)`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlaceScore}점)\n\n` : ""}🎮 나도 도전하기 👉 ${shareUrl}`;
+    const text = `🃏 카드 매칭 게임 결과!\n\n${gradeInfo.emoji} ${gradeInfo.grade}\n📊 ${finalScore}점 ${isNewFirst ? "🔥 새로운 1등!" : `(현재 ${myRank}위)`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlaceScore}점)\n\n` : ""}🎮 나도 도전하기 👉 ${shareUrl}`;
     
     const isKakao = isKakaoInApp();
     
