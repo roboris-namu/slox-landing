@@ -43,6 +43,14 @@ const translations = {
     
     techStack: "🛠️ 기술 스택",
     
+    relatedTitle: "📂 연구 자료",
+    experimentLink: "🧪 A/B 비교 실험",
+    experimentDesc: "어떤 추천이 더 신뢰가 가나요? 투표하기",
+    roadmapLink: "📚 학습 로드맵",
+    roadmapDesc: "읽고 있는 책과 학습 진행 상황",
+    papersLink: "📄 논문 리뷰 노트",
+    papersDesc: "핵심 논문 정리 및 분석",
+    
     contactTitle: "📬 연구자 정보",
     university: "대학교",
     department: "학과",
@@ -85,6 +93,14 @@ const translations = {
     contribution3: "Better Recommendation Acceptance",
     
     techStack: "🛠️ Tech Stack",
+    
+    relatedTitle: "📂 Research Materials",
+    experimentLink: "🧪 A/B Comparison Experiment",
+    experimentDesc: "Which recommendation do you trust more? Vote now",
+    roadmapLink: "📚 Learning Roadmap",
+    roadmapDesc: "Books I'm reading and learning progress",
+    papersLink: "📄 Paper Review Notes",
+    papersDesc: "Key paper summaries and analysis",
     
     contactTitle: "📬 Researcher Info",
     university: "University",
@@ -387,6 +403,55 @@ export default function ThesisDemo() {
                 {tech}
               </span>
             ))}
+          </div>
+        </div>
+
+        {/* 관련 페이지 링크 */}
+        <div className="mb-16">
+          <h2 className="text-2xl font-bold text-center mb-8">{t.relatedTitle}</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <Link
+              href="/thesis/experiment"
+              className="group p-6 bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-2xl hover:border-purple-400/50 transition-all hover:scale-[1.02]"
+            >
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="text-4xl">🧪</div>
+                <div>
+                  <h3 className="text-lg font-bold text-purple-400 group-hover:text-purple-300 transition-colors">
+                    {t.experimentLink}
+                  </h3>
+                  <p className="text-slate-400 text-sm mt-1">{t.experimentDesc}</p>
+                </div>
+              </div>
+            </Link>
+            <Link
+              href="/thesis/roadmap"
+              className="group p-6 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/30 rounded-2xl hover:border-emerald-400/50 transition-all hover:scale-[1.02]"
+            >
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="text-4xl">📚</div>
+                <div>
+                  <h3 className="text-lg font-bold text-emerald-400 group-hover:text-emerald-300 transition-colors">
+                    {t.roadmapLink}
+                  </h3>
+                  <p className="text-slate-400 text-sm mt-1">{t.roadmapDesc}</p>
+                </div>
+              </div>
+            </Link>
+            <Link
+              href="/thesis/papers"
+              className="group p-6 bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-2xl hover:border-blue-400/50 transition-all hover:scale-[1.02]"
+            >
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="text-4xl">📄</div>
+                <div>
+                  <h3 className="text-lg font-bold text-blue-400 group-hover:text-blue-300 transition-colors">
+                    {t.papersLink}
+                  </h3>
+                  <p className="text-slate-400 text-sm mt-1">{t.papersDesc}</p>
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
 
