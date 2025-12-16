@@ -320,19 +320,35 @@ export default function HallOfFameCarousel() {
                       </div>
                     ))
                   ) : (
-                    // 빈 슬롯 - 도전 유도
+                    // 빈 슬롯 - 실제 랭킹과 동일한 크기
                     Array.from({ length: 3 }).map((_, i) => (
                       <div 
                         key={`empty-${i}`} 
-                        className="flex items-center justify-center p-4 rounded-2xl bg-white/5 border-2 border-dashed border-white/10 group-hover:border-white/20 transition-colors"
+                        className={`flex items-center gap-3 p-3 rounded-2xl border border-dashed transition-colors ${
+                          i === 0 ? "bg-yellow-500/10 border-yellow-500/30" :
+                          i === 1 ? "bg-gray-400/10 border-gray-400/20" :
+                          "bg-orange-500/10 border-orange-500/20"
+                        }`}
                       >
-                        <div className="text-center">
-                          <span className="text-2xl mb-1 block">
-                            {i === 0 ? "👑" : i === 1 ? "🥈" : "🥉"}
-                          </span>
-                          <span className="text-dark-400 text-sm font-medium">
-                            {i === 0 ? "1등을 노려보세요!" : "도전자 모집 중..."}
-                          </span>
+                        {/* 순위 메달 */}
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-lg opacity-50 ${
+                          i === 0 ? "bg-gradient-to-br from-yellow-400 to-yellow-600" :
+                          i === 1 ? "bg-gradient-to-br from-gray-300 to-gray-400" :
+                          "bg-gradient-to-br from-orange-500 to-orange-700"
+                        }`}>
+                          {i === 0 ? "👑" : i === 1 ? "🥈" : "🥉"}
+                        </div>
+                        {/* 텍스트 */}
+                        <div className="flex-1">
+                          <p className="text-dark-400 text-sm font-medium truncate">
+                            {i === 0 ? "1등에 도전하세요!" : "도전자 모집 중..."}
+                          </p>
+                          <p className="text-dark-500 text-xs">-</p>
+                        </div>
+                        {/* 빈 점수 */}
+                        <div className="text-right">
+                          <p className="font-bold text-dark-500">-</p>
+                          <p className="text-dark-600 text-xs">{lb.unit}</p>
                         </div>
                       </div>
                     ))
