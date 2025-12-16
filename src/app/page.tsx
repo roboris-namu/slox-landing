@@ -10,6 +10,7 @@ import Contact from "@/components/Contact";
 import MobileToolsButton from "@/components/MobileToolsButton";
 import DesktopToolsDropdown from "@/components/DesktopToolsDropdown";
 import InstallPWA from "@/components/InstallPWA";
+import InstallButton from "@/components/InstallButton";
 
 /**
  * SLOX 메인 랜딩페이지
@@ -118,6 +119,8 @@ function Navigation() {
               </a>
               {/* 언어 선택 */}
               <LanguageSelector />
+              {/* 앱 설치 버튼 */}
+              <InstallButton />
               <a href="#contact" className="ml-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 via-accent-500 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:shadow-glow-sm transition-all duration-300 hover:-translate-y-0.5">
                 문의하기
               </a>
@@ -125,8 +128,8 @@ function Navigation() {
             
             {/* 모바일 CTA */}
             <div className="md:hidden flex items-center gap-2">
-              {/* 언어 선택 */}
-              <LanguageSelector mobile />
+              {/* 앱 설치 버튼 */}
+              <InstallButton />
               {/* 모바일 EVENT 버튼 */}
               <a href="/event" className="relative px-3 py-2 text-sm font-bold text-yellow-400 rounded-xl bg-yellow-500/10 flex items-center gap-1">
                 <span>🎁</span>
@@ -134,9 +137,6 @@ function Navigation() {
                 {/* 깜빡이는 점 */}
                 <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full animate-ping" />
                 <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full" />
-              </a>
-              <a href="#contact" className="px-3 py-2 bg-gradient-to-r from-accent-500 to-cyan-500 text-white text-sm font-semibold rounded-xl">
-                문의
               </a>
             </div>
           </div>
