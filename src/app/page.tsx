@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import FreeTools from "@/components/FreeTools";
 import HallOfFameCarousel from "@/components/HallOfFameCarousel";
+import MainBanner from "@/components/MainBanner";
 import Services from "@/components/Services";
 import Pricing from "@/components/Pricing";
 import Portfolio from "@/components/Portfolio";
@@ -11,14 +12,16 @@ import DesktopToolsDropdown from "@/components/DesktopToolsDropdown";
 /**
  * SLOX 메인 랜딩페이지
  * - 프리미엄 다크 테마 적용
+ * - 순서: 배너 → 명예의전당 → 무료도구 → 서비스소개
  */
 export default function Home() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
-      <Hero />
+      <MainBanner />
       <HallOfFameCarousel />
       <FreeTools />
+      <Hero />
       <Services />
       <Pricing />
       <Portfolio />
