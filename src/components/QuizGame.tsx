@@ -386,13 +386,13 @@ export default function QuizGame() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {currentQuestion.options.map((option, index) => {
-                    let buttonClass = "p-4 rounded-xl border-2 font-medium transition-all text-left outline-none focus:outline-none ";
+                    let buttonClass = "p-4 rounded-xl border-2 font-medium transition-all text-left outline-none ";
                     if (showResult) {
                       if (index === currentQuestion.answer) buttonClass += "bg-green-500/20 border-green-500 text-green-400";
                       else if (index === selectedAnswer && !isCorrect) buttonClass += "bg-red-500/20 border-red-500 text-red-400";
                       else buttonClass += "bg-dark-800/50 border-dark-700/50 text-dark-500";
                     } else {
-                      buttonClass += "bg-dark-800/50 border-dark-700/50 hover:border-indigo-500 hover:bg-indigo-500/10 active:border-indigo-500 active:bg-indigo-500/20 cursor-pointer text-white";
+                      buttonClass += "bg-dark-800/50 border-transparent hover:border-indigo-500 hover:bg-indigo-500/10 focus:border-transparent focus:bg-dark-800/50 active:border-indigo-500 active:bg-indigo-500/20 cursor-pointer text-white";
                     }
                     return (
                       <button key={index} onClick={() => selectAnswer(index)} disabled={showResult} className={buttonClass}>
