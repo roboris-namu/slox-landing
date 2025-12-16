@@ -200,11 +200,13 @@ export default function Sudoku() {
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting || hasSubmitted) return;
     setIsSubmitting(true);
+    const gradeInfo = getGrade();
     try {
       const { error } = await supabase.from("sudoku_leaderboard").insert({
         nickname: nickname.trim(),
         time_seconds: time,
         mistakes,
+        grade: gradeInfo.grade,
       });
       if (!error) { setHasSubmitted(true); setShowNicknameModal(false); setShowRankingPrompt(false); fetchLeaderboard(); }
     } catch (error) { console.error("Failed to submit score:", error); }
