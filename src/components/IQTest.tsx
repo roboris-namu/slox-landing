@@ -389,13 +389,13 @@ export default function IQTest() {
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   {currentQuestion.options.map((option, index) => {
-                    let buttonClass = "p-5 rounded-xl border-2 font-medium transition-all text-center text-xl ";
+                    let buttonClass = "p-5 rounded-xl border-2 font-medium transition-all text-center text-xl outline-none focus:outline-none ";
                     if (showResult) {
                       if (index === currentQuestion.answer) buttonClass += "bg-green-500/20 border-green-500 text-green-400";
                       else if (index === selectedAnswer && !isCorrect) buttonClass += "bg-red-500/20 border-red-500 text-red-400";
-                      else buttonClass += "bg-dark-800/50 border-dark-700 text-dark-500";
+                      else buttonClass += "bg-dark-800/50 border-dark-700/50 text-dark-500";
                     } else {
-                      buttonClass += "bg-dark-800/50 border-dark-700 hover:border-purple-500 hover:bg-purple-500/10 cursor-pointer text-white";
+                      buttonClass += "bg-dark-800/50 border-dark-700/50 hover:border-purple-500 hover:bg-purple-500/10 active:border-purple-500 active:bg-purple-500/20 cursor-pointer text-white";
                     }
                     return (
                       <button key={index} onClick={() => selectAnswer(index)} disabled={showResult} className={buttonClass}>{option}</button>
