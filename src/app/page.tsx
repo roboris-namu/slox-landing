@@ -128,6 +128,8 @@ function Navigation() {
             
             {/* 모바일 CTA */}
             <div className="md:hidden flex items-center gap-2">
+              {/* 언어 선택 (모바일) */}
+              <LanguageSelector mobile />
               {/* 앱 설치 버튼 */}
               <InstallButton />
               {/* 모바일 EVENT 버튼 */}
