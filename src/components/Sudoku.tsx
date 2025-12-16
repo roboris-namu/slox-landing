@@ -2,13 +2,13 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
 type Difficulty = "easy" | "medium" | "hard";
 type Board = (number | null)[][];
 type GameState = "ready" | "playing" | "complete";
 
-// 스도쿠 생성 함수들
 const generateSolvedBoard = (): number[][] => {
   const board: number[][] = Array(9).fill(null).map(() => Array(9).fill(0));
   
@@ -98,8 +98,10 @@ export default function Sudoku() {
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const shareCardRef = useRef<HTMLDivElement>(null);
 
   const fetchLeaderboard = useCallback(async () => {
     try {
@@ -219,6 +221,80 @@ export default function Sudoku() {
     finally { setIsSubmitting(false); }
   };
 
+  // 카카오 인앱 브라우저 감지
+  const isKakaoInApp = () => {
+    if (typeof window === "undefined") return false;
+    return navigator.userAgent.toLowerCase().includes("kakaotalk");
+  };
+
+  // 이미지 생성
+  const generateImage = async (): Promise<Blob | null> => {
+    if (!shareCardRef.current) return null;
+    shareCardRef.current.style.display = "block";
+    try {
+      const canvas = await html2canvas(shareCardRef.current, { backgroundColor: "#0f0d1a", scale: 2, useCORS: true });
+      return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), "image/png"));
+    } finally { shareCardRef.current.style.display = "none"; }
+  };
+
+  // 텍스트 공유
+  const shareResult = async () => {
+    const gradeInfo = getGrade();
+    const shareUrl = "https://www.slox.co.kr/sudoku";
+    const firstPlace = leaderboard[0];
+    const diffInfo = difficultyLabels[difficulty];
+    
+    const text = `🔢 스도쿠 완료!\n\n` +
+      `${gradeInfo.emoji} ${gradeInfo.grade}\n` +
+      `⏱️ 시간: ${formatTime(time)}\n` +
+      `❌ 실수: ${mistakes}회\n` +
+      `📊 난이도: ${diffInfo.emoji} ${diffInfo.label}\n\n` +
+      (firstPlace ? `🏆 현재 1위: ${firstPlace.nickname} (${formatTime(firstPlace.time_seconds)})\n\n` : "") +
+      `나도 도전하기 👇\n${shareUrl}`;
+
+    if (isKakaoInApp()) {
+      await navigator.clipboard.writeText(text);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+      return;
+    }
+
+    if (typeof navigator.share === "function") {
+      try { await navigator.share({ text }); return; } 
+      catch (e) { if (e instanceof Error && e.name === "AbortError") return; }
+    }
+    
+    await navigator.clipboard.writeText(text);
+    setShowCopied(true);
+    setTimeout(() => setShowCopied(false), 2000);
+  };
+
+  // 이미지 공유
+  const shareAsImage = async () => {
+    if (isKakaoInApp()) {
+      alert("📱 카카오톡 앱에서는 이미지 공유가 제한됩니다.\n\n우측 상단 ⋮ → '다른 브라우저로 열기'를 눌러주세요!");
+      return;
+    }
+    const blob = await generateImage();
+    if (blob && typeof navigator.share === "function") {
+      const file = new File([blob], `sudoku-${formatTime(time)}.png`, { type: "image/png" });
+      const shareData = { files: [file], text: `🔢 스도쿠! https://www.slox.co.kr/sudoku` };
+      if (navigator.canShare?.(shareData)) {
+        try { await navigator.share(shareData); return; } 
+        catch (e) { if (e instanceof Error && e.name === "AbortError") return; }
+      }
+    }
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `sudoku-${formatTime(time)}.png`;
+      link.href = url;
+      link.click();
+      URL.revokeObjectURL(url);
+      setTimeout(() => alert("📥 이미지가 다운로드되었습니다!"), 500);
+    }
+  };
+
   const getCellStyle = (row: number, col: number) => {
     const isInitial = initialBoard[row]?.[col] !== null;
     const isSelected = selectedCell?.[0] === row && selectedCell?.[1] === col;
@@ -263,7 +339,6 @@ export default function Sudoku() {
         </div>
       </nav>
 
-      {/* 메인 콘텐츠 */}
       <main className="pt-24 pb-16 px-4">
         <div className="max-w-4xl mx-auto">
           {/* 헤더 */}
@@ -421,14 +496,58 @@ export default function Sudoku() {
                         ✅ 랭킹에 등록되었습니다!
                       </div>
                     )}
+
+                    {/* 버튼들 */}
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
+                      <button onClick={shareResult} className="px-4 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl">
+                        {showCopied ? "✅ 복사됨!" : "📤 공유하기"}
+                      </button>
+                      <button onClick={shareAsImage} className="px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-medium rounded-xl">
+                        🖼️ 이미지 공유
+                      </button>
+                      <button onClick={() => setGameState("ready")} className="px-4 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl">
+                        🔄 다시 하기
+                      </button>
+                    </div>
                     
-                    <button onClick={() => setGameState("ready")} className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white font-bold rounded-xl transition-all transform hover:scale-105">
-                      🔄 다시 하기
-                    </button>
+                    {!hasSubmitted && (
+                      <button onClick={() => setShowNicknameModal(true)} className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl">
+                        🏆 랭킹 등록!
+                      </button>
+                    )}
                   </div>
                 )}
               </div>
             )}
+          </div>
+
+          {/* 공유 카드 */}
+          <div ref={shareCardRef} style={{ display: "none", position: "absolute", left: "-9999px", width: "360px", padding: "20px", backgroundColor: "#0f0d1a" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}>
+              <span style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>SLOX</span>
+              <span style={{ color: "#6366f1", fontSize: "12px" }}>🔢 스도쿠</span>
+            </div>
+            <div style={{ textAlign: "center", padding: "20px", backgroundColor: "#1a1625", borderRadius: "12px", marginBottom: "10px" }}>
+              <div style={{ fontSize: "44px" }}>{gradeInfo.emoji}</div>
+              <div style={{ fontSize: "26px", fontWeight: "bold", marginTop: "8px", color: "#6366f1" }}>{gradeInfo.grade}</div>
+              <div style={{ fontSize: "44px", fontWeight: "bold", color: "#22d3ee", marginTop: "8px" }}>{formatTime(time)}</div>
+              <div style={{ color: "#9ca3af", fontSize: "11px", marginTop: "6px" }}>실수 {mistakes}회 • {diffInfo.emoji} {diffInfo.label}</div>
+            </div>
+            <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+              <div style={{ flex: 1, backgroundColor: "#1e1b4b", borderRadius: "10px", padding: "10px", textAlign: "center" }}>
+                <div style={{ color: "#6366f1", fontSize: "10px" }}>📊 난이도</div>
+                <div style={{ color: "#a5b4fc", fontSize: "18px", fontWeight: "bold" }}>{diffInfo.label}</div>
+              </div>
+              <div style={{ backgroundColor: "#ffffff", borderRadius: "10px", padding: "8px", width: "100px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${encodeURIComponent("https://www.slox.co.kr/sudoku")}`} alt="QR" width={70} height={70} crossOrigin="anonymous" />
+                <div style={{ fontSize: "8px", color: "#6366f1", marginTop: "4px" }}>📱 나도 도전!</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderTop: "1px solid #1e1b4b", fontSize: "10px", color: "#6b7280" }}>
+              <span>{new Date().toLocaleDateString("ko-KR")}</span>
+              <span style={{ color: "#6366f1" }}>slox.co.kr/sudoku</span>
+            </div>
           </div>
 
           {/* 명예의전당 */}
@@ -482,6 +601,12 @@ export default function Sudoku() {
                   </div>
                   <button onClick={() => { setShowRankingPrompt(false); setShowNicknameModal(true); }} className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-black text-lg rounded-xl transition-all shadow-lg shadow-yellow-500/30">
                     <span className="flex items-center justify-center gap-2"><span className="text-xl">🏆</span>랭킹 등록하기!</span>
+                  </button>
+                  <button onClick={shareResult} className="w-full mt-2 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all border border-dark-600">
+                    <span className="flex items-center justify-center gap-2">
+                      <span>📤</span>
+                      {showCopied ? "✅ 복사됨!" : "친구에게 공유하기"}
+                    </span>
                   </button>
                   <button onClick={() => setShowRankingPrompt(false)} className="w-full mt-3 py-2 text-dark-500 hover:text-dark-300 text-sm transition-colors">나중에 할게요</button>
                 </div>

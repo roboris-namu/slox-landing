@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
 interface Question {
@@ -12,7 +13,6 @@ interface Question {
   category: string;
 }
 
-// 상식 퀴즈 문제들 (20개)
 const quizQuestions: Question[] = [
   { id: 1, question: "대한민국의 수도는?", options: ["부산", "서울", "인천", "대전"], answer: 1, category: "지리" },
   { id: 2, question: "태양계에서 가장 큰 행성은?", options: ["지구", "화성", "목성", "토성"], answer: 2, category: "과학" },
@@ -70,9 +70,11 @@ export default function QuizGame() {
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const totalTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const shareCardRef = useRef<HTMLDivElement>(null);
 
   const fetchLeaderboard = useCallback(async () => {
     try {
@@ -155,7 +157,6 @@ export default function QuizGame() {
   };
 
   const getGrade = () => {
-    // 정답 개수 기반 등급 (10문제 중)
     if (correctCount >= 10) return { grade: "천재", emoji: "🧠", color: "text-purple-400" };
     if (correctCount >= 8) return { grade: "박학다식", emoji: "📚", color: "text-blue-400" };
     if (correctCount >= 6) return { grade: "상식왕", emoji: "👑", color: "text-yellow-400" };
@@ -179,6 +180,82 @@ export default function QuizGame() {
       if (!error) { setHasSubmitted(true); setShowNicknameModal(false); setShowRankingPrompt(false); fetchLeaderboard(); }
     } catch (error) { console.error("Failed to submit score:", error); }
     finally { setIsSubmitting(false); }
+  };
+
+  // 카카오 인앱 브라우저 감지
+  const isKakaoInApp = () => {
+    if (typeof window === "undefined") return false;
+    const ua = navigator.userAgent.toLowerCase();
+    return ua.includes("kakaotalk");
+  };
+
+  // 이미지 생성
+  const generateImage = async (): Promise<Blob | null> => {
+    if (!shareCardRef.current) return null;
+    shareCardRef.current.style.display = "block";
+    try {
+      const canvas = await html2canvas(shareCardRef.current, { backgroundColor: "#0f0d1a", scale: 2, useCORS: true });
+      return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), "image/png"));
+    } finally { shareCardRef.current.style.display = "none"; }
+  };
+
+  // 텍스트 공유
+  const shareResult = async () => {
+    const gradeInfo = getGrade();
+    const shareUrl = "https://www.slox.co.kr/quiz";
+    const firstPlace = leaderboard[0];
+    
+    const text = `📚 상식 퀴즈 결과!\n\n` +
+      `${gradeInfo.emoji} ${gradeInfo.grade}\n` +
+      `✅ 정답: ${correctCount}/${QUESTIONS_PER_GAME}\n` +
+      `🎯 점수: ${score}점\n` +
+      `⏱️ 소요시간: ${totalTime}초\n\n` +
+      (firstPlace ? `🏆 현재 1위: ${firstPlace.nickname} (${firstPlace.score}점)\n\n` : "") +
+      `나도 도전하기 👇\n${shareUrl}`;
+
+    if (isKakaoInApp()) {
+      await navigator.clipboard.writeText(text);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+      return;
+    }
+
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ text });
+        return;
+      } catch (e) { if (e instanceof Error && e.name === "AbortError") return; }
+    }
+    
+    await navigator.clipboard.writeText(text);
+    setShowCopied(true);
+    setTimeout(() => setShowCopied(false), 2000);
+  };
+
+  // 이미지 공유
+  const shareAsImage = async () => {
+    if (isKakaoInApp()) {
+      alert("📱 카카오톡 앱에서는 이미지 공유가 제한됩니다.\n\n우측 상단 ⋮ → '다른 브라우저로 열기'를 눌러주세요!");
+      return;
+    }
+    const blob = await generateImage();
+    if (blob && typeof navigator.share === "function") {
+      const file = new File([blob], `quiz-${score}.png`, { type: "image/png" });
+      const shareData = { files: [file], text: `📚 상식 퀴즈! https://www.slox.co.kr/quiz` };
+      if (navigator.canShare?.(shareData)) {
+        try { await navigator.share(shareData); return; } 
+        catch (e) { if (e instanceof Error && e.name === "AbortError") return; }
+      }
+    }
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `quiz-${score}.png`;
+      link.href = url;
+      link.click();
+      URL.revokeObjectURL(url);
+      setTimeout(() => alert("📥 이미지가 다운로드되었습니다!"), 500);
+    }
   };
 
   const currentQuestion = questions[currentIndex];
@@ -295,18 +372,13 @@ export default function QuizGame() {
             {/* 문제 화면 */}
             {gameState === "playing" && currentQuestion && (
               <div className="py-4">
-                {/* 진행 바 */}
                 <div className="h-2 bg-dark-700 rounded-full mb-6 overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300" style={{ width: `${((currentIndex + 1) / QUESTIONS_PER_GAME) * 100}%` }} />
                 </div>
-
-                {/* 문제 카드 */}
                 <div className="bg-dark-800/50 border border-dark-700 rounded-2xl p-6 mb-6">
                   <div className="text-sm text-indigo-400 mb-2">📂 {currentQuestion.category}</div>
                   <h2 className="text-xl md:text-2xl font-bold text-white">{currentQuestion.question}</h2>
                 </div>
-
-                {/* 선택지 */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {currentQuestion.options.map((option, index) => {
                     let buttonClass = "p-4 rounded-xl border-2 font-medium transition-all text-left ";
@@ -324,8 +396,6 @@ export default function QuizGame() {
                     );
                   })}
                 </div>
-
-                {/* 결과 표시 */}
                 {showResult && (
                   <div className={`mt-6 p-4 rounded-xl text-center font-bold text-lg ${isCorrect ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
                     {selectedAnswer === -1 ? "⏰ 시간 초과!" : isCorrect ? "✅ 정답!" : "❌ 오답!"}
@@ -363,11 +433,55 @@ export default function QuizGame() {
                   </div>
                 )}
 
-                <button onClick={startGame} className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white font-bold rounded-xl transition-all transform hover:scale-105">
-                  🔄 다시 도전하기
-                </button>
+                {/* 버튼들 */}
+                <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
+                  <button onClick={shareResult} className="px-4 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl">
+                    {showCopied ? "✅ 복사됨!" : "📤 공유하기"}
+                  </button>
+                  <button onClick={shareAsImage} className="px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-medium rounded-xl">
+                    🖼️ 이미지 공유
+                  </button>
+                  <button onClick={startGame} className="px-4 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl">
+                    🔄 다시 도전
+                  </button>
+                </div>
+                
+                {!hasSubmitted && correctCount > 0 && (
+                  <button onClick={() => setShowNicknameModal(true)} className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl">
+                    🏆 랭킹 등록!
+                  </button>
+                )}
               </div>
             )}
+          </div>
+
+          {/* 공유 카드 (숨김) */}
+          <div ref={shareCardRef} style={{ display: "none", position: "absolute", left: "-9999px", width: "360px", padding: "20px", backgroundColor: "#0f0d1a" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}>
+              <span style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>SLOX</span>
+              <span style={{ color: "#818cf8", fontSize: "12px" }}>📚 상식 퀴즈</span>
+            </div>
+            <div style={{ textAlign: "center", padding: "20px", backgroundColor: "#1a1625", borderRadius: "12px", marginBottom: "10px" }}>
+              <div style={{ fontSize: "44px" }}>{gradeInfo.emoji}</div>
+              <div style={{ fontSize: "26px", fontWeight: "bold", marginTop: "8px", color: "#818cf8" }}>{gradeInfo.grade}</div>
+              <div style={{ fontSize: "44px", fontWeight: "bold", color: "#fde047", marginTop: "8px" }}>{score}<span style={{ fontSize: "18px", color: "#ca8a04" }}> 점</span></div>
+              <div style={{ color: "#9ca3af", fontSize: "11px", marginTop: "6px" }}>정답 {correctCount}/{QUESTIONS_PER_GAME} • {totalTime}초</div>
+            </div>
+            <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+              <div style={{ flex: 1, backgroundColor: "#1e1b4b", borderRadius: "10px", padding: "10px", textAlign: "center" }}>
+                <div style={{ color: "#818cf8", fontSize: "10px" }}>📊 정답률</div>
+                <div style={{ color: "#a5b4fc", fontSize: "18px", fontWeight: "bold" }}>{Math.round(correctCount / QUESTIONS_PER_GAME * 100)}%</div>
+              </div>
+              <div style={{ backgroundColor: "#ffffff", borderRadius: "10px", padding: "8px", width: "100px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${encodeURIComponent("https://www.slox.co.kr/quiz")}`} alt="QR" width={70} height={70} crossOrigin="anonymous" />
+                <div style={{ fontSize: "8px", color: "#6366f1", marginTop: "4px" }}>📱 나도 도전!</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderTop: "1px solid #1e1b4b", fontSize: "10px", color: "#6b7280" }}>
+              <span>{new Date().toLocaleDateString("ko-KR")}</span>
+              <span style={{ color: "#818cf8" }}>slox.co.kr/quiz</span>
+            </div>
           </div>
 
           {/* 명예의전당 */}
@@ -421,6 +535,12 @@ export default function QuizGame() {
                   <button onClick={() => { setShowRankingPrompt(false); setShowNicknameModal(true); }} className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-black text-lg rounded-xl transition-all shadow-lg shadow-yellow-500/30">
                     <span className="flex items-center justify-center gap-2"><span className="text-xl">🏆</span>랭킹 등록하기!</span>
                   </button>
+                  <button onClick={shareResult} className="w-full mt-2 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all border border-dark-600">
+                    <span className="flex items-center justify-center gap-2">
+                      <span>📤</span>
+                      {showCopied ? "✅ 복사됨!" : "친구에게 공유하기"}
+                    </span>
+                  </button>
                   <button onClick={() => setShowRankingPrompt(false)} className="w-full mt-3 py-2 text-dark-500 hover:text-dark-300 text-sm transition-colors">나중에 할게요</button>
                 </div>
               </div>
@@ -467,31 +587,31 @@ export default function QuizGame() {
           {/* 등급표 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
             <h3 className="text-white font-medium mb-2 text-center">🏆 등급표</h3>
-            <p className="text-dark-400 text-xs text-center mb-4">💡 정답 100점 + 남은시간 × 5점!</p>
+            <p className="text-dark-400 text-xs text-center mb-4">💡 정답 개수로 등급 결정!</p>
             <div className="flex flex-col items-center gap-2">
               <div className="w-32 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
                 <span className="text-purple-400 text-sm font-bold">🧠 천재</span>
-                <span className="text-white text-xs ml-2">1500+</span>
+                <span className="text-white text-xs ml-2">10개</span>
               </div>
               <div className="w-40 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
                 <span className="text-blue-400 text-sm font-bold">📚 박학다식</span>
-                <span className="text-white text-xs ml-2">1200+</span>
+                <span className="text-white text-xs ml-2">8-9개</span>
               </div>
               <div className="w-48 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
                 <span className="text-yellow-400 text-sm font-bold">👑 상식왕</span>
-                <span className="text-white text-xs ml-2">900+</span>
+                <span className="text-white text-xs ml-2">6-7개</span>
               </div>
               <div className="w-56 p-2 bg-gradient-to-r from-green-500/20 to-green-400/20 rounded-lg text-center border border-green-400/50">
                 <span className="text-green-400 text-sm font-bold">😊 평범</span>
-                <span className="text-white text-xs ml-2">600+</span>
+                <span className="text-white text-xs ml-2">4-5개</span>
               </div>
               <div className="w-64 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
                 <span className="text-orange-400 text-sm font-bold">📖 노력필요</span>
-                <span className="text-white text-xs ml-2">300+</span>
+                <span className="text-white text-xs ml-2">2-3개</span>
               </div>
               <div className="w-72 p-2 bg-gradient-to-r from-red-500/20 to-red-400/20 rounded-lg text-center border border-red-400/50">
                 <span className="text-red-400 text-sm font-bold">😅 공부하자</span>
-                <span className="text-white text-xs ml-2">0+</span>
+                <span className="text-white text-xs ml-2">0-1개</span>
               </div>
             </div>
           </div>

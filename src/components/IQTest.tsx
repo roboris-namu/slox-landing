@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
 interface IQQuestion {
@@ -12,7 +13,6 @@ interface IQQuestion {
   difficulty: number;
 }
 
-// IQ/멘사 스타일 패턴 문제 (20개)
 const iqQuestions: IQQuestion[] = [
   { id: 1, pattern: ["🔴", "🔵", "🔴", "🔵", "?"], options: ["🔴", "🟢", "🔵", "🟡"], answer: 0, difficulty: 1 },
   { id: 2, pattern: ["⬛", "⬛", "⬜", "⬛", "⬛", "⬜", "⬛", "⬛", "?"], options: ["⬛", "⬜", "🔲", "🔳"], answer: 1, difficulty: 1 },
@@ -71,9 +71,11 @@ export default function IQTest() {
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const totalTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const shareCardRef = useRef<HTMLDivElement>(null);
 
   const fetchLeaderboard = useCallback(async () => {
     try {
@@ -160,11 +162,8 @@ export default function IQTest() {
   };
 
   const calculateIQ = () => {
-    // 정답 개수 기반 IQ 계산 (0개=70, 12개=150)
-    // 12문제 중 정답 비율로 IQ 산출
     const baseIQ = 70;
-    const correctBonus = Math.round(correctCount * 6.7); // 0~80점
-    // 고득점(빠르게+난이도 높게)일 경우 미세 보너스 (최대 10점)
+    const correctBonus = Math.round(correctCount * 6.7);
     const scoreBonus = Math.min(10, Math.floor(score / 150));
     return Math.min(160, Math.max(70, baseIQ + correctBonus + scoreBonus));
   };
@@ -197,6 +196,75 @@ export default function IQTest() {
     finally { setIsSubmitting(false); }
   };
 
+  const isKakaoInApp = () => {
+    if (typeof window === "undefined") return false;
+    return navigator.userAgent.toLowerCase().includes("kakaotalk");
+  };
+
+  const generateImage = async (): Promise<Blob | null> => {
+    if (!shareCardRef.current) return null;
+    shareCardRef.current.style.display = "block";
+    try {
+      const canvas = await html2canvas(shareCardRef.current, { backgroundColor: "#0f0d1a", scale: 2, useCORS: true });
+      return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob), "image/png"));
+    } finally { shareCardRef.current.style.display = "none"; }
+  };
+
+  const shareResult = async () => {
+    const iqScore = calculateIQ();
+    const gradeInfo = getIQGrade(iqScore);
+    const shareUrl = "https://www.slox.co.kr/iq";
+    const firstPlace = leaderboard[0];
+    
+    const text = `🧠 IQ 테스트 결과!\n\n` +
+      `${gradeInfo.emoji} IQ ${iqScore} (${gradeInfo.grade})\n` +
+      `✅ 정답: ${correctCount}/${QUESTIONS_PER_GAME}\n` +
+      `⏱️ 소요시간: ${totalTime}초\n\n` +
+      (firstPlace ? `🏆 현재 1위: ${firstPlace.nickname} (IQ ${firstPlace.iq_score})\n\n` : "") +
+      `나도 도전하기 👇\n${shareUrl}`;
+
+    if (isKakaoInApp()) {
+      await navigator.clipboard.writeText(text);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+      return;
+    }
+
+    if (typeof navigator.share === "function") {
+      try { await navigator.share({ text }); return; } 
+      catch (e) { if (e instanceof Error && e.name === "AbortError") return; }
+    }
+    
+    await navigator.clipboard.writeText(text);
+    setShowCopied(true);
+    setTimeout(() => setShowCopied(false), 2000);
+  };
+
+  const shareAsImage = async () => {
+    if (isKakaoInApp()) {
+      alert("📱 카카오톡 앱에서는 이미지 공유가 제한됩니다.\n\n우측 상단 ⋮ → '다른 브라우저로 열기'를 눌러주세요!");
+      return;
+    }
+    const blob = await generateImage();
+    if (blob && typeof navigator.share === "function") {
+      const file = new File([blob], `iq-${calculateIQ()}.png`, { type: "image/png" });
+      const shareData = { files: [file], text: `🧠 IQ 테스트! https://www.slox.co.kr/iq` };
+      if (navigator.canShare?.(shareData)) {
+        try { await navigator.share(shareData); return; } 
+        catch (e) { if (e instanceof Error && e.name === "AbortError") return; }
+      }
+    }
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `iq-${calculateIQ()}.png`;
+      link.href = url;
+      link.click();
+      URL.revokeObjectURL(url);
+      setTimeout(() => alert("📥 이미지가 다운로드되었습니다!"), 500);
+    }
+  };
+
   const currentQuestion = questions[currentIndex];
   const iqScore = calculateIQ();
   const iqGrade = getIQGrade(iqScore);
@@ -218,7 +286,6 @@ export default function IQTest() {
         </div>
       </nav>
 
-      {/* 메인 콘텐츠 */}
       <main className="pt-24 pb-16 px-4">
         <div className="max-w-4xl mx-auto">
           {/* 헤더 */}
@@ -233,7 +300,6 @@ export default function IQTest() {
             <p className="text-dark-400 text-lg max-w-2xl mx-auto">패턴을 분석하고 당신의 IQ를 측정하세요!</p>
           </div>
 
-          {/* 게임 모드 안내 */}
           {gameState === "ready" && (
             <div className="flex justify-center gap-4 mb-8">
               <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
@@ -251,7 +317,6 @@ export default function IQTest() {
             </div>
           )}
 
-          {/* 게임 상태 표시 */}
           {gameState === "playing" && (
             <div className="flex flex-col items-center gap-3 mb-6">
               <div className="flex items-center gap-3">
@@ -285,7 +350,6 @@ export default function IQTest() {
             </div>
           )}
 
-          {/* 팁 */}
           {gameState === "ready" && (
             <div className="mb-8 p-4 bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl">
               <div className="flex items-start gap-3">
@@ -298,9 +362,7 @@ export default function IQTest() {
             </div>
           )}
 
-          {/* 게임 영역 */}
           <div className="relative rounded-2xl p-6 mb-8 min-h-[400px] bg-dark-900">
-            {/* 대기 화면 */}
             {gameState === "ready" && (
               <div className="flex flex-col items-center justify-center h-[400px]">
                 <div className="text-7xl mb-4 animate-bounce">🧩</div>
@@ -312,15 +374,11 @@ export default function IQTest() {
               </div>
             )}
 
-            {/* 문제 화면 */}
             {gameState === "playing" && currentQuestion && (
               <div className="py-4">
-                {/* 진행 바 */}
                 <div className="h-2 bg-dark-700 rounded-full mb-6 overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300" style={{ width: `${((currentIndex + 1) / QUESTIONS_PER_GAME) * 100}%` }} />
                 </div>
-
-                {/* 문제 카드 */}
                 <div className="bg-dark-800/50 border border-dark-700 rounded-2xl p-6 mb-6 text-center">
                   <p className="text-dark-400 mb-4">다음 패턴에서 ?에 들어갈 것은?</p>
                   <div className="text-2xl md:text-3xl font-mono tracking-wider flex flex-wrap justify-center gap-2">
@@ -329,8 +387,6 @@ export default function IQTest() {
                     ))}
                   </div>
                 </div>
-
-                {/* 선택지 */}
                 <div className="grid grid-cols-2 gap-3">
                   {currentQuestion.options.map((option, index) => {
                     let buttonClass = "p-5 rounded-xl border-2 font-medium transition-all text-center text-xl ";
@@ -346,8 +402,6 @@ export default function IQTest() {
                     );
                   })}
                 </div>
-
-                {/* 결과 표시 */}
                 {showResult && (
                   <div className={`mt-6 p-4 rounded-xl text-center font-bold text-lg ${isCorrect ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
                     {selectedAnswer === -1 ? "⏰ 시간 초과!" : isCorrect ? "✅ 정답!" : "❌ 오답!"}
@@ -356,7 +410,6 @@ export default function IQTest() {
               </div>
             )}
 
-            {/* 결과 화면 */}
             {gameState === "result" && (
               <div className="py-4 text-center">
                 <div className="text-6xl mb-4">{iqGrade.emoji}</div>
@@ -387,11 +440,54 @@ export default function IQTest() {
                   </div>
                 )}
 
-                <button onClick={startGame} className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold rounded-xl transition-all transform hover:scale-105">
-                  🔄 다시 도전하기
-                </button>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center mb-4">
+                  <button onClick={shareResult} className="px-4 py-3 bg-accent-purple hover:bg-accent-purple/80 text-white font-medium rounded-xl">
+                    {showCopied ? "✅ 복사됨!" : "📤 공유하기"}
+                  </button>
+                  <button onClick={shareAsImage} className="px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-medium rounded-xl">
+                    🖼️ 이미지 공유
+                  </button>
+                  <button onClick={startGame} className="px-4 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl">
+                    🔄 다시 도전
+                  </button>
+                </div>
+
+                {!hasSubmitted && correctCount > 0 && (
+                  <button onClick={() => setShowNicknameModal(true)} className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl">
+                    🏆 랭킹 등록!
+                  </button>
+                )}
               </div>
             )}
+          </div>
+
+          {/* 공유 카드 */}
+          <div ref={shareCardRef} style={{ display: "none", position: "absolute", left: "-9999px", width: "360px", padding: "20px", backgroundColor: "#0f0d1a" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}>
+              <span style={{ color: "white", fontWeight: "bold", fontSize: "20px" }}>SLOX</span>
+              <span style={{ color: "#a855f7", fontSize: "12px" }}>🧠 IQ 테스트</span>
+            </div>
+            <div style={{ textAlign: "center", padding: "20px", backgroundColor: "#1a1625", borderRadius: "12px", marginBottom: "10px" }}>
+              <div style={{ fontSize: "44px" }}>{iqGrade.emoji}</div>
+              <div style={{ fontSize: "36px", fontWeight: "bold", marginTop: "8px", color: "#a855f7" }}>IQ {iqScore}</div>
+              <div style={{ fontSize: "18px", color: "#9ca3af", marginTop: "4px" }}>{iqGrade.grade}</div>
+              <div style={{ color: "#6b7280", fontSize: "11px", marginTop: "6px" }}>정답 {correctCount}/{QUESTIONS_PER_GAME} • {totalTime}초</div>
+            </div>
+            <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
+              <div style={{ flex: 1, backgroundColor: "#2e1065", borderRadius: "10px", padding: "10px", textAlign: "center" }}>
+                <div style={{ color: "#a855f7", fontSize: "10px" }}>📊 정답률</div>
+                <div style={{ color: "#c084fc", fontSize: "18px", fontWeight: "bold" }}>{Math.round(correctCount / QUESTIONS_PER_GAME * 100)}%</div>
+              </div>
+              <div style={{ backgroundColor: "#ffffff", borderRadius: "10px", padding: "8px", width: "100px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=70x70&data=${encodeURIComponent("https://www.slox.co.kr/iq")}`} alt="QR" width={70} height={70} crossOrigin="anonymous" />
+                <div style={{ fontSize: "8px", color: "#7c3aed", marginTop: "4px" }}>📱 나도 도전!</div>
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderTop: "1px solid #1e1b4b", fontSize: "10px", color: "#6b7280" }}>
+              <span>{new Date().toLocaleDateString("ko-KR")}</span>
+              <span style={{ color: "#a855f7" }}>slox.co.kr/iq</span>
+            </div>
           </div>
 
           {/* 명예의전당 */}
@@ -428,7 +524,7 @@ export default function IQTest() {
             )}
           </div>
 
-          {/* 자동 랭킹 등록 팝업 */}
+          {/* 랭킹 등록 팝업 */}
           {showRankingPrompt && !showNicknameModal && !hasSubmitted && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
               <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-sm w-full animate-scale-in relative overflow-hidden">
@@ -444,6 +540,12 @@ export default function IQTest() {
                   </div>
                   <button onClick={() => { setShowRankingPrompt(false); setShowNicknameModal(true); }} className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-black text-lg rounded-xl transition-all shadow-lg shadow-yellow-500/30">
                     <span className="flex items-center justify-center gap-2"><span className="text-xl">🏆</span>랭킹 등록하기!</span>
+                  </button>
+                  <button onClick={shareResult} className="w-full mt-2 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all border border-dark-600">
+                    <span className="flex items-center justify-center gap-2">
+                      <span>📤</span>
+                      {showCopied ? "✅ 복사됨!" : "친구에게 공유하기"}
+                    </span>
                   </button>
                   <button onClick={() => setShowRankingPrompt(false)} className="w-full mt-3 py-2 text-dark-500 hover:text-dark-300 text-sm transition-colors">나중에 할게요</button>
                 </div>
@@ -491,7 +593,7 @@ export default function IQTest() {
           {/* 등급표 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
             <h3 className="text-white font-medium mb-2 text-center">🏆 IQ 등급표</h3>
-            <p className="text-dark-400 text-xs text-center mb-4">💡 정답 + 시간 보너스로 IQ 계산!</p>
+            <p className="text-dark-400 text-xs text-center mb-4">💡 정답 개수 + 속도로 IQ 계산!</p>
             <div className="flex flex-col items-center gap-2">
               <div className="w-32 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
                 <span className="text-purple-400 text-sm font-bold">🧠 천재</span>
@@ -520,7 +622,7 @@ export default function IQTest() {
             </div>
           </div>
 
-          {/* 다른 게임 링크 */}
+          {/* 다른 게임 */}
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-4">🔗 다른 게임</h3>
             <div className="flex flex-wrap gap-3">
