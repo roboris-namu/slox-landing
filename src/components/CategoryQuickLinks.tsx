@@ -17,7 +17,7 @@ const categories: Category[] = [
     id: "games",
     emoji: "🎮",
     title: "게임",
-    count: 8,
+    count: 9,
     color: "from-purple-500 to-pink-500",
     hoverColor: "hover:border-purple-500/50",
     items: [
@@ -27,8 +27,8 @@ const categories: Category[] = [
       { title: "CPS테스트", href: "/cps", emoji: "🖱️" },
       { title: "에임테스트", href: "/aim", emoji: "🎯" },
       { title: "타자테스트", href: "/typing", emoji: "⌨️" },
+      { title: "상식퀴즈", href: "/quiz", emoji: "📚" },
       { title: "기억력", href: "/memory-test", emoji: "🧠" },
-      { title: "순발력", href: "/reaction", emoji: "💨" },
     ],
   },
   {
