@@ -63,7 +63,6 @@ function isStaticOrApi(pathname: string): boolean {
 const koreanOnlyPaths = [
   '/admin',
   '/thesis',
-  '/event',
   '/privacy',
   '/about',
   '/salary',
