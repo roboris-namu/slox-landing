@@ -270,18 +270,43 @@ export default function Fortune({ initialLang = "ko" }: FortuneProps) {
     }, 1500);
   };
 
+  // 카카오 인앱 브라우저 감지
+  const isKakaoInApp = () => {
+    if (typeof window === "undefined") return false;
+    return navigator.userAgent.toLowerCase().includes("kakaotalk");
+  };
+
   // 공유하기
-  const handleShare = () => {
+  const handleShare = async () => {
     if (!fortune || !selectedZodiac) return;
     
     const zodiac = zodiacSigns.find(z => z.id === selectedZodiac);
     const today = new Date().toLocaleDateString(lang === "ko" ? "ko-KR" : "en-US");
     
     const text = lang === "ko"
-      ? `🔮 ${today} ${zodiac?.ko} 운세\n\n⭐ 운세 점수: ${fortune.score}점\n\n${fortune.overall}\n\n🍀 행운의 숫자: ${fortune.luckyNumber.join(", ")}\n🎨 행운의 색상: ${fortune.luckyColor}\n\n👉 나도 확인하기: ${window.location.href}`
-      : `🔮 ${zodiac?.en} Fortune for ${today}\n\n⭐ Score: ${fortune.score}/100\n\n${fortune.overall}\n\n🍀 Lucky Numbers: ${fortune.luckyNumber.join(", ")}\n🎨 Lucky Color: ${fortune.luckyColor}\n\n👉 Check yours: ${window.location.href}`;
+      ? `🔮 ${today} ${zodiac?.ko} 운세\n\n⭐ 운세 점수: ${fortune.score}점\n\n${fortune.overall}\n\n🍀 행운의 숫자: ${fortune.luckyNumber.join(", ")}\n🎨 행운의 색상: ${fortune.luckyColor}\n\n👉 나도 확인하기: https://www.slox.co.kr/fortune`
+      : `🔮 ${zodiac?.en} Fortune for ${today}\n\n⭐ Score: ${fortune.score}/100\n\n${fortune.overall}\n\n🍀 Lucky Numbers: ${fortune.luckyNumber.join(", ")}\n🎨 Lucky Color: ${fortune.luckyColor}\n\n👉 Check yours: https://www.slox.co.kr/fortune`;
+
+    // 카카오 인앱 브라우저면 클립보드로
+    if (isKakaoInApp()) {
+      await navigator.clipboard.writeText(text);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+      return;
+    }
+
+    // Web Share API 지원하면 사용
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ text });
+        return;
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return;
+      }
+    }
     
-    navigator.clipboard.writeText(text);
+    // 지원 안 하면 클립보드 복사
+    await navigator.clipboard.writeText(text);
     setShowCopied(true);
     setTimeout(() => setShowCopied(false), 2000);
   };

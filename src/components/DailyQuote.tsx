@@ -193,31 +193,15 @@ const translations = {
 
 export default function DailyQuote({ initialLang = "ko" }: DailyQuoteProps) {
   const [lang] = useState<Language>(initialLang);
-  const [, setSelectedCategory] = useState<string | null>(null);
+  const [currentCategory, setCurrentCategory] = useState<string | null>(null);
   const [quote, setQuote] = useState<{ text: string; author: string; category: string } | null>(null);
   const [isRevealing, setIsRevealing] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
 
   const t = translations[lang];
 
-  // 날짜 기반 시드 생성
-  const getDateSeed = useCallback(() => {
-    const today = new Date();
-    return today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-  }, []);
-
-  // 시드 기반 랜덤
-  const seededRandom = useCallback((seed: number, index: number) => {
-    const x = Math.sin(seed * 9999 + index * 7777) * 10000;
-    return x - Math.floor(x);
-  }, []);
-
-  // 명언 생성
+  // 명언 생성 (완전 랜덤)
   const generateQuote = useCallback((categoryId: string | null) => {
-    const dateSeed = getDateSeed();
-    const categoryIndex = categoryId ? categories.findIndex(c => c.id === categoryId) : 0;
-    const seed = dateSeed + categoryIndex * 1000;
-
     let selectedQuotes: { text: string; author: string }[];
     let category: string;
 
@@ -226,13 +210,13 @@ export default function DailyQuote({ initialLang = "ko" }: DailyQuoteProps) {
       category = categoryId;
     } else {
       // 랜덤 카테고리
-      const randomCatIndex = Math.floor(seededRandom(seed, 1) * categories.length);
+      const randomCatIndex = Math.floor(Math.random() * categories.length);
       const randomCategory = categories[randomCatIndex].id;
       selectedQuotes = quotes[lang][randomCategory as keyof typeof quotes.ko];
       category = randomCategory;
     }
 
-    const quoteIndex = Math.floor(seededRandom(seed, 2) * selectedQuotes.length);
+    const quoteIndex = Math.floor(Math.random() * selectedQuotes.length);
     const selectedQuote = selectedQuotes[quoteIndex];
 
     setQuote({
@@ -240,12 +224,12 @@ export default function DailyQuote({ initialLang = "ko" }: DailyQuoteProps) {
       author: selectedQuote.author,
       category,
     });
-  }, [lang, getDateSeed, seededRandom]);
+  }, [lang]);
 
   // 카테고리 선택
   const selectCategory = (categoryId: string | null) => {
     setIsRevealing(true);
-    setSelectedCategory(categoryId);
+    setCurrentCategory(categoryId);
     
     setTimeout(() => {
       generateQuote(categoryId);
@@ -253,23 +237,58 @@ export default function DailyQuote({ initialLang = "ko" }: DailyQuoteProps) {
     }, 1000);
   };
 
+  // 다른 명언 보기 (같은 카테고리에서)
+  const handleNewQuote = () => {
+    setIsRevealing(true);
+    
+    setTimeout(() => {
+      generateQuote(currentCategory);
+      setIsRevealing(false);
+    }, 500);
+  };
+
+  // 카카오 인앱 브라우저 감지
+  const isKakaoInApp = () => {
+    if (typeof window === "undefined") return false;
+    return navigator.userAgent.toLowerCase().includes("kakaotalk");
+  };
+
   // 공유하기
-  const handleShare = () => {
+  const handleShare = async () => {
     if (!quote) return;
     
     const categoryInfo = categories.find(c => c.id === quote.category);
     const categoryName = lang === "ko" ? categoryInfo?.ko : categoryInfo?.en;
     
-    const text = `💬 오늘의 명언 [${categoryName}]\n\n"${quote.text}"\n\n${t.author}${quote.author}\n\n👉 나도 확인하기: ${window.location.href}`;
+    const text = `💬 오늘의 명언 [${categoryName}]\n\n"${quote.text}"\n\n${t.author}${quote.author}\n\n👉 나도 확인하기: https://www.slox.co.kr/quote`;
+
+    // 카카오 인앱 브라우저면 클립보드로
+    if (isKakaoInApp()) {
+      await navigator.clipboard.writeText(text);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+      return;
+    }
+
+    // Web Share API 지원하면 사용
+    if (typeof navigator.share === "function") {
+      try {
+        await navigator.share({ text });
+        return;
+      } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") return;
+      }
+    }
     
-    navigator.clipboard.writeText(text);
+    // 지원 안 하면 클립보드 복사
+    await navigator.clipboard.writeText(text);
     setShowCopied(true);
     setTimeout(() => setShowCopied(false), 2000);
   };
 
-  // 다시하기
+  // 처음으로 돌아가기
   const handleRetry = () => {
-    setSelectedCategory(null);
+    setCurrentCategory(null);
     setQuote(null);
   };
 
@@ -393,10 +412,16 @@ export default function DailyQuote({ initialLang = "ko" }: DailyQuoteProps) {
                 {showCopied ? t.copied : t.share}
               </button>
               <button
-                onClick={handleRetry}
+                onClick={handleNewQuote}
                 className="px-6 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all"
               >
                 {t.newQuote}
+              </button>
+              <button
+                onClick={handleRetry}
+                className="px-6 py-3 bg-dark-900 hover:bg-dark-800 text-dark-400 hover:text-white font-medium rounded-xl transition-all border border-dark-700"
+              >
+                🏠 처음으로
               </button>
             </div>
 
