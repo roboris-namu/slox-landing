@@ -87,34 +87,34 @@ export default function CategoryQuickLinks() {
         <div className="flex flex-wrap justify-center gap-3 md:gap-4">
           {categories.map((category) => (
             <div key={category.id} className="group relative">
-              {/* 버튼 */}
-              <button
-                className={`flex items-center gap-2 px-4 py-2.5 md:px-5 md:py-3 bg-dark-800/50 border border-white/10 ${category.hoverColor} rounded-2xl transition-all duration-300 hover:bg-dark-700/50 hover:scale-105 hover:shadow-lg`}
-              >
-                <span className="text-xl md:text-2xl">{category.emoji}</span>
-                <span className="font-medium text-white text-sm md:text-base">{category.title}</span>
-                <span className={`px-2 py-0.5 bg-gradient-to-r ${category.color} text-white text-xs font-bold rounded-full`}>
-                  {category.count}
-                </span>
-              </button>
+              {/* 버튼 + 드롭다운 컨테이너 */}
+              <div className={`rounded-2xl border border-transparent group-hover:border-white/20 transition-all duration-300 group-hover:bg-dark-800/80 group-hover:shadow-xl`}>
+                {/* 버튼 */}
+                <button
+                  className={`flex items-center gap-2 px-4 py-2.5 md:px-5 md:py-3 bg-dark-800/50 group-hover:bg-transparent border border-white/10 group-hover:border-transparent rounded-2xl group-hover:rounded-b-none transition-all duration-300`}
+                >
+                  <span className="text-xl md:text-2xl">{category.emoji}</span>
+                  <span className="font-medium text-white text-sm md:text-base">{category.title}</span>
+                  <span className={`px-2 py-0.5 bg-gradient-to-r ${category.color} text-white text-xs font-bold rounded-full`}>
+                    {category.count}
+                  </span>
+                </button>
 
-              {/* 드롭다운 메뉴 */}
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
-                <div className="bg-dark-900/95 backdrop-blur-xl border border-white/10 rounded-2xl p-3 shadow-2xl min-w-[200px]">
-                  {/* 화살표 */}
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-dark-900/95 border-l border-t border-white/10 transform rotate-45" />
-                  
-                  <div className="grid grid-cols-2 gap-2 relative">
-                    {category.items.map((item) => (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors"
-                      >
-                        <span className="text-lg">{item.emoji}</span>
-                        <span className="text-sm text-white/80 hover:text-white whitespace-nowrap">{item.title}</span>
-                      </Link>
-                    ))}
+                {/* 드롭다운 메뉴 */}
+                <div className="max-h-0 overflow-hidden group-hover:max-h-[300px] transition-all duration-300 ease-out">
+                  <div className="p-3 border-t border-white/10">
+                    <div className="grid grid-cols-2 gap-2">
+                      {category.items.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/10 transition-colors"
+                        >
+                          <span className="text-lg">{item.emoji}</span>
+                          <span className="text-sm text-white/80 hover:text-white whitespace-nowrap">{item.title}</span>
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
