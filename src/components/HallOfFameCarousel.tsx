@@ -64,9 +64,10 @@ export default function HallOfFameCarousel() {
     try {
       const results = await Promise.all(
         gameConfigs.map(async (config) => {
+          // 각 테이블에 존재하는 컬럼만 선택
           const { data, error } = await supabase
             .from(config.table)
-            .select("nickname, " + config.scoreField + ", grade, percentile, device_type")
+            .select("*")
             .order(config.scoreField, { ascending: config.orderAsc })
             .limit(3);
 
@@ -85,10 +86,10 @@ export default function HallOfFameCarousel() {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             entries: (data || []).map((entry: any) => ({
               nickname: entry.nickname as string,
-              score: parseFloat(entry[config.scoreField]) || 0, // 문자열도 숫자로 변환
-              grade: entry.grade as string,
-              percentile: entry.percentile as number,
-              device_type: entry.device_type as string,
+              score: parseFloat(entry[config.scoreField]) || 0,
+              grade: entry.grade as string || "",
+              percentile: entry.percentile as number || 0,
+              device_type: entry.device_type as string || "",
             })),
           };
         })
