@@ -533,10 +533,39 @@ export default function QuizGame() {
                 </button>
                 <div className="relative z-10">
                   <div className="text-center mb-4">
-                    <div className="text-5xl mb-3">{gradeInfo.emoji}</div>
-                    <h3 className="text-2xl font-black text-white">{gradeInfo.grade}!</h3>
-                    <p className="text-dark-400 text-sm">{score}점 ({correctCount}/10)</p>
+                    {(() => {
+                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => score > (e.score || 0)) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => score > (e.score || 0)) + 1;
+                      const isFirstPlace = leaderboard.length === 0 || score > (leaderboard[0]?.score || 0);
+                      return (
+                        <>
+                          <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
+                            {isFirstPlace ? "👑" : myRank <= 3 ? "🏆" : "📚"}
+                          </div>
+                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : myRank <= 3 ? "text-yellow-400" : "text-white"}`}>
+                            {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${myRank}위!`}
+                          </h3>
+                          <p className={`text-3xl font-black ${gradeInfo.color}`}>{score}점</p>
+                          <p className="text-dark-400 text-sm">{gradeInfo.grade} ({correctCount}/10)</p>
+                        </>
+                      );
+                    })()}
                   </div>
+                  {leaderboard.length > 0 && score <= (leaderboard[0]?.score || 0) && (
+                    <div className="bg-dark-800/70 rounded-xl p-3 mb-4">
+                      <div className="flex items-center justify-between">
+                        <div className="text-center flex-1">
+                          <p className="text-[10px] text-dark-500 uppercase">현재 1위</p>
+                          <p className="text-yellow-400 font-bold">{leaderboard[0]?.score || 0}점</p>
+                          <p className="text-xs text-dark-400">{leaderboard[0]?.nickname}</p>
+                        </div>
+                        <div className="text-dark-600 px-2">vs</div>
+                        <div className="text-center flex-1">
+                          <p className="text-[10px] text-dark-500 uppercase">내 기록</p>
+                          <p className="text-indigo-400 font-bold">{score}점</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <button onClick={() => { setShowRankingPrompt(false); setShowNicknameModal(true); }} className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-black text-lg rounded-xl transition-all shadow-lg shadow-yellow-500/30">
                     <span className="flex items-center justify-center gap-2"><span className="text-xl">🏆</span>랭킹 등록하기!</span>
                   </button>
