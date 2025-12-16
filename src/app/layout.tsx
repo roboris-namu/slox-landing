@@ -55,11 +55,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "48x48" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico?v=2", sizes: "48x48" },
+      { url: "/icons/icon-32x32.png?v=2", type: "image/png", sizes: "32x32" },
+      { url: "/icons/icon-16x16.png?v=2", type: "image/png", sizes: "16x16" },
     ],
-    shortcut: "/favicon.ico",
-    apple: "/favicon.svg",
+    shortcut: "/favicon.ico?v=2",
+    apple: "/icons/apple-touch-icon.png?v=2",
   },
 };
 
