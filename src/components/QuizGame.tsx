@@ -142,6 +142,11 @@ export default function QuizGame() {
   };
 
   const goToNext = () => {
+    // 모바일에서 버튼 focus 제거
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    
     if (currentIndex + 1 >= QUESTIONS_PER_GAME) {
       if (timerRef.current) clearInterval(timerRef.current);
       if (totalTimerRef.current) clearInterval(totalTimerRef.current);
