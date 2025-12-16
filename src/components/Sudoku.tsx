@@ -5,7 +5,6 @@ import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
-type Difficulty = "easy" | "medium" | "hard";
 type Board = (number | null)[][];
 type GameState = "ready" | "playing" | "complete";
 
@@ -48,9 +47,10 @@ const generateSolvedBoard = (): number[][] => {
   return board;
 };
 
-const createPuzzle = (solved: number[][], difficulty: Difficulty): Board => {
+// 표준 난이도: 45칸 빈칸 (통일된 랭킹 측정용)
+const createPuzzle = (solved: number[][]): Board => {
   const puzzleBoard: Board = solved.map(row => [...row]);
-  const cellsToRemove = difficulty === "easy" ? 35 : difficulty === "medium" ? 45 : 55;
+  const cellsToRemove = 45; // 표준 난이도 고정
   
   let removed = 0;
   while (removed < cellsToRemove) {
@@ -67,21 +67,13 @@ const createPuzzle = (solved: number[][], difficulty: Difficulty): Board => {
 interface LeaderboardEntry {
   id: number;
   nickname: string;
-  difficulty: string;
   time_seconds: number;
   mistakes: number;
   created_at: string;
 }
 
-const difficultyLabels = {
-  easy: { label: "쉬움", color: "text-green-400", emoji: "🌱", bgColor: "bg-green-500/20", borderColor: "border-green-500/50" },
-  medium: { label: "보통", color: "text-yellow-400", emoji: "🔥", bgColor: "bg-yellow-500/20", borderColor: "border-yellow-500/50" },
-  hard: { label: "어려움", color: "text-red-400", emoji: "💀", bgColor: "bg-red-500/20", borderColor: "border-red-500/50" },
-};
-
 export default function Sudoku() {
   const [gameState, setGameState] = useState<GameState>("ready");
-  const [difficulty, setDifficulty] = useState<Difficulty>("easy");
   const [solvedBoard, setSolvedBoard] = useState<number[][]>([]);
   const [userBoard, setUserBoard] = useState<Board>([]);
   const [initialBoard, setInitialBoard] = useState<Board>([]);
@@ -108,12 +100,11 @@ export default function Sudoku() {
       const { data, count } = await supabase
         .from("sudoku_leaderboard")
         .select("*", { count: "exact" })
-        .eq("difficulty", difficulty)
         .order("time_seconds", { ascending: true })
         .limit(10);
       if (data) { setLeaderboard(data); setTotalCount(count || 0); }
     } catch (error) { console.error("Failed to fetch leaderboard:", error); }
-  }, [difficulty]);
+  }, []);
 
   useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
 
@@ -125,7 +116,7 @@ export default function Sudoku() {
 
   const startGame = () => {
     const solved = generateSolvedBoard();
-    const puzzleBoard = createPuzzle(solved, difficulty);
+    const puzzleBoard = createPuzzle(solved);
     setSolvedBoard(solved);
     setUserBoard(puzzleBoard.map(row => [...row]));
     setInitialBoard(puzzleBoard.map(row => [...row]));
@@ -196,13 +187,13 @@ export default function Sudoku() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // 표준 난이도 기준: 5분(300초) 기준
   const getGrade = () => {
-    const baseTime = difficulty === "easy" ? 180 : difficulty === "medium" ? 300 : 600;
-    if (time <= baseTime * 0.3) return { grade: "전설", emoji: "🏆", color: "text-yellow-400" };
-    if (time <= baseTime * 0.5) return { grade: "마스터", emoji: "💎", color: "text-purple-400" };
-    if (time <= baseTime * 0.7) return { grade: "전문가", emoji: "⭐", color: "text-blue-400" };
-    if (time <= baseTime) return { grade: "숙련자", emoji: "👍", color: "text-green-400" };
-    if (time <= baseTime * 1.5) return { grade: "중급자", emoji: "😊", color: "text-cyan-400" };
+    if (time <= 90) return { grade: "전설", emoji: "🏆", color: "text-yellow-400" };   // ~1분30초
+    if (time <= 150) return { grade: "마스터", emoji: "💎", color: "text-purple-400" }; // ~2분30초
+    if (time <= 210) return { grade: "전문가", emoji: "⭐", color: "text-blue-400" };  // ~3분30초
+    if (time <= 300) return { grade: "숙련자", emoji: "👍", color: "text-green-400" }; // ~5분
+    if (time <= 450) return { grade: "중급자", emoji: "😊", color: "text-cyan-400" };  // ~7분30초
     return { grade: "초보자", emoji: "📚", color: "text-orange-400" };
   };
 
@@ -212,7 +203,6 @@ export default function Sudoku() {
     try {
       const { error } = await supabase.from("sudoku_leaderboard").insert({
         nickname: nickname.trim(),
-        difficulty,
         time_seconds: time,
         mistakes,
       });
@@ -242,13 +232,11 @@ export default function Sudoku() {
     const gradeInfo = getGrade();
     const shareUrl = "https://www.slox.co.kr/sudoku";
     const firstPlace = leaderboard[0];
-    const diffInfo = difficultyLabels[difficulty];
     
     const text = `🔢 스도쿠 완료!\n\n` +
       `${gradeInfo.emoji} ${gradeInfo.grade}\n` +
       `⏱️ 시간: ${formatTime(time)}\n` +
-      `❌ 실수: ${mistakes}회\n` +
-      `📊 난이도: ${diffInfo.emoji} ${diffInfo.label}\n\n` +
+      `❌ 실수: ${mistakes}회\n\n` +
       (firstPlace ? `🏆 현재 1위: ${firstPlace.nickname} (${formatTime(firstPlace.time_seconds)})\n\n` : "") +
       `나도 도전하기 👇\n${shareUrl}`;
 
@@ -319,7 +307,6 @@ export default function Sudoku() {
     return classes;
   };
 
-  const diffInfo = difficultyLabels[difficulty];
   const gradeInfo = getGrade();
 
   return (
@@ -353,49 +340,28 @@ export default function Sudoku() {
             <p className="text-dark-400 text-lg max-w-2xl mx-auto">숫자 퍼즐의 고전! 빈칸을 채워 완성하세요.</p>
           </div>
 
-          {/* 난이도 선택 */}
+          {/* 게임 정보 */}
           {gameState === "ready" && (
-            <>
-              <div className="flex justify-center gap-3 mb-8">
-                {(["easy", "medium", "hard"] as Difficulty[]).map((d) => (
-                  <button
-                    key={d}
-                    onClick={() => setDifficulty(d)}
-                    className={`px-5 py-2 rounded-xl font-medium transition-all ${
-                      difficulty === d
-                        ? `${difficultyLabels[d].bgColor} ${difficultyLabels[d].borderColor} border-2 ${difficultyLabels[d].color} scale-105`
-                        : "bg-dark-800 text-dark-300 hover:bg-dark-700 border-2 border-transparent"
-                    }`}
-                  >
-                    <span className="mr-2">{difficultyLabels[d].emoji}</span>
-                    {difficultyLabels[d].label}
-                  </button>
-                ))}
+            <div className="flex justify-center gap-4 mb-8">
+              <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
+                <span className="text-dark-400 text-xs block">크기</span>
+                <span className="text-white font-bold">9×9</span>
               </div>
-              <div className="flex justify-center gap-4 mb-8">
-                <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
-                  <span className="text-dark-400 text-xs block">크기</span>
-                  <span className="text-white font-bold">9×9</span>
-                </div>
-                <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
-                  <span className="text-dark-400 text-xs block">빈칸</span>
-                  <span className="text-white font-bold">{difficulty === "easy" ? 35 : difficulty === "medium" ? 45 : 55}개</span>
-                </div>
-                <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
-                  <span className="text-dark-400 text-xs block">실수제한</span>
-                  <span className="text-white font-bold">없음</span>
-                </div>
+              <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
+                <span className="text-dark-400 text-xs block">빈칸</span>
+                <span className="text-white font-bold">45개</span>
               </div>
-            </>
+              <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
+                <span className="text-dark-400 text-xs block">실수제한</span>
+                <span className="text-white font-bold">없음</span>
+              </div>
+            </div>
           )}
 
           {/* 게임 상태 표시 */}
           {gameState === "playing" && (
             <div className="flex flex-col items-center gap-3 mb-6">
               <div className="flex items-center gap-3">
-                <div className={`px-4 py-2 rounded-xl border ${diffInfo.borderColor} ${diffInfo.bgColor}`}>
-                  <span className={diffInfo.color}>{diffInfo.emoji} {diffInfo.label}</span>
-                </div>
                 <div className="px-5 py-2 rounded-xl border-2 border-indigo-500/50 bg-gradient-to-r from-indigo-500/20 to-cyan-500/20">
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">⏱️</span>
@@ -433,7 +399,7 @@ export default function Sudoku() {
               <div className="flex flex-col items-center justify-center h-[400px]">
                 <div className="text-7xl mb-4 animate-bounce">🧩</div>
                 <p className="text-2xl font-bold text-white mb-2">준비되셨나요?</p>
-                <p className="text-dark-400 mb-6">{diffInfo.emoji} {diffInfo.label} 난이도로 시작!</p>
+                <p className="text-dark-400 mb-6">9×9 스도쿠에 도전하세요!</p>
                 <button onClick={startGame} className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white font-bold rounded-xl transition-all transform hover:scale-105">
                   🎮 게임 시작
                 </button>
@@ -531,12 +497,12 @@ export default function Sudoku() {
               <div style={{ fontSize: "44px" }}>{gradeInfo.emoji}</div>
               <div style={{ fontSize: "26px", fontWeight: "bold", marginTop: "8px", color: "#6366f1" }}>{gradeInfo.grade}</div>
               <div style={{ fontSize: "44px", fontWeight: "bold", color: "#22d3ee", marginTop: "8px" }}>{formatTime(time)}</div>
-              <div style={{ color: "#9ca3af", fontSize: "11px", marginTop: "6px" }}>실수 {mistakes}회 • {diffInfo.emoji} {diffInfo.label}</div>
+              <div style={{ color: "#9ca3af", fontSize: "11px", marginTop: "6px" }}>실수 {mistakes}회</div>
             </div>
             <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
               <div style={{ flex: 1, backgroundColor: "#1e1b4b", borderRadius: "10px", padding: "10px", textAlign: "center" }}>
-                <div style={{ color: "#6366f1", fontSize: "10px" }}>📊 난이도</div>
-                <div style={{ color: "#a5b4fc", fontSize: "18px", fontWeight: "bold" }}>{diffInfo.label}</div>
+                <div style={{ color: "#6366f1", fontSize: "10px" }}>⏱️ 완료 시간</div>
+                <div style={{ color: "#a5b4fc", fontSize: "18px", fontWeight: "bold" }}>{formatTime(time)}</div>
               </div>
               <div style={{ backgroundColor: "#ffffff", borderRadius: "10px", padding: "8px", width: "100px", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -554,8 +520,7 @@ export default function Sudoku() {
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-white font-medium flex items-center gap-2">
-                <span>🏆</span> 명예의전당 
-                <span className={`text-xs ${diffInfo.color}`}>({diffInfo.label})</span>
+                <span>🏆</span> 명예의전당
               </h3>
               <button onClick={fetchLeaderboard} className="text-dark-500 hover:text-white text-xs">🔄 새로고침</button>
             </div>
@@ -650,7 +615,7 @@ export default function Sudoku() {
                 <div className="text-center mb-6">
                   <div className="text-5xl mb-3">{gradeInfo.emoji}</div>
                   <h3 className="text-white text-xl font-bold">🏆 랭킹 등록</h3>
-                  <p className="text-dark-400 text-sm">{formatTime(time)} ({diffInfo.label})</p>
+                  <p className="text-dark-400 text-sm">{formatTime(time)} (실수 {mistakes}회)</p>
                 </div>
                 <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder="닉네임..." className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
                 <div className="flex gap-3">
@@ -682,26 +647,32 @@ export default function Sudoku() {
 
           {/* 등급표 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
-            <h3 className="text-white font-medium mb-2 text-center">🏆 등급표 ({diffInfo.label})</h3>
+            <h3 className="text-white font-medium mb-2 text-center">🏆 등급표</h3>
             <p className="text-dark-400 text-xs text-center mb-4">💡 빠르게 완료할수록 높은 등급!</p>
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-32 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
-                <span className="text-yellow-400 text-sm font-bold">🏆 전설</span>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-center text-sm">
+              <div className="p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg border border-yellow-400/50">
+                <span className="text-yellow-400 font-bold">🏆 전설</span>
+                <p className="text-dark-400 text-xs">~1분30초</p>
               </div>
-              <div className="w-40 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
-                <span className="text-purple-400 text-sm font-bold">💎 마스터</span>
+              <div className="p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg border border-purple-400/50">
+                <span className="text-purple-400 font-bold">💎 마스터</span>
+                <p className="text-dark-400 text-xs">~2분30초</p>
               </div>
-              <div className="w-48 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
-                <span className="text-blue-400 text-sm font-bold">⭐ 전문가</span>
+              <div className="p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg border border-blue-400/50">
+                <span className="text-blue-400 font-bold">⭐ 전문가</span>
+                <p className="text-dark-400 text-xs">~3분30초</p>
               </div>
-              <div className="w-56 p-2 bg-gradient-to-r from-green-500/20 to-green-400/20 rounded-lg text-center border border-green-400/50">
-                <span className="text-green-400 text-sm font-bold">👍 숙련자</span>
+              <div className="p-2 bg-gradient-to-r from-green-500/20 to-green-400/20 rounded-lg border border-green-400/50">
+                <span className="text-green-400 font-bold">👍 숙련자</span>
+                <p className="text-dark-400 text-xs">~5분</p>
               </div>
-              <div className="w-64 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
-                <span className="text-cyan-400 text-sm font-bold">😊 중급자</span>
+              <div className="p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg border border-cyan-400/50">
+                <span className="text-cyan-400 font-bold">😊 중급자</span>
+                <p className="text-dark-400 text-xs">~7분30초</p>
               </div>
-              <div className="w-72 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
-                <span className="text-orange-400 text-sm font-bold">📚 초보자</span>
+              <div className="p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg border border-orange-400/50">
+                <span className="text-orange-400 font-bold">📚 초보자</span>
+                <p className="text-dark-400 text-xs">7분30초~</p>
               </div>
             </div>
           </div>

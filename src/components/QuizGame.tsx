@@ -57,8 +57,8 @@ export default function QuizGame() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [score, setScore] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
+  const [timeBonus, setTimeBonus] = useState(0); // 남은 시간 총합
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME);
   const [totalTime, setTotalTime] = useState(0);
   const [showResult, setShowResult] = useState(false);
@@ -95,8 +95,8 @@ export default function QuizGame() {
     setCurrentIndex(0);
     setSelectedAnswer(null);
     setIsCorrect(null);
-    setScore(0);
     setCorrectCount(0);
+    setTimeBonus(0);
     setTimeLeft(QUESTION_TIME);
     setTotalTime(0);
     setShowResult(false);
@@ -134,12 +134,14 @@ export default function QuizGame() {
     setIsCorrect(correct);
     setShowResult(true);
     if (correct) {
-      const timeBonus = timeLeft * 5;
-      setScore((prev) => prev + 100 + timeBonus);
       setCorrectCount((prev) => prev + 1);
+      setTimeBonus((prev) => prev + timeLeft); // 남은 시간 누적
     }
     setTimeout(() => { goToNext(); }, 1500);
   };
+
+  // 최종 점수 계산: (정답 수 × 1000) + 남은 시간 총합
+  const getFinalScore = () => correctCount * 1000 + timeBonus;
 
   const goToNext = () => {
     // 모바일에서 버튼 focus 제거
@@ -177,7 +179,7 @@ export default function QuizGame() {
     try {
       const { error } = await supabase.from("quiz_leaderboard").insert({
         nickname: nickname.trim(),
-        score,
+        score: getFinalScore(),
         correct_count: correctCount,
         time_seconds: totalTime,
         grade: gradeInfo.grade,
@@ -213,7 +215,7 @@ export default function QuizGame() {
     const text = `📚 상식 퀴즈 결과!\n\n` +
       `${gradeInfo.emoji} ${gradeInfo.grade}\n` +
       `✅ 정답: ${correctCount}/${QUESTIONS_PER_GAME}\n` +
-      `🎯 점수: ${score}점\n` +
+      `🎯 점수: ${getFinalScore().toLocaleString()}점\n` +
       `⏱️ 소요시간: ${totalTime}초\n\n` +
       (firstPlace ? `🏆 현재 1위: ${firstPlace.nickname} (${firstPlace.score}점)\n\n` : "") +
       `나도 도전하기 👇\n${shareUrl}`;
@@ -245,7 +247,7 @@ export default function QuizGame() {
     }
     const blob = await generateImage();
     if (blob && typeof navigator.share === "function") {
-      const file = new File([blob], `quiz-${score}.png`, { type: "image/png" });
+      const file = new File([blob], `quiz-${getFinalScore()}.png`, { type: "image/png" });
       const shareData = { files: [file], text: `📚 상식 퀴즈! https://www.slox.co.kr/quiz` };
       if (navigator.canShare?.(shareData)) {
         try { await navigator.share(shareData); return; } 
@@ -255,7 +257,7 @@ export default function QuizGame() {
     if (blob) {
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
-      link.download = `quiz-${score}.png`;
+      link.download = `quiz-${getFinalScore()}.png`;
       link.href = url;
       link.click();
       URL.revokeObjectURL(url);
@@ -325,7 +327,7 @@ export default function QuizGame() {
                     <span className="text-2xl">🎯</span>
                     <div>
                       <p className="text-dark-400 text-xs">현재 점수</p>
-                      <p className="text-2xl font-black text-white">{score}점</p>
+                      <p className="text-2xl font-black text-white">{(correctCount * 1000 + timeBonus).toLocaleString()}점</p>
                     </div>
                   </div>
                 </div>
@@ -418,7 +420,7 @@ export default function QuizGame() {
                 <div className="my-6 p-6 bg-dark-800/50 rounded-2xl border border-dark-700">
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div>
-                      <div className="text-3xl font-bold text-yellow-400">{score}</div>
+                      <div className="text-3xl font-bold text-yellow-400">{getFinalScore().toLocaleString()}</div>
                       <div className="text-dark-400 text-sm">총점</div>
                     </div>
                     <div>
@@ -469,7 +471,7 @@ export default function QuizGame() {
             <div style={{ textAlign: "center", padding: "20px", backgroundColor: "#1a1625", borderRadius: "12px", marginBottom: "10px" }}>
               <div style={{ fontSize: "44px" }}>{gradeInfo.emoji}</div>
               <div style={{ fontSize: "26px", fontWeight: "bold", marginTop: "8px", color: "#818cf8" }}>{gradeInfo.grade}</div>
-              <div style={{ fontSize: "44px", fontWeight: "bold", color: "#fde047", marginTop: "8px" }}>{score}<span style={{ fontSize: "18px", color: "#ca8a04" }}> 점</span></div>
+              <div style={{ fontSize: "44px", fontWeight: "bold", color: "#fde047", marginTop: "8px" }}>{getFinalScore().toLocaleString()}<span style={{ fontSize: "18px", color: "#ca8a04" }}> 점</span></div>
               <div style={{ color: "#9ca3af", fontSize: "11px", marginTop: "6px" }}>정답 {correctCount}/{QUESTIONS_PER_GAME} • {totalTime}초</div>
             </div>
             <div style={{ display: "flex", gap: "8px", marginBottom: "10px" }}>
@@ -509,7 +511,7 @@ export default function QuizGame() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-white font-bold">{entry.score}점</div>
+                      <div className="text-white font-bold">{entry.score.toLocaleString()}점</div>
                       <div className="text-xs text-dark-500">{index + 1}위 / {totalCount}명</div>
                     </div>
                   </div>
@@ -534,8 +536,9 @@ export default function QuizGame() {
                 <div className="relative z-10">
                   <div className="text-center mb-4">
                     {(() => {
-                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => score > (e.score || 0)) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => score > (e.score || 0)) + 1;
-                      const isFirstPlace = leaderboard.length === 0 || score > (leaderboard[0]?.score || 0);
+                      const myScore = getFinalScore();
+                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => myScore > (e.score || 0)) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => myScore > (e.score || 0)) + 1;
+                      const isFirstPlace = leaderboard.length === 0 || myScore > (leaderboard[0]?.score || 0);
                       return (
                         <>
                           <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
@@ -544,24 +547,24 @@ export default function QuizGame() {
                           <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : myRank <= 3 ? "text-yellow-400" : "text-white"}`}>
                             {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${myRank}위!`}
                           </h3>
-                          <p className={`text-3xl font-black ${gradeInfo.color}`}>{score}점</p>
+                          <p className={`text-3xl font-black ${gradeInfo.color}`}>{getFinalScore().toLocaleString()}점</p>
                           <p className="text-dark-400 text-sm">{gradeInfo.grade} ({correctCount}/10)</p>
                         </>
                       );
                     })()}
                   </div>
-                  {leaderboard.length > 0 && score <= (leaderboard[0]?.score || 0) && (
+                  {leaderboard.length > 0 && getFinalScore() <= (leaderboard[0]?.score || 0) && (
                     <div className="bg-dark-800/70 rounded-xl p-3 mb-4">
                       <div className="flex items-center justify-between">
                         <div className="text-center flex-1">
                           <p className="text-[10px] text-dark-500 uppercase">현재 1위</p>
-                          <p className="text-yellow-400 font-bold">{leaderboard[0]?.score || 0}점</p>
+                          <p className="text-yellow-400 font-bold">{(leaderboard[0]?.score || 0).toLocaleString()}점</p>
                           <p className="text-xs text-dark-400">{leaderboard[0]?.nickname}</p>
                         </div>
                         <div className="text-dark-600 px-2">vs</div>
                         <div className="text-center flex-1">
                           <p className="text-[10px] text-dark-500 uppercase">내 기록</p>
-                          <p className="text-indigo-400 font-bold">{score}점</p>
+                          <p className="text-indigo-400 font-bold">{getFinalScore().toLocaleString()}점</p>
                         </div>
                       </div>
                     </div>
@@ -588,7 +591,7 @@ export default function QuizGame() {
                 <div className="text-center mb-6">
                   <div className="text-5xl mb-3">{gradeInfo.emoji}</div>
                   <h3 className="text-white text-xl font-bold">🏆 랭킹 등록</h3>
-                  <p className="text-dark-400 text-sm">{score}점 ({correctCount}/10)</p>
+                  <p className="text-dark-400 text-sm">{getFinalScore().toLocaleString()}점 ({correctCount}/10)</p>
                 </div>
                 <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder="닉네임..." className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
                 <div className="flex gap-3">
