@@ -66,7 +66,7 @@ export default function AdminDashboard() {
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   // 비밀번호 확인 (간단하게 환경변수 또는 하드코딩)
-  const ADMIN_PASSWORD = "slox2024!"; // 나중에 환경변수로 변경 권장
+  const ADMIN_PASSWORD = "slox2026!"; // 나중에 환경변수로 변경 권장
 
   const handleLogin = () => {
     if (password === ADMIN_PASSWORD) {
