@@ -204,6 +204,7 @@ export default function Sudoku() {
     try {
       const { error } = await supabase.from("sudoku_leaderboard").insert({
         nickname: nickname.trim(),
+        difficulty: "standard",  // 통합 난이도
         time_seconds: time,
         mistakes,
         grade: gradeInfo.grade,
