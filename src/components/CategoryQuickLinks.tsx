@@ -28,7 +28,7 @@ const categories: Category[] = [
       { title: "에임테스트", href: "/aim", emoji: "🎯" },
       { title: "타자테스트", href: "/typing", emoji: "⌨️" },
       { title: "상식퀴즈", href: "/quiz", emoji: "📚" },
-      { title: "기억력", href: "/memory-test", emoji: "🧠" },
+      { title: "IQ테스트", href: "/iq", emoji: "🧩" },
     ],
   },
   {
