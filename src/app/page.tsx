@@ -9,6 +9,7 @@ import Portfolio from "@/components/Portfolio";
 import Contact from "@/components/Contact";
 import MobileToolsButton from "@/components/MobileToolsButton";
 import DesktopToolsDropdown from "@/components/DesktopToolsDropdown";
+import InstallPWA from "@/components/InstallPWA";
 
 /**
  * SLOX 메인 랜딩페이지
@@ -30,6 +31,7 @@ export default function Home() {
       <Contact />
       <Footer />
       <MobileToolsButton />
+      <InstallPWA />
     </main>
   );
 }
