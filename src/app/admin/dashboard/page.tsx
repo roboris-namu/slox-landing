@@ -20,13 +20,14 @@ import {
 const GAMES = [
   { table: "reaction_leaderboard", name: "반응속도", emoji: "⚡", color: "#f59e0b" },
   { table: "color_leaderboard", name: "색깔찾기", emoji: "🎨", color: "#ec4899" },
-  { table: "card_leaderboard", name: "카드맞추기", emoji: "🃏", color: "#8b5cf6" },
+  { table: "cardmatch_leaderboard", name: "카드맞추기", emoji: "🃏", color: "#8b5cf6" },
   { table: "cps_leaderboard", name: "CPS", emoji: "👆", color: "#06b6d4" },
   { table: "memory_leaderboard", name: "기억력", emoji: "🧠", color: "#10b981" },
   { table: "aim_leaderboard", name: "에임", emoji: "🎯", color: "#ef4444" },
   { table: "quiz_leaderboard", name: "상식퀴즈", emoji: "📚", color: "#6366f1" },
   { table: "iq_leaderboard", name: "IQ테스트", emoji: "🧩", color: "#a855f7" },
   { table: "sudoku_leaderboard", name: "스도쿠", emoji: "🔢", color: "#14b8a6" },
+  { table: "typing_leaderboard", name: "타이핑", emoji: "⌨️", color: "#3b82f6" },
 ];
 
 interface DailyData {
