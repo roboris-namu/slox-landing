@@ -155,11 +155,12 @@ export default function QuizGame() {
   };
 
   const getGrade = () => {
-    if (score >= 1500) return { grade: "천재", emoji: "🧠", color: "text-purple-400" };
-    if (score >= 1200) return { grade: "박학다식", emoji: "📚", color: "text-blue-400" };
-    if (score >= 900) return { grade: "상식왕", emoji: "👑", color: "text-yellow-400" };
-    if (score >= 600) return { grade: "평범", emoji: "😊", color: "text-green-400" };
-    if (score >= 300) return { grade: "노력필요", emoji: "📖", color: "text-orange-400" };
+    // 정답 개수 기반 등급 (10문제 중)
+    if (correctCount >= 10) return { grade: "천재", emoji: "🧠", color: "text-purple-400" };
+    if (correctCount >= 8) return { grade: "박학다식", emoji: "📚", color: "text-blue-400" };
+    if (correctCount >= 6) return { grade: "상식왕", emoji: "👑", color: "text-yellow-400" };
+    if (correctCount >= 4) return { grade: "평범", emoji: "😊", color: "text-green-400" };
+    if (correctCount >= 2) return { grade: "노력필요", emoji: "📖", color: "text-orange-400" };
     return { grade: "공부하자", emoji: "😅", color: "text-red-400" };
   };
 

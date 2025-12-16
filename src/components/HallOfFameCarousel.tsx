@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
@@ -58,11 +58,6 @@ const gameConfigs = [
 export default function HallOfFameCarousel() {
   const [leaderboards, setLeaderboards] = useState<GameLeaderboard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [scrollX, setScrollX] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dragStartX = useRef(0);
-  const scrollStartX = useRef(0);
 
   const fetchAllLeaderboards = useCallback(async () => {
 
@@ -174,42 +169,10 @@ export default function HallOfFameCarousel() {
         <div className="absolute left-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-r from-dark-950 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-l from-dark-950 to-transparent z-10 pointer-events-none" />
 
-        {/* 스와이프 힌트 (모바일) */}
-        <p className="md:hidden text-center text-dark-500 text-xs mb-4 animate-pulse">
-          ← 스와이프하여 더 보기 →
-        </p>
-
-        {/* 스크롤 컨테이너 - 터치/드래그 스와이프 지원 */}
+        {/* 스크롤 컨테이너 - 자동 무한 스크롤 */}
         <div 
-          ref={containerRef}
-          className={`flex gap-4 sm:gap-6 md:gap-8 pl-[30vw] sm:pl-[25vw] md:pl-[20vw] lg:pl-[20vw] cursor-grab active:cursor-grabbing ${!isDragging ? 'animate-scroll-left' : ''}`}
-          style={{ 
-            width: "max-content",
-            transform: isDragging ? `translateX(${scrollX}px)` : undefined,
-          }}
-          onMouseDown={(e) => {
-            setIsDragging(true);
-            dragStartX.current = e.clientX;
-            scrollStartX.current = scrollX;
-          }}
-          onMouseMove={(e) => {
-            if (!isDragging) return;
-            const diff = e.clientX - dragStartX.current;
-            setScrollX(scrollStartX.current + diff);
-          }}
-          onMouseUp={() => setIsDragging(false)}
-          onMouseLeave={() => setIsDragging(false)}
-          onTouchStart={(e) => {
-            setIsDragging(true);
-            dragStartX.current = e.touches[0].clientX;
-            scrollStartX.current = scrollX;
-          }}
-          onTouchMove={(e) => {
-            if (!isDragging) return;
-            const diff = e.touches[0].clientX - dragStartX.current;
-            setScrollX(scrollStartX.current + diff);
-          }}
-          onTouchEnd={() => setIsDragging(false)}
+          className="flex gap-4 sm:gap-6 md:gap-8 pl-[30vw] sm:pl-[25vw] md:pl-[20vw] lg:pl-[20vw] animate-scroll-left"
+          style={{ width: "max-content" }}
         >
           {duplicatedLeaderboards.map((lb, idx) => {
             const isEventGame = lb.game === "reaction"; // 🎁 현재 이벤트 중인 게임

@@ -160,10 +160,13 @@ export default function IQTest() {
   };
 
   const calculateIQ = () => {
-    const baseIQ = 80;
-    const correctBonus = correctCount * 10;
-    const speedBonus = Math.max(0, Math.floor((QUESTIONS_PER_GAME * 30 - totalTime) / 20));
-    return Math.min(160, baseIQ + correctBonus + speedBonus);
+    // 정답 개수 기반 IQ 계산 (0개=70, 12개=150)
+    // 12문제 중 정답 비율로 IQ 산출
+    const baseIQ = 70;
+    const correctBonus = Math.round(correctCount * 6.7); // 0~80점
+    // 고득점(빠르게+난이도 높게)일 경우 미세 보너스 (최대 10점)
+    const scoreBonus = Math.min(10, Math.floor(score / 150));
+    return Math.min(160, Math.max(70, baseIQ + correctBonus + scoreBonus));
   };
 
   const getIQGrade = (iq: number) => {
