@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import MainBanner from "@/components/MainBanner";
 
 export const metadata: Metadata = {
   title: "SLOX - Ferramentas Online Grátis | Teste QI・Teste de Reação・Jogos",
@@ -9,15 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function PortugueseHome() {
-  const banners = [
-    { title: "⚡ Teste de Reação", subtitle: "🎁 Ganhe um vale-presente! Evento ativo", cta: "Desafio", href: "/pt/reaction", gradient: "from-purple-600 via-pink-500 to-red-500", badge: "🎁 EVENTO" },
-    { title: "🧠 Teste de QI", subtitle: "Qual é seu QI? 12 perguntas", cta: "Começar", href: "/pt/iq", gradient: "from-indigo-600 via-purple-500 to-pink-500", badge: "✨ NOVO" },
-    { title: "📚 Quiz de Conhecimentos", subtitle: "Teste seus conhecimentos!", cta: "Começar", href: "/pt/quiz", gradient: "from-blue-600 via-cyan-500 to-teal-500", badge: "✨ NOVO" },
-    { title: "🧩 Sudoku", subtitle: "Treino cerebral - 3 níveis", cta: "Jogar", href: "/pt/sudoku", gradient: "from-emerald-600 via-teal-500 to-cyan-500", badge: "✨ NOVO" },
-    { title: "🎨 Encontre a Cor", subtitle: "Encontre a cor diferente!", cta: "Desafio", href: "/pt/color", gradient: "from-orange-600 via-amber-500 to-yellow-500" },
-    { title: "🖱️ Teste CPS", subtitle: "Cliques por segundo", cta: "Testar", href: "/pt/cps", gradient: "from-rose-600 via-red-500 to-orange-500" },
-  ];
-
   const tools = [
     { emoji: "⚡", name: "Reação", href: "/pt/reaction", badge: "EVENTO" },
     { emoji: "🧠", name: "Teste QI", href: "/pt/iq", badge: "NOVO" },
@@ -54,22 +46,7 @@ export default function PortugueseHome() {
         </div>
       </nav>
 
-      <section className="pt-28 pb-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="relative overflow-hidden rounded-3xl">
-            <div className="flex animate-scroll-left-slow">
-              {[...banners, ...banners].map((b, i) => (
-                <Link key={i} href={b.href} className={`flex-shrink-0 w-[85vw] md:w-[600px] mx-2 p-8 md:p-10 rounded-2xl bg-gradient-to-br ${b.gradient} relative group`}>
-                  {b.badge && <span className="absolute top-4 right-4 bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">{b.badge}</span>}
-                  <h2 className="text-2xl md:text-4xl font-black text-white mb-2">{b.title}</h2>
-                  <p className="text-white/80 mb-6">{b.subtitle}</p>
-                  <span className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 text-white font-bold rounded-xl">{b.cta} →</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <MainBanner locale="pt" />
 
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
@@ -123,4 +100,3 @@ function LanguageSelector({ locale }: { locale: string }) {
     </div>
   );
 }
-

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import MainBanner from "@/components/MainBanner";
 
 export const metadata: Metadata = {
   title: "SLOX - Kostenlose Online-Tools | IQ-Test・Reaktionstest・Spiele",
@@ -9,15 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function GermanHome() {
-  const banners = [
-    { title: "⚡ Reaktionstest", subtitle: "🎁 Gewinne einen Gutschein! Event läuft", cta: "Herausforderung", href: "/de/reaction", gradient: "from-purple-600 via-pink-500 to-red-500", badge: "🎁 EVENT" },
-    { title: "🧠 IQ-Test", subtitle: "Wie hoch ist dein IQ? 12 Muster-Fragen", cta: "Test starten", href: "/de/iq", gradient: "from-indigo-600 via-purple-500 to-pink-500", badge: "✨ NEU" },
-    { title: "📚 Wissensquiz", subtitle: "Teste dein Wissen! 10 Fragen", cta: "Quiz starten", href: "/de/quiz", gradient: "from-blue-600 via-cyan-500 to-teal-500", badge: "✨ NEU" },
-    { title: "🧩 Sudoku", subtitle: "Gehirntraining - 3 Schwierigkeiten", cta: "Spielen", href: "/de/sudoku", gradient: "from-emerald-600 via-teal-500 to-cyan-500", badge: "✨ NEU" },
-    { title: "🎨 Farbe finden", subtitle: "Finde die andere Farbe! Augentest", cta: "Herausforderung", href: "/de/color", gradient: "from-orange-600 via-amber-500 to-yellow-500" },
-    { title: "🖱️ CPS-Test", subtitle: "Klicks pro Sekunde", cta: "Testen", href: "/de/cps", gradient: "from-rose-600 via-red-500 to-orange-500" },
-  ];
-
   const tools = [
     { emoji: "⚡", name: "Reaktion", href: "/de/reaction", badge: "EVENT" },
     { emoji: "🧠", name: "IQ-Test", href: "/de/iq", badge: "NEU" },
@@ -54,22 +46,7 @@ export default function GermanHome() {
         </div>
       </nav>
 
-      <section className="pt-28 pb-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="relative overflow-hidden rounded-3xl">
-            <div className="flex animate-scroll-left-slow">
-              {[...banners, ...banners].map((b, i) => (
-                <Link key={i} href={b.href} className={`flex-shrink-0 w-[85vw] md:w-[600px] mx-2 p-8 md:p-10 rounded-2xl bg-gradient-to-br ${b.gradient} relative group`}>
-                  {b.badge && <span className="absolute top-4 right-4 bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">{b.badge}</span>}
-                  <h2 className="text-2xl md:text-4xl font-black text-white mb-2">{b.title}</h2>
-                  <p className="text-white/80 mb-6">{b.subtitle}</p>
-                  <span className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 text-white font-bold rounded-xl">{b.cta} →</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <MainBanner locale="de" />
 
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
@@ -123,4 +100,3 @@ function LanguageSelector({ locale }: { locale: string }) {
     </div>
   );
 }
-

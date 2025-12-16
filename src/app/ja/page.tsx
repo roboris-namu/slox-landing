@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import MainBanner from "@/components/MainBanner";
 
 export const metadata: Metadata = {
   title: "SLOX - 無料オンラインツール | IQテスト・反応速度テスト・ゲーム",
@@ -16,7 +17,7 @@ export default function JapaneseHome() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
-      <MainBanner />
+      <MainBanner locale="ja" />
       <CategoryQuickLinks />
       <FreeToolsSection />
       <Footer />
@@ -98,100 +99,6 @@ function LanguageSelector({ currentLocale }: { currentLocale: string }) {
         ))}
       </div>
     </div>
-  );
-}
-
-function MainBanner() {
-  const banners = [
-    {
-      title: "⚡ 反応速度テスト",
-      subtitle: "🎁 1位にギフト券進呈！イベント開催中",
-      cta: "チャレンジ",
-      href: "/ja/reaction",
-      gradient: "from-purple-600 via-pink-500 to-red-500",
-      badge: "🎁 EVENT",
-      badgeColor: "bg-yellow-500 text-black",
-    },
-    {
-      title: "🧠 IQテスト",
-      subtitle: "あなたのIQは？12問のパターン問題",
-      cta: "テスト開始",
-      href: "/ja/iq",
-      gradient: "from-indigo-600 via-purple-500 to-pink-500",
-      badge: "✨ NEW",
-      badgeColor: "bg-cyan-500 text-black",
-    },
-    {
-      title: "📚 一般常識クイズ",
-      subtitle: "あなたの常識力をテスト！10問",
-      cta: "クイズ開始",
-      href: "/ja/quiz",
-      gradient: "from-blue-600 via-cyan-500 to-teal-500",
-      badge: "✨ NEW",
-      badgeColor: "bg-cyan-500 text-black",
-    },
-    {
-      title: "🧩 数独",
-      subtitle: "脳トレパズル - 3つの難易度",
-      cta: "プレイ",
-      href: "/ja/sudoku",
-      gradient: "from-emerald-600 via-teal-500 to-cyan-500",
-      badge: "✨ NEW",
-      badgeColor: "bg-cyan-500 text-black",
-    },
-    {
-      title: "🎨 色探しゲーム",
-      subtitle: "違う色を見つけよう！目のテスト",
-      cta: "チャレンジ",
-      href: "/ja/color",
-      gradient: "from-orange-600 via-amber-500 to-yellow-500",
-    },
-    {
-      title: "🖱️ CPSテスト",
-      subtitle: "クリック速度テスト",
-      cta: "テスト",
-      href: "/ja/cps",
-      gradient: "from-rose-600 via-red-500 to-orange-500",
-    },
-  ];
-
-  return (
-    <section className="pt-28 pb-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="relative overflow-hidden rounded-3xl">
-          <div className="flex animate-scroll-left-slow">
-            {[...banners, ...banners].map((banner, idx) => (
-              <Link
-                key={idx}
-                href={banner.href}
-                className={`flex-shrink-0 w-[85vw] md:w-[600px] mx-2 p-8 md:p-10 rounded-2xl bg-gradient-to-br ${banner.gradient} relative overflow-hidden group`}
-              >
-                {banner.badge && (
-                  <span className={`absolute top-4 right-4 ${banner.badgeColor} text-xs font-bold px-3 py-1 rounded-full`}>
-                    {banner.badge}
-                  </span>
-                )}
-                <div className="relative z-10">
-                  <h2 className="text-2xl md:text-4xl font-black text-white mb-2 drop-shadow-lg">
-                    {banner.title}
-                  </h2>
-                  <p className="text-white/80 text-sm md:text-base mb-6">
-                    {banner.subtitle}
-                  </p>
-                  <span className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 backdrop-blur-sm text-white font-bold rounded-xl group-hover:bg-white/30 transition-all">
-                    {banner.cta}
-                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-                </div>
-                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors" />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 

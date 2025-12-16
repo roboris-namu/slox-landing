@@ -16,73 +16,74 @@ interface BannerItem {
   badgeColor?: string;
 }
 
-const banners: BannerItem[] = [
-  // 1순위: 이벤트
-  {
-    id: 1,
-    title: "반응속도 테스트",
-    subtitle: "당신은 얼마나 빠른가요?",
-    description: "초록불이 켜지면 클릭! 1등에게 문화상품권 증정!",
-    buttonText: "도전하기 →",
-    href: "/reaction",
-    gradient: "from-green-500 via-emerald-500 to-teal-500",
-    emoji: "⚡",
-    badge: "🎁 이벤트 진행중",
-    badgeColor: "bg-red-500",
-  },
-  // 2순위: NEW 게임들
-  {
-    id: 2,
-    title: "상식 퀴즈",
-    subtitle: "당신의 상식을 테스트하세요!",
-    description: "역사, 과학, 지리 등 10문제! 빨리 맞출수록 높은 점수!",
-    buttonText: "퀴즈 시작 →",
-    href: "/quiz",
-    gradient: "from-indigo-500 via-purple-500 to-pink-500",
-    emoji: "📚",
-    badge: "NEW",
-    badgeColor: "bg-purple-500",
-  },
-  {
-    id: 3,
-    title: "IQ 테스트",
-    subtitle: "멘사 스타일 패턴 분석!",
-    description: "패턴을 찾아 당신의 IQ를 측정해보세요!",
-    buttonText: "테스트 시작 →",
-    href: "/iq",
-    gradient: "from-pink-500 via-rose-500 to-red-500",
-    emoji: "🧩",
-    badge: "NEW",
-    badgeColor: "bg-pink-500",
-  },
-  {
-    id: 4,
-    title: "스도쿠",
-    subtitle: "숫자 퍼즐의 고전!",
-    description: "9x9 빈칸을 채워 완성하세요. 난이도별 랭킹 도전!",
-    buttonText: "플레이 →",
-    href: "/sudoku",
-    gradient: "from-cyan-500 via-blue-500 to-indigo-600",
-    emoji: "🔢",
-    badge: "NEW",
-    badgeColor: "bg-cyan-500",
-  },
-  // 3순위: 매일 방문 유도
-  {
-    id: 5,
-    title: "오늘의 운세",
-    subtitle: "당신의 오늘 하루는?",
-    description: "12가지 별자리로 알아보는 오늘의 운세! 매일 업데이트됩니다.",
-    buttonText: "운세 확인하기 →",
-    href: "/fortune",
-    gradient: "from-purple-600 via-pink-500 to-orange-400",
-    emoji: "🔮",
-    badge: "매일 새로워요",
-    badgeColor: "bg-orange-500",
-  },
-];
+type Locale = 'ko' | 'en' | 'ja' | 'zh' | 'de' | 'fr' | 'es' | 'pt';
 
-export default function MainBanner() {
+const bannersByLocale: Record<Locale, BannerItem[]> = {
+  ko: [
+    { id: 1, title: "반응속도 테스트", subtitle: "당신은 얼마나 빠른가요?", description: "초록불이 켜지면 클릭! 1등에게 문화상품권 증정!", buttonText: "도전하기 →", href: "/reaction", gradient: "from-green-500 via-emerald-500 to-teal-500", emoji: "⚡", badge: "🎁 이벤트 진행중", badgeColor: "bg-red-500" },
+    { id: 2, title: "상식 퀴즈", subtitle: "당신의 상식을 테스트하세요!", description: "역사, 과학, 지리 등 10문제! 빨리 맞출수록 높은 점수!", buttonText: "퀴즈 시작 →", href: "/quiz", gradient: "from-indigo-500 via-purple-500 to-pink-500", emoji: "📚", badge: "NEW", badgeColor: "bg-purple-500" },
+    { id: 3, title: "IQ 테스트", subtitle: "멘사 스타일 패턴 분석!", description: "패턴을 찾아 당신의 IQ를 측정해보세요!", buttonText: "테스트 시작 →", href: "/iq", gradient: "from-pink-500 via-rose-500 to-red-500", emoji: "🧩", badge: "NEW", badgeColor: "bg-pink-500" },
+    { id: 4, title: "스도쿠", subtitle: "숫자 퍼즐의 고전!", description: "9x9 빈칸을 채워 완성하세요. 난이도별 랭킹 도전!", buttonText: "플레이 →", href: "/sudoku", gradient: "from-cyan-500 via-blue-500 to-indigo-600", emoji: "🔢", badge: "NEW", badgeColor: "bg-cyan-500" },
+    { id: 5, title: "오늘의 운세", subtitle: "당신의 오늘 하루는?", description: "12가지 별자리로 알아보는 오늘의 운세! 매일 업데이트됩니다.", buttonText: "운세 확인하기 →", href: "/fortune", gradient: "from-purple-600 via-pink-500 to-orange-400", emoji: "🔮", badge: "매일 새로워요", badgeColor: "bg-orange-500" },
+  ],
+  en: [
+    { id: 1, title: "Reaction Test", subtitle: "How fast are you?", description: "Click when green! Win a gift card for 1st place!", buttonText: "Challenge →", href: "/en/reaction", gradient: "from-green-500 via-emerald-500 to-teal-500", emoji: "⚡", badge: "🎁 EVENT", badgeColor: "bg-red-500" },
+    { id: 2, title: "Trivia Quiz", subtitle: "Test your knowledge!", description: "10 questions on history, science & more!", buttonText: "Start Quiz →", href: "/en/quiz", gradient: "from-indigo-500 via-purple-500 to-pink-500", emoji: "📚", badge: "NEW", badgeColor: "bg-purple-500" },
+    { id: 3, title: "IQ Test", subtitle: "Mensa-style patterns!", description: "Find patterns and measure your IQ!", buttonText: "Start Test →", href: "/en/iq", gradient: "from-pink-500 via-rose-500 to-red-500", emoji: "🧩", badge: "NEW", badgeColor: "bg-pink-500" },
+    { id: 4, title: "Sudoku", subtitle: "Classic number puzzle!", description: "Fill the 9x9 grid. Compete on leaderboards!", buttonText: "Play →", href: "/en/sudoku", gradient: "from-cyan-500 via-blue-500 to-indigo-600", emoji: "🔢", badge: "NEW", badgeColor: "bg-cyan-500" },
+    { id: 5, title: "Daily Fortune", subtitle: "What's your day like?", description: "Check your daily horoscope! Updated every day.", buttonText: "Check Fortune →", href: "/en/fortune", gradient: "from-purple-600 via-pink-500 to-orange-400", emoji: "🔮", badge: "Daily", badgeColor: "bg-orange-500" },
+  ],
+  ja: [
+    { id: 1, title: "反応速度テスト", subtitle: "あなたはどれくらい速い？", description: "緑になったらクリック！1位にギフト券進呈！", buttonText: "チャレンジ →", href: "/ja/reaction", gradient: "from-green-500 via-emerald-500 to-teal-500", emoji: "⚡", badge: "🎁 イベント中", badgeColor: "bg-red-500" },
+    { id: 2, title: "常識クイズ", subtitle: "あなたの常識をテスト！", description: "歴史、科学など10問！早く答えるほど高得点！", buttonText: "クイズ開始 →", href: "/ja/quiz", gradient: "from-indigo-500 via-purple-500 to-pink-500", emoji: "📚", badge: "NEW", badgeColor: "bg-purple-500" },
+    { id: 3, title: "IQテスト", subtitle: "メンサ式パターン分析！", description: "パターンを見つけてIQを測定！", buttonText: "テスト開始 →", href: "/ja/iq", gradient: "from-pink-500 via-rose-500 to-red-500", emoji: "🧩", badge: "NEW", badgeColor: "bg-pink-500" },
+    { id: 4, title: "数独", subtitle: "数字パズルの定番！", description: "9x9を完成させよう。難易度別ランキング！", buttonText: "プレイ →", href: "/ja/sudoku", gradient: "from-cyan-500 via-blue-500 to-indigo-600", emoji: "🔢", badge: "NEW", badgeColor: "bg-cyan-500" },
+    { id: 5, title: "今日の運勢", subtitle: "今日はどんな日？", description: "12星座の運勢を毎日更新！", buttonText: "運勢を見る →", href: "/ja/fortune", gradient: "from-purple-600 via-pink-500 to-orange-400", emoji: "🔮", badge: "毎日更新", badgeColor: "bg-orange-500" },
+  ],
+  zh: [
+    { id: 1, title: "反应速度测试", subtitle: "你有多快？", description: "绿灯亮起时点击！第一名赢礼品卡！", buttonText: "挑战 →", href: "/zh/reaction", gradient: "from-green-500 via-emerald-500 to-teal-500", emoji: "⚡", badge: "🎁 活动中", badgeColor: "bg-red-500" },
+    { id: 2, title: "常识问答", subtitle: "测试你的知识！", description: "历史、科学等10题！答得越快分数越高！", buttonText: "开始问答 →", href: "/zh/quiz", gradient: "from-indigo-500 via-purple-500 to-pink-500", emoji: "📚", badge: "NEW", badgeColor: "bg-purple-500" },
+    { id: 3, title: "IQ测试", subtitle: "门萨式图案分析！", description: "找出规律，测量你的IQ！", buttonText: "开始测试 →", href: "/zh/iq", gradient: "from-pink-500 via-rose-500 to-red-500", emoji: "🧩", badge: "NEW", badgeColor: "bg-pink-500" },
+    { id: 4, title: "数独", subtitle: "经典数字拼图！", description: "填满9x9格子，挑战排行榜！", buttonText: "开始玩 →", href: "/zh/sudoku", gradient: "from-cyan-500 via-blue-500 to-indigo-600", emoji: "🔢", badge: "NEW", badgeColor: "bg-cyan-500" },
+    { id: 5, title: "今日运势", subtitle: "你的今天如何？", description: "每日更新的星座运势！", buttonText: "查看运势 →", href: "/zh/fortune", gradient: "from-purple-600 via-pink-500 to-orange-400", emoji: "🔮", badge: "每日更新", badgeColor: "bg-orange-500" },
+  ],
+  de: [
+    { id: 1, title: "Reaktionstest", subtitle: "Wie schnell bist du?", description: "Klicke bei Grün! Gewinne einen Gutschein!", buttonText: "Herausforderung →", href: "/de/reaction", gradient: "from-green-500 via-emerald-500 to-teal-500", emoji: "⚡", badge: "🎁 EVENT", badgeColor: "bg-red-500" },
+    { id: 2, title: "Wissensquiz", subtitle: "Teste dein Wissen!", description: "10 Fragen zu Geschichte, Wissenschaft & mehr!", buttonText: "Quiz starten →", href: "/de/quiz", gradient: "from-indigo-500 via-purple-500 to-pink-500", emoji: "📚", badge: "NEU", badgeColor: "bg-purple-500" },
+    { id: 3, title: "IQ-Test", subtitle: "Mensa-Muster!", description: "Finde Muster und miss deinen IQ!", buttonText: "Test starten →", href: "/de/iq", gradient: "from-pink-500 via-rose-500 to-red-500", emoji: "🧩", badge: "NEU", badgeColor: "bg-pink-500" },
+    { id: 4, title: "Sudoku", subtitle: "Klassisches Zahlenrätsel!", description: "Fülle das 9x9-Gitter aus!", buttonText: "Spielen →", href: "/de/sudoku", gradient: "from-cyan-500 via-blue-500 to-indigo-600", emoji: "🔢", badge: "NEU", badgeColor: "bg-cyan-500" },
+    { id: 5, title: "Tageshoroskop", subtitle: "Wie wird dein Tag?", description: "Täglich aktualisiertes Horoskop!", buttonText: "Horoskop sehen →", href: "/de/fortune", gradient: "from-purple-600 via-pink-500 to-orange-400", emoji: "🔮", badge: "Täglich", badgeColor: "bg-orange-500" },
+  ],
+  fr: [
+    { id: 1, title: "Test de Réaction", subtitle: "Êtes-vous rapide?", description: "Cliquez au vert! Gagnez une carte cadeau!", buttonText: "Défi →", href: "/fr/reaction", gradient: "from-green-500 via-emerald-500 to-teal-500", emoji: "⚡", badge: "🎁 ÉVÉNEMENT", badgeColor: "bg-red-500" },
+    { id: 2, title: "Quiz Culture", subtitle: "Testez vos connaissances!", description: "10 questions sur l'histoire, la science & plus!", buttonText: "Commencer →", href: "/fr/quiz", gradient: "from-indigo-500 via-purple-500 to-pink-500", emoji: "📚", badge: "NOUVEAU", badgeColor: "bg-purple-500" },
+    { id: 3, title: "Test de QI", subtitle: "Motifs style Mensa!", description: "Trouvez les motifs et mesurez votre QI!", buttonText: "Commencer →", href: "/fr/iq", gradient: "from-pink-500 via-rose-500 to-red-500", emoji: "🧩", badge: "NOUVEAU", badgeColor: "bg-pink-500" },
+    { id: 4, title: "Sudoku", subtitle: "Puzzle de chiffres classique!", description: "Remplissez la grille 9x9!", buttonText: "Jouer →", href: "/fr/sudoku", gradient: "from-cyan-500 via-blue-500 to-indigo-600", emoji: "🔢", badge: "NOUVEAU", badgeColor: "bg-cyan-500" },
+    { id: 5, title: "Horoscope du Jour", subtitle: "Comment sera votre journée?", description: "Horoscope mis à jour quotidiennement!", buttonText: "Voir l'horoscope →", href: "/fr/fortune", gradient: "from-purple-600 via-pink-500 to-orange-400", emoji: "🔮", badge: "Quotidien", badgeColor: "bg-orange-500" },
+  ],
+  es: [
+    { id: 1, title: "Test de Reacción", subtitle: "¿Qué tan rápido eres?", description: "¡Haz clic en verde! ¡Gana una tarjeta regalo!", buttonText: "Desafío →", href: "/es/reaction", gradient: "from-green-500 via-emerald-500 to-teal-500", emoji: "⚡", badge: "🎁 EVENTO", badgeColor: "bg-red-500" },
+    { id: 2, title: "Quiz de Cultura", subtitle: "¡Pon a prueba tus conocimientos!", description: "10 preguntas de historia, ciencia y más!", buttonText: "Empezar →", href: "/es/quiz", gradient: "from-indigo-500 via-purple-500 to-pink-500", emoji: "📚", badge: "NUEVO", badgeColor: "bg-purple-500" },
+    { id: 3, title: "Test de IQ", subtitle: "¡Patrones estilo Mensa!", description: "¡Encuentra patrones y mide tu IQ!", buttonText: "Empezar →", href: "/es/iq", gradient: "from-pink-500 via-rose-500 to-red-500", emoji: "🧩", badge: "NUEVO", badgeColor: "bg-pink-500" },
+    { id: 4, title: "Sudoku", subtitle: "¡Puzzle de números clásico!", description: "¡Completa la cuadrícula 9x9!", buttonText: "Jugar →", href: "/es/sudoku", gradient: "from-cyan-500 via-blue-500 to-indigo-600", emoji: "🔢", badge: "NUEVO", badgeColor: "bg-cyan-500" },
+    { id: 5, title: "Horóscopo del Día", subtitle: "¿Cómo será tu día?", description: "¡Horóscopo actualizado diariamente!", buttonText: "Ver horóscopo →", href: "/es/fortune", gradient: "from-purple-600 via-pink-500 to-orange-400", emoji: "🔮", badge: "Diario", badgeColor: "bg-orange-500" },
+  ],
+  pt: [
+    { id: 1, title: "Teste de Reação", subtitle: "Quão rápido você é?", description: "Clique no verde! Ganhe um vale-presente!", buttonText: "Desafio →", href: "/pt/reaction", gradient: "from-green-500 via-emerald-500 to-teal-500", emoji: "⚡", badge: "🎁 EVENTO", badgeColor: "bg-red-500" },
+    { id: 2, title: "Quiz de Conhecimentos", subtitle: "Teste seus conhecimentos!", description: "10 perguntas de história, ciência e mais!", buttonText: "Começar →", href: "/pt/quiz", gradient: "from-indigo-500 via-purple-500 to-pink-500", emoji: "📚", badge: "NOVO", badgeColor: "bg-purple-500" },
+    { id: 3, title: "Teste de QI", subtitle: "Padrões estilo Mensa!", description: "Encontre padrões e meça seu QI!", buttonText: "Começar →", href: "/pt/iq", gradient: "from-pink-500 via-rose-500 to-red-500", emoji: "🧩", badge: "NOVO", badgeColor: "bg-pink-500" },
+    { id: 4, title: "Sudoku", subtitle: "Puzzle de números clássico!", description: "Complete a grade 9x9!", buttonText: "Jogar →", href: "/pt/sudoku", gradient: "from-cyan-500 via-blue-500 to-indigo-600", emoji: "🔢", badge: "NOVO", badgeColor: "bg-cyan-500" },
+    { id: 5, title: "Horóscopo do Dia", subtitle: "Como será seu dia?", description: "Horóscopo atualizado diariamente!", buttonText: "Ver horóscopo →", href: "/pt/fortune", gradient: "from-purple-600 via-pink-500 to-orange-400", emoji: "🔮", badge: "Diário", badgeColor: "bg-orange-500" },
+  ],
+};
+
+interface MainBannerProps {
+  locale?: Locale;
+}
+
+export default function MainBanner({ locale = 'ko' }: MainBannerProps) {
+  const banners = bannersByLocale[locale] || bannersByLocale.ko;
+  
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -97,7 +98,7 @@ export default function MainBanner() {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying]);
+  }, [isAutoPlaying, banners.length]);
 
   // 다음/이전 슬라이드
   const goToSlide = useCallback((index: number) => {

@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import MainBanner from "@/components/MainBanner";
 
 export const metadata: Metadata = {
   title: "SLOX - 免费在线工具 | IQ测试・反应速度测试・游戏",
@@ -9,15 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function ChineseHome() {
-  const banners = [
-    { title: "⚡ 反应速度测试", subtitle: "🎁 第一名赢礼品卡！活动进行中", cta: "挑战", href: "/zh/reaction", gradient: "from-purple-600 via-pink-500 to-red-500", badge: "🎁 活动" },
-    { title: "🧠 IQ测试", subtitle: "你的IQ是多少？12道图案题", cta: "开始测试", href: "/zh/iq", gradient: "from-indigo-600 via-purple-500 to-pink-500", badge: "✨ 新" },
-    { title: "📚 常识问答", subtitle: "测试你的知识！10道题", cta: "开始", href: "/zh/quiz", gradient: "from-blue-600 via-cyan-500 to-teal-500", badge: "✨ 新" },
-    { title: "🧩 数独", subtitle: "大脑训练拼图 - 3个难度", cta: "开始玩", href: "/zh/sudoku", gradient: "from-emerald-600 via-teal-500 to-cyan-500", badge: "✨ 新" },
-    { title: "🎨 找颜色", subtitle: "找出不同的颜色！眼力测试", cta: "挑战", href: "/zh/color", gradient: "from-orange-600 via-amber-500 to-yellow-500" },
-    { title: "🖱️ CPS测试", subtitle: "每秒点击次数测试", cta: "测试", href: "/zh/cps", gradient: "from-rose-600 via-red-500 to-orange-500" },
-  ];
-
   const tools = [
     { emoji: "⚡", name: "反应测试", href: "/zh/reaction", badge: "活动" },
     { emoji: "🧠", name: "IQ测试", href: "/zh/iq", badge: "新" },
@@ -54,22 +46,7 @@ export default function ChineseHome() {
         </div>
       </nav>
 
-      <section className="pt-28 pb-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="relative overflow-hidden rounded-3xl">
-            <div className="flex animate-scroll-left-slow">
-              {[...banners, ...banners].map((b, i) => (
-                <Link key={i} href={b.href} className={`flex-shrink-0 w-[85vw] md:w-[600px] mx-2 p-8 md:p-10 rounded-2xl bg-gradient-to-br ${b.gradient} relative group`}>
-                  {b.badge && <span className="absolute top-4 right-4 bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full">{b.badge}</span>}
-                  <h2 className="text-2xl md:text-4xl font-black text-white mb-2">{b.title}</h2>
-                  <p className="text-white/80 mb-6">{b.subtitle}</p>
-                  <span className="inline-flex items-center gap-2 px-6 py-3 bg-white/20 text-white font-bold rounded-xl">{b.cta} →</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      <MainBanner locale="zh" />
 
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
@@ -123,4 +100,3 @@ function LanguageSelector({ locale }: { locale: string }) {
     </div>
   );
 }
-
