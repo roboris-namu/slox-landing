@@ -211,30 +211,34 @@ export default function InstallButton() {
         {guideType === "pc" && (
           <>
             <div className="text-center mb-6">
-              <div className="text-5xl mb-3">💻</div>
-              <h3 className="text-white text-xl font-bold">PC에서 설치하기</h3>
-              <p className="text-dark-400 text-sm mt-1">모바일에서 더 편하게 이용하세요!</p>
+              <div className="text-5xl mb-3">📱</div>
+              <h3 className="text-white text-xl font-bold">모바일에서 설치하세요!</h3>
+              <p className="text-dark-400 text-sm mt-1">스마트폰에서 더 빠르고 편리해요</p>
             </div>
 
             <div className="space-y-4 mb-6">
-              {/* 모바일 추천 */}
-              <div className="p-4 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 rounded-xl">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">📱</span>
-                  <span className="text-white font-bold">모바일 추천!</span>
+              {/* 모바일 설치 안내 */}
+              <div className="p-5 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 border border-purple-500/30 rounded-xl">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                  <div className="text-4xl">🐂</div>
                 </div>
-                <p className="text-dark-300 text-sm">
-                  스마트폰에서 <span className="text-purple-400 font-medium">slox.co.kr</span> 접속 후<br/>
-                  앱 설치 버튼을 눌러주세요!
-                </p>
+                <div className="text-center">
+                  <p className="text-white font-bold text-lg mb-2">SLOX 앱 설치</p>
+                  <p className="text-dark-300 text-sm mb-3">
+                    스마트폰으로 아래 주소 접속 후<br/>
+                    <span className="text-purple-400 font-bold">📲 앱 설치</span> 버튼을 눌러주세요!
+                  </p>
+                  <div className="bg-dark-800 rounded-lg py-2 px-4 inline-block">
+                    <span className="text-purple-400 font-mono font-bold">slox.co.kr</span>
+                  </div>
+                </div>
               </div>
 
-              {/* PC Chrome 설치 방법 */}
-              <div className="p-3 bg-dark-800 rounded-xl">
-                <p className="text-dark-400 text-xs mb-2">💡 PC Chrome에서도 가능해요</p>
-                <p className="text-dark-300 text-sm">
-                  주소창 오른쪽의 <span className="text-blue-400">⊕</span> 설치 아이콘 클릭
-                </p>
+              {/* 장점 */}
+              <div className="flex gap-2 text-xs text-dark-400">
+                <span className="bg-dark-800 px-2 py-1 rounded-full">⚡ 빠른 실행</span>
+                <span className="bg-dark-800 px-2 py-1 rounded-full">📴 오프라인 가능</span>
+                <span className="bg-dark-800 px-2 py-1 rounded-full">🔔 알림</span>
               </div>
             </div>
           </>
