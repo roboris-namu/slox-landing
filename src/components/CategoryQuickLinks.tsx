@@ -83,37 +83,39 @@ export default function CategoryQuickLinks() {
   return (
     <section className="relative py-6 md:py-8">
       <div className="max-w-6xl mx-auto px-4">
-        {/* 카테고리 버튼들 */}
-        <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+        {/* 카테고리 버튼들 - 1줄 */}
+        <div className="flex justify-center gap-2 md:gap-3 overflow-x-auto pb-2 scrollbar-hide">
           {categories.map((category) => (
-            <div key={category.id} className="group relative">
+            <div key={category.id} className="group relative flex-shrink-0">
               {/* 버튼 + 드롭다운 컨테이너 */}
-              <div className={`rounded-2xl border border-transparent group-hover:border-white/20 transition-all duration-300 group-hover:bg-dark-800/80 group-hover:shadow-xl`}>
+              <div className={`rounded-xl border border-transparent group-hover:border-white/20 transition-all duration-300 group-hover:bg-dark-800/90 group-hover:shadow-xl`}>
                 {/* 버튼 */}
                 <button
-                  className={`flex items-center gap-2 px-4 py-2.5 md:px-5 md:py-3 bg-dark-800/50 group-hover:bg-transparent border border-white/10 group-hover:border-transparent rounded-2xl group-hover:rounded-b-none transition-all duration-300`}
+                  className={`flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2.5 bg-dark-800/60 group-hover:bg-transparent border border-white/10 group-hover:border-transparent rounded-xl group-hover:rounded-b-none transition-all duration-300`}
                 >
-                  <span className="text-xl md:text-2xl">{category.emoji}</span>
-                  <span className="font-medium text-white text-sm md:text-base">{category.title}</span>
-                  <span className={`px-2 py-0.5 bg-gradient-to-r ${category.color} text-white text-xs font-bold rounded-full`}>
+                  <span className="text-lg md:text-xl">{category.emoji}</span>
+                  <span className="font-medium text-white text-xs md:text-sm">{category.title}</span>
+                  <span className={`px-1.5 py-0.5 bg-gradient-to-r ${category.color} text-white text-[10px] md:text-xs font-bold rounded-full`}>
                     {category.count}
                   </span>
                 </button>
 
                 {/* 드롭다운 메뉴 */}
-                <div className="max-h-0 overflow-hidden group-hover:max-h-[300px] transition-all duration-300 ease-out">
-                  <div className="p-3 border-t border-white/10">
-                    <div className="grid grid-cols-2 gap-2">
-                      {category.items.map((item) => (
-                        <Link
-                          key={item.href}
-                          href={item.href}
-                          className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-white/10 transition-colors"
-                        >
-                          <span className="text-lg">{item.emoji}</span>
-                          <span className="text-sm text-white/80 hover:text-white whitespace-nowrap">{item.title}</span>
-                        </Link>
-                      ))}
+                <div className="absolute top-full left-0 z-50 min-w-[200px] max-h-0 overflow-hidden group-hover:max-h-[300px] transition-all duration-300 ease-out">
+                  <div className="bg-dark-800/95 backdrop-blur-sm border border-white/10 border-t-0 rounded-b-xl shadow-xl">
+                    <div className="p-2.5">
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {category.items.map((item) => (
+                          <Link
+                            key={item.href}
+                            href={item.href}
+                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                          >
+                            <span className="text-base">{item.emoji}</span>
+                            <span className="text-xs text-white/80 hover:text-white whitespace-nowrap">{item.title}</span>
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

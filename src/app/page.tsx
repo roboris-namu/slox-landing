@@ -145,16 +145,16 @@ function Footer() {
               <div>
                 <p className="text-xs text-dark-500 mb-2 font-medium">🎮 게임 & 테스트</p>
                 <ul className="space-y-1.5">
-                  <li><a href="/reaction" className="text-sm text-purple-400 hover:text-purple-300 transition-colors">⚡ 반응속도 ⭐</a></li>
-                  <li><a href="/typing" className="text-sm text-dark-400 hover:text-white transition-colors">⌨️ 타자</a></li>
-                  <li><a href="/cps" className="text-sm text-dark-400 hover:text-white transition-colors">🖱️ CPS</a></li>
-                  <li><a href="/aim" className="text-sm text-dark-400 hover:text-white transition-colors">🎯 에임</a></li>
-                  <li><a href="/memory" className="text-sm text-dark-400 hover:text-white transition-colors">🧠 숫자기억</a></li>
+                  <li><a href="/reaction" className="text-sm text-purple-400 hover:text-purple-300 transition-colors">⚡ 반응속도 🎁</a></li>
+                  <li><a href="/quiz" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">📚 상식퀴즈 ✨</a></li>
+                  <li><a href="/iq" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">🧩 IQ테스트 ✨</a></li>
+                  <li><a href="/sudoku" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">🔢 스도쿠 ✨</a></li>
                   <li><a href="/color" className="text-sm text-dark-400 hover:text-white transition-colors">🎨 색상찾기</a></li>
-                  <li><a href="/card-match" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">🃏 카드매칭 ✨</a></li>
-                  <li><a href="/slox-test" className="text-sm text-dark-400 hover:text-white transition-colors">🐂 황소테스트</a></li>
-                  <li><a href="/fortune" className="text-sm text-pink-400 hover:text-pink-300 transition-colors">🔮 오늘의 운세 ✨</a></li>
-                  <li><a href="/quote" className="text-sm text-pink-400 hover:text-pink-300 transition-colors">💬 오늘의 명언 ✨</a></li>
+                  <li><a href="/card-match" className="text-sm text-dark-400 hover:text-white transition-colors">🃏 카드매칭</a></li>
+                  <li><a href="/cps" className="text-sm text-dark-400 hover:text-white transition-colors">🖱️ CPS</a></li>
+                  <li><a href="/typing" className="text-sm text-dark-400 hover:text-white transition-colors">⌨️ 타자</a></li>
+                  <li><a href="/fortune" className="text-sm text-pink-400 hover:text-pink-300 transition-colors">🔮 오늘의운세</a></li>
+                  <li><a href="/quote" className="text-sm text-pink-400 hover:text-pink-300 transition-colors">💬 오늘의명언</a></li>
                 </ul>
               </div>
               

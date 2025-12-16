@@ -26,12 +26,15 @@ const toolCategories: ToolCategory[] = [
     color: "purple",
     tools: [
       { href: "/reaction", emoji: "⚡", label: "반응속도 테스트", best: true, event: true },
-      { href: "/cps", emoji: "🖱️", label: "CPS 테스트", best: true },
+      { href: "/quiz", emoji: "📚", label: "상식 퀴즈", isNew: true },
+      { href: "/iq", emoji: "🧩", label: "IQ 테스트", isNew: true },
+      { href: "/sudoku", emoji: "🔢", label: "스도쿠", isNew: true },
+      { href: "/color", emoji: "🎨", label: "색상 찾기 게임" },
+      { href: "/card-match", emoji: "🃏", label: "카드 짝 맞추기" },
+      { href: "/cps", emoji: "🖱️", label: "CPS 테스트" },
       { href: "/typing", emoji: "⌨️", label: "타자 테스트" },
       { href: "/aim", emoji: "🎯", label: "에임 트레이너" },
       { href: "/memory", emoji: "🧠", label: "숫자 기억 게임" },
-      { href: "/color", emoji: "🎨", label: "색상 찾기 게임" },
-      { href: "/card-match", emoji: "🃏", label: "카드 짝 맞추기" },
     ],
   },
   {
@@ -104,7 +107,7 @@ export default function DesktopToolsDropdown() {
         </svg>
         {/* 도구 개수 배지 */}
         <span className="ml-1 px-1.5 py-0.5 text-[10px] bg-gradient-to-r from-purple-500/20 to-cyan-500/20 rounded-full text-purple-300 font-medium">
-          21
+          24
         </span>
       </button>
 
