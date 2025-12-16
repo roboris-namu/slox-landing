@@ -234,12 +234,6 @@ export default function InstallButton() {
                 </div>
               </div>
 
-              {/* 장점 */}
-              <div className="flex gap-2 text-xs text-dark-400">
-                <span className="bg-dark-800 px-2 py-1 rounded-full">⚡ 빠른 실행</span>
-                <span className="bg-dark-800 px-2 py-1 rounded-full">📴 오프라인 가능</span>
-                <span className="bg-dark-800 px-2 py-1 rounded-full">🔔 알림</span>
-              </div>
             </div>
           </>
         )}
