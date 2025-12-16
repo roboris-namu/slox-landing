@@ -81,41 +81,40 @@ export default function CategoryQuickLinks() {
   const totalCount = categories.reduce((acc, cat) => acc + cat.count, 0);
 
   return (
-    <section className="relative py-6 md:py-8">
+    <section className="relative py-6 md:py-8 z-30">
       <div className="max-w-6xl mx-auto px-4">
-        {/* 카테고리 버튼들 - 1줄 */}
-        <div className="flex justify-center gap-2 md:gap-3 overflow-x-auto pb-2 scrollbar-hide">
+        {/* 카테고리 버튼들 - 1줄, 중앙 정렬 */}
+        <div className="flex flex-wrap justify-center gap-2 md:gap-3">
           {categories.map((category) => (
-            <div key={category.id} className="group relative flex-shrink-0">
-              {/* 버튼 + 드롭다운 컨테이너 */}
-              <div className={`rounded-xl border border-transparent group-hover:border-white/20 transition-all duration-300 group-hover:bg-dark-800/90 group-hover:shadow-xl`}>
-                {/* 버튼 */}
-                <button
-                  className={`flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2.5 bg-dark-800/60 group-hover:bg-transparent border border-white/10 group-hover:border-transparent rounded-xl group-hover:rounded-b-none transition-all duration-300`}
-                >
-                  <span className="text-lg md:text-xl">{category.emoji}</span>
-                  <span className="font-medium text-white text-xs md:text-sm">{category.title}</span>
-                  <span className={`px-1.5 py-0.5 bg-gradient-to-r ${category.color} text-white text-[10px] md:text-xs font-bold rounded-full`}>
-                    {category.count}
-                  </span>
-                </button>
+            <div key={category.id} className="group relative">
+              {/* 버튼 */}
+              <button
+                className={`flex items-center gap-1.5 px-3 py-2 md:px-4 md:py-2.5 bg-dark-800/60 hover:bg-dark-800 border border-white/10 hover:border-white/20 rounded-xl transition-all duration-300`}
+              >
+                <span className="text-lg md:text-xl">{category.emoji}</span>
+                <span className="font-medium text-white text-xs md:text-sm">{category.title}</span>
+                <span className={`px-1.5 py-0.5 bg-gradient-to-r ${category.color} text-white text-[10px] md:text-xs font-bold rounded-full`}>
+                  {category.count}
+                </span>
+              </button>
 
-                {/* 드롭다운 메뉴 */}
-                <div className="absolute top-full left-0 z-50 min-w-[200px] max-h-0 overflow-hidden group-hover:max-h-[300px] transition-all duration-300 ease-out">
-                  <div className="bg-dark-800/95 backdrop-blur-sm border border-white/10 border-t-0 rounded-b-xl shadow-xl">
-                    <div className="p-2.5">
-                      <div className="grid grid-cols-2 gap-1.5">
-                        {category.items.map((item) => (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
-                          >
-                            <span className="text-base">{item.emoji}</span>
-                            <span className="text-xs text-white/80 hover:text-white whitespace-nowrap">{item.title}</span>
-                          </Link>
-                        ))}
-                      </div>
+              {/* 드롭다운 메뉴 */}
+              <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50 min-w-[220px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="bg-dark-800/98 backdrop-blur-xl border border-white/15 rounded-xl shadow-2xl shadow-black/50">
+                  {/* 화살표 */}
+                  <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-dark-800/98 border-l border-t border-white/15 rotate-45" />
+                  <div className="relative p-3">
+                    <div className="grid grid-cols-2 gap-1.5">
+                      {category.items.map((item) => (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors"
+                        >
+                          <span className="text-base">{item.emoji}</span>
+                          <span className="text-xs text-white/80 hover:text-white whitespace-nowrap">{item.title}</span>
+                        </Link>
+                      ))}
                     </div>
                   </div>
                 </div>

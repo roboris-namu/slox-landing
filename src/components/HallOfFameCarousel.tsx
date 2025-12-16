@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
@@ -44,17 +44,25 @@ const gradeColors: Record<string, string> = {
 
 const gameConfigs = [
   { table: "reaction_leaderboard", game: "reaction", gameName: "반응속도", emoji: "⚡", href: "/reaction", unit: "ms", color: "from-yellow-500 to-orange-500", bgColor: "from-yellow-500/20 to-orange-500/20", scoreField: "score", orderAsc: true },
+  { table: "quiz_leaderboard", game: "quiz", gameName: "상식퀴즈", emoji: "📚", href: "/quiz", unit: "점", color: "from-indigo-500 to-purple-500", bgColor: "from-indigo-500/20 to-purple-500/20", scoreField: "score", orderAsc: false, isNew: true },
+  { table: "iq_leaderboard", game: "iq", gameName: "IQ테스트", emoji: "🧩", href: "/iq", unit: "IQ", color: "from-pink-500 to-rose-500", bgColor: "from-pink-500/20 to-rose-500/20", scoreField: "iq_score", orderAsc: false, isNew: true },
+  { table: "sudoku_leaderboard", game: "sudoku", gameName: "스도쿠", emoji: "🔢", href: "/sudoku", unit: "초", color: "from-cyan-500 to-blue-500", bgColor: "from-cyan-500/20 to-blue-500/20", scoreField: "time_seconds", orderAsc: true, isNew: true },
+  { table: "color_leaderboard", game: "color", gameName: "색상찾기", emoji: "👁️", href: "/color", unit: "점", color: "from-emerald-500 to-teal-500", bgColor: "from-emerald-500/20 to-teal-500/20", scoreField: "score", orderAsc: false },
+  { table: "cardmatch_leaderboard", game: "card", gameName: "카드매칭", emoji: "🃏", href: "/card-match", unit: "점", color: "from-amber-500 to-orange-500", bgColor: "from-amber-500/20 to-orange-500/20", scoreField: "score", orderAsc: false },
   { table: "cps_leaderboard", game: "cps", gameName: "CPS", emoji: "🖱️", href: "/cps", unit: "CPS", color: "from-purple-500 to-pink-500", bgColor: "from-purple-500/20 to-pink-500/20", scoreField: "score", orderAsc: false },
-  { table: "typing_leaderboard", game: "typing", gameName: "타자속도", emoji: "⌨️", href: "/typing", unit: "타/분", color: "from-cyan-500 to-blue-500", bgColor: "from-cyan-500/20 to-blue-500/20", scoreField: "wpm", orderAsc: false },
+  { table: "typing_leaderboard", game: "typing", gameName: "타자속도", emoji: "⌨️", href: "/typing", unit: "타/분", color: "from-blue-500 to-indigo-500", bgColor: "from-blue-500/20 to-indigo-500/20", scoreField: "wpm", orderAsc: false },
   { table: "memory_leaderboard", game: "memory", gameName: "숫자기억", emoji: "🧠", href: "/memory", unit: "자리", color: "from-green-500 to-emerald-500", bgColor: "from-green-500/20 to-emerald-500/20", scoreField: "score", orderAsc: false },
-  { table: "color_leaderboard", game: "color", gameName: "색상찾기", emoji: "👁️", href: "/color", unit: "점", color: "from-pink-500 to-rose-500", bgColor: "from-pink-500/20 to-rose-500/20", scoreField: "score", orderAsc: false },
   { table: "aim_leaderboard", game: "aim", gameName: "에임", emoji: "🎯", href: "/aim", unit: "점", color: "from-red-500 to-orange-500", bgColor: "from-red-500/20 to-orange-500/20", scoreField: "score", orderAsc: false },
-  { table: "cardmatch_leaderboard", game: "card", gameName: "카드매칭", emoji: "🃏", href: "/card-match", unit: "점", color: "from-indigo-500 to-purple-500", bgColor: "from-indigo-500/20 to-purple-500/20", scoreField: "score", orderAsc: false },
 ];
 
 export default function HallOfFameCarousel() {
   const [leaderboards, setLeaderboards] = useState<GameLeaderboard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [scrollX, setScrollX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dragStartX = useRef(0);
+  const scrollStartX = useRef(0);
 
   const fetchAllLeaderboards = useCallback(async () => {
 
@@ -160,16 +168,48 @@ export default function HallOfFameCarousel() {
         </div>
       </div>
 
-      {/* 필름 스트립 스타일 캐러셀 - 위아래 여백으로 호버 확장 공간 확보 */}
-      <div className="relative overflow-x-hidden overflow-y-visible py-8">
+      {/* 필름 스트립 스타일 캐러셀 - 터치 스와이프 지원 */}
+      <div className="relative overflow-hidden py-8">
         {/* 좌우 페이드 효과 */}
         <div className="absolute left-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-r from-dark-950 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-l from-dark-950 to-transparent z-10 pointer-events-none" />
 
-        {/* 스크롤 컨테이너 - 모바일에서도 살짝 멀리서 시작 */}
+        {/* 스와이프 힌트 (모바일) */}
+        <p className="md:hidden text-center text-dark-500 text-xs mb-4 animate-pulse">
+          ← 스와이프하여 더 보기 →
+        </p>
+
+        {/* 스크롤 컨테이너 - 터치/드래그 스와이프 지원 */}
         <div 
-          className="flex gap-4 sm:gap-6 md:gap-8 animate-scroll-left pl-[30vw] sm:pl-[25vw] md:pl-[20vw] lg:pl-[20vw]"
-          style={{ width: "max-content" }}
+          ref={containerRef}
+          className={`flex gap-4 sm:gap-6 md:gap-8 pl-[30vw] sm:pl-[25vw] md:pl-[20vw] lg:pl-[20vw] cursor-grab active:cursor-grabbing ${!isDragging ? 'animate-scroll-left' : ''}`}
+          style={{ 
+            width: "max-content",
+            transform: isDragging ? `translateX(${scrollX}px)` : undefined,
+          }}
+          onMouseDown={(e) => {
+            setIsDragging(true);
+            dragStartX.current = e.clientX;
+            scrollStartX.current = scrollX;
+          }}
+          onMouseMove={(e) => {
+            if (!isDragging) return;
+            const diff = e.clientX - dragStartX.current;
+            setScrollX(scrollStartX.current + diff);
+          }}
+          onMouseUp={() => setIsDragging(false)}
+          onMouseLeave={() => setIsDragging(false)}
+          onTouchStart={(e) => {
+            setIsDragging(true);
+            dragStartX.current = e.touches[0].clientX;
+            scrollStartX.current = scrollX;
+          }}
+          onTouchMove={(e) => {
+            if (!isDragging) return;
+            const diff = e.touches[0].clientX - dragStartX.current;
+            setScrollX(scrollStartX.current + diff);
+          }}
+          onTouchEnd={() => setIsDragging(false)}
         >
           {duplicatedLeaderboards.map((lb, idx) => {
             const isEventGame = lb.game === "reaction"; // 🎁 현재 이벤트 중인 게임
@@ -333,7 +373,7 @@ export default function HallOfFameCarousel() {
             <span className="text-xl">→</span>
           </Link>
           <p className="mt-4 text-dark-500 text-sm">
-            7가지 게임에서 당신의 실력을 증명하세요!
+            10가지 게임에서 당신의 실력을 증명하세요!
           </p>
         </div>
       </div>
