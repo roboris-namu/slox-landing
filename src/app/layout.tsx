@@ -5,7 +5,7 @@ import "./globals.css";
  * SEO 메타데이터 설정
  */
 export const metadata: Metadata = {
-  title: "SLOX - 홈페이지 · 앱 제작 · AI 챗봇 구축 · 무료 도구",
+  title: "SLOX",
   description:
     "SLOX - 홈페이지·앱·AI 챗봇 전문 개발사. 반응속도 테스트, CPS 테스트, 타자연습 등 무료 도구 21종 제공. 합리적 비용으로 고품질 개발 서비스.",
   keywords: [
