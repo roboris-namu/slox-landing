@@ -126,8 +126,8 @@ export default function InstallButton() {
                   <span className="text-white font-bold text-sm">1</span>
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm">하단 공유 버튼 탭</p>
-                  <p className="text-dark-400 text-xs mt-0.5">Safari 하단의 <span className="text-blue-400">↑</span> 버튼</p>
+                  <p className="text-white font-medium text-sm">우측 하단 <span className="text-blue-400">···</span> 버튼 탭</p>
+                  <p className="text-dark-400 text-xs mt-0.5">Safari 하단 메뉴 열기</p>
                 </div>
               </div>
 
@@ -136,8 +136,8 @@ export default function InstallButton() {
                   <span className="text-white font-bold text-sm">2</span>
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm">&quot;홈 화면에 추가&quot; 선택</p>
-                  <p className="text-dark-400 text-xs mt-0.5">스크롤해서 찾아주세요</p>
+                  <p className="text-white font-medium text-sm"><span className="text-blue-400">공유</span> 버튼 탭</p>
+                  <p className="text-dark-400 text-xs mt-0.5">공유 메뉴 열기</p>
                 </div>
               </div>
 
@@ -146,7 +146,17 @@ export default function InstallButton() {
                   <span className="text-white font-bold text-sm">3</span>
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm">&quot;추가&quot; 버튼 탭</p>
+                  <p className="text-white font-medium text-sm">우측 하단 <span className="text-blue-400">···</span> 더보기 탭</p>
+                  <p className="text-dark-400 text-xs mt-0.5">추가 옵션 보기</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3 p-3 bg-dark-800 rounded-xl">
+                <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-bold text-sm">4</span>
+                </div>
+                <div>
+                  <p className="text-white font-medium text-sm">&quot;홈 화면에 추가&quot; 선택</p>
                   <p className="text-dark-400 text-xs mt-0.5">홈 화면에 SLOX 아이콘 생성! 🐂</p>
                 </div>
               </div>
@@ -179,7 +189,7 @@ export default function InstallButton() {
                   <span className="text-white font-bold text-sm">2</span>
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm">&quot;앱 설치&quot; 또는 &quot;홈 화면에 추가&quot;</p>
+                  <p className="text-white font-medium text-sm">&quot;홈 화면에 추가&quot; 선택</p>
                   <p className="text-dark-400 text-xs mt-0.5">메뉴에서 선택해주세요</p>
                 </div>
               </div>
@@ -189,7 +199,7 @@ export default function InstallButton() {
                   <span className="text-white font-bold text-sm">3</span>
                 </div>
                 <div>
-                  <p className="text-white font-medium text-sm">&quot;설치&quot; 버튼 탭</p>
+                  <p className="text-white font-medium text-sm">&quot;추가&quot; 버튼 탭</p>
                   <p className="text-dark-400 text-xs mt-0.5">홈 화면에 SLOX 아이콘 생성! 🐂</p>
                 </div>
               </div>
