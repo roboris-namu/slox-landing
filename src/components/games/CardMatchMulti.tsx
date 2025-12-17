@@ -7,6 +7,34 @@ import { supabase } from "@/lib/supabase";
 
 type Locale = "ko" | "en" | "ja" | "zh" | "de" | "fr" | "es" | "pt";
 
+// 국가 옵션
+const COUNTRY_OPTIONS = [
+  { code: "KR", flag: "🇰🇷", name: { ko: "한국", en: "Korea", ja: "韓国", zh: "韩国", de: "Korea", fr: "Corée", es: "Corea", pt: "Coreia" } },
+  { code: "US", flag: "🇺🇸", name: { ko: "미국", en: "USA", ja: "アメリカ", zh: "美国", de: "USA", fr: "États-Unis", es: "EE.UU.", pt: "EUA" } },
+  { code: "JP", flag: "🇯🇵", name: { ko: "일본", en: "Japan", ja: "日本", zh: "日本", de: "Japan", fr: "Japon", es: "Japón", pt: "Japão" } },
+  { code: "CN", flag: "🇨🇳", name: { ko: "중국", en: "China", ja: "中国", zh: "中国", de: "China", fr: "Chine", es: "China", pt: "China" } },
+  { code: "DE", flag: "🇩🇪", name: { ko: "독일", en: "Germany", ja: "ドイツ", zh: "德国", de: "Deutschland", fr: "Allemagne", es: "Alemania", pt: "Alemanha" } },
+  { code: "FR", flag: "🇫🇷", name: { ko: "프랑스", en: "France", ja: "フランス", zh: "法国", de: "Frankreich", fr: "France", es: "Francia", pt: "França" } },
+  { code: "ES", flag: "🇪🇸", name: { ko: "스페인", en: "Spain", ja: "スペイン", zh: "西班牙", de: "Spanien", fr: "Espagne", es: "España", pt: "Espanha" } },
+  { code: "BR", flag: "🇧🇷", name: { ko: "브라질", en: "Brazil", ja: "ブラジル", zh: "巴西", de: "Brasilien", fr: "Brésil", es: "Brasil", pt: "Brasil" } },
+  { code: "GB", flag: "🇬🇧", name: { ko: "영국", en: "UK", ja: "イギリス", zh: "英国", de: "Großbritannien", fr: "Royaume-Uni", es: "Reino Unido", pt: "Reino Unido" } },
+  { code: "CA", flag: "🇨🇦", name: { ko: "캐나다", en: "Canada", ja: "カナダ", zh: "加拿大", de: "Kanada", fr: "Canada", es: "Canadá", pt: "Canadá" } },
+  { code: "AU", flag: "🇦🇺", name: { ko: "호주", en: "Australia", ja: "オーストラリア", zh: "澳大利亚", de: "Australien", fr: "Australie", es: "Australia", pt: "Austrália" } },
+  { code: "IN", flag: "🇮🇳", name: { ko: "인도", en: "India", ja: "インド", zh: "印度", de: "Indien", fr: "Inde", es: "India", pt: "Índia" } },
+  { code: "RU", flag: "🇷🇺", name: { ko: "러시아", en: "Russia", ja: "ロシア", zh: "俄罗斯", de: "Russland", fr: "Russie", es: "Rusia", pt: "Rússia" } },
+  { code: "IT", flag: "🇮🇹", name: { ko: "이탈리아", en: "Italy", ja: "イタリア", zh: "意大利", de: "Italien", fr: "Italie", es: "Italia", pt: "Itália" } },
+  { code: "MX", flag: "🇲🇽", name: { ko: "멕시코", en: "Mexico", ja: "メキシコ", zh: "墨西哥", de: "Mexiko", fr: "Mexique", es: "México", pt: "México" } },
+  { code: "TH", flag: "🇹🇭", name: { ko: "태국", en: "Thailand", ja: "タイ", zh: "泰国", de: "Thailand", fr: "Thaïlande", es: "Tailandia", pt: "Tailândia" } },
+  { code: "VN", flag: "🇻🇳", name: { ko: "베트남", en: "Vietnam", ja: "ベトナム", zh: "越南", de: "Vietnam", fr: "Vietnam", es: "Vietnam", pt: "Vietnã" } },
+  { code: "PH", flag: "🇵🇭", name: { ko: "필리핀", en: "Philippines", ja: "フィリピン", zh: "菲律宾", de: "Philippinen", fr: "Philippines", es: "Filipinas", pt: "Filipinas" } },
+  { code: "SG", flag: "🇸🇬", name: { ko: "싱가포르", en: "Singapore", ja: "シンガポール", zh: "新加坡", de: "Singapur", fr: "Singapour", es: "Singapur", pt: "Singapura" } },
+  { code: "NZ", flag: "🇳🇿", name: { ko: "뉴질랜드", en: "New Zealand", ja: "ニュージーランド", zh: "新西兰", de: "Neuseeland", fr: "Nouvelle-Zélande", es: "Nueva Zelanda", pt: "Nova Zelândia" } },
+];
+
+const DEFAULT_COUNTRY: Record<Locale, string> = {
+  ko: "KR", en: "US", ja: "JP", zh: "CN", de: "DE", fr: "FR", es: "ES", pt: "BR"
+};
+
 const translations: Record<Locale, {
   title: string;
   subtitle: string;
@@ -53,6 +81,7 @@ const translations: Record<Locale, {
   copied: string;
   rankingRegister: string;
   nickname: string;
+  country: string;
   cancel: string;
   register: string;
   newFirst: string;
@@ -110,6 +139,7 @@ const translations: Record<Locale, {
     copied: "✅ 복사됨!",
     rankingRegister: "🏆 랭킹 등록",
     nickname: "닉네임...",
+    country: "국가",
     cancel: "취소",
     register: "등록!",
     newFirst: "🔥 새로운 1등!",
@@ -167,6 +197,7 @@ const translations: Record<Locale, {
     copied: "✅ Copied!",
     rankingRegister: "🏆 Register",
     nickname: "Nickname...",
+    country: "Country",
     cancel: "Cancel",
     register: "Register!",
     newFirst: "🔥 New #1!",
@@ -224,6 +255,7 @@ const translations: Record<Locale, {
     copied: "✅ コピー済み！",
     rankingRegister: "🏆 登録",
     nickname: "ニックネーム...",
+    country: "国",
     cancel: "キャンセル",
     register: "登録！",
     newFirst: "🔥 新しい1位！",
@@ -281,6 +313,7 @@ const translations: Record<Locale, {
     copied: "✅ 已复制！",
     rankingRegister: "🏆 登记",
     nickname: "昵称...",
+    country: "国家",
     cancel: "取消",
     register: "登记！",
     newFirst: "🔥 新的第一！",
@@ -338,6 +371,7 @@ const translations: Record<Locale, {
     copied: "✅ Kopiert!",
     rankingRegister: "🏆 Eintragen",
     nickname: "Spitzname...",
+    country: "Land",
     cancel: "Abbrechen",
     register: "Eintragen!",
     newFirst: "🔥 Neuer #1!",
@@ -395,6 +429,7 @@ const translations: Record<Locale, {
     copied: "✅ Copié!",
     rankingRegister: "🏆 Inscription",
     nickname: "Pseudo...",
+    country: "Pays",
     cancel: "Annuler",
     register: "S'inscrire!",
     newFirst: "🔥 Nouveau #1!",
@@ -452,6 +487,7 @@ const translations: Record<Locale, {
     copied: "✅ ¡Copiado!",
     rankingRegister: "🏆 Registrar",
     nickname: "Apodo...",
+    country: "País",
     cancel: "Cancelar",
     register: "¡Registrar!",
     newFirst: "🔥 ¡Nuevo #1!",
@@ -509,6 +545,7 @@ const translations: Record<Locale, {
     copied: "✅ Copiado!",
     rankingRegister: "🏆 Registrar",
     nickname: "Apelido...",
+    country: "País",
     cancel: "Cancelar",
     register: "Registrar!",
     newFirst: "🔥 Novo #1!",
@@ -538,6 +575,7 @@ interface CardMatchLeaderboardEntry {
   nickname: string;
   time_seconds: number;
   moves: number;
+  country?: string;
   pairs: number;
   device_type: string;
   created_at: string;
@@ -595,6 +633,7 @@ export default function CardMatchMulti({ locale }: Props) {
   const [totalCount, setTotalCount] = useState(0);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY[locale]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
@@ -650,6 +689,7 @@ export default function CardMatchMulti({ locale }: Props) {
         score: currentScore,
         grade: gradeInfo.grade,
         percentile: percentile,
+        country: selectedCountry,
       });
       if (error) throw error;
       setHasSubmittedScore(true);
@@ -1138,7 +1178,10 @@ export default function CardMatchMulti({ locale }: Props) {
                     <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
                       <div className="flex-1 min-w-0 text-left">
-                        <p className="text-white font-medium truncate">{entry.nickname}</p>
+                        <p className="text-white font-medium truncate">
+                          <span className="mr-1">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
+                          {entry.nickname}
+                        </p>
                         <div className="flex items-center gap-2 text-xs text-dark-400">
                           <span className={entryGrade.color}>{entryGrade.grade}</span>
                           <span>•</span>
@@ -1253,7 +1296,19 @@ export default function CardMatchMulti({ locale }: Props) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
           <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full">
             <div className="text-center mb-6"><div className="text-5xl mb-3">{getGrade().emoji}</div><h3 className="text-white text-xl font-bold">{t.rankingRegister}</h3><p className="text-dark-400 text-sm">{getFinalScore()}pts</p></div>
-            <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder={t.nickname} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+            <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder={t.nickname} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-3" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+            <div className="mb-4">
+              <label className="text-dark-400 text-sm mb-1 block">{t.country}</label>
+              <select 
+                value={selectedCountry} 
+                onChange={(e) => setSelectedCountry(e.target.value)}
+                className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 appearance-none cursor-pointer"
+              >
+                {COUNTRY_OPTIONS.map((c) => (
+                  <option key={c.code} value={c.code}>{c.flag} {c.name[locale]}</option>
+                ))}
+              </select>
+            </div>
             <div className="flex gap-3">
               <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 text-white rounded-xl">{t.cancel}</button>
               <button onClick={submitScore} disabled={!nickname.trim() || isSubmitting} className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl disabled:opacity-50">{isSubmitting ? "..." : t.register}</button>

@@ -8,11 +8,40 @@ import { supabase } from "@/lib/supabase";
 // 다국어 타입 정의
 type Locale = "ko" | "en" | "ja" | "zh" | "de" | "fr" | "es" | "pt";
 
+// 국가 옵션
+const COUNTRY_OPTIONS = [
+  { code: "KR", flag: "🇰🇷", name: { ko: "한국", en: "Korea", ja: "韓国", zh: "韩国", de: "Korea", fr: "Corée", es: "Corea", pt: "Coreia" } },
+  { code: "US", flag: "🇺🇸", name: { ko: "미국", en: "USA", ja: "アメリカ", zh: "美国", de: "USA", fr: "États-Unis", es: "EE.UU.", pt: "EUA" } },
+  { code: "JP", flag: "🇯🇵", name: { ko: "일본", en: "Japan", ja: "日本", zh: "日本", de: "Japan", fr: "Japon", es: "Japón", pt: "Japão" } },
+  { code: "CN", flag: "🇨🇳", name: { ko: "중국", en: "China", ja: "中国", zh: "中国", de: "China", fr: "Chine", es: "China", pt: "China" } },
+  { code: "DE", flag: "🇩🇪", name: { ko: "독일", en: "Germany", ja: "ドイツ", zh: "德国", de: "Deutschland", fr: "Allemagne", es: "Alemania", pt: "Alemanha" } },
+  { code: "FR", flag: "🇫🇷", name: { ko: "프랑스", en: "France", ja: "フランス", zh: "法国", de: "Frankreich", fr: "France", es: "Francia", pt: "França" } },
+  { code: "ES", flag: "🇪🇸", name: { ko: "스페인", en: "Spain", ja: "スペイン", zh: "西班牙", de: "Spanien", fr: "Espagne", es: "España", pt: "Espanha" } },
+  { code: "BR", flag: "🇧🇷", name: { ko: "브라질", en: "Brazil", ja: "ブラジル", zh: "巴西", de: "Brasilien", fr: "Brésil", es: "Brasil", pt: "Brasil" } },
+  { code: "GB", flag: "🇬🇧", name: { ko: "영국", en: "UK", ja: "イギリス", zh: "英国", de: "Großbritannien", fr: "Royaume-Uni", es: "Reino Unido", pt: "Reino Unido" } },
+  { code: "CA", flag: "🇨🇦", name: { ko: "캐나다", en: "Canada", ja: "カナダ", zh: "加拿大", de: "Kanada", fr: "Canada", es: "Canadá", pt: "Canadá" } },
+  { code: "AU", flag: "🇦🇺", name: { ko: "호주", en: "Australia", ja: "オーストラリア", zh: "澳大利亚", de: "Australien", fr: "Australie", es: "Australia", pt: "Austrália" } },
+  { code: "IN", flag: "🇮🇳", name: { ko: "인도", en: "India", ja: "インド", zh: "印度", de: "Indien", fr: "Inde", es: "India", pt: "Índia" } },
+  { code: "RU", flag: "🇷🇺", name: { ko: "러시아", en: "Russia", ja: "ロシア", zh: "俄罗斯", de: "Russland", fr: "Russie", es: "Rusia", pt: "Rússia" } },
+  { code: "IT", flag: "🇮🇹", name: { ko: "이탈리아", en: "Italy", ja: "イタリア", zh: "意大利", de: "Italien", fr: "Italie", es: "Italia", pt: "Itália" } },
+  { code: "MX", flag: "🇲🇽", name: { ko: "멕시코", en: "Mexico", ja: "メキシコ", zh: "墨西哥", de: "Mexiko", fr: "Mexique", es: "México", pt: "México" } },
+  { code: "TH", flag: "🇹🇭", name: { ko: "태국", en: "Thailand", ja: "タイ", zh: "泰国", de: "Thailand", fr: "Thaïlande", es: "Tailandia", pt: "Tailândia" } },
+  { code: "VN", flag: "🇻🇳", name: { ko: "베트남", en: "Vietnam", ja: "ベトナム", zh: "越南", de: "Vietnam", fr: "Vietnam", es: "Vietnam", pt: "Vietnã" } },
+  { code: "PH", flag: "🇵🇭", name: { ko: "필리핀", en: "Philippines", ja: "フィリピン", zh: "菲律宾", de: "Philippinen", fr: "Philippines", es: "Filipinas", pt: "Filipinas" } },
+  { code: "SG", flag: "🇸🇬", name: { ko: "싱가포르", en: "Singapore", ja: "シンガポール", zh: "新加坡", de: "Singapur", fr: "Singapour", es: "Singapur", pt: "Singapura" } },
+  { code: "NZ", flag: "🇳🇿", name: { ko: "뉴질랜드", en: "New Zealand", ja: "ニュージーランド", zh: "新西兰", de: "Neuseeland", fr: "Nouvelle-Zélande", es: "Nueva Zelanda", pt: "Nova Zelândia" } },
+];
+
+const DEFAULT_COUNTRY: Record<Locale, string> = {
+  ko: "KR", en: "US", ja: "JP", zh: "CN", de: "DE", fr: "FR", es: "ES", pt: "BR"
+};
+
 interface TypingLeaderboardEntry {
   id: string;
   nickname: string;
   wpm: number;
   accuracy: number;
+  country?: string;
   device_type: string;
   created_at: string;
   grade?: string;
@@ -149,6 +178,7 @@ const translations: Record<Locale, {
   cancel: string;
   register: string;
   nickname: string;
+  country: string;
   newFirst: string;
   currentRank: string;
   myRecord: string;
@@ -197,6 +227,7 @@ const translations: Record<Locale, {
     cancel: "취소",
     register: "등록!",
     nickname: "닉네임...",
+    country: "국가",
     newFirst: "🔥 새로운 1등!",
     currentRank: "현재",
     myRecord: "내 기록",
@@ -244,6 +275,7 @@ const translations: Record<Locale, {
     cancel: "Cancel",
     register: "Submit!",
     nickname: "Nickname...",
+    country: "Country",
     newFirst: "🔥 New #1!",
     currentRank: "Rank",
     myRecord: "My Score",
@@ -291,6 +323,7 @@ const translations: Record<Locale, {
     cancel: "キャンセル",
     register: "登録!",
     nickname: "ニックネーム...",
+    country: "国",
     newFirst: "🔥 新記録1位！",
     currentRank: "現在",
     myRecord: "私の記録",
@@ -338,6 +371,7 @@ const translations: Record<Locale, {
     cancel: "取消",
     register: "提交!",
     nickname: "昵称...",
+    country: "国家",
     newFirst: "🔥 新的第一名!",
     currentRank: "当前",
     myRecord: "我的成绩",
@@ -385,6 +419,7 @@ const translations: Record<Locale, {
     cancel: "Abbrechen",
     register: "Einreichen!",
     nickname: "Spitzname...",
+    country: "Land",
     newFirst: "🔥 Neuer #1!",
     currentRank: "Rang",
     myRecord: "Mein Score",
@@ -432,6 +467,7 @@ const translations: Record<Locale, {
     cancel: "Annuler",
     register: "Soumettre!",
     nickname: "Pseudo...",
+    country: "Pays",
     newFirst: "🔥 Nouveau #1!",
     currentRank: "Rang",
     myRecord: "Mon Score",
@@ -479,6 +515,7 @@ const translations: Record<Locale, {
     cancel: "Cancelar",
     register: "¡Enviar!",
     nickname: "Apodo...",
+    country: "País",
     newFirst: "🔥 ¡Nuevo #1!",
     currentRank: "Rango",
     myRecord: "Mi Puntuación",
@@ -526,6 +563,7 @@ const translations: Record<Locale, {
     cancel: "Cancelar",
     register: "Enviar!",
     nickname: "Apelido...",
+    country: "País",
     newFirst: "🔥 Novo #1!",
     currentRank: "Posição",
     myRecord: "Minha Pontuação",
@@ -610,6 +648,7 @@ export default function TypingMulti({ locale }: Props) {
   const [leaderboard, setLeaderboard] = useState<TypingLeaderboardEntry[]>([]);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY[locale]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
@@ -721,6 +760,7 @@ export default function TypingMulti({ locale }: Props) {
         device_type: isMobile ? "mobile" : "pc",
         grade: gradeInfo.grade,
         percentile: percentile,
+        country: selectedCountry,
       });
       if (error) throw error;
       setHasSubmittedScore(true);
@@ -1062,7 +1102,10 @@ export default function TypingMulti({ locale }: Props) {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
                     <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2">
-                        <p className="text-white font-medium truncate">{entry.nickname}</p>
+                        <p className="text-white font-medium truncate">
+                          <span className="mr-1">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
+                          {entry.nickname}
+                        </p>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-dark-400">
@@ -1178,10 +1221,22 @@ export default function TypingMulti({ locale }: Props) {
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value.slice(0, 20))}
                   placeholder={t.nickname}
-                  className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4"
+                  className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-3"
                   autoFocus
                   onKeyDown={(e) => e.key === "Enter" && submitScore()}
                 />
+                <div className="mb-4">
+                  <label className="text-dark-400 text-sm mb-1 block">{t.country}</label>
+                  <select 
+                    value={selectedCountry} 
+                    onChange={(e) => setSelectedCountry(e.target.value)}
+                    className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white focus:outline-none focus:border-yellow-500 appearance-none cursor-pointer"
+                  >
+                    {COUNTRY_OPTIONS.map((c) => (
+                      <option key={c.code} value={c.code}>{c.flag} {c.name[locale]}</option>
+                    ))}
+                  </select>
+                </div>
                 <div className="flex gap-3">
                   <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 text-white rounded-xl">{t.cancel}</button>
                   <button onClick={submitScore} disabled={!nickname.trim() || isSubmitting} className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl disabled:opacity-50">{isSubmitting ? "..." : t.register}</button>
