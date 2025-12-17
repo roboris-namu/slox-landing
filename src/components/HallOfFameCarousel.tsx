@@ -196,10 +196,10 @@ export default function HallOfFameCarousel() {
   const handleDragEnd = useCallback(() => {
     setIsDragging(false);
     
-    // 3초 후 자동 스크롤 재개
+    // 1초 후 자동 스크롤 재개
     resumeTimeoutRef.current = setTimeout(() => {
       setIsPaused(false);
-    }, 3000);
+    }, 1000);
   }, []);
 
   // 마우스 이벤트
