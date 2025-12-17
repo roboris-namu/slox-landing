@@ -285,10 +285,12 @@ const gradeColors: Record<string, string> = {
   "수재": "text-purple-400",
   "우수": "text-blue-400",
   "평균": "text-green-400",
-  "전설": "text-cyan-300",
+  // 스도쿠 등급
+  "전설": "text-yellow-400",
+  "마스터": "text-purple-400",
   "전문가": "text-blue-400",
   "숙련자": "text-green-400",
-  "중급자": "text-yellow-400",
+  "중급자": "text-cyan-400",
   "초보자": "text-orange-400",
 };
 
@@ -300,7 +302,9 @@ const gradeTranslations: Record<string, Record<string, string>> = {
     "골드": "Gold", "실버": "Silver", "브론즈": "Bronze", "아이언": "Iron",
     "천재": "Genius", "박학다식": "Scholar", "상식왕": "Expert", "평범": "Average",
     "노력필요": "Needs Work", "공부하자": "Beginner", "수재": "Gifted", "우수": "Excellent",
-    "평균": "Average", "전설": "Legend", "전문가": "Expert", "숙련자": "Skilled",
+    "평균": "Average", 
+    // 스도쿠 등급
+    "전설": "Legend", "마스터": "Master", "전문가": "Expert", "숙련자": "Skilled",
     "중급자": "Intermediate", "초보자": "Beginner",
   },
   ja: {
@@ -351,6 +355,16 @@ const gradeTranslations: Record<string, Record<string, string>> = {
     "평균": "Média", "전설": "Lenda", "전문가": "Especialista", "숙련자": "Habilidoso",
     "중급자": "Intermediário", "초보자": "Iniciante",
   },
+};
+
+// 스도쿠 등급 계산 함수 (시간 기준)
+const getSudokuGrade = (timeSeconds: number): string => {
+  if (timeSeconds <= 120) return "전설";   // ~2분
+  if (timeSeconds <= 240) return "마스터"; // ~4분
+  if (timeSeconds <= 360) return "전문가"; // ~6분
+  if (timeSeconds <= 480) return "숙련자"; // ~8분
+  if (timeSeconds <= 720) return "중급자"; // ~12분
+  return "초보자";
 };
 
 const gameConfigs = [
@@ -408,13 +422,20 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
             color: config.color,
             bgColor: config.bgColor,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            entries: (data || []).map((entry: any) => ({
-              nickname: entry.nickname as string,
-              score: parseFloat(entry[config.scoreField]) || 0,
-              grade: entry.grade as string || "",
-              percentile: entry.percentile as number || 0,
-              device_type: entry.device_type as string || "",
-            })),
+            entries: (data || []).map((entry: any) => {
+              const score = parseFloat(entry[config.scoreField]) || 0;
+              // 스도쿠는 시간 기준으로 등급 재계산
+              const grade = config.game === "sudoku" 
+                ? getSudokuGrade(score) 
+                : (entry.grade as string || "");
+              return {
+                nickname: entry.nickname as string,
+                score,
+                grade,
+                percentile: entry.percentile as number || 0,
+                device_type: entry.device_type as string || "",
+              };
+            }),
           };
         })
       );

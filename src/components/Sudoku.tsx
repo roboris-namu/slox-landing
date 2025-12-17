@@ -215,12 +215,15 @@ export default function Sudoku() {
   };
 
   // 고수 모드(50칸) 기준 등급표
-  const getGrade = () => {
-    if (time <= 120) return { grade: "전설", emoji: "🏆", color: "text-yellow-400" };   // ~2분 (거의 불가능급)
-    if (time <= 240) return { grade: "마스터", emoji: "💎", color: "text-purple-400" }; // ~4분
-    if (time <= 360) return { grade: "전문가", emoji: "⭐", color: "text-blue-400" };  // ~6분
-    if (time <= 480) return { grade: "숙련자", emoji: "👍", color: "text-green-400" }; // ~8분
-    if (time <= 720) return { grade: "중급자", emoji: "😊", color: "text-cyan-400" };  // ~12분
+  const getGrade = () => getGradeByTime(time);
+  
+  // 시간 기준으로 등급 반환 (랭킹 표시용)
+  const getGradeByTime = (seconds: number) => {
+    if (seconds <= 120) return { grade: "전설", emoji: "🏆", color: "text-yellow-400" };   // ~2분 (거의 불가능급)
+    if (seconds <= 240) return { grade: "마스터", emoji: "💎", color: "text-purple-400" }; // ~4분
+    if (seconds <= 360) return { grade: "전문가", emoji: "⭐", color: "text-blue-400" };  // ~6분
+    if (seconds <= 480) return { grade: "숙련자", emoji: "👍", color: "text-green-400" }; // ~8분
+    if (seconds <= 720) return { grade: "중급자", emoji: "😊", color: "text-cyan-400" };  // ~12분
     return { grade: "초보자", emoji: "📚", color: "text-orange-400" };
   };
 
@@ -638,21 +641,26 @@ export default function Sudoku() {
             </div>
             {leaderboard.length > 0 ? (
               <div className="space-y-2">
-                {leaderboard.map((entry, index) => (
-                  <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-white font-medium truncate">{entry.nickname}</span>
-                      <div className="flex items-center gap-2 text-xs text-dark-400">
-                        <span>실수 {entry.mistakes}회</span>
+                {leaderboard.map((entry, index) => {
+                  const entryGrade = getGradeByTime(entry.time_seconds);
+                  return (
+                    <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-white font-medium truncate">{entry.nickname}</span>
+                        <div className="flex items-center gap-2 text-xs text-dark-400">
+                          <span className={entryGrade.color}>{entryGrade.grade}</span>
+                          <span>•</span>
+                          <span>실수 {entry.mistakes}회</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-cyan-400 font-bold">{formatTime(entry.time_seconds)}</div>
+                        <div className="text-xs text-dark-500">{index + 1}위 / {totalCount}명</div>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <div className="text-cyan-400 font-bold">{formatTime(entry.time_seconds)}</div>
-                      <div className="text-xs text-dark-500">{index + 1}위 / {totalCount}명</div>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : (
               <div className="text-center py-8 text-dark-500">
