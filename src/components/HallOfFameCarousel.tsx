@@ -285,9 +285,8 @@ const gradeColors: Record<string, string> = {
   "수재": "text-purple-400",
   "우수": "text-blue-400",
   "평균": "text-green-400",
-  // 스도쿠 등급
+  // 스도쿠 등급 (마스터는 위에서 이미 정의됨)
   "전설": "text-yellow-400",
-  "마스터": "text-purple-400",
   "전문가": "text-blue-400",
   "숙련자": "text-green-400",
   "중급자": "text-cyan-400",
