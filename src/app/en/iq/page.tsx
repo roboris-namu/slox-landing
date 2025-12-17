@@ -1,18 +1,10 @@
-import { Metadata } from "next";
-import IQTestEN from "@/components/games/IQTestEN";
+import IQTestMulti from "@/components/games/IQTestMulti";
 
-export const metadata: Metadata = {
-  title: "Free IQ Test Online - Measure Your Intelligence | SLOX",
-  description: "Free online IQ test with 12 pattern recognition questions. Measure your IQ and compare with others. Fast, accurate, and fun!",
-  keywords: ["IQ test", "free IQ test", "intelligence test", "online IQ test", "brain test", "SLOX"],
-  openGraph: {
-    title: "Free IQ Test Online | SLOX",
-    description: "Measure your IQ with our free online test!",
-    locale: "en_US",
-  },
+export const metadata = {
+  title: "IQ Test - Measure Your Intelligence | SLOX",
+  description: "Measure your IQ with pattern analysis! Mensa-style questions. Compete on the global leaderboard!",
 };
 
-export default function IQTestPage() {
-  return <IQTestEN />;
+export default function EnIQPage() {
+  return <IQTestMulti locale="en" />;
 }
-

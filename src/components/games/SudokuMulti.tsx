@@ -1,0 +1,847 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
+import { supabase } from "@/lib/supabase";
+
+// 지원 언어
+type Locale = "ko" | "en" | "ja" | "zh" | "de" | "fr" | "es" | "pt";
+
+// 패널티 시스템 상수
+const MAX_MISTAKES = 10;
+const PENALTY_SECONDS = 3;
+
+// 언어별 번역
+const translations: Record<Locale, {
+  title: string;
+  subtitle: string;
+  easy: string;
+  medium: string;
+  hard: string;
+  mistakeLimit: string;
+  timePenalty: string;
+  times: string;
+  startGame: string;
+  hallOfFame: string;
+  noChallengers: string;
+  firstChallenger: string;
+  time: string;
+  mistakes: string;
+  left: string;
+  back: string;
+  playAgain: string;
+  share: string;
+  copied: string;
+  gameOver: string;
+  madeMistakes: string;
+  tryAgain: string;
+  registerRanking: string;
+  maybeLater: string;
+  enterNickname: string;
+  nickname: string;
+  cancel: string;
+  submit: string;
+  complete: string;
+  includesPenalty: string;
+  gradeTable: string;
+  gradeTableDesc: string;
+  refresh: string;
+  rank: string;
+  grades: { legend: string; master: string; expert: string; advanced: string; intermediate: string; beginner: string };
+}> = {
+  ko: {
+    title: "스도쿠",
+    subtitle: "두뇌 훈련 퍼즐",
+    easy: "초급",
+    medium: "중급",
+    hard: "고수",
+    mistakeLimit: "실수 제한",
+    timePenalty: "시간 패널티",
+    times: "회",
+    startGame: "게임 시작 →",
+    hallOfFame: "명예의전당",
+    noChallengers: "아직 기록이 없습니다.",
+    firstChallenger: "첫 번째 도전자가 되어보세요!",
+    time: "시간",
+    mistakes: "실수",
+    left: "남음",
+    back: "← 뒤로",
+    playAgain: "다시 도전",
+    share: "📤 공유하기",
+    copied: "✅ 복사됨!",
+    gameOver: "게임 오버!",
+    madeMistakes: "실수를 너무 많이 했어요",
+    tryAgain: "🔄 다시 도전",
+    registerRanking: "🏆 랭킹 등록!",
+    maybeLater: "다음에 할게요",
+    enterNickname: "닉네임을 입력하세요",
+    nickname: "닉네임",
+    cancel: "취소",
+    submit: "등록",
+    complete: "완료!",
+    includesPenalty: "패널티 포함",
+    gradeTable: "등급표 (고수 모드)",
+    gradeTableDesc: "빠르게 완료할수록 높은 등급! (패널티 시간 포함)",
+    refresh: "새로고침",
+    rank: "위",
+    grades: { legend: "전설", master: "마스터", expert: "전문가", advanced: "숙련자", intermediate: "중급자", beginner: "초보자" }
+  },
+  en: {
+    title: "Sudoku",
+    subtitle: "Brain Training Puzzle",
+    easy: "Easy",
+    medium: "Medium",
+    hard: "Hard",
+    mistakeLimit: "Mistake Limit",
+    timePenalty: "Time Penalty",
+    times: "times",
+    startGame: "Start Game →",
+    hallOfFame: "Hall of Fame",
+    noChallengers: "No records yet.",
+    firstChallenger: "Be the first challenger!",
+    time: "Time",
+    mistakes: "Mistakes",
+    left: "left",
+    back: "← Back",
+    playAgain: "Play Again",
+    share: "📤 Share",
+    copied: "✅ Copied!",
+    gameOver: "Game Over!",
+    madeMistakes: "Too many mistakes",
+    tryAgain: "🔄 Try Again",
+    registerRanking: "🏆 Register Ranking!",
+    maybeLater: "Maybe Later",
+    enterNickname: "Enter Your Nickname",
+    nickname: "Nickname",
+    cancel: "Cancel",
+    submit: "Submit",
+    complete: "Complete!",
+    includesPenalty: "includes penalty",
+    gradeTable: "Grade Table (Hard Mode)",
+    gradeTableDesc: "Faster completion = Higher grade! (Penalty time included)",
+    refresh: "Refresh",
+    rank: "",
+    grades: { legend: "Legend", master: "Master", expert: "Expert", advanced: "Advanced", intermediate: "Intermediate", beginner: "Beginner" }
+  },
+  ja: {
+    title: "数独",
+    subtitle: "脳トレパズル",
+    easy: "初級",
+    medium: "中級",
+    hard: "上級",
+    mistakeLimit: "ミス制限",
+    timePenalty: "時間ペナルティ",
+    times: "回",
+    startGame: "ゲーム開始 →",
+    hallOfFame: "ランキング",
+    noChallengers: "まだ記録がありません。",
+    firstChallenger: "最初の挑戦者になろう！",
+    time: "時間",
+    mistakes: "ミス",
+    left: "残り",
+    back: "← 戻る",
+    playAgain: "もう一度",
+    share: "📤 シェア",
+    copied: "✅ コピー済み！",
+    gameOver: "ゲームオーバー！",
+    madeMistakes: "ミスが多すぎました",
+    tryAgain: "🔄 もう一度",
+    registerRanking: "🏆 ランキング登録！",
+    maybeLater: "後で",
+    enterNickname: "ニックネームを入力",
+    nickname: "ニックネーム",
+    cancel: "キャンセル",
+    submit: "登録",
+    complete: "完成！",
+    includesPenalty: "ペナルティ含む",
+    gradeTable: "等級表 (上級モード)",
+    gradeTableDesc: "早く完了するほど高い等級！(ペナルティ時間込み)",
+    refresh: "更新",
+    rank: "位",
+    grades: { legend: "伝説", master: "マスター", expert: "エキスパート", advanced: "上級者", intermediate: "中級者", beginner: "初心者" }
+  },
+  zh: {
+    title: "数独",
+    subtitle: "脑力训练谜题",
+    easy: "简单",
+    medium: "中等",
+    hard: "困难",
+    mistakeLimit: "错误限制",
+    timePenalty: "时间惩罚",
+    times: "次",
+    startGame: "开始游戏 →",
+    hallOfFame: "排行榜",
+    noChallengers: "暂无记录。",
+    firstChallenger: "成为第一个挑战者！",
+    time: "时间",
+    mistakes: "错误",
+    left: "剩余",
+    back: "← 返回",
+    playAgain: "再玩一次",
+    share: "📤 分享",
+    copied: "✅ 已复制！",
+    gameOver: "游戏结束！",
+    madeMistakes: "错误太多了",
+    tryAgain: "🔄 再试一次",
+    registerRanking: "🏆 登记排名！",
+    maybeLater: "以后再说",
+    enterNickname: "输入昵称",
+    nickname: "昵称",
+    cancel: "取消",
+    submit: "提交",
+    complete: "完成！",
+    includesPenalty: "含惩罚时间",
+    gradeTable: "等级表 (困难模式)",
+    gradeTableDesc: "越快完成等级越高！(含惩罚时间)",
+    refresh: "刷新",
+    rank: "名",
+    grades: { legend: "传奇", master: "大师", expert: "专家", advanced: "高级", intermediate: "中级", beginner: "初级" }
+  },
+  de: {
+    title: "Sudoku",
+    subtitle: "Gehirntraining-Puzzle",
+    easy: "Leicht",
+    medium: "Mittel",
+    hard: "Schwer",
+    mistakeLimit: "Fehlerlimit",
+    timePenalty: "Zeitstrafe",
+    times: "mal",
+    startGame: "Spiel starten →",
+    hallOfFame: "Rangliste",
+    noChallengers: "Noch keine Einträge.",
+    firstChallenger: "Sei der Erste!",
+    time: "Zeit",
+    mistakes: "Fehler",
+    left: "übrig",
+    back: "← Zurück",
+    playAgain: "Nochmal",
+    share: "📤 Teilen",
+    copied: "✅ Kopiert!",
+    gameOver: "Spiel vorbei!",
+    madeMistakes: "Zu viele Fehler",
+    tryAgain: "🔄 Nochmal",
+    registerRanking: "🏆 Ranking eintragen!",
+    maybeLater: "Später",
+    enterNickname: "Spitznamen eingeben",
+    nickname: "Spitzname",
+    cancel: "Abbrechen",
+    submit: "Absenden",
+    complete: "Geschafft!",
+    includesPenalty: "inkl. Strafe",
+    gradeTable: "Rangstufen (Schwer-Modus)",
+    gradeTableDesc: "Schneller = Höherer Rang! (inkl. Strafzeit)",
+    refresh: "Aktualisieren",
+    rank: ".",
+    grades: { legend: "Legende", master: "Meister", expert: "Experte", advanced: "Fortgeschritten", intermediate: "Mittel", beginner: "Anfänger" }
+  },
+  fr: {
+    title: "Sudoku",
+    subtitle: "Puzzle d'entraînement cérébral",
+    easy: "Facile",
+    medium: "Moyen",
+    hard: "Difficile",
+    mistakeLimit: "Limite d'erreurs",
+    timePenalty: "Pénalité temps",
+    times: "fois",
+    startGame: "Commencer →",
+    hallOfFame: "Classement",
+    noChallengers: "Aucun record encore.",
+    firstChallenger: "Soyez le premier !",
+    time: "Temps",
+    mistakes: "Erreurs",
+    left: "restant",
+    back: "← Retour",
+    playAgain: "Rejouer",
+    share: "📤 Partager",
+    copied: "✅ Copié !",
+    gameOver: "Partie terminée !",
+    madeMistakes: "Trop d'erreurs",
+    tryAgain: "🔄 Réessayer",
+    registerRanking: "🏆 S'inscrire !",
+    maybeLater: "Plus tard",
+    enterNickname: "Entrez votre pseudo",
+    nickname: "Pseudo",
+    cancel: "Annuler",
+    submit: "Soumettre",
+    complete: "Terminé !",
+    includesPenalty: "incl. pénalité",
+    gradeTable: "Niveaux (Mode Difficile)",
+    gradeTableDesc: "Plus vite = Meilleur niveau ! (pénalité incluse)",
+    refresh: "Actualiser",
+    rank: "e",
+    grades: { legend: "Légende", master: "Maître", expert: "Expert", advanced: "Avancé", intermediate: "Intermédiaire", beginner: "Débutant" }
+  },
+  es: {
+    title: "Sudoku",
+    subtitle: "Puzzle de entrenamiento cerebral",
+    easy: "Fácil",
+    medium: "Medio",
+    hard: "Difícil",
+    mistakeLimit: "Límite de errores",
+    timePenalty: "Penalización",
+    times: "veces",
+    startGame: "Iniciar →",
+    hallOfFame: "Clasificación",
+    noChallengers: "Sin registros aún.",
+    firstChallenger: "¡Sé el primero!",
+    time: "Tiempo",
+    mistakes: "Errores",
+    left: "restantes",
+    back: "← Volver",
+    playAgain: "Jugar de nuevo",
+    share: "📤 Compartir",
+    copied: "✅ ¡Copiado!",
+    gameOver: "¡Juego terminado!",
+    madeMistakes: "Demasiados errores",
+    tryAgain: "🔄 Reintentar",
+    registerRanking: "🏆 ¡Registrar!",
+    maybeLater: "Quizás después",
+    enterNickname: "Ingresa tu apodo",
+    nickname: "Apodo",
+    cancel: "Cancelar",
+    submit: "Enviar",
+    complete: "¡Completado!",
+    includesPenalty: "incl. penalización",
+    gradeTable: "Niveles (Modo Difícil)",
+    gradeTableDesc: "¡Más rápido = Mejor nivel! (penalización incluida)",
+    refresh: "Actualizar",
+    rank: "º",
+    grades: { legend: "Leyenda", master: "Maestro", expert: "Experto", advanced: "Avanzado", intermediate: "Intermedio", beginner: "Principiante" }
+  },
+  pt: {
+    title: "Sudoku",
+    subtitle: "Puzzle de treinamento cerebral",
+    easy: "Fácil",
+    medium: "Médio",
+    hard: "Difícil",
+    mistakeLimit: "Limite de erros",
+    timePenalty: "Penalidade",
+    times: "vezes",
+    startGame: "Iniciar →",
+    hallOfFame: "Classificação",
+    noChallengers: "Sem registros ainda.",
+    firstChallenger: "Seja o primeiro!",
+    time: "Tempo",
+    mistakes: "Erros",
+    left: "restantes",
+    back: "← Voltar",
+    playAgain: "Jogar novamente",
+    share: "📤 Compartilhar",
+    copied: "✅ Copiado!",
+    gameOver: "Fim de jogo!",
+    madeMistakes: "Muitos erros",
+    tryAgain: "🔄 Tentar de novo",
+    registerRanking: "🏆 Registrar!",
+    maybeLater: "Talvez depois",
+    enterNickname: "Digite seu apelido",
+    nickname: "Apelido",
+    cancel: "Cancelar",
+    submit: "Enviar",
+    complete: "Completo!",
+    includesPenalty: "incl. penalidade",
+    gradeTable: "Níveis (Modo Difícil)",
+    gradeTableDesc: "Mais rápido = Melhor nível! (penalidade incluída)",
+    refresh: "Atualizar",
+    rank: "º",
+    grades: { legend: "Lenda", master: "Mestre", expert: "Especialista", advanced: "Avançado", intermediate: "Intermediário", beginner: "Iniciante" }
+  }
+};
+
+// 언어 선택기 옵션
+const languageOptions: { locale: Locale; flag: string; name: string }[] = [
+  { locale: "ko", flag: "🇰🇷", name: "한국어" },
+  { locale: "en", flag: "🇺🇸", name: "English" },
+  { locale: "ja", flag: "🇯🇵", name: "日本語" },
+  { locale: "zh", flag: "🇨🇳", name: "中文" },
+  { locale: "de", flag: "🇩🇪", name: "Deutsch" },
+  { locale: "fr", flag: "🇫🇷", name: "Français" },
+  { locale: "es", flag: "🇪🇸", name: "Español" },
+  { locale: "pt", flag: "🇧🇷", name: "Português" },
+];
+
+// 스도쿠 생성
+function generateSudoku(difficulty: "easy" | "medium" | "hard") {
+  const base = [
+    [5,3,4,6,7,8,9,1,2],
+    [6,7,2,1,9,5,3,4,8],
+    [1,9,8,3,4,2,5,6,7],
+    [8,5,9,7,6,1,4,2,3],
+    [4,2,6,8,5,3,7,9,1],
+    [7,1,3,9,2,4,8,5,6],
+    [9,6,1,5,3,7,2,8,4],
+    [2,8,7,4,1,9,6,3,5],
+    [3,4,5,2,8,6,1,7,9]
+  ];
+  
+  const puzzle = base.map(row => [...row]);
+  const solution = base.map(row => [...row]);
+  
+  const removeCount = difficulty === "easy" ? 30 : difficulty === "medium" ? 40 : 50;
+  let removed = 0;
+  while (removed < removeCount) {
+    const r = Math.floor(Math.random() * 9);
+    const c = Math.floor(Math.random() * 9);
+    if (puzzle[r][c] !== 0) {
+      puzzle[r][c] = 0;
+      removed++;
+    }
+  }
+  
+  return { puzzle, solution };
+}
+
+interface LeaderboardEntry {
+  id: string;
+  nickname: string;
+  time_seconds: number;
+  difficulty: string;
+  mistakes: number;
+}
+
+interface Props {
+  locale: Locale;
+}
+
+export default function SudokuMulti({ locale }: Props) {
+  const t = translations[locale];
+  
+  const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("hard");
+  const [gameState, setGameState] = useState<"ready" | "playing" | "complete" | "gameover">("ready");
+  const [puzzle, setPuzzle] = useState<number[][]>([]);
+  const [solution, setSolution] = useState<number[][]>([]);
+  const [userInput, setUserInput] = useState<number[][]>([]);
+  const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
+  const [time, setTime] = useState(0);
+  const [mistakes, setMistakes] = useState(0);
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [showRankingPrompt, setShowRankingPrompt] = useState(false);
+  const [showNicknameModal, setShowNicknameModal] = useState(false);
+  const [nickname, setNickname] = useState("");
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
+
+  // 시간 기준으로 등급 반환 (한국어 버전과 동일)
+  const getGradeByTime = useCallback((seconds: number) => {
+    if (seconds <= 120) return { grade: t.grades.legend, emoji: "🏆", color: "text-yellow-400" };   // ~2분
+    if (seconds <= 240) return { grade: t.grades.master, emoji: "💎", color: "text-purple-400" };   // ~4분
+    if (seconds <= 360) return { grade: t.grades.expert, emoji: "⭐", color: "text-blue-400" };     // ~6분
+    if (seconds <= 480) return { grade: t.grades.advanced, emoji: "👍", color: "text-green-400" };  // ~8분
+    if (seconds <= 720) return { grade: t.grades.intermediate, emoji: "😊", color: "text-cyan-400" }; // ~12분
+    return { grade: t.grades.beginner, emoji: "📚", color: "text-orange-400" };
+  }, [t.grades]);
+
+  const getGrade = useCallback(() => {
+    return getGradeByTime(time);
+  }, [time, getGradeByTime]);
+
+  const gradeInfo = getGrade();
+
+  const fetchLeaderboard = useCallback(async () => {
+    const { data } = await supabase
+      .from("sudoku_leaderboard")
+      .select("*")
+      .order("time_seconds", { ascending: true })
+      .limit(10);
+    if (data) setLeaderboard(data);
+  }, []);
+
+  useEffect(() => {
+    fetchLeaderboard();
+  }, [fetchLeaderboard]);
+
+  useEffect(() => {
+    if (gameState !== "playing") return;
+    const timer = setInterval(() => setTime(t => t + 1), 1000);
+    return () => clearInterval(timer);
+  }, [gameState]);
+
+  const startGame = () => {
+    const { puzzle: p, solution: s } = generateSudoku(difficulty);
+    setPuzzle(p);
+    setSolution(s);
+    setUserInput(p.map(row => [...row]));
+    setSelectedCell(null);
+    setTime(0);
+    setMistakes(0);
+    setGameState("playing");
+    setHasSubmitted(false);
+  };
+
+  const handleCellClick = (row: number, col: number) => {
+    if (puzzle[row][col] === 0) {
+      setSelectedCell([row, col]);
+    }
+  };
+
+  const handleNumberInput = (num: number) => {
+    if (!selectedCell || gameState !== "playing") return;
+    const [row, col] = selectedCell;
+    if (puzzle[row][col] !== 0) return;
+
+    const newInput = userInput.map(r => [...r]);
+    newInput[row][col] = num;
+    setUserInput(newInput);
+
+    if (num !== solution[row][col]) {
+      const newMistakes = mistakes + 1;
+      setMistakes(newMistakes);
+      setTime((prev) => prev + PENALTY_SECONDS);
+      if (newMistakes >= MAX_MISTAKES) {
+        setGameState("gameover");
+        return;
+      }
+    }
+
+    let complete = true;
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        if (newInput[r][c] !== solution[r][c]) complete = false;
+      }
+    }
+    if (complete) {
+      setGameState("complete");
+      if (difficulty === "hard") {
+        setShowRankingPrompt(true);
+      }
+    }
+  };
+
+  const submitScore = async () => {
+    if (!nickname.trim() || hasSubmitted) return;
+    await supabase.from("sudoku_leaderboard").insert({
+      nickname: nickname.trim(),
+      difficulty,
+      time_seconds: time,
+      mistakes,
+    });
+    setHasSubmitted(true);
+    setShowNicknameModal(false);
+    fetchLeaderboard();
+  };
+
+  const getSudokuPath = (targetLocale: Locale) => {
+    return targetLocale === "ko" ? "/sudoku" : `/${targetLocale}/sudoku`;
+  };
+
+  const shareResult = async () => {
+    const baseUrl = locale === "ko" ? "https://slox.co.kr/sudoku" : `https://slox.co.kr/${locale}/sudoku`;
+    const difficultyName = difficulty === "easy" ? t.easy : difficulty === "medium" ? t.medium : t.hard;
+    const text = `🧩 SLOX ${t.title} ${t.complete}\n\n${difficultyName}\n${t.time}: ${formatTime(time)}\n${t.mistakes}: ${mistakes}\n${gradeInfo.grade} ${gradeInfo.emoji}\n\n${baseUrl}`;
+    if (navigator.share) {
+      try { await navigator.share({ text }); return; } catch { /* fallback */ }
+    }
+    await navigator.clipboard.writeText(text);
+    setShowCopied(true);
+    setTimeout(() => setShowCopied(false), 2000);
+  };
+
+  const currentLang = languageOptions.find(l => l.locale === locale);
+
+  return (
+    <div className="min-h-screen bg-dark-950">
+      {/* 네비게이션 */}
+      <nav className="fixed top-0 left-0 right-0 z-50">
+        <div className="mx-4 mt-4">
+          <div className="max-w-4xl mx-auto bg-dark-900/80 backdrop-blur-xl rounded-2xl border border-white/10">
+            <div className="flex items-center justify-between h-14 px-4">
+              <Link href={locale === "ko" ? "/" : `/${locale}`} className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">S</span>
+                </div>
+                <span className="font-bold text-white">SLOX</span>
+              </Link>
+              
+              {/* 언어 선택 드롭다운 */}
+              <div className="relative">
+                <button 
+                  onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm text-dark-300 hover:text-white bg-dark-800 rounded-lg border border-dark-700"
+                >
+                  <span>{currentLang?.flag}</span>
+                  <span className="hidden sm:inline">{currentLang?.name}</span>
+                  <span>▼</span>
+                </button>
+                
+                {showLanguageMenu && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setShowLanguageMenu(false)} />
+                    <div className="absolute right-0 mt-2 w-40 bg-dark-900 border border-dark-700 rounded-xl shadow-xl z-50 overflow-hidden">
+                      {languageOptions.map((lang) => (
+                        <Link
+                          key={lang.locale}
+                          href={getSudokuPath(lang.locale)}
+                          className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-dark-800 transition-colors ${
+                            lang.locale === locale ? "bg-dark-800 text-white" : "text-dark-300"
+                          }`}
+                          onClick={() => setShowLanguageMenu(false)}
+                        >
+                          <span>{lang.flag}</span>
+                          <span>{lang.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <div className="pt-24 pb-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          {gameState === "ready" && (
+            <div className="text-center">
+              <div className="text-6xl mb-6">🧩</div>
+              <h1 className="text-4xl font-black text-white mb-4">{t.title}</h1>
+              <p className="text-dark-400 mb-8">{t.subtitle}</p>
+
+              <div className="flex justify-center gap-2 mb-8">
+                {(["easy", "medium", "hard"] as const).map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => setDifficulty(d)}
+                    className={`px-4 py-2 rounded-xl font-medium transition-all ${
+                      difficulty === d
+                        ? "bg-emerald-500 text-black"
+                        : "bg-dark-800 text-dark-400 hover:text-white"
+                    }`}
+                  >
+                    {d === "easy" ? t.easy : d === "medium" ? t.medium : t.hard}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex justify-center gap-3 mb-6">
+                <div className="px-3 py-2 bg-dark-800 rounded-xl text-center">
+                  <span className="text-dark-400 text-xs block">{t.mistakeLimit}</span>
+                  <span className="text-red-400 font-bold">{MAX_MISTAKES} {t.times}</span>
+                </div>
+                <div className="px-3 py-2 bg-dark-800 rounded-xl text-center">
+                  <span className="text-dark-400 text-xs block">{t.timePenalty}</span>
+                  <span className="text-orange-400 font-bold">+{PENALTY_SECONDS}s</span>
+                </div>
+              </div>
+
+              {difficulty !== "hard" && (
+                <p className="text-dark-500 text-sm mb-4">💡 {locale === "ko" ? "랭킹 도전은 '고수' 모드에서만 가능해요!" : "Ranking available only in Hard mode!"}</p>
+              )}
+
+              <button onClick={startGame} className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-lg rounded-xl">
+                {t.startGame}
+              </button>
+
+              {/* 명예의전당 */}
+              <div className="mt-12 bg-dark-900/50 rounded-2xl p-6 border border-dark-800">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <span>🏆</span> {t.hallOfFame}
+                  </h3>
+                  <button onClick={fetchLeaderboard} className="text-dark-500 hover:text-white text-xs">🔄 {t.refresh}</button>
+                </div>
+                {leaderboard.length === 0 ? (
+                  <div className="text-center py-8 text-dark-500">
+                    <span className="text-4xl mb-2 block">🔢</span>
+                    {t.noChallengers} {t.firstChallenger}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {leaderboard.map((entry, idx) => {
+                      const entryGrade = getGradeByTime(entry.time_seconds);
+                      return (
+                        <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${idx === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : idx === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : idx === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${idx === 0 ? "bg-yellow-500 text-black" : idx === 1 ? "bg-gray-300 text-black" : idx === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{idx + 1}</div>
+                          <div className="flex-1 min-w-0">
+                            <span className="text-white font-medium truncate">{entry.nickname}</span>
+                            <div className="flex items-center gap-2 text-xs text-dark-400">
+                              <span className={entryGrade.color}>{entryGrade.grade}</span>
+                              <span>•</span>
+                              <span>{t.mistakes} {entry.mistakes}{t.times}</span>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-cyan-400 font-bold">{formatTime(entry.time_seconds)}</div>
+                            <div className="text-xs text-dark-500">{idx + 1}{t.rank} / {leaderboard.length}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* 등급표 */}
+              <div className="mt-8 bg-dark-900/50 rounded-2xl p-6 border border-dark-800">
+                <h3 className="text-white font-medium mb-2 text-center">🏆 {t.gradeTable}</h3>
+                <p className="text-dark-400 text-xs text-center mb-4">💡 {t.gradeTableDesc}</p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-center text-sm">
+                  <div className="p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg border border-yellow-400/50">
+                    <span className="text-yellow-400 font-bold">🏆 {t.grades.legend}</span>
+                    <p className="text-dark-400 text-xs">~2min</p>
+                  </div>
+                  <div className="p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg border border-purple-400/50">
+                    <span className="text-purple-400 font-bold">💎 {t.grades.master}</span>
+                    <p className="text-dark-400 text-xs">~4min</p>
+                  </div>
+                  <div className="p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg border border-blue-400/50">
+                    <span className="text-blue-400 font-bold">⭐ {t.grades.expert}</span>
+                    <p className="text-dark-400 text-xs">~6min</p>
+                  </div>
+                  <div className="p-2 bg-gradient-to-r from-green-500/20 to-green-400/20 rounded-lg border border-green-400/50">
+                    <span className="text-green-400 font-bold">👍 {t.grades.advanced}</span>
+                    <p className="text-dark-400 text-xs">~8min</p>
+                  </div>
+                  <div className="p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg border border-cyan-400/50">
+                    <span className="text-cyan-400 font-bold">😊 {t.grades.intermediate}</span>
+                    <p className="text-dark-400 text-xs">~12min</p>
+                  </div>
+                  <div className="p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg border border-orange-400/50">
+                    <span className="text-orange-400 font-bold">📚 {t.grades.beginner}</span>
+                    <p className="text-dark-400 text-xs">12min~</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {gameState === "playing" && (
+            <div className="text-center">
+              <div className="flex justify-center gap-4 mb-6 text-sm">
+                <div className="px-3 py-1.5 bg-dark-800 rounded-lg">
+                  <span className="text-dark-400">⏱ </span>
+                  <span className="text-cyan-400 font-bold">{formatTime(time)}</span>
+                </div>
+                <div className={`px-3 py-1.5 rounded-lg ${mistakes >= MAX_MISTAKES - 3 ? 'bg-red-500/20' : 'bg-dark-800'}`}>
+                  <span className="text-dark-400">❌ </span>
+                  <span className={`font-bold ${mistakes >= MAX_MISTAKES - 3 ? 'text-red-400' : 'text-orange-400'}`}>
+                    {mistakes}/{MAX_MISTAKES}
+                  </span>
+                  <span className="text-dark-500 text-xs ml-1">({MAX_MISTAKES - mistakes} {t.left})</span>
+                </div>
+              </div>
+
+              <div className="inline-block bg-dark-800 p-2 rounded-xl">
+                <div className="grid grid-cols-9 gap-0.5">
+                  {userInput.map((row, r) =>
+                    row.map((cell, c) => (
+                      <button
+                        key={`${r}-${c}`}
+                        onClick={() => handleCellClick(r, c)}
+                        className={`w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-sm sm:text-lg font-bold transition-all
+                          ${puzzle[r][c] !== 0 ? "bg-dark-700 text-white" : "bg-dark-900 hover:bg-dark-800"}
+                          ${selectedCell?.[0] === r && selectedCell?.[1] === c ? "ring-2 ring-emerald-500" : ""}
+                          ${cell !== 0 && cell !== solution[r][c] ? "text-red-400" : cell !== 0 ? "text-emerald-400" : "text-transparent"}
+                          ${c === 2 || c === 5 ? "mr-1" : ""}
+                          ${r === 2 || r === 5 ? "mb-1" : ""}
+                        `}
+                      >
+                        {cell || ""}
+                      </button>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div className="flex justify-center gap-2 mt-6">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                  <button
+                    key={num}
+                    onClick={() => handleNumberInput(num)}
+                    className="w-10 h-10 bg-dark-800 hover:bg-dark-700 text-white font-bold rounded-lg transition-all"
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
+
+              <button onClick={() => setGameState("ready")} className="mt-6 px-4 py-2 text-dark-500 hover:text-white text-sm">
+                {t.back}
+              </button>
+            </div>
+          )}
+
+          {gameState === "complete" && (
+            <div className="max-w-xl mx-auto text-center">
+              <div className="bg-dark-900/50 rounded-2xl p-8 border border-dark-800">
+                <div className="text-5xl mb-4">{gradeInfo.emoji}</div>
+                <h2 className={`text-4xl font-black mb-2 ${gradeInfo.color}`}>{gradeInfo.grade}</h2>
+                <p className="text-dark-400">{t.time}: {formatTime(time)} • {t.mistakes}: {mistakes}</p>
+                <p className="text-dark-500 text-sm">({t.includesPenalty}: +{mistakes * PENALTY_SECONDS}s)</p>
+                <div className="mt-8 flex flex-col gap-3">
+                  <button onClick={() => setGameState("ready")} className="py-3 px-6 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-xl">{t.playAgain}</button>
+                  <button onClick={shareResult} className="py-3 px-6 bg-dark-800 text-white font-medium rounded-xl border border-dark-700">{showCopied ? t.copied : t.share}</button>
+                </div>
+
+                {difficulty === "hard" && !hasSubmitted && (
+                  <button onClick={() => setShowNicknameModal(true)} className="mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl">
+                    {t.registerRanking}
+                  </button>
+                )}
+                {difficulty !== "hard" && (
+                  <p className="text-dark-500 text-sm mt-4">💡 {locale === "ko" ? "랭킹 도전은 '고수' 모드에서 가능해요!" : "Ranking available only in Hard mode!"}</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {gameState === "gameover" && (
+            <div className="max-w-xl mx-auto text-center">
+              <div className="bg-dark-900/50 rounded-2xl p-8 border border-red-500/30">
+                <div className="text-6xl mb-4">😵</div>
+                <h2 className="text-4xl font-black mb-2 text-red-400">{t.gameOver}</h2>
+                <p className="text-dark-400 mb-2">{t.madeMistakes}</p>
+                <p className="text-dark-500 text-sm">{t.time}: {formatTime(time)}</p>
+                <div className="mt-8">
+                  <button 
+                    onClick={startGame} 
+                    className="py-3 px-8 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl hover:opacity-90 transition-all"
+                  >
+                    {t.tryAgain}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 랭킹 팝업 */}
+      {showRankingPrompt && !showNicknameModal && !hasSubmitted && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-sm w-full">
+            <div className="text-center mb-6">
+              <div className="text-5xl mb-3">{gradeInfo.emoji}</div>
+              <h3 className={`text-3xl font-black ${gradeInfo.color}`}>{formatTime(time)}</h3>
+              <p className="text-dark-400">{gradeInfo.grade}</p>
+            </div>
+            <button onClick={() => { setShowRankingPrompt(false); setShowNicknameModal(true); }} className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-black font-black rounded-xl mb-2">{t.registerRanking}</button>
+            <button onClick={shareResult} className="w-full py-3 bg-dark-800 text-white font-medium rounded-xl border border-dark-700 mb-2">{t.share}</button>
+            <button onClick={() => setShowRankingPrompt(false)} className="w-full py-2 text-dark-500 text-sm">{t.maybeLater}</button>
+          </div>
+        </div>
+      )}
+
+      {/* 닉네임 모달 */}
+      {showNicknameModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+          <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-sm w-full">
+            <h3 className="text-xl font-bold text-white mb-4 text-center">{t.enterNickname}</h3>
+            <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder={t.nickname} maxLength={10} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4 focus:outline-none focus:border-emerald-500" />
+            <div className="flex gap-2">
+              <button onClick={() => setShowNicknameModal(false)} className="flex-1 py-3 bg-dark-800 text-dark-400 rounded-xl">{t.cancel}</button>
+              <button onClick={submitScore} disabled={!nickname.trim()} className="flex-1 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-xl disabled:opacity-50">{t.submit}</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+

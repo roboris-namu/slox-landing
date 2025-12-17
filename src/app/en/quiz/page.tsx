@@ -1,18 +1,10 @@
-import { Metadata } from "next";
-import QuizGameEN from "@/components/games/QuizGameEN";
+import QuizGameMulti from "@/components/games/QuizGameMulti";
 
-export const metadata: Metadata = {
-  title: "Free Trivia Quiz - Test Your Knowledge | SLOX",
-  description: "Free online trivia quiz with 10 questions. Test your general knowledge and compete with others!",
-  keywords: ["trivia quiz", "free quiz", "knowledge test", "online quiz", "brain game", "SLOX"],
-  openGraph: {
-    title: "Free Trivia Quiz | SLOX",
-    description: "Test your knowledge with our free trivia quiz!",
-    locale: "en_US",
-  },
+export const metadata = {
+  title: "Trivia Quiz - Test Your Knowledge | SLOX",
+  description: "Test your knowledge with fun trivia questions! 10 questions, 15 seconds each. Compete on the global leaderboard!",
 };
 
-export default function QuizPage() {
-  return <QuizGameEN />;
+export default function EnQuizPage() {
+  return <QuizGameMulti locale="en" />;
 }
-
