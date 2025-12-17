@@ -1413,7 +1413,10 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                       <Link
                         key={l}
                         href={langUrls[l]}
-                        onClick={() => setShowLangMenu(false)}
+                        onClick={() => {
+                          document.cookie = `SLOX_LOCALE=${l}; path=/; max-age=31536000`;
+                          setShowLangMenu(false);
+                        }}
                         className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-dark-700 transition-colors ${
                           lang === l ? "bg-dark-700 text-white" : "text-dark-300"
                         }`}

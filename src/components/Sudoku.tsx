@@ -391,7 +391,10 @@ export default function Sudoku() {
                           className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-dark-800 transition-colors ${
                             lang.locale === "ko" ? "bg-dark-800 text-white" : "text-dark-300"
                           }`}
-                          onClick={() => setShowLanguageMenu(false)}
+                          onClick={() => {
+                            document.cookie = `SLOX_LOCALE=${lang.locale}; path=/; max-age=31536000`;
+                            setShowLanguageMenu(false);
+                          }}
                         >
                           <span>{lang.flag}</span>
                           <span>{lang.name}</span>
