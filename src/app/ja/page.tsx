@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import MainBanner from "@/components/MainBanner";
+import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 
 export const metadata: Metadata = {
   title: "SLOX - 無料オンラインツール | IQテスト・反応速度テスト・ゲーム",
@@ -18,6 +19,7 @@ export default function JapaneseHome() {
     <main className="relative overflow-hidden">
       <Navigation />
       <MainBanner locale="ja" />
+      <HallOfFameCarousel />
       <CategoryQuickLinks />
       <FreeToolsSection />
       <Footer />

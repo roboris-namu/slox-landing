@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import MainBanner from "@/components/MainBanner";
+import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 
 export const metadata: Metadata = {
   title: "SLOX - 免费在线工具 | IQ测试・反应速度测试・游戏",
@@ -47,6 +48,8 @@ export default function ChineseHome() {
       </nav>
 
       <MainBanner locale="zh" />
+
+      <HallOfFameCarousel />
 
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">

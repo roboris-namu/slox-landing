@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import MainBanner from "@/components/MainBanner";
+import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 
 export const metadata: Metadata = {
   title: "SLOX - Free Online Tools | IQ Test, Reaction Test, Games & More",
@@ -19,6 +20,7 @@ export default function EnglishHome() {
     <main className="relative overflow-hidden">
       <Navigation />
       <MainBanner locale="en" />
+      <HallOfFameCarousel />
       <CategoryQuickLinks />
       <FreeToolsSection />
       <Footer />
