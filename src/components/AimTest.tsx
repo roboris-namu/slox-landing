@@ -1296,9 +1296,9 @@ export default function AimTest({ initialLang }: AimTestProps) {
                 {leaderboard.map((entry, index) => (
                   <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
+                    <span className="text-xl flex-shrink-0">{getCountryFlag(entry.country)}</span>
                     <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2">
-                        <span className="text-lg">{getCountryFlag(entry.country)}</span>
                         <p className="text-white font-medium truncate">{entry.nickname}</p>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
                       </div>

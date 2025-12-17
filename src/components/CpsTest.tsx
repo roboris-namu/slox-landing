@@ -1052,9 +1052,9 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
                       index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"
                     }`}>{index + 1}</div>
+                    <span className="text-xl flex-shrink-0">{getCountryFlag(entry.country)}</span>
                     <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2">
-                        <span className="text-lg">{getCountryFlag(entry.country)}</span>
                         <p className="text-white font-medium truncate">{entry.nickname}</p>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
                       </div>

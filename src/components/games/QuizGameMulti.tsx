@@ -609,11 +609,9 @@ export default function QuizGameMulti({ locale }: Props) {
                       return (
                         <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${idx === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : idx === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : idx === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${idx === 0 ? "bg-yellow-500 text-black" : idx === 1 ? "bg-gray-300 text-black" : idx === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{idx + 1}</div>
+                          <span className="text-xl flex-shrink-0">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
                           <div className="flex-1 min-w-0 text-left">
-                            <p className="text-white font-medium truncate">
-                              <span className="mr-1">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
-                              {entry.nickname}
-                            </p>
+                            <p className="text-white font-medium truncate">{entry.nickname}</p>
                             <div className="flex items-center gap-2 text-xs text-dark-400">
                               <span className={entryGrade.color}>{entryGrade.grade}</span>
                               <span>•</span>
