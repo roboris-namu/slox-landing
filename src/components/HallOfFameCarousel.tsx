@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
@@ -58,6 +58,17 @@ const gameConfigs = [
 export default function HallOfFameCarousel() {
   const [leaderboards, setLeaderboards] = useState<GameLeaderboard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  
+  // 스와이프 관련 상태
+  const [isPaused, setIsPaused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const animationRef = useRef<number | null>(null);
+  const scrollPositionRef = useRef(0);
 
   const fetchAllLeaderboards = useCallback(async () => {
 
@@ -118,6 +129,123 @@ export default function HallOfFameCarousel() {
     fetchAllLeaderboards();
   }, [fetchAllLeaderboards]);
 
+  // 자동 스크롤 애니메이션 (JavaScript 기반)
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    const speed = 0.5; // 픽셀/프레임
+
+    const animate = () => {
+      if (!isPaused && !isDragging && scrollContainer) {
+        scrollPositionRef.current += speed;
+        
+        // 무한 스크롤: 절반 지점에서 처음으로 리셋
+        const halfWidth = scrollContainer.scrollWidth / 2;
+        if (scrollPositionRef.current >= halfWidth) {
+          scrollPositionRef.current = 0;
+        }
+        
+        scrollContainer.style.transform = `translateX(-${scrollPositionRef.current}px)`;
+      }
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [isPaused, isDragging]);
+
+  // 터치/마우스 이벤트 핸들러
+  const handleDragStart = useCallback((clientX: number) => {
+    setIsDragging(true);
+    setIsPaused(true);
+    startXRef.current = clientX;
+    scrollLeftRef.current = scrollPositionRef.current;
+    
+    // 기존 재개 타이머 취소
+    if (resumeTimeoutRef.current) {
+      clearTimeout(resumeTimeoutRef.current);
+      resumeTimeoutRef.current = null;
+    }
+  }, []);
+
+  const handleDragMove = useCallback((clientX: number) => {
+    if (!isDragging) return;
+    
+    const diff = startXRef.current - clientX;
+    scrollPositionRef.current = scrollLeftRef.current + diff;
+    
+    // 범위 제한
+    const scrollContainer = scrollRef.current;
+    if (scrollContainer) {
+      const halfWidth = scrollContainer.scrollWidth / 2;
+      if (scrollPositionRef.current < 0) {
+        scrollPositionRef.current = halfWidth + scrollPositionRef.current;
+      } else if (scrollPositionRef.current >= halfWidth) {
+        scrollPositionRef.current = scrollPositionRef.current - halfWidth;
+      }
+      scrollContainer.style.transform = `translateX(-${scrollPositionRef.current}px)`;
+    }
+  }, [isDragging]);
+
+  const handleDragEnd = useCallback(() => {
+    setIsDragging(false);
+    
+    // 3초 후 자동 스크롤 재개
+    resumeTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 3000);
+  }, []);
+
+  // 마우스 이벤트
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    handleDragStart(e.clientX);
+  }, [handleDragStart]);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    handleDragMove(e.clientX);
+  }, [handleDragMove]);
+
+  const handleMouseUp = useCallback(() => {
+    if (isDragging) {
+      handleDragEnd();
+    }
+  }, [isDragging, handleDragEnd]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (isDragging) {
+      handleDragEnd();
+    }
+  }, [isDragging, handleDragEnd]);
+
+  // 터치 이벤트
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    handleDragStart(e.touches[0].clientX);
+  }, [handleDragStart]);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    handleDragMove(e.touches[0].clientX);
+  }, [handleDragMove]);
+
+  const handleTouchEnd = useCallback(() => {
+    handleDragEnd();
+  }, [handleDragEnd]);
+
+  // 컴포넌트 언마운트 시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current) {
+        clearTimeout(resumeTimeoutRef.current);
+      }
+    };
+  }, []);
+
   // 무한 스크롤을 위해 데이터 복제 (최소 14개 = 7 * 2)
   const displayLeaderboards = leaderboards.length > 0 ? leaderboards : gameConfigs.map(config => ({
     game: config.game,
@@ -165,14 +293,25 @@ export default function HallOfFameCarousel() {
       </div>
 
       {/* 필름 스트립 스타일 캐러셀 - 터치 스와이프 지원 */}
-      <div className="relative overflow-hidden py-8">
+      <div 
+        ref={containerRef}
+        className="relative overflow-hidden py-8 cursor-grab active:cursor-grabbing select-none"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {/* 좌우 페이드 효과 */}
         <div className="absolute left-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-r from-dark-950 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-4 sm:w-16 md:w-32 lg:w-48 bg-gradient-to-l from-dark-950 to-transparent z-10 pointer-events-none" />
 
-        {/* 스크롤 컨테이너 - 자동 무한 스크롤 */}
+        {/* 스크롤 컨테이너 - JavaScript 기반 자동 스크롤 + 스와이프 */}
         <div 
-          className="flex gap-4 sm:gap-6 md:gap-8 pl-[30vw] sm:pl-[25vw] md:pl-[20vw] lg:pl-[20vw] animate-scroll-left"
+          ref={scrollRef}
+          className="flex gap-4 sm:gap-6 md:gap-8 pl-[30vw] sm:pl-[25vw] md:pl-[20vw] lg:pl-[20vw] will-change-transform"
           style={{ width: "max-content" }}
         >
           {duplicatedLeaderboards.map((lb, idx) => {
