@@ -533,7 +533,7 @@ export default function Sudoku() {
                     <h2 className="text-3xl font-bold mb-2 text-red-400">게임 오버!</h2>
                     <p className="text-dark-400 mb-4">{MAX_MISTAKES}번 틀려서 실패했어요 (시간: {formatTime(time)})</p>
                     <button
-                      onClick={startGame}
+                      onClick={() => startGame()}
                       className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl hover:opacity-90 transition-all"
                     >
                       🔄 다시 도전하기
