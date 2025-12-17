@@ -245,7 +245,19 @@ interface LeaderboardEntry {
   grade: string;
   percentile: number;
   device_type: string;
+  country?: string;
 }
+
+// 국가 코드 → 국기 이모지 변환
+const getCountryFlag = (countryCode: string | null | undefined): string => {
+  if (!countryCode) return "";
+  const flags: Record<string, string> = {
+    KR: "🇰🇷", US: "🇺🇸", JP: "🇯🇵", CN: "🇨🇳", DE: "🇩🇪", FR: "🇫🇷", ES: "🇪🇸", BR: "🇧🇷",
+    GB: "🇬🇧", CA: "🇨🇦", AU: "🇦🇺", IN: "🇮🇳", RU: "🇷🇺", IT: "🇮🇹", MX: "🇲🇽", TH: "🇹🇭",
+    VN: "🇻🇳", PH: "🇵🇭", SG: "🇸🇬", NZ: "🇳🇿",
+  };
+  return flags[countryCode] || "🌍";
+};
 
 interface GameLeaderboard {
   game: string;
@@ -433,6 +445,7 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
                 grade,
                 percentile: entry.percentile as number || 0,
                 device_type: entry.device_type as string || "",
+                country: entry.country as string || "",
               };
             }),
           };
@@ -736,8 +749,9 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
 
                         {/* 닉네임 & 등급 */}
                         <div className="flex-1 min-w-0">
-                          <p className="text-white font-bold truncate">
-                            {entry.nickname}
+                          <p className="text-white font-bold truncate flex items-center gap-1">
+                            {entry.country && <span className="text-base">{getCountryFlag(entry.country)}</span>}
+                            <span>{entry.nickname}</span>
                           </p>
                           <p className={`text-xs font-medium ${gradeColors[entry.grade] || "text-dark-400"}`}>
                             {gradeTranslations[locale]?.[entry.grade] || entry.grade || "-"}
