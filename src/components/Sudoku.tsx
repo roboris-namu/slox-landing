@@ -6,7 +6,10 @@ import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
 type Board = (number | null)[][];
-type GameState = "ready" | "playing" | "complete";
+type GameState = "ready" | "playing" | "complete" | "gameover";
+
+const MAX_MISTAKES = 10; // 최대 틀림 횟수
+const PENALTY_SECONDS = 3; // 틀릴 때마다 +3초
 
 const generateSolvedBoard = (): number[][] => {
   const board: number[][] = Array(9).fill(null).map(() => Array(9).fill(0));
@@ -155,10 +158,20 @@ export default function Sudoku() {
     } else {
       newBoard[row][col] = num;
       if (num !== solvedBoard[row][col]) {
-        setMistakes((prev) => prev + 1);
+        const newMistakes = mistakes + 1;
+        setMistakes(newMistakes);
+        // 시간 패널티: +3초
+        setTime((prev) => prev + PENALTY_SECONDS);
         const newErrors = new Set(showErrors);
         newErrors.add(`${row}-${col}`);
         setShowErrors(newErrors);
+        // 최대 틀림 횟수 초과 시 게임 오버
+        if (newMistakes >= MAX_MISTAKES) {
+          if (timerRef.current) clearInterval(timerRef.current);
+          setUserBoard(newBoard);
+          setGameState("gameover");
+          return;
+        }
       } else {
         const newErrors = new Set(showErrors);
         newErrors.delete(`${row}-${col}`);
@@ -356,7 +369,7 @@ export default function Sudoku() {
               </div>
               <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
                 <span className="text-dark-400 text-xs block">실수제한</span>
-                <span className="text-white font-bold">없음</span>
+                <span className="text-red-400 font-bold">{MAX_MISTAKES}회</span>
               </div>
             </div>
           )}
@@ -375,8 +388,8 @@ export default function Sudoku() {
                   </div>
                 </div>
                 <div className="px-4 py-2 bg-dark-800/50 rounded-xl">
-                  <p className="text-dark-400 text-xs">실수</p>
-                  <p className={`text-xl font-bold ${mistakes > 0 ? 'text-red-400' : 'text-green-400'}`}>{mistakes}</p>
+                  <p className="text-dark-400 text-xs">실수 ({MAX_MISTAKES - mistakes}회 남음)</p>
+                  <p className={`text-xl font-bold ${mistakes >= MAX_MISTAKES - 3 ? 'text-red-400' : mistakes > 0 ? 'text-orange-400' : 'text-green-400'}`}>{mistakes}/{MAX_MISTAKES}</p>
                 </div>
               </div>
             </div>
@@ -410,7 +423,7 @@ export default function Sudoku() {
             )}
 
             {/* 게임 화면 */}
-            {(gameState === "playing" || gameState === "complete") && (
+            {(gameState === "playing" || gameState === "complete" || gameState === "gameover") && (
               <div className="py-4">
                 {/* 스도쿠 보드 */}
                 <div className="flex justify-center mb-6">
@@ -453,12 +466,27 @@ export default function Sudoku() {
                   </div>
                 )}
 
+                {/* 게임 오버 메시지 */}
+                {gameState === "gameover" && (
+                  <div className="text-center mt-6">
+                    <div className="text-6xl mb-4">😵</div>
+                    <h2 className="text-3xl font-bold mb-2 text-red-400">게임 오버!</h2>
+                    <p className="text-dark-400 mb-4">{MAX_MISTAKES}번 틀려서 실패했어요 (시간: {formatTime(time)})</p>
+                    <button
+                      onClick={startGame}
+                      className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl hover:opacity-90 transition-all"
+                    >
+                      🔄 다시 도전하기
+                    </button>
+                  </div>
+                )}
+
                 {/* 완료 메시지 */}
                 {gameState === "complete" && (
                   <div className="text-center mt-6">
                     <div className="text-6xl mb-4">{gradeInfo.emoji}</div>
                     <h2 className={`text-3xl font-bold mb-2 ${gradeInfo.color}`}>{gradeInfo.grade}!</h2>
-                    <p className="text-dark-400 mb-4">{formatTime(time)} 완료 (실수 {mistakes}회)</p>
+                    <p className="text-dark-400 mb-4">{formatTime(time)} 완료 (실수 {mistakes}회, 패널티 +{mistakes * PENALTY_SECONDS}초 포함)</p>
                     
                     {hasSubmitted && (
                       <div className="mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400">
@@ -632,7 +660,7 @@ export default function Sudoku() {
           {/* 게임 방법 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
             <h3 className="text-white font-medium mb-3 flex items-center gap-2"><span>🎯</span> 게임 방법</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
               <div className="bg-dark-800/50 p-3 rounded-lg">
                 <p className="text-indigo-400 font-medium">1️⃣ 셀 선택</p>
                 <p className="text-dark-400 mt-1">빈 칸을 클릭하세요</p>
@@ -644,6 +672,10 @@ export default function Sudoku() {
               <div className="bg-dark-800/50 p-3 rounded-lg">
                 <p className="text-purple-400 font-medium">3️⃣ 규칙</p>
                 <p className="text-dark-400 mt-1">행/열/박스에 중복 없이!</p>
+              </div>
+              <div className="bg-dark-800/50 p-3 rounded-lg border border-red-500/30">
+                <p className="text-red-400 font-medium">⚠️ 패널티</p>
+                <p className="text-dark-400 mt-1">틀리면 <span className="text-red-400 font-bold">+3초</span>, {MAX_MISTAKES}회 틀리면 <span className="text-red-400 font-bold">게임 오버!</span></p>
               </div>
             </div>
           </div>
