@@ -49,7 +49,7 @@ export default function SpanishHome() {
 
       <MainBanner locale="es" />
 
-      <HallOfFameCarousel />
+      <HallOfFameCarousel locale="es" />
 
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">

@@ -20,7 +20,7 @@ export default function EnglishHome() {
     <main className="relative overflow-hidden">
       <Navigation />
       <MainBanner locale="en" />
-      <HallOfFameCarousel />
+      <HallOfFameCarousel locale="en" />
       <CategoryQuickLinks />
       <FreeToolsSection />
       <Footer />

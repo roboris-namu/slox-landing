@@ -19,7 +19,7 @@ export default function JapaneseHome() {
     <main className="relative overflow-hidden">
       <Navigation />
       <MainBanner locale="ja" />
-      <HallOfFameCarousel />
+      <HallOfFameCarousel locale="ja" />
       <CategoryQuickLinks />
       <FreeToolsSection />
       <Footer />

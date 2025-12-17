@@ -49,7 +49,7 @@ export default function GermanHome() {
 
       <MainBanner locale="de" />
 
-      <HallOfFameCarousel />
+      <HallOfFameCarousel locale="de" />
 
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">

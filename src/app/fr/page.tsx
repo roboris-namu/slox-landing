@@ -49,7 +49,7 @@ export default function FrenchHome() {
 
       <MainBanner locale="fr" />
 
-      <HallOfFameCarousel />
+      <HallOfFameCarousel locale="fr" />
 
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">

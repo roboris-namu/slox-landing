@@ -290,22 +290,9 @@ const gameConfigs = [
   { table: "aim_leaderboard", game: "aim", gameName: "에임", emoji: "🎯", href: "/aim", unit: "점", color: "from-red-500 to-orange-500", bgColor: "from-red-500/20 to-orange-500/20", scoreField: "score", orderAsc: false },
 ];
 
-export default function HallOfFameCarousel() {
+export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string }) {
   const [leaderboards, setLeaderboards] = useState<GameLeaderboard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [locale, setLocale] = useState("ko");
-  
-  // 쿠키에서 언어 감지
-  useEffect(() => {
-    const getCookie = (name: string) => {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return parts.pop()?.split(';').shift();
-      return null;
-    };
-    const savedLocale = getCookie("SLOX_LOCALE") || "ko";
-    setLocale(savedLocale);
-  }, []);
 
   const t = translations[locale] || translations.ko;
   
