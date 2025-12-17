@@ -7,9 +7,17 @@ import { supabase } from "@/lib/supabase";
 
 type Board = (number | null)[][];
 type GameState = "ready" | "playing" | "complete" | "gameover";
+type Difficulty = "easy" | "medium" | "hard";
 
 const MAX_MISTAKES = 10; // 최대 틀림 횟수
 const PENALTY_SECONDS = 3; // 틀릴 때마다 +3초
+
+// 난이도별 설정
+const DIFFICULTY_CONFIG = {
+  easy: { name: "초보", emoji: "🟢", cells: 30, color: "text-green-400", bgColor: "bg-green-500" },
+  medium: { name: "중수", emoji: "🟡", cells: 40, color: "text-yellow-400", bgColor: "bg-yellow-500" },
+  hard: { name: "고수", emoji: "🔴", cells: 50, color: "text-red-400", bgColor: "bg-red-500" },
+};
 
 const generateSolvedBoard = (): number[][] => {
   const board: number[][] = Array(9).fill(null).map(() => Array(9).fill(0));
@@ -50,10 +58,10 @@ const generateSolvedBoard = (): number[][] => {
   return board;
 };
 
-// 표준 난이도: 45칸 빈칸 (통일된 랭킹 측정용)
-const createPuzzle = (solved: number[][]): Board => {
+// 난이도별 빈칸 생성
+const createPuzzle = (solved: number[][], difficulty: Difficulty): Board => {
   const puzzleBoard: Board = solved.map(row => [...row]);
-  const cellsToRemove = 45; // 표준 난이도 고정
+  const cellsToRemove = DIFFICULTY_CONFIG[difficulty].cells;
   
   let removed = 0;
   while (removed < cellsToRemove) {
@@ -77,6 +85,7 @@ interface LeaderboardEntry {
 
 export default function Sudoku() {
   const [gameState, setGameState] = useState<GameState>("ready");
+  const [difficulty, setDifficulty] = useState<Difficulty>("hard"); // 기본값: 고수
   const [solvedBoard, setSolvedBoard] = useState<number[][]>([]);
   const [userBoard, setUserBoard] = useState<Board>([]);
   const [initialBoard, setInitialBoard] = useState<Board>([]);
@@ -117,9 +126,11 @@ export default function Sudoku() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [gameState]);
 
-  const startGame = () => {
+  const startGame = (selectedDifficulty?: Difficulty) => {
+    const diff = selectedDifficulty || difficulty;
+    setDifficulty(diff);
     const solved = generateSolvedBoard();
-    const puzzleBoard = createPuzzle(solved);
+    const puzzleBoard = createPuzzle(solved, diff);
     setSolvedBoard(solved);
     setUserBoard(puzzleBoard.map(row => [...row]));
     setInitialBoard(puzzleBoard.map(row => [...row]));
@@ -191,7 +202,10 @@ export default function Sudoku() {
     }
     if (timerRef.current) clearInterval(timerRef.current);
     setGameState("complete");
-    setShowRankingPrompt(true);
+    // 고수 모드에서만 랭킹 팝업 표시
+    if (difficulty === "hard") {
+      setShowRankingPrompt(true);
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -246,14 +260,16 @@ export default function Sudoku() {
   // 텍스트 공유
   const shareResult = async () => {
     const gradeInfo = getGrade();
+    const diffConfig = DIFFICULTY_CONFIG[difficulty];
     const shareUrl = "https://www.slox.co.kr/sudoku";
     const firstPlace = leaderboard[0];
     
     const text = `🔢 스도쿠 완료!\n\n` +
+      `${diffConfig.emoji} 난이도: ${diffConfig.name}${difficulty === "hard" ? " (랭킹 모드)" : " (연습)"}\n` +
       `${gradeInfo.emoji} ${gradeInfo.grade}\n` +
       `⏱️ 시간: ${formatTime(time)}\n` +
       `❌ 실수: ${mistakes}회\n\n` +
-      (firstPlace ? `🏆 현재 1위: ${firstPlace.nickname} (${formatTime(firstPlace.time_seconds)})\n\n` : "") +
+      (difficulty === "hard" && firstPlace ? `🏆 현재 1위: ${firstPlace.nickname} (${formatTime(firstPlace.time_seconds)})\n\n` : "") +
       `나도 도전하기 👇\n${shareUrl}`;
 
     if (isKakaoInApp()) {
@@ -356,27 +372,62 @@ export default function Sudoku() {
             <p className="text-dark-400 text-lg max-w-2xl mx-auto">숫자 퍼즐의 고전! 빈칸을 채워 완성하세요.</p>
           </div>
 
-          {/* 게임 정보 */}
+          {/* 난이도 선택 */}
           {gameState === "ready" && (
-            <div className="flex justify-center gap-4 mb-8">
-              <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
-                <span className="text-dark-400 text-xs block">크기</span>
-                <span className="text-white font-bold">9×9</span>
+            <div className="mb-8">
+              <p className="text-center text-dark-400 text-sm mb-3">난이도를 선택하세요</p>
+              <div className="flex justify-center gap-3">
+                {(["easy", "medium", "hard"] as Difficulty[]).map((d) => {
+                  const config = DIFFICULTY_CONFIG[d];
+                  return (
+                    <button
+                      key={d}
+                      onClick={() => setDifficulty(d)}
+                      className={`px-4 py-3 rounded-xl font-medium transition-all border-2 ${
+                        difficulty === d
+                          ? `${config.bgColor} text-black border-transparent`
+                          : "bg-dark-800 text-dark-400 hover:text-white border-dark-700 hover:border-dark-600"
+                      }`}
+                    >
+                      <span className="text-lg">{config.emoji}</span>
+                      <span className="ml-2">{config.name}</span>
+                    </button>
+                  );
+                })}
               </div>
-              <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
-                <span className="text-dark-400 text-xs block">빈칸</span>
-                <span className="text-white font-bold">45개</span>
+              {/* 선택된 난이도 정보 */}
+              <div className="flex justify-center gap-4 mt-6">
+                <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
+                  <span className="text-dark-400 text-xs block">빈칸</span>
+                  <span className="text-white font-bold">{DIFFICULTY_CONFIG[difficulty].cells}개</span>
+                </div>
+                <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
+                  <span className="text-dark-400 text-xs block">실수제한</span>
+                  <span className="text-red-400 font-bold">{MAX_MISTAKES}회</span>
+                </div>
+                <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
+                  <span className="text-dark-400 text-xs block">랭킹</span>
+                  <span className={difficulty === "hard" ? "text-yellow-400 font-bold" : "text-dark-500 font-bold"}>
+                    {difficulty === "hard" ? "🏆 가능" : "연습용"}
+                  </span>
+                </div>
               </div>
-              <div className="px-4 py-2 bg-dark-800 rounded-xl text-center">
-                <span className="text-dark-400 text-xs block">실수제한</span>
-                <span className="text-red-400 font-bold">{MAX_MISTAKES}회</span>
-              </div>
+              {difficulty !== "hard" && (
+                <p className="text-center text-dark-500 text-xs mt-3">
+                  💡 랭킹 등록은 <span className="text-red-400 font-medium">고수</span> 모드에서만 가능해요!
+                </p>
+              )}
             </div>
           )}
 
           {/* 게임 상태 표시 */}
           {gameState === "playing" && (
             <div className="flex flex-col items-center gap-3 mb-6">
+              {/* 현재 난이도 표시 */}
+              <div className={`px-3 py-1 rounded-full text-sm font-medium ${DIFFICULTY_CONFIG[difficulty].bgColor} text-black`}>
+                {DIFFICULTY_CONFIG[difficulty].emoji} {DIFFICULTY_CONFIG[difficulty].name}
+                {difficulty === "hard" && " (랭킹 모드)"}
+              </div>
               <div className="flex items-center gap-3">
                 <div className="px-5 py-2 rounded-xl border-2 border-indigo-500/50 bg-gradient-to-r from-indigo-500/20 to-cyan-500/20">
                   <div className="flex items-center gap-3">
@@ -415,9 +466,18 @@ export default function Sudoku() {
               <div className="flex flex-col items-center justify-center h-[400px]">
                 <div className="text-7xl mb-4 animate-bounce">🧩</div>
                 <p className="text-2xl font-bold text-white mb-2">준비되셨나요?</p>
-                <p className="text-dark-400 mb-6">9×9 스도쿠에 도전하세요!</p>
-                <button onClick={startGame} className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white font-bold rounded-xl transition-all transform hover:scale-105">
-                  🎮 게임 시작
+                <p className="text-dark-400 mb-6">
+                  {DIFFICULTY_CONFIG[difficulty].emoji} {DIFFICULTY_CONFIG[difficulty].name} 모드로 도전!
+                </p>
+                <button 
+                  onClick={() => startGame(difficulty)} 
+                  className={`px-8 py-4 font-bold rounded-xl transition-all transform hover:scale-105 ${
+                    difficulty === "hard"
+                      ? "bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white"
+                      : "bg-gradient-to-r from-indigo-500 to-cyan-500 hover:from-indigo-600 hover:to-cyan-600 text-white"
+                  }`}
+                >
+                  🎮 {difficulty === "hard" ? "랭킹 도전!" : "연습 시작"}
                 </button>
               </div>
             )}
@@ -484,6 +544,10 @@ export default function Sudoku() {
                 {/* 완료 메시지 */}
                 {gameState === "complete" && (
                   <div className="text-center mt-6">
+                    {/* 현재 난이도 표시 */}
+                    <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium mb-3 ${DIFFICULTY_CONFIG[difficulty].bgColor} text-black`}>
+                      {DIFFICULTY_CONFIG[difficulty].emoji} {DIFFICULTY_CONFIG[difficulty].name} 클리어!
+                    </div>
                     <div className="text-6xl mb-4">{gradeInfo.emoji}</div>
                     <h2 className={`text-3xl font-bold mb-2 ${gradeInfo.color}`}>{gradeInfo.grade}!</h2>
                     <p className="text-dark-400 mb-4">{formatTime(time)} 완료 (실수 {mistakes}회, 패널티 +{mistakes * PENALTY_SECONDS}초 포함)</p>
@@ -491,6 +555,22 @@ export default function Sudoku() {
                     {hasSubmitted && (
                       <div className="mb-4 p-3 bg-green-500/20 border border-green-500/30 rounded-xl text-green-400">
                         ✅ 랭킹에 등록되었습니다!
+                      </div>
+                    )}
+
+                    {/* 초보/중수 모드일 때 안내 */}
+                    {difficulty !== "hard" && (
+                      <div className="mb-4 p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl">
+                        <p className="text-yellow-400 font-medium mb-1">💡 연습 모드 완료!</p>
+                        <p className="text-dark-400 text-sm">
+                          랭킹 도전은 <span className="text-red-400 font-bold">🔴 고수</span> 모드에서 가능해요
+                        </p>
+                        <button 
+                          onClick={() => startGame("hard")} 
+                          className="mt-3 px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-sm rounded-lg hover:opacity-90 transition-all"
+                        >
+                          🏆 고수 모드로 도전하기!
+                        </button>
                       </div>
                     )}
 
@@ -507,7 +587,8 @@ export default function Sudoku() {
                       </button>
                     </div>
                     
-                    {!hasSubmitted && (
+                    {/* 고수 모드에서만 랭킹 등록 버튼 표시 */}
+                    {difficulty === "hard" && !hasSubmitted && (
                       <button onClick={() => setShowNicknameModal(true)} className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl">
                         🏆 랭킹 등록!
                       </button>
