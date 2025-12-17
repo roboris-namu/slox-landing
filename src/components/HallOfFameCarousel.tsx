@@ -747,11 +747,15 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
                           {rank === 0 ? "👑" : rank + 1}
                         </div>
 
+                        {/* 국기 */}
+                        {entry.country && (
+                          <span className="text-xl flex-shrink-0">{getCountryFlag(entry.country)}</span>
+                        )}
+
                         {/* 닉네임 & 등급 */}
                         <div className="flex-1 min-w-0">
-                          <p className="text-white font-bold truncate flex items-center gap-1">
-                            {entry.country && <span className="text-base">{getCountryFlag(entry.country)}</span>}
-                            <span>{entry.nickname}</span>
+                          <p className="text-white font-bold truncate">
+                            {entry.nickname}
                           </p>
                           <p className={`text-xs font-medium ${gradeColors[entry.grade] || "text-dark-400"}`}>
                             {gradeTranslations[locale]?.[entry.grade] || entry.grade || "-"}
