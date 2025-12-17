@@ -5,7 +5,6 @@ import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
-
 interface CpsLeaderboardEntry {
   id: string;
   nickname: string;
@@ -1016,9 +1015,9 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
                       index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"
                     }`}>{index + 1}</div>
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2">
-                        <span className="text-white font-medium truncate">{entry.nickname}</span>
+                        <p className="text-white font-medium truncate">{entry.nickname}</p>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-dark-400">

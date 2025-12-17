@@ -6,7 +6,6 @@ import html2canvas from "html2canvas";
 import confetti from "canvas-confetti";
 import { supabase, LeaderboardEntry } from "@/lib/supabase";
 
-
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
 
@@ -1730,9 +1729,9 @@ export default function ReactionTest({ initialLang }: ReactionTestProps) {
                     </div>
                     
                     {/* 정보 */}
-                    <div className="flex-1 min-w-0">
+                    <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2">
-                        <span className="text-white font-medium truncate">{entry.nickname}</span>
+                        <p className="text-white font-medium truncate">{entry.nickname}</p>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">
                           {entry.device_type === "mobile" ? "📱" : "🖥️"}
                         </span>
