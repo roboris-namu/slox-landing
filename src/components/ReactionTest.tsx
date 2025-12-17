@@ -86,6 +86,14 @@ const translations = {
     inGamesDesc: "FPS, 격투 게임에서 승패를 좌우",
     inDaily: "일상에서",
     inDailyDesc: "운전, 스포츠 등 순간 판단력",
+    eventOngoing: "진행중",
+    eventPrize: "1등에게 문화상품권 5천원!",
+    eventDeadline: "마감까지",
+    days: "일",
+    hours: "시간", 
+    minutes: "분",
+    seconds: "초",
+    sameTierNote: "📱 모바일 / 🖥️ PC 동일 기준",
   },
   en: {
     title: "Reaction",
@@ -150,6 +158,14 @@ const translations = {
     inGamesDesc: "Determines victory in FPS and fighting games",
     inDaily: "In Daily Life",
     inDailyDesc: "Quick judgment in driving, sports, etc.",
+    eventOngoing: "LIVE",
+    eventPrize: "#1 wins $5 Gift Card!",
+    eventDeadline: "Ends in",
+    days: "D",
+    hours: "H",
+    minutes: "M",
+    seconds: "S",
+    sameTierNote: "📱 Mobile / 🖥️ PC Same Standard",
   },
   ja: {
     title: "反応速度",
@@ -214,6 +230,14 @@ const translations = {
     inGamesDesc: "FPS、格闘ゲームで勝敗を左右",
     inDaily: "日常で",
     inDailyDesc: "運転、スポーツなどの瞬間判断",
+    eventOngoing: "開催中",
+    eventPrize: "1位に500円ギフトカード!",
+    eventDeadline: "締切まで",
+    days: "日",
+    hours: "時",
+    minutes: "分",
+    seconds: "秒",
+    sameTierNote: "📱 モバイル / 🖥️ PC 同一基準",
   },
   zh: {
     title: "反应速度",
@@ -278,6 +302,14 @@ const translations = {
     inGamesDesc: "决定FPS和格斗游戏的胜负",
     inDaily: "在日常生活中",
     inDailyDesc: "驾驶、运动等需要快速判断",
+    eventOngoing: "进行中",
+    eventPrize: "第1名获$5礼品卡!",
+    eventDeadline: "截止",
+    days: "天",
+    hours: "时",
+    minutes: "分",
+    seconds: "秒",
+    sameTierNote: "📱 移动端 / 🖥️ PC 同一标准",
   },
   es: {
     title: "Test de",
@@ -342,6 +374,14 @@ const translations = {
     inGamesDesc: "Determina la victoria en FPS y juegos de lucha",
     inDaily: "En la vida diaria",
     inDailyDesc: "Juicio rápido al conducir, deportes, etc.",
+    eventOngoing: "EN VIVO",
+    eventPrize: "¡#1 gana $5 Tarjeta Regalo!",
+    eventDeadline: "Termina en",
+    days: "D",
+    hours: "H",
+    minutes: "M",
+    seconds: "S",
+    sameTierNote: "📱 Móvil / 🖥️ PC Mismo Estándar",
   },
   pt: {
     title: "Teste de",
@@ -406,6 +446,14 @@ const translations = {
     inGamesDesc: "Determina a vitória em FPS e jogos de luta",
     inDaily: "No dia a dia",
     inDailyDesc: "Julgamento rápido ao dirigir, esportes, etc.",
+    eventOngoing: "AO VIVO",
+    eventPrize: "#1 ganha R$25 Vale-Presente!",
+    eventDeadline: "Termina em",
+    days: "D",
+    hours: "H",
+    minutes: "M",
+    seconds: "S",
+    sameTierNote: "📱 Mobile / 🖥️ PC Mesmo Padrão",
   },
   de: {
     title: "Reaktionszeit",
@@ -470,6 +518,14 @@ const translations = {
     inGamesDesc: "Entscheidet über Sieg in FPS und Kampfspielen",
     inDaily: "Im Alltag",
     inDailyDesc: "Schnelle Entscheidungen beim Fahren, Sport usw.",
+    eventOngoing: "LIVE",
+    eventPrize: "#1 gewinnt 5€ Gutschein!",
+    eventDeadline: "Endet in",
+    days: "T",
+    hours: "Std",
+    minutes: "Min",
+    seconds: "Sek",
+    sameTierNote: "📱 Mobil / 🖥️ PC Gleicher Standard",
   },
   fr: {
     title: "Test de",
@@ -534,6 +590,14 @@ const translations = {
     inGamesDesc: "Détermine la victoire dans les FPS et jeux de combat",
     inDaily: "Au quotidien",
     inDailyDesc: "Jugement rapide en conduite, sports, etc.",
+    eventOngoing: "EN DIRECT",
+    eventPrize: "#1 gagne 5€ Carte Cadeau!",
+    eventDeadline: "Fin dans",
+    days: "J",
+    hours: "H",
+    minutes: "M",
+    seconds: "S",
+    sameTierNote: "📱 Mobile / 🖥️ PC Même Standard",
   },
 };
 
@@ -578,6 +642,7 @@ interface ReactionTestProps {
 // 🎁 이벤트 배너 컴포넌트 (실시간 카운트다운 + 현재 1등)
 function EventBanner({ lang, leader }: { lang: Language; leader?: { nickname: string; score: number } | null }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const t = translations[lang];
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -620,10 +685,10 @@ function EventBanner({ lang, leader }: { lang: Language; leader?: { nickname: st
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-yellow-400 font-black text-lg">EVENT</span>
-                <span className="px-2 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded animate-pulse">진행중</span>
+                <span className="px-2 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded animate-pulse">{t.eventOngoing}</span>
               </div>
               <p className="text-dark-300 text-sm">
-                <span className="text-white font-bold">1등</span>에게 <span className="text-yellow-400 font-bold">문화상품권 5천원</span>!
+                <span className="text-yellow-400 font-bold">{t.eventPrize}</span>
               </p>
             </div>
           </div>
@@ -639,26 +704,26 @@ function EventBanner({ lang, leader }: { lang: Language; leader?: { nickname: st
         
         {/* 실시간 카운트다운 */}
         <div className="flex items-center justify-center gap-1 sm:gap-2 bg-black/30 rounded-xl p-2 sm:p-3">
-          <span className="text-dark-400 text-xs sm:text-sm">⏰ 마감까지</span>
+          <span className="text-dark-400 text-xs sm:text-sm">⏰ {t.eventDeadline}</span>
           <div className="flex items-center gap-1">
             <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
               <span className="text-yellow-400 font-black text-lg sm:text-xl">{timeLeft.days}</span>
-              <span className="text-dark-500 text-[10px] block -mt-1">일</span>
+              <span className="text-dark-500 text-[10px] block -mt-1">{t.days}</span>
             </div>
             <span className="text-dark-500 font-bold">:</span>
             <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
               <span className="text-yellow-400 font-black text-lg sm:text-xl">{String(timeLeft.hours).padStart(2, '0')}</span>
-              <span className="text-dark-500 text-[10px] block -mt-1">시간</span>
+              <span className="text-dark-500 text-[10px] block -mt-1">{t.hours}</span>
             </div>
             <span className="text-dark-500 font-bold">:</span>
             <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
               <span className="text-yellow-400 font-black text-lg sm:text-xl">{String(timeLeft.minutes).padStart(2, '0')}</span>
-              <span className="text-dark-500 text-[10px] block -mt-1">분</span>
+              <span className="text-dark-500 text-[10px] block -mt-1">{t.minutes}</span>
             </div>
             <span className="text-dark-500 font-bold">:</span>
             <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
               <span className="text-cyan-400 font-black text-lg sm:text-xl animate-pulse">{String(timeLeft.seconds).padStart(2, '0')}</span>
-              <span className="text-dark-500 text-[10px] block -mt-1">초</span>
+              <span className="text-dark-500 text-[10px] block -mt-1">{t.seconds}</span>
             </div>
           </div>
         </div>
