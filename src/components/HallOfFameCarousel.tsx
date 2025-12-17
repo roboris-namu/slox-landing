@@ -275,6 +275,82 @@ const gradeColors: Record<string, string> = {
   "Silver": "text-gray-300",
   "Bronze": "text-orange-400",
   "Iron": "text-stone-400",
+  // 퀴즈/IQ/스도쿠 등급
+  "천재": "text-purple-400",
+  "박학다식": "text-blue-400",
+  "상식왕": "text-yellow-400",
+  "평범": "text-green-400",
+  "노력필요": "text-orange-400",
+  "공부하자": "text-red-400",
+  "수재": "text-purple-400",
+  "우수": "text-blue-400",
+  "평균": "text-green-400",
+  "전설": "text-cyan-300",
+  "전문가": "text-blue-400",
+  "숙련자": "text-green-400",
+  "중급자": "text-yellow-400",
+  "초보자": "text-orange-400",
+};
+
+// 등급 번역 (한국어 → 다국어)
+const gradeTranslations: Record<string, Record<string, string>> = {
+  ko: {},
+  en: {
+    "챌린저": "Challenger", "마스터": "Master", "다이아몬드": "Diamond", "플래티넘": "Platinum",
+    "골드": "Gold", "실버": "Silver", "브론즈": "Bronze", "아이언": "Iron",
+    "천재": "Genius", "박학다식": "Scholar", "상식왕": "Expert", "평범": "Average",
+    "노력필요": "Needs Work", "공부하자": "Beginner", "수재": "Gifted", "우수": "Excellent",
+    "평균": "Average", "전설": "Legend", "전문가": "Expert", "숙련자": "Skilled",
+    "중급자": "Intermediate", "초보자": "Beginner",
+  },
+  ja: {
+    "챌린저": "チャレンジャー", "마스터": "マスター", "다이아몬드": "ダイヤモンド", "플래티넘": "プラチナ",
+    "골드": "ゴールド", "실버": "シルバー", "브론즈": "ブロンズ", "아이언": "アイアン",
+    "천재": "天才", "박학다식": "博識", "상식왕": "達人", "평범": "普通",
+    "노력필요": "努力必要", "공부하자": "初心者", "수재": "秀才", "우수": "優秀",
+    "평균": "平均", "전설": "伝説", "전문가": "エキスパート", "숙련자": "熟練者",
+    "중급자": "中級者", "초보자": "初心者",
+  },
+  zh: {
+    "챌린저": "挑战者", "마스터": "大师", "다이아몬드": "钻石", "플래티넘": "铂金",
+    "골드": "黄金", "실버": "白银", "브론즈": "青铜", "아이언": "黑铁",
+    "천재": "天才", "박학다식": "博学", "상식왕": "专家", "평범": "普通",
+    "노력필요": "需努力", "공부하자": "初学者", "수재": "英才", "우수": "优秀",
+    "평균": "平均", "전설": "传说", "전문가": "专家", "숙련자": "熟练者",
+    "중급자": "中级者", "초보자": "初学者",
+  },
+  de: {
+    "챌린저": "Challenger", "마스터": "Meister", "다이아몬드": "Diamant", "플래티넘": "Platin",
+    "골드": "Gold", "실버": "Silber", "브론즈": "Bronze", "아이언": "Eisen",
+    "천재": "Genie", "박학다식": "Gelehrter", "상식왕": "Experte", "평범": "Normal",
+    "노력필요": "Übung nötig", "공부하자": "Anfänger", "수재": "Begabt", "우수": "Exzellent",
+    "평균": "Durchschnitt", "전설": "Legende", "전문가": "Experte", "숙련자": "Geübt",
+    "중급자": "Mittelstufe", "초보자": "Anfänger",
+  },
+  fr: {
+    "챌린저": "Challenger", "마스터": "Maître", "다이아몬드": "Diamant", "플래티넘": "Platine",
+    "골드": "Or", "실버": "Argent", "브론즈": "Bronze", "아이언": "Fer",
+    "천재": "Génie", "박학다식": "Érudit", "상식왕": "Expert", "평범": "Moyen",
+    "노력필요": "À améliorer", "공부하자": "Débutant", "수재": "Doué", "우수": "Excellent",
+    "평균": "Moyen", "전설": "Légende", "전문가": "Expert", "숙련자": "Expérimenté",
+    "중급자": "Intermédiaire", "초보자": "Débutant",
+  },
+  es: {
+    "챌린저": "Challenger", "마스터": "Maestro", "다이아몬드": "Diamante", "플래티넘": "Platino",
+    "골드": "Oro", "실버": "Plata", "브론즈": "Bronce", "아이언": "Hierro",
+    "천재": "Genio", "박학다식": "Erudito", "상식왕": "Experto", "평범": "Normal",
+    "노력필요": "Mejorar", "공부하자": "Principiante", "수재": "Dotado", "우수": "Excelente",
+    "평균": "Promedio", "전설": "Leyenda", "전문가": "Experto", "숙련자": "Hábil",
+    "중급자": "Intermedio", "초보자": "Principiante",
+  },
+  pt: {
+    "챌린저": "Challenger", "마스터": "Mestre", "다이아몬드": "Diamante", "플래티넘": "Platina",
+    "골드": "Ouro", "실버": "Prata", "브론즈": "Bronze", "아이언": "Ferro",
+    "천재": "Gênio", "박학다식": "Estudioso", "상식왕": "Especialista", "평범": "Normal",
+    "노력필요": "Melhorar", "공부하자": "Iniciante", "수재": "Talentoso", "우수": "Excelente",
+    "평균": "Média", "전설": "Lenda", "전문가": "Especialista", "숙련자": "Habilidoso",
+    "중급자": "Intermediário", "초보자": "Iniciante",
+  },
 };
 
 const gameConfigs = [
@@ -644,7 +720,7 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
                             {entry.nickname}
                           </p>
                           <p className={`text-xs font-medium ${gradeColors[entry.grade] || "text-dark-400"}`}>
-                            {entry.grade || "-"}
+                            {gradeTranslations[locale]?.[entry.grade] || entry.grade || "-"}
                           </p>
                         </div>
 
