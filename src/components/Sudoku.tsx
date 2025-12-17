@@ -214,13 +214,13 @@ export default function Sudoku() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // 표준 난이도 기준: 5분(300초) 기준
+  // 고수 모드(50칸) 기준 등급표
   const getGrade = () => {
-    if (time <= 90) return { grade: "전설", emoji: "🏆", color: "text-yellow-400" };   // ~1분30초
-    if (time <= 150) return { grade: "마스터", emoji: "💎", color: "text-purple-400" }; // ~2분30초
-    if (time <= 210) return { grade: "전문가", emoji: "⭐", color: "text-blue-400" };  // ~3분30초
-    if (time <= 300) return { grade: "숙련자", emoji: "👍", color: "text-green-400" }; // ~5분
-    if (time <= 450) return { grade: "중급자", emoji: "😊", color: "text-cyan-400" };  // ~7분30초
+    if (time <= 120) return { grade: "전설", emoji: "🏆", color: "text-yellow-400" };   // ~2분 (거의 불가능급)
+    if (time <= 240) return { grade: "마스터", emoji: "💎", color: "text-purple-400" }; // ~4분
+    if (time <= 360) return { grade: "전문가", emoji: "⭐", color: "text-blue-400" };  // ~6분
+    if (time <= 480) return { grade: "숙련자", emoji: "👍", color: "text-green-400" }; // ~8분
+    if (time <= 720) return { grade: "중급자", emoji: "😊", color: "text-cyan-400" };  // ~12분
     return { grade: "초보자", emoji: "📚", color: "text-orange-400" };
   };
 
@@ -763,32 +763,32 @@ export default function Sudoku() {
 
           {/* 등급표 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
-            <h3 className="text-white font-medium mb-2 text-center">🏆 등급표</h3>
-            <p className="text-dark-400 text-xs text-center mb-4">💡 빠르게 완료할수록 높은 등급!</p>
+            <h3 className="text-white font-medium mb-2 text-center">🏆 등급표 (고수 모드)</h3>
+            <p className="text-dark-400 text-xs text-center mb-4">💡 빠르게 완료할수록 높은 등급! (패널티 시간 포함)</p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-center text-sm">
               <div className="p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg border border-yellow-400/50">
                 <span className="text-yellow-400 font-bold">🏆 전설</span>
-                <p className="text-dark-400 text-xs">~1분30초</p>
+                <p className="text-dark-400 text-xs">~2분</p>
               </div>
               <div className="p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg border border-purple-400/50">
                 <span className="text-purple-400 font-bold">💎 마스터</span>
-                <p className="text-dark-400 text-xs">~2분30초</p>
+                <p className="text-dark-400 text-xs">~4분</p>
               </div>
               <div className="p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg border border-blue-400/50">
                 <span className="text-blue-400 font-bold">⭐ 전문가</span>
-                <p className="text-dark-400 text-xs">~3분30초</p>
+                <p className="text-dark-400 text-xs">~6분</p>
               </div>
               <div className="p-2 bg-gradient-to-r from-green-500/20 to-green-400/20 rounded-lg border border-green-400/50">
                 <span className="text-green-400 font-bold">👍 숙련자</span>
-                <p className="text-dark-400 text-xs">~5분</p>
+                <p className="text-dark-400 text-xs">~8분</p>
               </div>
               <div className="p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg border border-cyan-400/50">
                 <span className="text-cyan-400 font-bold">😊 중급자</span>
-                <p className="text-dark-400 text-xs">~7분30초</p>
+                <p className="text-dark-400 text-xs">~12분</p>
               </div>
               <div className="p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg border border-orange-400/50">
                 <span className="text-orange-400 font-bold">📚 초보자</span>
-                <p className="text-dark-400 text-xs">7분30초~</p>
+                <p className="text-dark-400 text-xs">12분~</p>
               </div>
             </div>
           </div>
