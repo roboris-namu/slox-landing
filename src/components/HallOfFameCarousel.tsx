@@ -654,7 +654,7 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
             return (
             <div key={`${lb.game}-${idx}`} className={`flex-shrink-0 flex items-center ${isSecondLoopStart ? "ml-16 sm:ml-24 md:ml-32" : ""}`}>
               <Link
-                href={lb.href}
+                href={locale === "ko" ? lb.href : `/${locale}${lb.href}`}
                 className="flex-shrink-0 w-72 sm:w-76 md:w-80 group"
               >
               <div className={`relative bg-gradient-to-br ${lb.bgColor} backdrop-blur-xl rounded-3xl p-6 transition-all duration-500 hover:scale-110 hover:shadow-2xl hover:z-30 overflow-hidden ${
