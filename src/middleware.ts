@@ -30,6 +30,13 @@ function getPreferredLocale(acceptLanguage: string | null): string {
     }
   }
   
+  // 지원하지 않는 언어는 영어로 fallback (한국어가 아닌 경우)
+  // 예: 힌디어, 아랍어, 러시아어 등 → 영어
+  const hasKorean = languages.some(({ code }) => code === 'ko');
+  if (!hasKorean && languages.length > 0) {
+    return 'en'; // 외국인은 영어로
+  }
+  
   return defaultLocale;
 }
 
