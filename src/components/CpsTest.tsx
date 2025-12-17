@@ -15,6 +15,7 @@ interface CpsLeaderboardEntry {
   created_at: string;
   grade?: string;
   percentile?: number;
+  country?: string;
 }
 
 type GameState = "waiting" | "playing" | "result";
@@ -463,6 +464,40 @@ const langUrls: Record<Language, string> = {
   es: "/es/cps", pt: "/pt/cps", de: "/de/cps", fr: "/fr/cps",
 };
 
+// 국가 옵션
+const COUNTRY_OPTIONS = [
+  { code: "KR", flag: "🇰🇷", name: { ko: "한국", en: "Korea", ja: "韓国", zh: "韩国", de: "Korea", fr: "Corée", es: "Corea", pt: "Coreia" } },
+  { code: "US", flag: "🇺🇸", name: { ko: "미국", en: "USA", ja: "アメリカ", zh: "美国", de: "USA", fr: "États-Unis", es: "EE.UU.", pt: "EUA" } },
+  { code: "JP", flag: "🇯🇵", name: { ko: "일본", en: "Japan", ja: "日本", zh: "日本", de: "Japan", fr: "Japon", es: "Japón", pt: "Japão" } },
+  { code: "CN", flag: "🇨🇳", name: { ko: "중국", en: "China", ja: "中国", zh: "中国", de: "China", fr: "Chine", es: "China", pt: "China" } },
+  { code: "DE", flag: "🇩🇪", name: { ko: "독일", en: "Germany", ja: "ドイツ", zh: "德国", de: "Deutschland", fr: "Allemagne", es: "Alemania", pt: "Alemanha" } },
+  { code: "FR", flag: "🇫🇷", name: { ko: "프랑스", en: "France", ja: "フランス", zh: "法国", de: "Frankreich", fr: "France", es: "Francia", pt: "França" } },
+  { code: "ES", flag: "🇪🇸", name: { ko: "스페인", en: "Spain", ja: "スペイン", zh: "西班牙", de: "Spanien", fr: "Espagne", es: "España", pt: "Espanha" } },
+  { code: "BR", flag: "🇧🇷", name: { ko: "브라질", en: "Brazil", ja: "ブラジル", zh: "巴西", de: "Brasilien", fr: "Brésil", es: "Brasil", pt: "Brasil" } },
+  { code: "GB", flag: "🇬🇧", name: { ko: "영국", en: "UK", ja: "イギリス", zh: "英国", de: "Großbritannien", fr: "Royaume-Uni", es: "Reino Unido", pt: "Reino Unido" } },
+  { code: "CA", flag: "🇨🇦", name: { ko: "캐나다", en: "Canada", ja: "カナダ", zh: "加拿大", de: "Kanada", fr: "Canada", es: "Canadá", pt: "Canadá" } },
+  { code: "AU", flag: "🇦🇺", name: { ko: "호주", en: "Australia", ja: "オーストラリア", zh: "澳大利亚", de: "Australien", fr: "Australie", es: "Australia", pt: "Austrália" } },
+  { code: "IN", flag: "🇮🇳", name: { ko: "인도", en: "India", ja: "インド", zh: "印度", de: "Indien", fr: "Inde", es: "India", pt: "Índia" } },
+  { code: "RU", flag: "🇷🇺", name: { ko: "러시아", en: "Russia", ja: "ロシア", zh: "俄罗斯", de: "Russland", fr: "Russie", es: "Rusia", pt: "Rússia" } },
+  { code: "IT", flag: "🇮🇹", name: { ko: "이탈리아", en: "Italy", ja: "イタリア", zh: "意大利", de: "Italien", fr: "Italie", es: "Italia", pt: "Itália" } },
+  { code: "MX", flag: "🇲🇽", name: { ko: "멕시코", en: "Mexico", ja: "メキシコ", zh: "墨西哥", de: "Mexiko", fr: "Mexique", es: "México", pt: "México" } },
+  { code: "TH", flag: "🇹🇭", name: { ko: "태국", en: "Thailand", ja: "タイ", zh: "泰国", de: "Thailand", fr: "Thaïlande", es: "Tailandia", pt: "Tailândia" } },
+  { code: "VN", flag: "🇻🇳", name: { ko: "베트남", en: "Vietnam", ja: "ベトナム", zh: "越南", de: "Vietnam", fr: "Vietnam", es: "Vietnam", pt: "Vietnã" } },
+  { code: "PH", flag: "🇵🇭", name: { ko: "필리핀", en: "Philippines", ja: "フィリピン", zh: "菲律宾", de: "Philippinen", fr: "Philippines", es: "Filipinas", pt: "Filipinas" } },
+  { code: "SG", flag: "🇸🇬", name: { ko: "싱가포르", en: "Singapore", ja: "シンガポール", zh: "新加坡", de: "Singapur", fr: "Singapour", es: "Singapur", pt: "Singapura" } },
+  { code: "NZ", flag: "🇳🇿", name: { ko: "뉴질랜드", en: "New Zealand", ja: "ニュージーランド", zh: "新西兰", de: "Neuseeland", fr: "Nouvelle-Zélande", es: "Nueva Zelanda", pt: "Nova Zelândia" } },
+];
+
+const DEFAULT_COUNTRY: Record<Language, string> = {
+  ko: "KR", en: "US", ja: "JP", zh: "CN", de: "DE", fr: "FR", es: "ES", pt: "BR"
+};
+
+const getCountryFlag = (countryCode: string | null | undefined): string => {
+  if (!countryCode) return "🌍";
+  const country = COUNTRY_OPTIONS.find(c => c.code === countryCode);
+  return country?.flag || "🌍";
+};
+
 interface CpsTestProps {
   initialLang: Language;
 }
@@ -487,6 +522,7 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY[lang]);
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
@@ -536,6 +572,7 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
           device_type: isMobile ? "mobile" : "pc",
           grade: gradeInfo.grade,
           percentile: percentile,
+          country: selectedCountry,
         });
       if (error) throw error;
       setHasSubmittedScore(true);
@@ -1017,6 +1054,7 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
                     }`}>{index + 1}</div>
                     <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2">
+                        <span className="text-lg">{getCountryFlag(entry.country)}</span>
                         <p className="text-white font-medium truncate">{entry.nickname}</p>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
                       </div>
@@ -1147,10 +1185,18 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
                 <div className="text-center mb-6">
                   <div className="text-5xl mb-3">{getGrade(cps).emoji}</div>
                   <h3 className="text-white text-xl font-bold mb-2">🏆 {lang === "ko" ? "랭킹 등록" : "Register Ranking"}</h3>
-                  <p className="text-dark-400 text-sm">{cps.toFixed(1)} CPS ({duration}초)</p>
+                  <p className="text-dark-400 text-sm">{cps.toFixed(1)} CPS ({duration}{lang === "ko" ? "초" : "s"})</p>
                 </div>
                 <div className="mb-4">
                   <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder={lang === "ko" ? "닉네임 입력..." : "Enter nickname..."} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white placeholder-dark-500 focus:outline-none focus:border-accent-purple" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+                </div>
+                <div className="relative mb-4">
+                  <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white appearance-none focus:outline-none focus:border-accent-purple">
+                    {COUNTRY_OPTIONS.map((option) => (<option key={option.code} value={option.code}>{option.flag} {option.name[lang]}</option>))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-dark-400">
+                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                  </div>
                 </div>
                 <div className="flex gap-3">
                   <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 hover:bg-dark-700 text-white rounded-xl">{lang === "ko" ? "취소" : "Cancel"}</button>

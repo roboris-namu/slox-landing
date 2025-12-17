@@ -14,5 +14,6 @@ export interface LeaderboardEntry {
   percentile: number;
   device_type: string;
   created_at: string;
+  country?: string;
 }
 
