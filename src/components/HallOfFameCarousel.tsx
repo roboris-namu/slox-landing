@@ -4,6 +4,241 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
+// 다국어 번역
+const translations: Record<string, {
+  hallOfFame: string;
+  challenge: string;
+  recordYourName: string;
+  test: string;
+  tryIt: string;
+  top3: string;
+  play: string;
+  allGames: string;
+  proveYourself: string;
+  challengeFirst: string;
+  recruiting: string;
+  winnerLikely: string;
+  loading: string;
+  games: Record<string, { name: string; unit: string }>;
+}> = {
+  ko: {
+    hallOfFame: "명예의 전당",
+    challenge: "최고의 기록에 도전하세요!",
+    recordYourName: "당신의 이름을 영원히 남기세요",
+    test: "테스트",
+    tryIt: "도전하기 →",
+    top3: "TOP 3",
+    play: "🎮 플레이",
+    allGames: "전체 게임 도전하기",
+    proveYourself: "10가지 게임에서 당신의 실력을 증명하세요!",
+    challengeFirst: "1등에 도전하세요!",
+    recruiting: "도전자 모집 중...",
+    winnerLikely: "💎 당첨 유력!",
+    loading: "랭킹 불러오는 중...",
+    games: {
+      reaction: { name: "반응속도", unit: "ms" },
+      quiz: { name: "상식퀴즈", unit: "점" },
+      iq: { name: "IQ테스트", unit: "IQ" },
+      sudoku: { name: "스도쿠", unit: "초" },
+      color: { name: "색상찾기", unit: "점" },
+      card: { name: "카드매칭", unit: "점" },
+      cps: { name: "CPS", unit: "CPS" },
+      typing: { name: "타자속도", unit: "타/분" },
+      memory: { name: "숫자기억", unit: "자리" },
+      aim: { name: "에임", unit: "점" },
+    },
+  },
+  en: {
+    hallOfFame: "Hall of Fame",
+    challenge: "Challenge the best records!",
+    recordYourName: "Make your name immortal",
+    test: "Test",
+    tryIt: "Try it →",
+    top3: "TOP 3",
+    play: "🎮 Play",
+    allGames: "Try All Games",
+    proveYourself: "Prove yourself in 10 different games!",
+    challengeFirst: "Be the first!",
+    recruiting: "Waiting for challengers...",
+    winnerLikely: "💎 Likely Winner!",
+    loading: "Loading rankings...",
+    games: {
+      reaction: { name: "Reaction", unit: "ms" },
+      quiz: { name: "Trivia", unit: "pts" },
+      iq: { name: "IQ Test", unit: "IQ" },
+      sudoku: { name: "Sudoku", unit: "sec" },
+      color: { name: "Color Find", unit: "pts" },
+      card: { name: "Card Match", unit: "pts" },
+      cps: { name: "CPS", unit: "CPS" },
+      typing: { name: "Typing", unit: "WPM" },
+      memory: { name: "Memory", unit: "digits" },
+      aim: { name: "Aim", unit: "pts" },
+    },
+  },
+  ja: {
+    hallOfFame: "殿堂入り",
+    challenge: "最高記録に挑戦しよう！",
+    recordYourName: "あなたの名前を永遠に刻もう",
+    test: "テスト",
+    tryIt: "挑戦 →",
+    top3: "TOP 3",
+    play: "🎮 プレイ",
+    allGames: "全ゲームに挑戦",
+    proveYourself: "10種類のゲームで実力を証明！",
+    challengeFirst: "1位に挑戦！",
+    recruiting: "挑戦者募集中...",
+    winnerLikely: "💎 当選有力！",
+    loading: "ランキング読み込み中...",
+    games: {
+      reaction: { name: "反応速度", unit: "ms" },
+      quiz: { name: "クイズ", unit: "点" },
+      iq: { name: "IQテスト", unit: "IQ" },
+      sudoku: { name: "数独", unit: "秒" },
+      color: { name: "色探し", unit: "点" },
+      card: { name: "カード", unit: "点" },
+      cps: { name: "CPS", unit: "CPS" },
+      typing: { name: "タイピング", unit: "WPM" },
+      memory: { name: "記憶力", unit: "桁" },
+      aim: { name: "エイム", unit: "点" },
+    },
+  },
+  zh: {
+    hallOfFame: "名人堂",
+    challenge: "挑战最高纪录！",
+    recordYourName: "让你的名字永垂不朽",
+    test: "测试",
+    tryIt: "挑战 →",
+    top3: "TOP 3",
+    play: "🎮 开始",
+    allGames: "挑战所有游戏",
+    proveYourself: "在10个游戏中证明你的实力！",
+    challengeFirst: "争当第一！",
+    recruiting: "等待挑战者...",
+    winnerLikely: "💎 有望获奖！",
+    loading: "加载排名中...",
+    games: {
+      reaction: { name: "反应速度", unit: "ms" },
+      quiz: { name: "问答", unit: "分" },
+      iq: { name: "IQ测试", unit: "IQ" },
+      sudoku: { name: "数独", unit: "秒" },
+      color: { name: "找颜色", unit: "分" },
+      card: { name: "卡片配对", unit: "分" },
+      cps: { name: "CPS", unit: "CPS" },
+      typing: { name: "打字", unit: "WPM" },
+      memory: { name: "记忆力", unit: "位" },
+      aim: { name: "瞄准", unit: "分" },
+    },
+  },
+  de: {
+    hallOfFame: "Ruhmeshalle",
+    challenge: "Fordere die besten Rekorde heraus!",
+    recordYourName: "Verewige deinen Namen",
+    test: "Test",
+    tryIt: "Probieren →",
+    top3: "TOP 3",
+    play: "🎮 Spielen",
+    allGames: "Alle Spiele",
+    proveYourself: "Beweise dich in 10 Spielen!",
+    challengeFirst: "Sei der Erste!",
+    recruiting: "Herausforderer gesucht...",
+    winnerLikely: "💎 Favorit!",
+    loading: "Lade Rangliste...",
+    games: {
+      reaction: { name: "Reaktion", unit: "ms" },
+      quiz: { name: "Quiz", unit: "Pkt" },
+      iq: { name: "IQ-Test", unit: "IQ" },
+      sudoku: { name: "Sudoku", unit: "Sek" },
+      color: { name: "Farbsuche", unit: "Pkt" },
+      card: { name: "Karten", unit: "Pkt" },
+      cps: { name: "CPS", unit: "CPS" },
+      typing: { name: "Tippen", unit: "WPM" },
+      memory: { name: "Gedächtnis", unit: "Ziff" },
+      aim: { name: "Zielen", unit: "Pkt" },
+    },
+  },
+  fr: {
+    hallOfFame: "Temple de la Gloire",
+    challenge: "Défiez les meilleurs records!",
+    recordYourName: "Gravez votre nom pour l'éternité",
+    test: "Test",
+    tryIt: "Essayer →",
+    top3: "TOP 3",
+    play: "🎮 Jouer",
+    allGames: "Tous les Jeux",
+    proveYourself: "Prouvez-vous dans 10 jeux!",
+    challengeFirst: "Soyez le premier!",
+    recruiting: "En attente de challengers...",
+    winnerLikely: "💎 Favori!",
+    loading: "Chargement...",
+    games: {
+      reaction: { name: "Réaction", unit: "ms" },
+      quiz: { name: "Quiz", unit: "pts" },
+      iq: { name: "Test QI", unit: "QI" },
+      sudoku: { name: "Sudoku", unit: "sec" },
+      color: { name: "Couleur", unit: "pts" },
+      card: { name: "Cartes", unit: "pts" },
+      cps: { name: "CPS", unit: "CPS" },
+      typing: { name: "Frappe", unit: "MPM" },
+      memory: { name: "Mémoire", unit: "chif" },
+      aim: { name: "Visée", unit: "pts" },
+    },
+  },
+  es: {
+    hallOfFame: "Salón de la Fama",
+    challenge: "¡Desafía los mejores récords!",
+    recordYourName: "Haz tu nombre inmortal",
+    test: "Test",
+    tryIt: "Intentar →",
+    top3: "TOP 3",
+    play: "🎮 Jugar",
+    allGames: "Todos los Juegos",
+    proveYourself: "¡Demuestra tu habilidad en 10 juegos!",
+    challengeFirst: "¡Sé el primero!",
+    recruiting: "Esperando retadores...",
+    winnerLikely: "💎 ¡Favorito!",
+    loading: "Cargando...",
+    games: {
+      reaction: { name: "Reacción", unit: "ms" },
+      quiz: { name: "Trivia", unit: "pts" },
+      iq: { name: "Test IQ", unit: "IQ" },
+      sudoku: { name: "Sudoku", unit: "seg" },
+      color: { name: "Color", unit: "pts" },
+      card: { name: "Cartas", unit: "pts" },
+      cps: { name: "CPS", unit: "CPS" },
+      typing: { name: "Mecanografía", unit: "PPM" },
+      memory: { name: "Memoria", unit: "díg" },
+      aim: { name: "Puntería", unit: "pts" },
+    },
+  },
+  pt: {
+    hallOfFame: "Hall da Fama",
+    challenge: "Desafie os melhores recordes!",
+    recordYourName: "Torne seu nome imortal",
+    test: "Teste",
+    tryIt: "Tentar →",
+    top3: "TOP 3",
+    play: "🎮 Jogar",
+    allGames: "Todos os Jogos",
+    proveYourself: "Prove-se em 10 jogos!",
+    challengeFirst: "Seja o primeiro!",
+    recruiting: "Aguardando desafiantes...",
+    winnerLikely: "💎 Favorito!",
+    loading: "Carregando...",
+    games: {
+      reaction: { name: "Reação", unit: "ms" },
+      quiz: { name: "Quiz", unit: "pts" },
+      iq: { name: "Teste QI", unit: "QI" },
+      sudoku: { name: "Sudoku", unit: "seg" },
+      color: { name: "Cor", unit: "pts" },
+      card: { name: "Cartas", unit: "pts" },
+      cps: { name: "CPS", unit: "CPS" },
+      typing: { name: "Digitação", unit: "PPM" },
+      memory: { name: "Memória", unit: "díg" },
+      aim: { name: "Mira", unit: "pts" },
+    },
+  },
+};
+
 interface LeaderboardEntry {
   nickname: string;
   score: number;
@@ -58,6 +293,21 @@ const gameConfigs = [
 export default function HallOfFameCarousel() {
   const [leaderboards, setLeaderboards] = useState<GameLeaderboard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [locale, setLocale] = useState("ko");
+  
+  // 쿠키에서 언어 감지
+  useEffect(() => {
+    const getCookie = (name: string) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop()?.split(';').shift();
+      return null;
+    };
+    const savedLocale = getCookie("SLOX_LOCALE") || "ko";
+    setLocale(savedLocale);
+  }, []);
+
+  const t = translations[locale] || translations.ko;
   
   // 스와이프 관련 상태
   const [isPaused, setIsPaused] = useState(false);
@@ -279,15 +529,15 @@ export default function HallOfFameCarousel() {
           
           <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 animate-pulse">
-              명예의 전당
+              {t.hallOfFame}
             </span>
           </h2>
           
           <p className="text-lg text-dark-300 mb-2">
-            🔥 최고의 기록에 <span className="text-yellow-400 font-bold">도전</span>하세요!
+            🔥 {t.challenge}
           </p>
           <p className="text-sm text-dark-500">
-            당신의 이름을 영원히 남기세요 ✨
+            {t.recordYourName} ✨
           </p>
         </div>
       </div>
@@ -357,13 +607,13 @@ export default function HallOfFameCarousel() {
                       <span className="text-2xl">{lb.emoji}</span>
                     </div>
                     <div>
-                      <span className="text-white font-bold text-lg block">{lb.gameName}</span>
-                      <span className="text-dark-400 text-xs">테스트</span>
+                      <span className="text-white font-bold text-lg block">{t.games[lb.game]?.name || lb.gameName}</span>
+                      <span className="text-dark-400 text-xs">{t.test}</span>
                     </div>
                   </div>
                   <div className={`px-3 py-1 rounded-full ${isEventGame ? "bg-gradient-to-r from-yellow-500/30 to-orange-500/30 border border-yellow-500/50" : "bg-white/10"}`}>
                     <span className={`text-xs font-medium transition-colors ${isEventGame ? "text-yellow-300" : "text-white/80 group-hover:text-cyan-400"}`}>
-                      도전하기 →
+                      {t.tryIt}
                     </span>
                   </div>
                 </div>
@@ -388,7 +638,7 @@ export default function HallOfFameCarousel() {
                         {rank === 0 && isEventGame && (
                           <div className="absolute -top-2 -right-2 z-10">
                             <div className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-lg shadow-cyan-500/30 animate-pulse whitespace-nowrap">
-                              💎 당첨 유력!
+                              {t.winnerLikely}
                             </div>
                           </div>
                         )}
@@ -418,7 +668,7 @@ export default function HallOfFameCarousel() {
                               ? entry.score.toFixed(1) 
                               : entry.score}
                           </p>
-                          <p className="text-dark-500 text-xs">{lb.unit}</p>
+                          <p className="text-dark-500 text-xs">{t.games[lb.game]?.unit || lb.unit}</p>
                         </div>
                       </div>
                     ))
@@ -444,14 +694,14 @@ export default function HallOfFameCarousel() {
                         {/* 텍스트 */}
                         <div className="flex-1">
                           <p className="text-dark-400 text-sm font-medium truncate">
-                            {i === 0 ? "1등에 도전하세요!" : "도전자 모집 중..."}
+                            {i === 0 ? t.challengeFirst : t.recruiting}
                           </p>
                           <p className="text-dark-500 text-xs">-</p>
                         </div>
                         {/* 빈 점수 */}
                         <div className="text-right">
                           <p className="font-bold text-dark-500">-</p>
-                          <p className="text-dark-600 text-xs">{lb.unit}</p>
+                          <p className="text-dark-600 text-xs">{t.games[lb.game]?.unit || lb.unit}</p>
                         </div>
                       </div>
                     ))
@@ -467,7 +717,7 @@ export default function HallOfFameCarousel() {
                     </div>
                     <div className={`px-4 py-2 rounded-xl bg-gradient-to-r ${lb.color} opacity-80 group-hover:opacity-100 transition-all group-hover:scale-105`}>
                       <span className="text-white text-sm font-bold">
-                        🎮 플레이
+                        {t.play}
                       </span>
                     </div>
                   </div>
@@ -488,11 +738,11 @@ export default function HallOfFameCarousel() {
             className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 text-white font-bold rounded-2xl hover:opacity-90 transition-all hover:scale-105 shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
           >
             <span className="text-xl">🎮</span>
-            <span className="text-lg">전체 게임 도전하기</span>
+            <span className="text-lg">{t.allGames}</span>
             <span className="text-xl">→</span>
           </Link>
           <p className="mt-4 text-dark-500 text-sm">
-            10가지 게임에서 당신의 실력을 증명하세요!
+            {t.proveYourself}
           </p>
         </div>
       </div>
@@ -502,7 +752,7 @@ export default function HallOfFameCarousel() {
         <div className="absolute inset-0 bg-dark-950/50 backdrop-blur-sm flex items-center justify-center z-20">
           <div className="text-center">
             <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-dark-300">랭킹 불러오는 중...</p>
+            <p className="text-dark-300">{t.loading}</p>
           </div>
         </div>
       )}

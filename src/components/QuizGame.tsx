@@ -5,6 +5,110 @@ import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
+// 다국어 번역
+const quizTranslations: Record<string, {
+  gradeTable: string;
+  gradeDesc: string;
+  grades: { name: string; emoji: string; range: string }[];
+}> = {
+  ko: {
+    gradeTable: "🏆 등급표",
+    gradeDesc: "💡 점수 = (정답 수 × 1000) + 남은 시간",
+    grades: [
+      { name: "천재", emoji: "🧠", range: "10,000점+" },
+      { name: "박학다식", emoji: "📚", range: "8,000~9,999" },
+      { name: "상식왕", emoji: "👑", range: "6,000~7,999" },
+      { name: "평범", emoji: "😊", range: "4,000~5,999" },
+      { name: "노력필요", emoji: "📖", range: "2,000~3,999" },
+      { name: "공부하자", emoji: "😅", range: "0~1,999" },
+    ],
+  },
+  en: {
+    gradeTable: "🏆 Grade Table",
+    gradeDesc: "💡 Score = (Correct × 1000) + Time Left",
+    grades: [
+      { name: "Genius", emoji: "🧠", range: "10,000+" },
+      { name: "Scholar", emoji: "📚", range: "8,000~9,999" },
+      { name: "Expert", emoji: "👑", range: "6,000~7,999" },
+      { name: "Average", emoji: "😊", range: "4,000~5,999" },
+      { name: "Needs Work", emoji: "📖", range: "2,000~3,999" },
+      { name: "Beginner", emoji: "😅", range: "0~1,999" },
+    ],
+  },
+  ja: {
+    gradeTable: "🏆 等級表",
+    gradeDesc: "💡 スコア = (正解数 × 1000) + 残り時間",
+    grades: [
+      { name: "天才", emoji: "🧠", range: "10,000+" },
+      { name: "博識", emoji: "📚", range: "8,000~9,999" },
+      { name: "達人", emoji: "👑", range: "6,000~7,999" },
+      { name: "普通", emoji: "😊", range: "4,000~5,999" },
+      { name: "努力必要", emoji: "📖", range: "2,000~3,999" },
+      { name: "初心者", emoji: "😅", range: "0~1,999" },
+    ],
+  },
+  zh: {
+    gradeTable: "🏆 等级表",
+    gradeDesc: "💡 分数 = (正确数 × 1000) + 剩余时间",
+    grades: [
+      { name: "天才", emoji: "🧠", range: "10,000+" },
+      { name: "博学", emoji: "📚", range: "8,000~9,999" },
+      { name: "专家", emoji: "👑", range: "6,000~7,999" },
+      { name: "普通", emoji: "😊", range: "4,000~5,999" },
+      { name: "需努力", emoji: "📖", range: "2,000~3,999" },
+      { name: "初学者", emoji: "😅", range: "0~1,999" },
+    ],
+  },
+  de: {
+    gradeTable: "🏆 Bewertungstabelle",
+    gradeDesc: "💡 Punkte = (Richtig × 1000) + Restzeit",
+    grades: [
+      { name: "Genie", emoji: "🧠", range: "10.000+" },
+      { name: "Gelehrter", emoji: "📚", range: "8.000~9.999" },
+      { name: "Experte", emoji: "👑", range: "6.000~7.999" },
+      { name: "Normal", emoji: "😊", range: "4.000~5.999" },
+      { name: "Übung nötig", emoji: "📖", range: "2.000~3.999" },
+      { name: "Anfänger", emoji: "😅", range: "0~1.999" },
+    ],
+  },
+  fr: {
+    gradeTable: "🏆 Tableau des grades",
+    gradeDesc: "💡 Score = (Correct × 1000) + Temps restant",
+    grades: [
+      { name: "Génie", emoji: "🧠", range: "10 000+" },
+      { name: "Érudit", emoji: "📚", range: "8 000~9 999" },
+      { name: "Expert", emoji: "👑", range: "6 000~7 999" },
+      { name: "Moyen", emoji: "😊", range: "4 000~5 999" },
+      { name: "À améliorer", emoji: "📖", range: "2 000~3 999" },
+      { name: "Débutant", emoji: "😅", range: "0~1 999" },
+    ],
+  },
+  es: {
+    gradeTable: "🏆 Tabla de grados",
+    gradeDesc: "💡 Puntos = (Correctas × 1000) + Tiempo restante",
+    grades: [
+      { name: "Genio", emoji: "🧠", range: "10.000+" },
+      { name: "Erudito", emoji: "📚", range: "8.000~9.999" },
+      { name: "Experto", emoji: "👑", range: "6.000~7.999" },
+      { name: "Normal", emoji: "😊", range: "4.000~5.999" },
+      { name: "Mejorar", emoji: "📖", range: "2.000~3.999" },
+      { name: "Principiante", emoji: "😅", range: "0~1.999" },
+    ],
+  },
+  pt: {
+    gradeTable: "🏆 Tabela de níveis",
+    gradeDesc: "💡 Pontos = (Corretas × 1000) + Tempo restante",
+    grades: [
+      { name: "Gênio", emoji: "🧠", range: "10.000+" },
+      { name: "Estudioso", emoji: "📚", range: "8.000~9.999" },
+      { name: "Especialista", emoji: "👑", range: "6.000~7.999" },
+      { name: "Normal", emoji: "😊", range: "4.000~5.999" },
+      { name: "Melhorar", emoji: "📖", range: "2.000~3.999" },
+      { name: "Iniciante", emoji: "😅", range: "0~1.999" },
+    ],
+  },
+};
+
 interface Question {
   id: number;
   question: string;
@@ -62,6 +166,21 @@ export default function QuizGame() {
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME);
   const [totalTime, setTotalTime] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [locale, setLocale] = useState("ko");
+
+  // 쿠키에서 언어 감지
+  useEffect(() => {
+    const getCookie = (name: string) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop()?.split(';').shift();
+      return null;
+    };
+    const savedLocale = getCookie("SLOX_LOCALE") || "ko";
+    setLocale(savedLocale);
+  }, []);
+
+  const qt = quizTranslations[locale] || quizTranslations.ko;
   
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -164,11 +283,12 @@ export default function QuizGame() {
   };
 
   const getGrade = () => {
-    if (correctCount >= 10) return { grade: "천재", emoji: "🧠", color: "text-purple-400" };
-    if (correctCount >= 8) return { grade: "박학다식", emoji: "📚", color: "text-blue-400" };
-    if (correctCount >= 6) return { grade: "상식왕", emoji: "👑", color: "text-yellow-400" };
-    if (correctCount >= 4) return { grade: "평범", emoji: "😊", color: "text-green-400" };
-    if (correctCount >= 2) return { grade: "노력필요", emoji: "📖", color: "text-orange-400" };
+    const finalScore = getFinalScore();
+    if (finalScore >= 10000) return { grade: "천재", emoji: "🧠", color: "text-purple-400" };
+    if (finalScore >= 8000) return { grade: "박학다식", emoji: "📚", color: "text-blue-400" };
+    if (finalScore >= 6000) return { grade: "상식왕", emoji: "👑", color: "text-yellow-400" };
+    if (finalScore >= 4000) return { grade: "평범", emoji: "😊", color: "text-green-400" };
+    if (finalScore >= 2000) return { grade: "노력필요", emoji: "📖", color: "text-orange-400" };
     return { grade: "공부하자", emoji: "😅", color: "text-red-400" };
   };
 
@@ -623,33 +743,25 @@ export default function QuizGame() {
 
           {/* 등급표 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
-            <h3 className="text-white font-medium mb-2 text-center">🏆 등급표</h3>
-            <p className="text-dark-400 text-xs text-center mb-4">💡 정답 개수로 등급 결정!</p>
+            <h3 className="text-white font-medium mb-2 text-center">{qt.gradeTable}</h3>
+            <p className="text-dark-400 text-xs text-center mb-4">{qt.gradeDesc}</p>
             <div className="flex flex-col items-center gap-2">
-              <div className="w-32 p-2 bg-gradient-to-r from-purple-500/20 to-purple-400/20 rounded-lg text-center border border-purple-400/50">
-                <span className="text-purple-400 text-sm font-bold">🧠 천재</span>
-                <span className="text-white text-xs ml-2">10개</span>
-              </div>
-              <div className="w-40 p-2 bg-gradient-to-r from-blue-500/20 to-blue-400/20 rounded-lg text-center border border-blue-400/50">
-                <span className="text-blue-400 text-sm font-bold">📚 박학다식</span>
-                <span className="text-white text-xs ml-2">8-9개</span>
-              </div>
-              <div className="w-48 p-2 bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 rounded-lg text-center border border-yellow-400/50">
-                <span className="text-yellow-400 text-sm font-bold">👑 상식왕</span>
-                <span className="text-white text-xs ml-2">6-7개</span>
-              </div>
-              <div className="w-56 p-2 bg-gradient-to-r from-green-500/20 to-green-400/20 rounded-lg text-center border border-green-400/50">
-                <span className="text-green-400 text-sm font-bold">😊 평범</span>
-                <span className="text-white text-xs ml-2">4-5개</span>
-              </div>
-              <div className="w-64 p-2 bg-gradient-to-r from-orange-500/20 to-orange-400/20 rounded-lg text-center border border-orange-400/50">
-                <span className="text-orange-400 text-sm font-bold">📖 노력필요</span>
-                <span className="text-white text-xs ml-2">2-3개</span>
-              </div>
-              <div className="w-72 p-2 bg-gradient-to-r from-red-500/20 to-red-400/20 rounded-lg text-center border border-red-400/50">
-                <span className="text-red-400 text-sm font-bold">😅 공부하자</span>
-                <span className="text-white text-xs ml-2">0-1개</span>
-              </div>
+              {qt.grades.map((grade, idx) => {
+                const colors = [
+                  { bg: "from-purple-500/20 to-purple-400/20", border: "border-purple-400/50", text: "text-purple-400", width: "w-44" },
+                  { bg: "from-blue-500/20 to-blue-400/20", border: "border-blue-400/50", text: "text-blue-400", width: "w-48" },
+                  { bg: "from-yellow-500/20 to-yellow-400/20", border: "border-yellow-400/50", text: "text-yellow-400", width: "w-52" },
+                  { bg: "from-green-500/20 to-green-400/20", border: "border-green-400/50", text: "text-green-400", width: "w-56" },
+                  { bg: "from-orange-500/20 to-orange-400/20", border: "border-orange-400/50", text: "text-orange-400", width: "w-60" },
+                  { bg: "from-red-500/20 to-red-400/20", border: "border-red-400/50", text: "text-red-400", width: "w-64" },
+                ][idx];
+                return (
+                  <div key={idx} className={`${colors.width} p-2 bg-gradient-to-r ${colors.bg} rounded-lg text-center border ${colors.border}`}>
+                    <span className={`${colors.text} text-sm font-bold`}>{grade.emoji} {grade.name}</span>
+                    <span className="text-white text-xs ml-2">{grade.range}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
