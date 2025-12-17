@@ -302,8 +302,8 @@ const gradeTranslations: Record<string, Record<string, string>> = {
     "천재": "Genius", "박학다식": "Scholar", "상식왕": "Expert", "평범": "Average",
     "노력필요": "Needs Work", "공부하자": "Beginner", "수재": "Gifted", "우수": "Excellent",
     "평균": "Average", 
-    // 스도쿠 등급
-    "전설": "Legend", "마스터": "Master", "전문가": "Expert", "숙련자": "Skilled",
+    // 스도쿠 등급 (마스터는 위에서 이미 정의됨)
+    "전설": "Legend", "전문가": "Expert", "숙련자": "Skilled",
     "중급자": "Intermediate", "초보자": "Beginner",
   },
   ja: {
