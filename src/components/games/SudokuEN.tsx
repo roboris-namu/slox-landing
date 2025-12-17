@@ -4,6 +4,10 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
+// 패널티 시스템 상수
+const MAX_MISTAKES = 10; // 최대 틀림 횟수
+const PENALTY_SECONDS = 3; // 틀릴 때마다 +3초
+
 // Simple Sudoku generator
 function generateSudoku(difficulty: "easy" | "medium" | "hard") {
   const base = [
@@ -45,7 +49,7 @@ interface LeaderboardEntry {
 
 export default function SudokuEN() {
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("medium");
-  const [gameState, setGameState] = useState<"ready" | "playing" | "complete">("ready");
+  const [gameState, setGameState] = useState<"ready" | "playing" | "complete" | "gameover">("ready");
   const [puzzle, setPuzzle] = useState<number[][]>([]);
   const [solution, setSolution] = useState<number[][]>([]);
   const [userInput, setUserInput] = useState<number[][]>([]);
@@ -115,7 +119,7 @@ export default function SudokuEN() {
   };
 
   const handleNumberInput = (num: number) => {
-    if (!selectedCell) return;
+    if (!selectedCell || gameState !== "playing") return;
     const [row, col] = selectedCell;
     if (puzzle[row][col] !== 0) return;
 
@@ -124,7 +128,15 @@ export default function SudokuEN() {
     setUserInput(newInput);
 
     if (num !== solution[row][col]) {
-      setMistakes(m => m + 1);
+      const newMistakes = mistakes + 1;
+      setMistakes(newMistakes);
+      // 시간 패널티: +3초
+      setTime((prev) => prev + PENALTY_SECONDS);
+      // 최대 틀림 횟수 초과 시 게임 오버
+      if (newMistakes >= MAX_MISTAKES) {
+        setGameState("gameover");
+        return;
+      }
     }
 
     // Check completion
@@ -205,6 +217,18 @@ export default function SudokuEN() {
                 ))}
               </div>
 
+              {/* 패널티 정보 */}
+              <div className="flex justify-center gap-3 mb-6">
+                <div className="px-3 py-2 bg-dark-800 rounded-xl text-center">
+                  <span className="text-dark-400 text-xs block">Mistake Limit</span>
+                  <span className="text-red-400 font-bold">{MAX_MISTAKES} times</span>
+                </div>
+                <div className="px-3 py-2 bg-dark-800 rounded-xl text-center">
+                  <span className="text-dark-400 text-xs block">Time Penalty</span>
+                  <span className="text-orange-400 font-bold">+{PENALTY_SECONDS}s</span>
+                </div>
+              </div>
+
               <button onClick={startGame} className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-lg rounded-xl">
                 Start Game →
               </button>
@@ -232,9 +256,18 @@ export default function SudokuEN() {
 
           {gameState === "playing" && (
             <div className="text-center">
-              <div className="flex justify-center gap-6 mb-6 text-sm">
-                <span className="text-dark-400">⏱ {formatTime(time)}</span>
-                <span className="text-dark-400">❌ {mistakes} mistakes</span>
+              <div className="flex justify-center gap-4 mb-6 text-sm">
+                <div className="px-3 py-1.5 bg-dark-800 rounded-lg">
+                  <span className="text-dark-400">⏱ </span>
+                  <span className="text-cyan-400 font-bold">{formatTime(time)}</span>
+                </div>
+                <div className={`px-3 py-1.5 rounded-lg ${mistakes >= MAX_MISTAKES - 3 ? 'bg-red-500/20' : 'bg-dark-800'}`}>
+                  <span className="text-dark-400">❌ </span>
+                  <span className={`font-bold ${mistakes >= MAX_MISTAKES - 3 ? 'text-red-400' : 'text-orange-400'}`}>
+                    {mistakes}/{MAX_MISTAKES}
+                  </span>
+                  <span className="text-dark-500 text-xs ml-1">({MAX_MISTAKES - mistakes} left)</span>
+                </div>
               </div>
 
               {/* Sudoku Grid */}
@@ -285,9 +318,30 @@ export default function SudokuEN() {
                 <div className="text-5xl mb-4">{gradeInfo.emoji}</div>
                 <h2 className={`text-4xl font-black mb-2 ${gradeInfo.color}`}>{gradeInfo.grade}</h2>
                 <p className="text-dark-400">Time: {formatTime(time)} • Mistakes: {mistakes}</p>
+                <p className="text-dark-500 text-sm">(includes +{mistakes * PENALTY_SECONDS}s penalty)</p>
                 <div className="mt-8 flex flex-col gap-3">
                   <button onClick={() => setGameState("ready")} className="py-3 px-6 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-xl">Play Again</button>
                   <button onClick={shareResult} className="py-3 px-6 bg-dark-800 text-white font-medium rounded-xl border border-dark-700">{showCopied ? "✅ Copied!" : "📤 Share"}</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 게임 오버 화면 */}
+          {gameState === "gameover" && (
+            <div className="max-w-xl mx-auto text-center">
+              <div className="bg-dark-900/50 rounded-2xl p-8 border border-red-500/30">
+                <div className="text-6xl mb-4">😵</div>
+                <h2 className="text-4xl font-black mb-2 text-red-400">Game Over!</h2>
+                <p className="text-dark-400 mb-2">You made {MAX_MISTAKES} mistakes</p>
+                <p className="text-dark-500 text-sm">Time: {formatTime(time)}</p>
+                <div className="mt-8">
+                  <button 
+                    onClick={startGame} 
+                    className="py-3 px-8 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-xl hover:opacity-90 transition-all"
+                  >
+                    🔄 Try Again
+                  </button>
                 </div>
               </div>
             </div>
