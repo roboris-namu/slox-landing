@@ -5,6 +5,7 @@ import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
+
 interface ColorLeaderboardEntry {
   id: string;
   nickname: string;

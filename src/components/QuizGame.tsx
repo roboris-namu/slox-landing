@@ -5,6 +5,18 @@ import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
+// 언어 선택기 옵션
+const languageOptions = [
+  { locale: "ko", flag: "🇰🇷", name: "한국어", path: "/quiz" },
+  { locale: "en", flag: "🇺🇸", name: "English", path: "/en/quiz" },
+  { locale: "ja", flag: "🇯🇵", name: "日本語", path: "/ja/quiz" },
+  { locale: "zh", flag: "🇨🇳", name: "中文", path: "/zh/quiz" },
+  { locale: "de", flag: "🇩🇪", name: "Deutsch", path: "/de/quiz" },
+  { locale: "fr", flag: "🇫🇷", name: "Français", path: "/fr/quiz" },
+  { locale: "es", flag: "🇪🇸", name: "Español", path: "/es/quiz" },
+  { locale: "pt", flag: "🇧🇷", name: "Português", path: "/pt/quiz" },
+];
+
 // 다국어 번역
 const quizTranslations: Record<string, {
   gradeTable: string;
@@ -188,6 +200,7 @@ export default function QuizGame() {
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
   
@@ -400,7 +413,40 @@ export default function QuizGame() {
               </div>
               <span className="text-white font-semibold">SLOX</span>
             </Link>
-            <Link href="/" className="text-dark-300 hover:text-white transition-colors text-sm">← 메인으로</Link>
+            <div className="flex items-center gap-4">
+              {/* 언어 선택 드롭다운 */}
+              <div className="relative">
+                <button 
+                  onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm text-dark-300 hover:text-white bg-dark-800 rounded-lg border border-dark-700"
+                >
+                  <span>🇰🇷</span>
+                  <span className="hidden sm:inline">한국어</span>
+                  <span className="text-xs">▼</span>
+                </button>
+                {showLanguageMenu && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setShowLanguageMenu(false)} />
+                    <div className="absolute right-0 mt-2 w-40 bg-dark-900 border border-dark-700 rounded-xl shadow-xl z-50 overflow-hidden">
+                      {languageOptions.map((lang) => (
+                        <Link
+                          key={lang.locale}
+                          href={lang.path}
+                          className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-dark-800 transition-colors ${
+                            lang.locale === "ko" ? "bg-dark-800 text-white" : "text-dark-300"
+                          }`}
+                          onClick={() => setShowLanguageMenu(false)}
+                        >
+                          <span>{lang.flag}</span>
+                          <span>{lang.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+              <Link href="/" className="text-dark-300 hover:text-white transition-colors text-sm">← 메인</Link>
+            </div>
           </div>
         </div>
       </nav>

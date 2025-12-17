@@ -6,6 +6,7 @@ import html2canvas from "html2canvas";
 import confetti from "canvas-confetti";
 import { supabase, LeaderboardEntry } from "@/lib/supabase";
 
+
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
 

@@ -5,6 +5,18 @@ import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
+// 언어 선택기 옵션
+const languageOptions = [
+  { locale: "ko", flag: "🇰🇷", name: "한국어", path: "/card-match" },
+  { locale: "en", flag: "🇺🇸", name: "English", path: "/en/card-match" },
+  { locale: "ja", flag: "🇯🇵", name: "日本語", path: "/ja/card-match" },
+  { locale: "zh", flag: "🇨🇳", name: "中文", path: "/zh/card-match" },
+  { locale: "de", flag: "🇩🇪", name: "Deutsch", path: "/de/card-match" },
+  { locale: "fr", flag: "🇫🇷", name: "Français", path: "/fr/card-match" },
+  { locale: "es", flag: "🇪🇸", name: "Español", path: "/es/card-match" },
+  { locale: "pt", flag: "🇧🇷", name: "Português", path: "/pt/card-match" },
+];
+
 interface CardMatchLeaderboardEntry {
   id: string;
   nickname: string;
@@ -509,6 +521,7 @@ export default function CardMatchGame() {
 
   // 공유하기 상태
   const [showCopied, setShowCopied] = useState(false);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
 
   // 카카오톡 인앱 브라우저 감지
   const isKakaoInApp = () => navigator.userAgent.toLowerCase().includes("kakaotalk");
@@ -591,9 +604,40 @@ export default function CardMatchGame() {
               </div>
               <span className="text-white font-semibold">SLOX</span>
             </Link>
-            <Link href="/" className="text-dark-300 hover:text-white transition-colors text-sm">
-              ← 메인으로
-            </Link>
+            <div className="flex items-center gap-4">
+              {/* 언어 선택 드롭다운 */}
+              <div className="relative">
+                <button 
+                  onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm text-dark-300 hover:text-white bg-dark-800 rounded-lg border border-dark-700"
+                >
+                  <span>🇰🇷</span>
+                  <span className="hidden sm:inline">한국어</span>
+                  <span className="text-xs">▼</span>
+                </button>
+                {showLanguageMenu && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setShowLanguageMenu(false)} />
+                    <div className="absolute right-0 mt-2 w-40 bg-dark-900 border border-dark-700 rounded-xl shadow-xl z-50 overflow-hidden">
+                      {languageOptions.map((lang) => (
+                        <Link
+                          key={lang.locale}
+                          href={lang.path}
+                          className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-dark-800 transition-colors ${
+                            lang.locale === "ko" ? "bg-dark-800 text-white" : "text-dark-300"
+                          }`}
+                          onClick={() => setShowLanguageMenu(false)}
+                        >
+                          <span>{lang.flag}</span>
+                          <span>{lang.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+              <Link href="/" className="text-dark-300 hover:text-white transition-colors text-sm">← 메인</Link>
+            </div>
           </div>
         </div>
       </nav>
