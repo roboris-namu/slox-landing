@@ -1,5 +1,5 @@
 import AimTest from "@/components/AimTest";
-export default function AimPageEs() { return <AimTest initialLang="es" />; }
+export default function AimPageEs() { return <AimTest locale="es" />; }
 
 
 

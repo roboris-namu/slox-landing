@@ -1,5 +1,5 @@
 import MemoryTest from "@/components/MemoryTest";
-export default function MemoryPageJa() { return <MemoryTest initialLang="ja" />; }
+export default function MemoryPageJa() { return <MemoryTest locale="ja" />; }
 
 
 

@@ -1,5 +1,5 @@
 import ColorTest from "@/components/ColorTest";
-export default function ColorPageEn() { return <ColorTest initialLang="en" />; }
+export default function ColorPageEn() { return <ColorTest locale="en" />; }
 
 
 

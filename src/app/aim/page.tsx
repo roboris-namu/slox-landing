@@ -1,7 +1,7 @@
 import AimTest from "@/components/AimTest";
 
 export default function AimPage() {
-  return <AimTest initialLang="ko" />;
+  return <AimTest locale="ko" />;
 }
 
 

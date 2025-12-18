@@ -416,20 +416,17 @@ const translations = {
   },
 };
 
-const langFlags: Record<Language, string> = {
-  ko: "🇰🇷", en: "🇺🇸", ja: "🇯🇵", zh: "🇨🇳",
-  es: "🇪🇸", pt: "🇧🇷", de: "🇩🇪", fr: "🇫🇷",
-};
-
-const langNames: Record<Language, string> = {
-  ko: "한국어", en: "English", ja: "日本語", zh: "中文",
-  es: "Español", pt: "Português", de: "Deutsch", fr: "Français",
-};
-
-const langUrls: Record<Language, string> = {
-  ko: "/color", en: "/en/color", ja: "/ja/color", zh: "/zh/color",
-  es: "/es/color", pt: "/pt/color", de: "/de/color", fr: "/fr/color",
-};
+type Locale = Language;
+const languageOptions: { locale: Locale; flag: string; name: string; path: string }[] = [
+  { locale: "ko", flag: "🇰🇷", name: "한국어", path: "/color" },
+  { locale: "en", flag: "🇺🇸", name: "English", path: "/en/color" },
+  { locale: "ja", flag: "🇯🇵", name: "日本語", path: "/ja/color" },
+  { locale: "zh", flag: "🇨🇳", name: "中文", path: "/zh/color" },
+  { locale: "de", flag: "🇩🇪", name: "Deutsch", path: "/de/color" },
+  { locale: "fr", flag: "🇫🇷", name: "Français", path: "/fr/color" },
+  { locale: "es", flag: "🇪🇸", name: "Español", path: "/es/color" },
+  { locale: "pt", flag: "🇧🇷", name: "Português", path: "/pt/color" },
+];
 
 // 국가 옵션
 const COUNTRY_OPTIONS = [
@@ -466,11 +463,12 @@ const getCountryFlag = (countryCode: string | null | undefined): string => {
 };
 
 interface ColorTestProps {
-  initialLang: Language;
+  locale: Locale;
 }
 
-export default function ColorTest({ initialLang }: ColorTestProps) {
+export default function ColorTest({ locale }: ColorTestProps) {
   const router = useRouter();
+  const lang = locale;
   const [state, setState] = useState<GameState>("waiting");
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
@@ -479,7 +477,6 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
   const [baseColor, setBaseColor] = useState({ h: 0, s: 70, l: 50 });
   const [differentIndex, setDifferentIndex] = useState(0);
   const [colorDiff, setColorDiff] = useState(30);
-  const [lang] = useState<Language>(initialLang);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [showCorrect, setShowCorrect] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -683,7 +680,7 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
       return;
     }
 
-    const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
+    const shareUrl = `https://www.slox.co.kr${languageOptions.find(l => l.locale === lang)?.path || "/color"}`;
     const blob = await generateImage();
     
     if (blob && typeof navigator.share === "function") {
@@ -725,25 +722,25 @@ export default function ColorTest({ initialLang }: ColorTestProps) {
                   onClick={() => setShowLangMenu(!showLangMenu)}
                   className="flex items-center gap-1 px-3 py-1.5 bg-dark-800 hover:bg-dark-700 rounded-lg text-sm transition-colors"
                 >
-                  <span>{langFlags[lang]}</span>
-                  <span className="text-dark-300 hidden sm:inline">{langNames[lang]}</span>
+                  <span>{languageOptions.find(l => l.locale === lang)?.flag}</span>
+                  <span className="text-dark-300 hidden sm:inline">{languageOptions.find(l => l.locale === lang)?.name}</span>
                 </button>
                 {showLangMenu && (
                   <div className="absolute right-0 mt-2 w-40 bg-dark-800 border border-dark-700 rounded-lg shadow-xl overflow-hidden">
-                    {(Object.keys(langFlags) as Language[]).map((l) => (
+                    {languageOptions.map((opt) => (
                       <button
-                        key={l}
+                        key={opt.locale}
                         onClick={() => {
-                          document.cookie = `SLOX_LOCALE=${l}; path=/; max-age=31536000`;
+                          document.cookie = `SLOX_LOCALE=${opt.locale}; path=/; max-age=31536000`;
                           setShowLangMenu(false);
-                          router.push(langUrls[l]);
+                          router.push(opt.path);
                         }}
                         className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-dark-700 transition-colors text-left ${
-                          lang === l ? "bg-dark-700 text-white" : "text-dark-300"
+                          lang === opt.locale ? "bg-dark-700 text-white" : "text-dark-300"
                         }`}
                       >
-                        <span>{langFlags[l]}</span>
-                        <span>{langNames[l]}</span>
+                        <span>{opt.flag}</span>
+                        <span>{opt.name}</span>
                       </button>
                     ))}
                   </div>

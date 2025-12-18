@@ -440,20 +440,17 @@ const translations = {
   },
 };
 
-const langFlags: Record<Language, string> = {
-  ko: "🇰🇷", en: "🇺🇸", ja: "🇯🇵", zh: "🇨🇳",
-  es: "🇪🇸", pt: "🇧🇷", de: "🇩🇪", fr: "🇫🇷",
-};
-
-const langNames: Record<Language, string> = {
-  ko: "한국어", en: "English", ja: "日本語", zh: "中文",
-  es: "Español", pt: "Português", de: "Deutsch", fr: "Français",
-};
-
-const langUrls: Record<Language, string> = {
-  ko: "/memory", en: "/en/memory", ja: "/ja/memory", zh: "/zh/memory",
-  es: "/es/memory", pt: "/pt/memory", de: "/de/memory", fr: "/fr/memory",
-};
+type Locale = Language;
+const languageOptions: { locale: Locale; flag: string; name: string; path: string }[] = [
+  { locale: "ko", flag: "🇰🇷", name: "한국어", path: "/memory" },
+  { locale: "en", flag: "🇺🇸", name: "English", path: "/en/memory" },
+  { locale: "ja", flag: "🇯🇵", name: "日本語", path: "/ja/memory" },
+  { locale: "zh", flag: "🇨🇳", name: "中文", path: "/zh/memory" },
+  { locale: "de", flag: "🇩🇪", name: "Deutsch", path: "/de/memory" },
+  { locale: "fr", flag: "🇫🇷", name: "Français", path: "/fr/memory" },
+  { locale: "es", flag: "🇪🇸", name: "Español", path: "/es/memory" },
+  { locale: "pt", flag: "🇧🇷", name: "Português", path: "/pt/memory" },
+];
 
 // 국가 옵션
 const COUNTRY_OPTIONS = [
@@ -490,17 +487,17 @@ const getCountryFlag = (countryCode: string | null | undefined): string => {
 };
 
 interface MemoryTestProps {
-  initialLang: Language;
+  locale: Locale;
 }
 
-export default function MemoryTest({ initialLang }: MemoryTestProps) {
+export default function MemoryTest({ locale }: MemoryTestProps) {
   const router = useRouter();
+  const lang = locale;
   const [state, setState] = useState<GameState>("waiting");
   const [level, setLevel] = useState(1);
   const [numbers, setNumbers] = useState("");
   const [userInput, setUserInput] = useState("");
   const [bestLevel, setBestLevel] = useState(1);
-  const [lang] = useState<Language>(initialLang);
   const [showLangMenu, setShowLangMenu] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [leaderboard, setLeaderboard] = useState<MemoryLeaderboardEntry[]>([]);
@@ -704,7 +701,7 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
       return;
     }
 
-    const shareUrl = `https://www.slox.co.kr${langUrls[lang]}`;
+    const shareUrl = `https://www.slox.co.kr${languageOptions.find(l => l.locale === lang)?.path || "/memory"}`;
     const blob = await generateImage();
     
     if (blob && typeof navigator.share === "function") {
@@ -746,25 +743,25 @@ export default function MemoryTest({ initialLang }: MemoryTestProps) {
                   onClick={() => setShowLangMenu(!showLangMenu)}
                   className="flex items-center gap-1 px-3 py-1.5 bg-dark-800 hover:bg-dark-700 rounded-lg text-sm transition-colors"
                 >
-                  <span>{langFlags[lang]}</span>
-                  <span className="text-dark-300 hidden sm:inline">{langNames[lang]}</span>
+                  <span>{languageOptions.find(l => l.locale === lang)?.flag}</span>
+                  <span className="text-dark-300 hidden sm:inline">{languageOptions.find(l => l.locale === lang)?.name}</span>
                 </button>
                 {showLangMenu && (
                   <div className="absolute right-0 mt-2 w-40 bg-dark-800 border border-dark-700 rounded-lg shadow-xl overflow-hidden">
-                    {(Object.keys(langFlags) as Language[]).map((l) => (
+                    {languageOptions.map((opt) => (
                       <button
-                        key={l}
+                        key={opt.locale}
                         onClick={() => {
-                          document.cookie = `SLOX_LOCALE=${l}; path=/; max-age=31536000`;
+                          document.cookie = `SLOX_LOCALE=${opt.locale}; path=/; max-age=31536000`;
                           setShowLangMenu(false);
-                          router.push(langUrls[l]);
+                          router.push(opt.path);
                         }}
                         className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-dark-700 transition-colors text-left ${
-                          lang === l ? "bg-dark-700 text-white" : "text-dark-300"
+                          lang === opt.locale ? "bg-dark-700 text-white" : "text-dark-300"
                         }`}
                       >
-                        <span>{langFlags[l]}</span>
-                        <span>{langNames[l]}</span>
+                        <span>{opt.flag}</span>
+                        <span>{opt.name}</span>
                       </button>
                     ))}
                   </div>

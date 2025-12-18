@@ -1,7 +1,7 @@
 import ReactionTest from "@/components/ReactionTest";
 
 export default function ReactionPageDe() {
-  return <ReactionTest initialLang="de" />;
+  return <ReactionTest locale="de" />;
 }
 
 
