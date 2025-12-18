@@ -240,7 +240,7 @@ export default function TemplateService() {
     elements?.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, []);
+  }, [activeCategory, activeSubCategory]); // 탭 변경 시 다시 관찰
 
   // 카테고리 변경 시 첫 번째 서브카테고리로 초기화
   useEffect(() => {
