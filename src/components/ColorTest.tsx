@@ -70,6 +70,9 @@ const translations = {
     tipContent: "화면 중앙에 시선을 고정하고, 주변시를 활용해보세요. 밝기 차이에 주목하면 더 쉽게 찾을 수 있습니다!",
     whatIsColor: "색각 테스트란?",
     colorDescription: "색각 테스트는 미세한 색상 차이를 구별하는 능력을 측정합니다. 디자이너, 화가, 조종사 등 정확한 색 구별이 필요한 직업에서 중요합니다!",
+    noRecords: "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!",
+    currentFirst: "현재 1위",
+    myRecord: "내 기록",
   },
   en: {
     title: "Find the",
@@ -120,6 +123,9 @@ const translations = {
     tipContent: "Focus your gaze on the center of the screen and use peripheral vision. Paying attention to brightness differences makes it easier to find!",
     whatIsColor: "What is Color Vision Test?",
     colorDescription: "The color vision test measures your ability to distinguish subtle color differences. It's important for professions like designers, painters, and pilots that require accurate color discrimination!",
+    noRecords: "No records yet. Be the first challenger!",
+    currentFirst: "Current #1",
+    myRecord: "My Record",
   },
   ja: {
     title: "色探し",
@@ -170,6 +176,9 @@ const translations = {
     tipContent: "画面の中心に視線を固定し、周辺視野を活用してください。明るさの違いに注目すると見つけやすくなります！",
     whatIsColor: "色覚テストとは？",
     colorDescription: "色覚テストは微細な色の違いを区別する能力を測定します。デザイナー、画家、パイロットなど正確な色の区別が必要な職業で重要です！",
+    noRecords: "まだ記録がありません。最初の挑戦者になりましょう！",
+    currentFirst: "現在1位",
+    myRecord: "私の記録",
   },
   zh: {
     title: "找不同",
@@ -220,6 +229,9 @@ const translations = {
     tipContent: "将视线固定在屏幕中央，利用周边视野。注意亮度差异可以更容易找到！",
     whatIsColor: "什么是色觉测试？",
     colorDescription: "色觉测试测量你区分细微颜色差异的能力。对于设计师、画家、飞行员等需要准确色彩辨别的职业很重要！",
+    noRecords: "还没有记录。成为第一个挑战者吧！",
+    currentFirst: "当前第1名",
+    myRecord: "我的记录",
   },
   es: {
     title: "Encuentra el",
@@ -270,6 +282,9 @@ const translations = {
     tipContent: "Fija la mirada en el centro de la pantalla y usa la visión periférica. ¡Prestar atención a las diferencias de brillo facilita encontrarlo!",
     whatIsColor: "¿Qué es el test de visión de colores?",
     colorDescription: "El test de visión de colores mide tu capacidad para distinguir diferencias sutiles de color. ¡Es importante para profesiones como diseñadores, pintores y pilotos que requieren discriminación precisa del color!",
+    noRecords: "Aún no hay registros. ¡Sé el primer retador!",
+    currentFirst: "Actual #1",
+    myRecord: "Mi Registro",
   },
   pt: {
     title: "Encontre a",
@@ -320,6 +335,9 @@ const translations = {
     tipContent: "Fixe o olhar no centro da tela e use a visão periférica. Prestar atenção às diferenças de brilho facilita encontrar!",
     whatIsColor: "O que é o teste de visão de cores?",
     colorDescription: "O teste de visão de cores mede sua capacidade de distinguir diferenças sutis de cor. É importante para profissões como designers, pintores e pilotos que requerem discriminação precisa de cores!",
+    noRecords: "Ainda sem registros. Seja o primeiro desafiante!",
+    currentFirst: "Atual #1",
+    myRecord: "Meu Registro",
   },
   de: {
     title: "Finde die",
@@ -370,6 +388,9 @@ const translations = {
     tipContent: "Fixiere den Blick auf die Bildschirmmitte und nutze das periphere Sehen. Auf Helligkeitsunterschiede zu achten macht es einfacher zu finden!",
     whatIsColor: "Was ist ein Farbsehentest?",
     colorDescription: "Der Farbsehentest misst deine Fähigkeit, subtile Farbunterschiede zu unterscheiden. Wichtig für Berufe wie Designer, Maler und Piloten, die genaue Farbunterscheidung erfordern!",
+    noRecords: "Noch keine Rekorde. Sei der erste Herausforderer!",
+    currentFirst: "Aktueller #1",
+    myRecord: "Mein Rekord",
   },
   fr: {
     title: "Trouvez la",
@@ -420,6 +441,9 @@ const translations = {
     tipContent: "Fixez le regard au centre de l'écran et utilisez la vision périphérique. Faire attention aux différences de luminosité facilite la recherche !",
     whatIsColor: "Qu'est-ce que le test de vision des couleurs ?",
     colorDescription: "Le test de vision des couleurs mesure votre capacité à distinguer les différences subtiles de couleur. Important pour les métiers comme designers, peintres et pilotes qui nécessitent une discrimination précise des couleurs !",
+    noRecords: "Aucun record. Soyez le premier challenger !",
+    currentFirst: "Actuel #1",
+    myRecord: "Mon Record",
   },
 };
 
@@ -870,7 +894,7 @@ export default function ColorTest({ locale }: ColorTestProps) {
               <button onClick={fetchLeaderboard} className="text-dark-400 hover:text-white text-sm">🔄 {lang === "ko" ? "새로고침" : "Refresh"}</button>
             </div>
             {leaderboard.length === 0 ? (
-              <div className="text-center py-8"><div className="text-4xl mb-3">👁️</div><p className="text-dark-400">{lang === "ko" ? "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!" : "No records yet. Be the first challenger!"}</p></div>
+              <div className="text-center py-8"><div className="text-4xl mb-3">👁️</div><p className="text-dark-400">{t.noRecords}</p></div>
             ) : (
               <div className="space-y-2">
                 {leaderboard.map((entry, index) => (
@@ -957,13 +981,13 @@ export default function ColorTest({ locale }: ColorTestProps) {
                     <div className="bg-dark-800/70 rounded-xl p-3 mb-4">
                       <div className="flex items-center justify-between">
                         <div className="text-center flex-1">
-                          <p className="text-[10px] text-dark-500 uppercase">현재 1위</p>
+                          <p className="text-[10px] text-dark-500 uppercase">{t.currentFirst}</p>
                           <p className="text-yellow-400 font-bold">{leaderboard[0].score}점</p>
                           <p className="text-xs text-dark-400">{leaderboard[0].nickname}</p>
                         </div>
                         <div className="text-dark-600 px-2">vs</div>
                         <div className="text-center flex-1">
-                          <p className="text-[10px] text-dark-500 uppercase">내 기록</p>
+                          <p className="text-[10px] text-dark-500 uppercase">{t.myRecord}</p>
                           <p className="text-purple-400 font-bold">{score}점</p>
                         </div>
                       </div>

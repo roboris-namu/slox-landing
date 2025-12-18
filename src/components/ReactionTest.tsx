@@ -94,6 +94,22 @@ const translations = {
     minutes: "분",
     seconds: "초",
     sameTierNote: "📱 모바일 / 🖥️ PC 동일 기준",
+    newFirst: "🔥 새로운 1등!",
+    beatPrevious: "기존 1위 {name}님을 {diff}ms 앞섰어요",
+    firstChallenger: "👑 첫 번째 도전자!",
+    registerFirstNote: "등록하면 바로 1등이에요",
+    currentFirst: "현재 1위",
+    myRecord: "내 기록",
+    prizeEvent: "🎁 1등은 매달 문화상품권 이벤트 참여 가능!",
+    registerFirstBtn: "🔥 1등 등록!",
+    submit: "등록하기!",
+    noRecords: "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!",
+    sameScore: "👑 현재 1위와 동점!",
+    cancel: "취소",
+    newRecord: "👑 신기록 달성!",
+    beatRecord: "기존 1위 {name} ({score}ms) 돌파!",
+    myRank: "내 순위",
+    rank: "위",
   },
   en: {
     title: "Reaction",
@@ -166,6 +182,22 @@ const translations = {
     minutes: "M",
     seconds: "S",
     sameTierNote: "📱 Mobile / 🖥️ PC Same Standard",
+    newFirst: "🔥 New #1!",
+    beatPrevious: "You beat {name} by {diff}ms!",
+    firstChallenger: "👑 First Challenger!",
+    registerFirstNote: "Register to claim #1!",
+    currentFirst: "Current #1",
+    myRecord: "My Record",
+    prizeEvent: "🎁 #1 wins monthly gift card event!",
+    registerFirstBtn: "🔥 Register #1!",
+    submit: "Submit!",
+    noRecords: "No records yet. Be the first challenger!",
+    sameScore: "👑 Tied with #1!",
+    cancel: "Cancel",
+    newRecord: "👑 New Record!",
+    beatRecord: "Beat {name} ({score}ms)!",
+    myRank: "My Rank",
+    rank: "",
   },
   ja: {
     title: "反応速度",
@@ -238,6 +270,22 @@ const translations = {
     minutes: "分",
     seconds: "秒",
     sameTierNote: "📱 モバイル / 🖥️ PC 同一基準",
+    newFirst: "🔥 新しい1位!",
+    beatPrevious: "前の1位 {name}さんを{diff}ms上回りました!",
+    firstChallenger: "👑 最初の挑戦者!",
+    registerFirstNote: "登録すれば1位になります!",
+    currentFirst: "現在1位",
+    myRecord: "私の記録",
+    prizeEvent: "🎁 1位は毎月ギフトカードイベントに参加可能!",
+    registerFirstBtn: "🔥 1位登録!",
+    submit: "登録!",
+    noRecords: "まだ記録がありません。最初の挑戦者になってください!",
+    sameScore: "👑 現在1位と同点!",
+    cancel: "キャンセル",
+    newRecord: "👑 新記録達成!",
+    beatRecord: "前1位 {name} ({score}ms) を突破!",
+    myRank: "私の順位",
+    rank: "位",
   },
   zh: {
     title: "反应速度",
@@ -310,6 +358,22 @@ const translations = {
     minutes: "分",
     seconds: "秒",
     sameTierNote: "📱 移动端 / 🖥️ PC 同一标准",
+    newFirst: "🔥 新的第1名!",
+    beatPrevious: "超越了前第1名 {name} {diff}ms!",
+    firstChallenger: "👑 第一个挑战者!",
+    registerFirstNote: "注册就能成为第1名!",
+    currentFirst: "当前第1名",
+    myRecord: "我的记录",
+    prizeEvent: "🎁 第1名可参加每月礼品卡活动!",
+    registerFirstBtn: "🔥 注册第1名!",
+    submit: "提交!",
+    noRecords: "暂无记录。成为第一个挑战者吧!",
+    sameScore: "👑 与第1名同分!",
+    cancel: "取消",
+    newRecord: "👑 新纪录!",
+    beatRecord: "击败了前第1名 {name} ({score}ms)!",
+    myRank: "我的排名",
+    rank: "名",
   },
   es: {
     title: "Test de",
@@ -382,6 +446,22 @@ const translations = {
     minutes: "M",
     seconds: "S",
     sameTierNote: "📱 Móvil / 🖥️ PC Mismo Estándar",
+    newFirst: "🔥 ¡Nuevo #1!",
+    beatPrevious: "¡Superaste a {name} por {diff}ms!",
+    firstChallenger: "👑 ¡Primer Retador!",
+    registerFirstNote: "¡Regístrate para ser #1!",
+    currentFirst: "Actual #1",
+    myRecord: "Mi Registro",
+    prizeEvent: "🎁 ¡#1 participa en evento mensual de tarjeta regalo!",
+    registerFirstBtn: "🔥 ¡Registrar #1!",
+    submit: "¡Enviar!",
+    noRecords: "Aún no hay registros. ¡Sé el primer retador!",
+    sameScore: "👑 ¡Empate con #1!",
+    cancel: "Cancelar",
+    newRecord: "👑 ¡Nuevo Récord!",
+    beatRecord: "¡Venciste a {name} ({score}ms)!",
+    myRank: "Mi Rango",
+    rank: "°",
   },
   pt: {
     title: "Teste de",
@@ -454,6 +534,22 @@ const translations = {
     minutes: "M",
     seconds: "S",
     sameTierNote: "📱 Mobile / 🖥️ PC Mesmo Padrão",
+    newFirst: "🔥 Novo #1!",
+    beatPrevious: "Você superou {name} por {diff}ms!",
+    firstChallenger: "👑 Primeiro Desafiante!",
+    registerFirstNote: "Registre-se para ser #1!",
+    currentFirst: "Atual #1",
+    myRecord: "Meu Registro",
+    prizeEvent: "🎁 #1 participa do evento mensal de vale-presente!",
+    registerFirstBtn: "🔥 Registrar #1!",
+    submit: "Enviar!",
+    noRecords: "Ainda sem registros. Seja o primeiro desafiante!",
+    sameScore: "👑 Empatado com #1!",
+    cancel: "Cancelar",
+    newRecord: "👑 Novo Recorde!",
+    beatRecord: "Você venceu {name} ({score}ms)!",
+    myRank: "Meu Rank",
+    rank: "°",
   },
   de: {
     title: "Reaktionszeit",
@@ -526,6 +622,22 @@ const translations = {
     minutes: "Min",
     seconds: "Sek",
     sameTierNote: "📱 Mobil / 🖥️ PC Gleicher Standard",
+    newFirst: "🔥 Neuer #1!",
+    beatPrevious: "Du hast {name} um {diff}ms geschlagen!",
+    firstChallenger: "👑 Erster Herausforderer!",
+    registerFirstNote: "Registriere dich um #1 zu werden!",
+    currentFirst: "Aktueller #1",
+    myRecord: "Mein Rekord",
+    prizeEvent: "🎁 #1 nimmt am monatlichen Gutschein-Event teil!",
+    registerFirstBtn: "🔥 #1 Registrieren!",
+    submit: "Absenden!",
+    noRecords: "Noch keine Rekorde. Sei der erste Herausforderer!",
+    sameScore: "👑 Gleichstand mit #1!",
+    cancel: "Abbrechen",
+    newRecord: "👑 Neuer Rekord!",
+    beatRecord: "Du hast {name} ({score}ms) geschlagen!",
+    myRank: "Mein Rang",
+    rank: ".",
   },
   fr: {
     title: "Test de",
@@ -598,6 +710,22 @@ const translations = {
     minutes: "M",
     seconds: "S",
     sameTierNote: "📱 Mobile / 🖥️ PC Même Standard",
+    newFirst: "🔥 Nouveau #1!",
+    beatPrevious: "Vous avez battu {name} de {diff}ms!",
+    firstChallenger: "👑 Premier Challenger!",
+    registerFirstNote: "Inscrivez-vous pour être #1!",
+    currentFirst: "Actuel #1",
+    myRecord: "Mon Record",
+    prizeEvent: "🎁 #1 participe à l'événement mensuel carte cadeau!",
+    registerFirstBtn: "🔥 Inscrire #1!",
+    submit: "Envoyer!",
+    noRecords: "Aucun record. Soyez le premier challenger!",
+    sameScore: "👑 Égalité avec #1!",
+    cancel: "Annuler",
+    newRecord: "👑 Nouveau Record!",
+    beatRecord: "Vous avez battu {name} ({score}ms)!",
+    myRank: "Mon Rang",
+    rank: "e",
   },
 };
 
@@ -946,7 +1074,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
    */
   const getPercentile = (ms: number): number => {
     // 통일 기준
-    if (ms < 120) return 0.1;
+    if (ms < 120) return 1;
     if (ms < 150) return 1;
     if (ms < 190) return 5;
     if (ms < 240) return 15;
@@ -1555,37 +1683,37 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                   {/* 🏆 현재 랭킹 표시 - 세련된 버전 */}
                   {leaderboard.length === 0 ? (
                     <div className="mb-3 px-6 py-4 bg-gradient-to-b from-yellow-500/20 to-transparent border border-yellow-500/30 rounded-2xl">
-                      <p className="text-yellow-400 font-black text-lg">👑 첫 번째 도전자!</p>
-                      <p className="text-dark-400 text-sm mt-1">등록하면 바로 1등이에요</p>
+                      <p className="text-yellow-400 font-black text-lg">{t.firstChallenger}</p>
+                      <p className="text-dark-400 text-sm mt-1">{t.registerFirstNote}</p>
                     </div>
                   ) : reactionTime < leaderboard[0].score ? (
                     <div className="mb-3 px-6 py-4 bg-gradient-to-b from-yellow-500/20 to-transparent border border-yellow-500/30 rounded-2xl">
-                      <p className="text-yellow-400 font-black text-lg">👑 신기록 달성!</p>
+                      <p className="text-yellow-400 font-black text-lg">{t.newRecord}</p>
                       <p className="text-dark-400 text-sm mt-1">
-                        기존 1위 <span className="text-white">{leaderboard[0].nickname}</span> ({leaderboard[0].score}ms) 돌파!
+                        {t.beatRecord.replace("{name}", leaderboard[0].nickname).replace("{score}", String(leaderboard[0].score))}
                       </p>
                     </div>
                   ) : reactionTime === leaderboard[0].score ? (
                     <div className="mb-3 px-5 py-3 bg-dark-800/50 border border-yellow-500/30 rounded-xl">
-                      <p className="text-yellow-400 font-bold">👑 현재 1위와 동점!</p>
+                      <p className="text-yellow-400 font-bold">{t.sameScore}</p>
                       <p className="text-dark-400 text-xs mt-1">{leaderboard[0].nickname} ({leaderboard[0].score}ms)</p>
                     </div>
                   ) : (
                     <div className="mb-3 px-5 py-3 bg-dark-800/50 border border-dark-700 rounded-xl">
                       <div className="flex items-center justify-center gap-6">
                         <div className="text-center">
-                          <p className="text-dark-500 text-[10px] uppercase tracking-wider">현재 1위</p>
+                          <p className="text-dark-500 text-[10px] uppercase tracking-wider">{t.currentFirst}</p>
                           <p className="text-yellow-400 font-bold text-lg">{leaderboard[0].score}<span className="text-xs text-dark-500">ms</span></p>
                           <p className="text-dark-400 text-xs">{leaderboard[0].nickname}</p>
                         </div>
                         <div className="w-px h-10 bg-dark-700" />
                         <div className="text-center">
-                          <p className="text-dark-500 text-[10px] uppercase tracking-wider">내 순위</p>
+                          <p className="text-dark-500 text-[10px] uppercase tracking-wider">{t.myRank}</p>
                           <p className="text-purple-400 font-bold text-lg">
                             {(() => {
                               const rank = leaderboard.findIndex(e => reactionTime < e.score);
                               return rank === -1 ? leaderboard.length + 1 : rank + 1;
-                            })()}위
+                            })()}{t.rank}
                           </p>
                           <p className="text-dark-500 text-xs">+{reactionTime - leaderboard[0].score}ms</p>
                         </div>
@@ -1719,12 +1847,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
             {leaderboard.length === 0 ? (
               <div className="text-center py-8">
                 <div className="text-4xl mb-3">🎮</div>
-                <p className="text-dark-400">
-                  {lang === "ko" ? "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!" : 
-                   lang === "ja" ? "まだ記録がありません。最初の挑戦者になりましょう！" :
-                   lang === "zh" ? "还没有记录。成为第一个挑战者吧！" :
-                   "No records yet. Be the first challenger!"}
-                </p>
+                <p className="text-dark-400">{t.noRecords}</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -1932,21 +2055,21 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                   }`}>
                     {reactionTime < leaderboard[0].score ? (
                       <div className="text-center">
-                        <p className="text-yellow-400 font-bold text-lg">👑 새로운 1등!</p>
+                        <p className="text-yellow-400 font-bold text-lg">{t.newFirst}</p>
                         <p className="text-dark-400 text-sm mt-1">
-                          기존 1위 <span className="text-white">{leaderboard[0].nickname}</span>님을 {leaderboard[0].score - reactionTime}ms 앞섰어요
+                          {t.beatPrevious.replace("{name}", leaderboard[0].nickname).replace("{diff}", String(leaderboard[0].score - reactionTime))}
                         </p>
                       </div>
                     ) : (
                       <div className="flex items-center justify-center gap-6">
                         <div className="text-center">
-                          <p className="text-dark-500 text-[10px] uppercase tracking-wider">현재 1위</p>
+                          <p className="text-dark-500 text-[10px] uppercase tracking-wider">{t.currentFirst}</p>
                           <p className="text-yellow-400 font-bold text-lg">{leaderboard[0].score}<span className="text-xs text-dark-500">ms</span></p>
                           <p className="text-dark-400 text-xs">{leaderboard[0].nickname}</p>
                         </div>
                         <div className="w-px h-10 bg-dark-700" />
                         <div className="text-center">
-                          <p className="text-dark-500 text-[10px] uppercase tracking-wider">내 기록</p>
+                          <p className="text-dark-500 text-[10px] uppercase tracking-wider">{t.myRecord}</p>
                           <p className="text-purple-400 font-bold text-lg">{reactionTime}<span className="text-xs text-dark-500">ms</span></p>
                           <p className="text-dark-500 text-xs">+{reactionTime - leaderboard[0].score}ms</p>
                         </div>
@@ -1955,8 +2078,8 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                   </div>
                 ) : (
                   <div className="mb-4 p-4 rounded-xl text-center bg-gradient-to-b from-yellow-500/15 to-transparent border border-yellow-500/30">
-                    <p className="text-yellow-400 font-bold text-lg">👑 첫 번째 도전자!</p>
-                    <p className="text-dark-400 text-sm mt-1">등록하면 바로 1등이에요</p>
+                    <p className="text-yellow-400 font-bold text-lg">{t.firstChallenger}</p>
+                    <p className="text-dark-400 text-sm mt-1">{t.registerFirstNote}</p>
                   </div>
                 )}
                 
@@ -2004,7 +2127,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                 {(leaderboard.length === 0 || reactionTime < leaderboard[0].score) && (
                   <div className="mb-4 p-2 bg-yellow-500/10 rounded-lg">
                     <p className="text-yellow-400 text-xs text-center">
-                      🎁 1등은 매달 문화상품권 이벤트 참여 가능!
+                      {t.prizeEvent}
                     </p>
                   </div>
                 )}
@@ -2014,7 +2137,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                     onClick={() => setShowNicknameModal(false)}
                     className="flex-1 px-4 py-3 bg-dark-800 hover:bg-dark-700 text-white rounded-xl transition-all"
                   >
-                    {lang === "ko" ? "취소" : "Cancel"}
+                    {t.cancel}
                   </button>
                   <button
                     onClick={submitScore}
@@ -2026,8 +2149,8 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                     }`}
                   >
                     {isSubmitting ? "..." : leaderboard.length === 0 || reactionTime < leaderboard[0].score 
-                      ? "🔥 1등 등록!" 
-                      : lang === "ko" ? "등록하기!" : "Submit!"}
+                      ? t.registerFirstBtn 
+                      : t.submit}
                   </button>
                 </div>
               </div>

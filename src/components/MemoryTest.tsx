@@ -72,6 +72,9 @@ const translations = {
     whatIsMemory: "숫자 기억력이란?",
     memoryDescription: "평균적인 사람은 7±2개의 항목을 기억할 수 있습니다(밀러의 법칙). 훈련을 통해 12자리 이상까지 향상시킬 수 있습니다!",
     averageNote: "💡 일반인 평균: 7±2자리 (밀러의 법칙)",
+    noRecords: "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!",
+    currentFirst: "현재 1위",
+    myRecord: "내 기록",
   },
   en: {
     title: "Number",
@@ -124,6 +127,9 @@ const translations = {
     whatIsMemory: "What is Number Memory?",
     memoryDescription: "The average person can remember 7±2 items (Miller's Law). Through training, you can improve to 12+ digits!",
     averageNote: "💡 Average: 7±2 digits (Miller's Law)",
+    noRecords: "No records yet. Be the first challenger!",
+    currentFirst: "Current #1",
+    myRecord: "My Record",
   },
   ja: {
     title: "数字記憶",
@@ -176,6 +182,9 @@ const translations = {
     whatIsMemory: "数字記憶力とは？",
     memoryDescription: "平均的な人は7±2個の項目を記憶できます（ミラーの法則）。トレーニングで12桁以上に向上させることができます！",
     averageNote: "💡 平均：7±2桁（ミラーの法則）",
+    noRecords: "まだ記録がありません。最初の挑戦者になりましょう！",
+    currentFirst: "現在1位",
+    myRecord: "私の記録",
   },
   zh: {
     title: "数字记忆",
@@ -228,6 +237,9 @@ const translations = {
     whatIsMemory: "什么是数字记忆力？",
     memoryDescription: "普通人可以记住7±2个项目（米勒法则）。通过训练，可以提高到12位以上！",
     averageNote: "💡 平均：7±2位（米勒法则）",
+    noRecords: "还没有记录。成为第一个挑战者吧！",
+    currentFirst: "当前第1名",
+    myRecord: "我的记录",
   },
   es: {
     title: "Memoria de",
@@ -280,6 +292,9 @@ const translations = {
     whatIsMemory: "¿Qué es la memoria numérica?",
     memoryDescription: "La persona promedio puede recordar 7±2 elementos (Ley de Miller). ¡Con entrenamiento puedes mejorar a 12+ dígitos!",
     averageNote: "💡 Promedio: 7±2 dígitos (Ley de Miller)",
+    noRecords: "Aún no hay registros. ¡Sé el primer retador!",
+    currentFirst: "Actual #1",
+    myRecord: "Mi Registro",
   },
   pt: {
     title: "Memória de",
@@ -332,6 +347,9 @@ const translations = {
     whatIsMemory: "O que é memória numérica?",
     memoryDescription: "A pessoa média pode lembrar 7±2 itens (Lei de Miller). Com treinamento, você pode melhorar para 12+ dígitos!",
     averageNote: "💡 Média: 7±2 dígitos (Lei de Miller)",
+    noRecords: "Ainda sem registros. Seja o primeiro desafiante!",
+    currentFirst: "Atual #1",
+    myRecord: "Meu Registro",
   },
   de: {
     title: "Zahlen",
@@ -384,6 +402,9 @@ const translations = {
     whatIsMemory: "Was ist Zahlengedächtnis?",
     memoryDescription: "Der Durchschnittsmensch kann sich 7±2 Elemente merken (Millersche Zahl). Durch Training kannst du auf 12+ Ziffern verbessern!",
     averageNote: "💡 Durchschnitt: 7±2 Ziffern (Millersche Zahl)",
+    noRecords: "Noch keine Rekorde. Sei der erste Herausforderer!",
+    currentFirst: "Aktueller #1",
+    myRecord: "Mein Rekord",
   },
   fr: {
     title: "Mémoire des",
@@ -436,6 +457,9 @@ const translations = {
     whatIsMemory: "Qu'est-ce que la mémoire numérique ?",
     memoryDescription: "La personne moyenne peut retenir 7±2 éléments (Loi de Miller). Avec l'entraînement, vous pouvez améliorer à 12+ chiffres !",
     averageNote: "💡 Moyenne : 7±2 chiffres (Loi de Miller)",
+    noRecords: "Aucun record. Soyez le premier challenger !",
+    currentFirst: "Actuel #1",
+    myRecord: "Mon Record",
   },
 };
 
@@ -904,7 +928,7 @@ export default function MemoryTest({ locale }: MemoryTestProps) {
               <button onClick={fetchLeaderboard} className="text-dark-400 hover:text-white text-sm">🔄 {lang === "ko" ? "새로고침" : "Refresh"}</button>
             </div>
             {leaderboard.length === 0 ? (
-              <div className="text-center py-8"><div className="text-4xl mb-3">🧠</div><p className="text-dark-400">{lang === "ko" ? "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!" : "No records yet. Be the first challenger!"}</p></div>
+              <div className="text-center py-8"><div className="text-4xl mb-3">🧠</div><p className="text-dark-400">{t.noRecords}</p></div>
             ) : (
               <div className="space-y-2">
                 {leaderboard.map((entry, index) => (
@@ -991,13 +1015,13 @@ export default function MemoryTest({ locale }: MemoryTestProps) {
                     <div className="bg-dark-800/70 rounded-xl p-3 mb-4">
                       <div className="flex items-center justify-between">
                         <div className="text-center flex-1">
-                          <p className="text-[10px] text-dark-500 uppercase">현재 1위</p>
+                          <p className="text-[10px] text-dark-500 uppercase">{t.currentFirst}</p>
                           <p className="text-yellow-400 font-bold">{leaderboard[0].score} {t.digits}</p>
                           <p className="text-xs text-dark-400">{leaderboard[0].nickname}</p>
                         </div>
                         <div className="text-dark-600 px-2">vs</div>
                         <div className="text-center flex-1">
-                          <p className="text-[10px] text-dark-500 uppercase">내 기록</p>
+                          <p className="text-[10px] text-dark-500 uppercase">{t.myRecord}</p>
                           <p className="text-purple-400 font-bold">{bestLevel} {t.digits}</p>
                         </div>
                       </div>

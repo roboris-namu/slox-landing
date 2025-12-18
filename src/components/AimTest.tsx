@@ -73,6 +73,9 @@ const translations = {
     share: "📤 공유하기",
     tierTable: "🎮 에임 등급표",
     tierNote: "💡 점수 = 명중수 × 정확도 × 속도보너스",
+    noRecords: "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!",
+    currentFirst: "현재 1위",
+    myRecord: "내 기록",
     otherTools: "🔗 다른 도구",
     reactionTest: "⚡ 반응속도 테스트",
     cpsTest: "🖱️ CPS 테스트",
@@ -124,6 +127,9 @@ const translations = {
     share: "📤 Share",
     tierTable: "🎮 Aim Tier Chart",
     tierNote: "💡 Score = Hits × Accuracy × Speed Bonus",
+    noRecords: "No records yet. Be the first challenger!",
+    currentFirst: "Current #1",
+    myRecord: "My Record",
     otherTools: "🔗 Other Tools",
     reactionTest: "⚡ Reaction Test",
     cpsTest: "🖱️ CPS Test",
@@ -175,6 +181,9 @@ const translations = {
     share: "📤 共有",
     tierTable: "🎮 エイムランク表",
     tierNote: "💡 スコア = 命中数 × 精度 × 速度ボーナス",
+    noRecords: "まだ記録がありません。最初の挑戦者になりましょう！",
+    currentFirst: "現在1位",
+    myRecord: "私の記録",
     otherTools: "🔗 他のツール",
     reactionTest: "⚡ 反応速度テスト",
     cpsTest: "🖱️ CPSテスト",
@@ -226,6 +235,9 @@ const translations = {
     share: "📤 分享",
     tierTable: "🎮 瞄准等级表",
     tierNote: "💡 分数 = 命中数 × 精准度 × 速度加成",
+    noRecords: "还没有记录。成为第一个挑战者吧！",
+    currentFirst: "当前第1名",
+    myRecord: "我的记录",
     otherTools: "🔗 其他工具",
     reactionTest: "⚡ 反应速度测试",
     cpsTest: "🖱️ CPS测试",
@@ -277,6 +289,9 @@ const translations = {
     share: "📤 Compartir",
     tierTable: "🎮 Tabla de Rangos",
     tierNote: "💡 Puntos = Aciertos × Precisión × Bonus de velocidad",
+    noRecords: "Aún no hay registros. ¡Sé el primer retador!",
+    currentFirst: "Actual #1",
+    myRecord: "Mi Registro",
     otherTools: "🔗 Otras Herramientas",
     reactionTest: "⚡ Test de Reacción",
     cpsTest: "🖱️ Test CPS",
@@ -328,6 +343,9 @@ const translations = {
     share: "📤 Compartilhar",
     tierTable: "🎮 Tabela de Ranks",
     tierNote: "💡 Pontos = Acertos × Precisão × Bônus de velocidade",
+    noRecords: "Ainda sem registros. Seja o primeiro desafiante!",
+    currentFirst: "Atual #1",
+    myRecord: "Meu Registro",
     otherTools: "🔗 Outras Ferramentas",
     reactionTest: "⚡ Teste de Reação",
     cpsTest: "🖱️ Teste CPS",
@@ -379,6 +397,9 @@ const translations = {
     share: "📤 Teilen",
     tierTable: "🎮 Aim Rang-Tabelle",
     tierNote: "💡 Punkte = Treffer × Genauigkeit × Geschwindigkeitsbonus",
+    noRecords: "Noch keine Rekorde. Sei der erste Herausforderer!",
+    currentFirst: "Aktueller #1",
+    myRecord: "Mein Rekord",
     otherTools: "🔗 Andere Tools",
     reactionTest: "⚡ Reaktionstest",
     cpsTest: "🖱️ CPS Test",
@@ -430,6 +451,9 @@ const translations = {
     share: "📤 Partager",
     tierTable: "🎮 Tableau des Rangs",
     tierNote: "💡 Score = Touches × Précision × Bonus de vitesse",
+    noRecords: "Aucun record. Soyez le premier challenger !",
+    currentFirst: "Actuel #1",
+    myRecord: "Mon Record",
     otherTools: "🔗 Autres Outils",
     reactionTest: "⚡ Test de Réaction",
     cpsTest: "🖱️ Test CPS",
@@ -1298,7 +1322,7 @@ export default function AimTest({ locale }: AimTestProps) {
               <button onClick={fetchLeaderboard} className="text-dark-400 hover:text-white text-sm">🔄 {lang === "ko" ? "새로고침" : "Refresh"}</button>
             </div>
             {leaderboard.length === 0 ? (
-              <div className="text-center py-8"><div className="text-4xl mb-3">🎯</div><p className="text-dark-400">{lang === "ko" ? "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!" : "No records yet. Be the first challenger!"}</p></div>
+              <div className="text-center py-8"><div className="text-4xl mb-3">🎯</div><p className="text-dark-400">{t.noRecords}</p></div>
             ) : (
               <div className="space-y-2">
                 {leaderboard.map((entry, index) => (
@@ -1386,13 +1410,13 @@ export default function AimTest({ locale }: AimTestProps) {
                     <div className="bg-dark-800/70 rounded-xl p-3 mb-4">
                       <div className="flex items-center justify-between">
                         <div className="text-center flex-1">
-                          <p className="text-[10px] text-dark-500 uppercase">현재 1위</p>
+                          <p className="text-[10px] text-dark-500 uppercase">{t.currentFirst}</p>
                           <p className="text-yellow-400 font-bold">{leaderboard[0].score}점</p>
                           <p className="text-xs text-dark-400">{leaderboard[0].nickname}</p>
                         </div>
                         <div className="text-dark-600 px-2">vs</div>
                         <div className="text-center flex-1">
-                          <p className="text-[10px] text-dark-500 uppercase">내 기록</p>
+                          <p className="text-[10px] text-dark-500 uppercase">{t.myRecord}</p>
                           <p className="text-purple-400 font-bold">{getScore()}점</p>
                         </div>
                       </div>

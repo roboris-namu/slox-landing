@@ -97,6 +97,9 @@ const translations = {
     jitterClick: "지터 클릭: 8-12 CPS",
     butterflyClick: "버터플라이: 12-16 CPS",
     dragClick: "드래그 클릭: 20+ CPS",
+    noRecords: "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!",
+    currentFirst: "현재 1위",
+    myRecord: "내 기록",
   },
   en: {
     title: "CPS",
@@ -148,6 +151,9 @@ const translations = {
     jitterClick: "Jitter Click: 8-12 CPS",
     butterflyClick: "Butterfly: 12-16 CPS",
     dragClick: "Drag Click: 20+ CPS",
+    noRecords: "No records yet. Be the first challenger!",
+    currentFirst: "Current #1",
+    myRecord: "My Record",
   },
   ja: {
     title: "CPS",
@@ -199,6 +205,9 @@ const translations = {
     jitterClick: "ジッター: 8-12 CPS",
     butterflyClick: "バタフライ: 12-16 CPS",
     dragClick: "ドラッグ: 20+ CPS",
+    noRecords: "まだ記録がありません。最初の挑戦者になりましょう！",
+    currentFirst: "現在1位",
+    myRecord: "私の記録",
   },
   zh: {
     title: "CPS",
@@ -250,6 +259,9 @@ const translations = {
     jitterClick: "抖动点击: 8-12 CPS",
     butterflyClick: "蝴蝶点击: 12-16 CPS",
     dragClick: "拖拽点击: 20+ CPS",
+    noRecords: "还没有记录。成为第一个挑战者吧！",
+    currentFirst: "当前第1名",
+    myRecord: "我的记录",
   },
   es: {
     title: "Test",
@@ -301,6 +313,9 @@ const translations = {
     jitterClick: "Jitter Click: 8-12 CPS",
     butterflyClick: "Butterfly: 12-16 CPS",
     dragClick: "Drag Click: 20+ CPS",
+    noRecords: "Aún no hay registros. ¡Sé el primer retador!",
+    currentFirst: "Actual #1",
+    myRecord: "Mi Registro",
   },
   pt: {
     title: "Teste",
@@ -352,6 +367,9 @@ const translations = {
     jitterClick: "Jitter Click: 8-12 CPS",
     butterflyClick: "Butterfly: 12-16 CPS",
     dragClick: "Drag Click: 20+ CPS",
+    noRecords: "Ainda sem registros. Seja o primeiro desafiante!",
+    currentFirst: "Atual #1",
+    myRecord: "Meu Registro",
   },
   de: {
     title: "CPS",
@@ -403,6 +421,9 @@ const translations = {
     jitterClick: "Jitter Klick: 8-12 CPS",
     butterflyClick: "Butterfly: 12-16 CPS",
     dragClick: "Drag Klick: 20+ CPS",
+    noRecords: "Noch keine Rekorde. Sei der erste Herausforderer!",
+    currentFirst: "Aktueller #1",
+    myRecord: "Mein Rekord",
   },
   fr: {
     title: "Test",
@@ -454,6 +475,9 @@ const translations = {
     jitterClick: "Jitter Clic: 8-12 CPS",
     butterflyClick: "Butterfly: 12-16 CPS",
     dragClick: "Drag Clic: 20+ CPS",
+    noRecords: "Aucun record. Soyez le premier challenger !",
+    currentFirst: "Actuel #1",
+    myRecord: "Mon Record",
   },
 };
 
@@ -1047,7 +1071,7 @@ export default function CpsTest({ locale }: CpsTestProps) {
             {leaderboard.length === 0 ? (
               <div className="text-center py-8">
                 <div className="text-4xl mb-3">🖱️</div>
-                <p className="text-dark-400">{lang === "ko" ? "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!" : "No records yet. Be the first challenger!"}</p>
+                <p className="text-dark-400">{t.noRecords}</p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -1154,13 +1178,13 @@ export default function CpsTest({ locale }: CpsTestProps) {
                     <div className="bg-dark-800/70 rounded-xl p-3 mb-4">
                       <div className="flex items-center justify-between">
                         <div className="text-center flex-1">
-                          <p className="text-[10px] text-dark-500 uppercase">현재 1위</p>
+                          <p className="text-[10px] text-dark-500 uppercase">{t.currentFirst}</p>
                           <p className="text-yellow-400 font-bold">{leaderboard[0].score} CPS</p>
                           <p className="text-xs text-dark-400">{leaderboard[0].nickname}</p>
                         </div>
                         <div className="text-dark-600 px-2">vs</div>
                         <div className="text-center flex-1">
-                          <p className="text-[10px] text-dark-500 uppercase">내 기록</p>
+                          <p className="text-[10px] text-dark-500 uppercase">{t.myRecord}</p>
                           <p className="text-purple-400 font-bold">{cps.toFixed(1)} CPS</p>
                         </div>
                       </div>
