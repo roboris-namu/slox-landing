@@ -78,6 +78,15 @@ const translations: Record<Locale, {
   refresh: string;
   rank: string;
   grades: { legend: string; master: string; expert: string; advanced: string; intermediate: string; beginner: string };
+  // 랭킹 모드 UI
+  ranking: string;
+  rankingAvailable: string;
+  practiceMode: string;
+  rankingOnlyHard: string;
+  rankingChallenge: string;
+  practiceStart: string;
+  practiceComplete: string;
+  challengeHardMode: string;
 }> = {
   ko: {
     title: "스도쿠",
@@ -115,7 +124,15 @@ const translations: Record<Locale, {
     gradeTableDesc: "빠르게 완료할수록 높은 등급! (패널티 시간 포함)",
     refresh: "새로고침",
     rank: "위",
-    grades: { legend: "전설", master: "마스터", expert: "전문가", advanced: "숙련자", intermediate: "중급자", beginner: "초보자" }
+    grades: { legend: "전설", master: "마스터", expert: "전문가", advanced: "숙련자", intermediate: "중급자", beginner: "초보자" },
+    ranking: "랭킹",
+    rankingAvailable: "🏆 가능",
+    practiceMode: "연습용",
+    rankingOnlyHard: "💡 랭킹 등록은 고수 모드에서만 가능해요!",
+    rankingChallenge: "🎮 랭킹 도전!",
+    practiceStart: "🎮 연습 시작",
+    practiceComplete: "💡 연습 모드 완료!",
+    challengeHardMode: "랭킹 도전은 🔴 고수 모드에서 가능해요"
   },
   en: {
     title: "Sudoku",
@@ -153,7 +170,15 @@ const translations: Record<Locale, {
     gradeTableDesc: "Faster completion = Higher grade! (Penalty time included)",
     refresh: "Refresh",
     rank: "",
-    grades: { legend: "Legend", master: "Master", expert: "Expert", advanced: "Advanced", intermediate: "Intermediate", beginner: "Beginner" }
+    grades: { legend: "Legend", master: "Master", expert: "Expert", advanced: "Advanced", intermediate: "Intermediate", beginner: "Beginner" },
+    ranking: "Ranking",
+    rankingAvailable: "🏆 Available",
+    practiceMode: "Practice",
+    rankingOnlyHard: "💡 Ranking is only available in Hard mode!",
+    rankingChallenge: "🎮 Challenge Ranking!",
+    practiceStart: "🎮 Start Practice",
+    practiceComplete: "💡 Practice mode complete!",
+    challengeHardMode: "Ranking challenge is available in 🔴 Hard mode"
   },
   ja: {
     title: "数独",
@@ -191,7 +216,15 @@ const translations: Record<Locale, {
     gradeTableDesc: "早く完了するほど高い等級！(ペナルティ時間込み)",
     refresh: "更新",
     rank: "位",
-    grades: { legend: "伝説", master: "マスター", expert: "エキスパート", advanced: "上級者", intermediate: "中級者", beginner: "初心者" }
+    grades: { legend: "伝説", master: "マスター", expert: "エキスパート", advanced: "上級者", intermediate: "中級者", beginner: "初心者" },
+    ranking: "ランキング",
+    rankingAvailable: "🏆 可能",
+    practiceMode: "練習用",
+    rankingOnlyHard: "💡 ランキング登録は上級モードのみ！",
+    rankingChallenge: "🎮 ランキング挑戦!",
+    practiceStart: "🎮 練習開始",
+    practiceComplete: "💡 練習モード完了！",
+    challengeHardMode: "ランキング挑戦は 🔴 上級モードで可能です"
   },
   zh: {
     title: "数独",
@@ -229,7 +262,15 @@ const translations: Record<Locale, {
     gradeTableDesc: "越快完成等级越高！(含惩罚时间)",
     refresh: "刷新",
     rank: "名",
-    grades: { legend: "传奇", master: "大师", expert: "专家", advanced: "高级", intermediate: "中级", beginner: "初级" }
+    grades: { legend: "传奇", master: "大师", expert: "专家", advanced: "高级", intermediate: "中级", beginner: "初级" },
+    ranking: "排名",
+    rankingAvailable: "🏆 可用",
+    practiceMode: "练习",
+    rankingOnlyHard: "💡 排名仅在困难模式可用！",
+    rankingChallenge: "🎮 挑战排名!",
+    practiceStart: "🎮 开始练习",
+    practiceComplete: "💡 练习模式完成！",
+    challengeHardMode: "排名挑战在 🔴 困难模式可用"
   },
   de: {
     title: "Sudoku",
@@ -267,7 +308,15 @@ const translations: Record<Locale, {
     gradeTableDesc: "Schneller = Höherer Rang! (inkl. Strafzeit)",
     refresh: "Aktualisieren",
     rank: ".",
-    grades: { legend: "Legende", master: "Meister", expert: "Experte", advanced: "Fortgeschritten", intermediate: "Mittel", beginner: "Anfänger" }
+    grades: { legend: "Legende", master: "Meister", expert: "Experte", advanced: "Fortgeschritten", intermediate: "Mittel", beginner: "Anfänger" },
+    ranking: "Rangliste",
+    rankingAvailable: "🏆 Verfügbar",
+    practiceMode: "Übung",
+    rankingOnlyHard: "💡 Rangliste nur im Schwer-Modus!",
+    rankingChallenge: "🎮 Ranking herausfordern!",
+    practiceStart: "🎮 Übung starten",
+    practiceComplete: "💡 Übungsmodus abgeschlossen!",
+    challengeHardMode: "Ranking-Herausforderung im 🔴 Schwer-Modus"
   },
   fr: {
     title: "Sudoku",
@@ -305,7 +354,15 @@ const translations: Record<Locale, {
     gradeTableDesc: "Plus vite = Meilleur niveau ! (pénalité incluse)",
     refresh: "Actualiser",
     rank: "e",
-    grades: { legend: "Légende", master: "Maître", expert: "Expert", advanced: "Avancé", intermediate: "Intermédiaire", beginner: "Débutant" }
+    grades: { legend: "Légende", master: "Maître", expert: "Expert", advanced: "Avancé", intermediate: "Intermédiaire", beginner: "Débutant" },
+    ranking: "Classement",
+    rankingAvailable: "🏆 Disponible",
+    practiceMode: "Entraînement",
+    rankingOnlyHard: "💡 Classement uniquement en mode Difficile !",
+    rankingChallenge: "🎮 Défier le classement !",
+    practiceStart: "🎮 Commencer l'entraînement",
+    practiceComplete: "💡 Mode entraînement terminé !",
+    challengeHardMode: "Défi classement en mode 🔴 Difficile"
   },
   es: {
     title: "Sudoku",
@@ -343,7 +400,15 @@ const translations: Record<Locale, {
     gradeTableDesc: "¡Más rápido = Mejor nivel! (penalización incluida)",
     refresh: "Actualizar",
     rank: "º",
-    grades: { legend: "Leyenda", master: "Maestro", expert: "Experto", advanced: "Avanzado", intermediate: "Intermedio", beginner: "Principiante" }
+    grades: { legend: "Leyenda", master: "Maestro", expert: "Experto", advanced: "Avanzado", intermediate: "Intermedio", beginner: "Principiante" },
+    ranking: "Clasificación",
+    rankingAvailable: "🏆 Disponible",
+    practiceMode: "Práctica",
+    rankingOnlyHard: "💡 ¡Clasificación solo en modo Difícil!",
+    rankingChallenge: "🎮 ¡Desafiar clasificación!",
+    practiceStart: "🎮 Iniciar práctica",
+    practiceComplete: "💡 ¡Modo práctica completado!",
+    challengeHardMode: "Desafío de clasificación en modo 🔴 Difícil"
   },
   pt: {
     title: "Sudoku",
@@ -381,7 +446,15 @@ const translations: Record<Locale, {
     gradeTableDesc: "Mais rápido = Melhor nível! (penalidade incluída)",
     refresh: "Atualizar",
     rank: "º",
-    grades: { legend: "Lenda", master: "Mestre", expert: "Especialista", advanced: "Avançado", intermediate: "Intermediário", beginner: "Iniciante" }
+    grades: { legend: "Lenda", master: "Mestre", expert: "Especialista", advanced: "Avançado", intermediate: "Intermediário", beginner: "Iniciante" },
+    ranking: "Classificação",
+    rankingAvailable: "🏆 Disponível",
+    practiceMode: "Prática",
+    rankingOnlyHard: "💡 Classificação apenas no modo Difícil!",
+    rankingChallenge: "🎮 Desafiar classificação!",
+    practiceStart: "🎮 Iniciar prática",
+    practiceComplete: "💡 Modo prática concluído!",
+    challengeHardMode: "Desafio de classificação no modo 🔴 Difícil"
   }
 };
 
@@ -672,14 +745,27 @@ export default function SudokuMulti({ locale }: Props) {
                   <span className="text-dark-400 text-xs block">{t.timePenalty}</span>
                   <span className="text-orange-400 font-bold">+{PENALTY_SECONDS}s</span>
                 </div>
+                <div className="px-3 py-2 bg-dark-800 rounded-xl text-center">
+                  <span className="text-dark-400 text-xs block">{t.ranking}</span>
+                  <span className={difficulty === "hard" ? "text-yellow-400 font-bold" : "text-dark-500 font-bold"}>
+                    {difficulty === "hard" ? t.rankingAvailable : t.practiceMode}
+                  </span>
+                </div>
               </div>
 
               {difficulty !== "hard" && (
-                <p className="text-dark-500 text-sm mb-4">💡 {locale === "ko" ? "랭킹 도전은 '고수' 모드에서만 가능해요!" : "Ranking available only in Hard mode!"}</p>
+                <p className="text-dark-500 text-sm mb-4">{t.rankingOnlyHard}</p>
               )}
 
-              <button onClick={startGame} className="px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-lg rounded-xl">
-                {t.startGame}
+              <button 
+                onClick={startGame} 
+                className={`px-8 py-4 text-white font-bold text-lg rounded-xl ${
+                  difficulty === "hard" 
+                    ? "bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600"
+                    : "bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600"
+                }`}
+              >
+                {difficulty === "hard" ? t.rankingChallenge : t.practiceStart}
               </button>
 
               {/* 명예의전당 */}
@@ -830,7 +916,16 @@ export default function SudokuMulti({ locale }: Props) {
                   </button>
                 )}
                 {difficulty !== "hard" && (
-                  <p className="text-dark-500 text-sm mt-4">💡 {locale === "ko" ? "랭킹 도전은 '고수' 모드에서 가능해요!" : "Ranking available only in Hard mode!"}</p>
+                  <div className="mt-4 p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl">
+                    <p className="text-yellow-400 font-medium mb-1">{t.practiceComplete}</p>
+                    <p className="text-dark-400 text-sm mb-3">{t.challengeHardMode}</p>
+                    <button 
+                      onClick={() => { setDifficulty("hard"); startGame(); }}
+                      className="px-4 py-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-sm font-bold rounded-lg"
+                    >
+                      {t.rankingChallenge}
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
