@@ -2,7 +2,7 @@ import Hero from "@/components/Hero";
 import FreeTools from "@/components/FreeTools";
 import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 import MainBanner from "@/components/MainBanner";
-import CategoryQuickLinks from "@/components/CategoryQuickLinks";
+// import CategoryQuickLinks from "@/components/CategoryQuickLinks"; // 임시 숨김
 import TemplateService from "@/components/TemplateService";
 // import Portfolio from "@/components/Portfolio"; // 임시 숨김
 import Contact from "@/components/Contact";
@@ -22,7 +22,7 @@ export default function Home() {
     <main className="relative overflow-hidden">
       <Navigation />
       <MainBanner />
-      <CategoryQuickLinks />
+      {/* <CategoryQuickLinks /> */}{/* 임시 숨김 */}
       <HallOfFameCarousel />
       <FreeTools />
       <Hero />
