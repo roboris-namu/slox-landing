@@ -88,16 +88,19 @@ function LanguageSelector({ currentLocale }: { currentLocale: string }) {
       </button>
       <div className="absolute right-0 top-full mt-2 w-40 bg-dark-900/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
         {languages.map((lang) => (
-          <a
+          <button
             key={lang.code}
-            href={lang.path}
-            className={`flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-white/5 transition-colors first:rounded-t-xl last:rounded-b-xl ${
+            onClick={() => {
+              document.cookie = `SLOX_LOCALE=${lang.code}; path=/; max-age=31536000`;
+              window.location.href = lang.path;
+            }}
+            className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-white/5 transition-colors first:rounded-t-xl last:rounded-b-xl ${
               lang.code === currentLocale ? 'text-cyan-400' : 'text-dark-300 hover:text-white'
             }`}
           >
             <span>{lang.flag}</span>
             <span>{lang.name}</span>
-          </a>
+          </button>
         ))}
       </div>
     </div>
