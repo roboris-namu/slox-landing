@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 // 지원 언어
@@ -410,6 +411,7 @@ interface Props {
 export default function QuizGameMulti({ locale }: Props) {
   const t = translations[locale];
   const questions = questionsByLocale[locale];
+  const router = useRouter();
   
   const [gameState, setGameState] = useState<"ready" | "playing" | "result">("ready");
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -557,20 +559,20 @@ export default function QuizGameMulti({ locale }: Props) {
                     <div className="fixed inset-0 z-40" onClick={() => setShowLanguageMenu(false)} />
                     <div className="absolute right-0 mt-2 w-40 bg-dark-900 border border-dark-700 rounded-xl shadow-xl z-50 overflow-hidden">
                       {languageOptions.map((lang) => (
-                        <Link
+                        <button
                           key={lang.locale}
-                          href={getQuizPath(lang.locale)}
-                          className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-dark-800 transition-colors ${
+                          className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-dark-800 transition-colors w-full text-left ${
                             lang.locale === locale ? "bg-dark-800 text-white" : "text-dark-300"
                           }`}
                           onClick={() => {
                             document.cookie = `SLOX_LOCALE=${lang.locale}; path=/; max-age=31536000`;
                             setShowLanguageMenu(false);
+                            router.push(getQuizPath(lang.locale));
                           }}
                         >
                           <span>{lang.flag}</span>
                           <span>{lang.name}</span>
-                        </Link>
+                        </button>
                       ))}
                     </div>
                   </>

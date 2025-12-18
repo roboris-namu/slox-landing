@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
@@ -632,6 +633,7 @@ interface Props {
 
 export default function TypingMulti({ locale }: Props) {
   const t = translations[locale];
+  const router = useRouter();
   
   const [sentence, setSentence] = useState<string>("");
   const [input, setInput] = useState<string>("");
@@ -935,9 +937,12 @@ export default function TypingMulti({ locale }: Props) {
               {/* 언어 선택 */}
               <div className="hidden sm:flex items-center gap-1">
                 {(["ko", "en", "ja", "zh", "de", "fr", "es", "pt"] as Locale[]).map((l) => (
-                  <Link
+                  <button
                     key={l}
-                    href={l === "ko" ? "/typing" : `/${l}/typing`}
+                    onClick={() => {
+                      document.cookie = `SLOX_LOCALE=${l}; path=/; max-age=31536000`;
+                      router.push(l === "ko" ? "/typing" : `/${l}/typing`);
+                    }}
                     className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
                       locale === l
                         ? "bg-accent-purple text-white"
@@ -945,7 +950,7 @@ export default function TypingMulti({ locale }: Props) {
                     }`}
                   >
                     {l.toUpperCase()}
-                  </Link>
+                  </button>
                 ))}
               </div>
               {/* 모바일 언어 선택 */}
@@ -953,7 +958,8 @@ export default function TypingMulti({ locale }: Props) {
                 value={locale}
                 onChange={(e) => {
                   const newLocale = e.target.value as Locale;
-                  window.location.href = newLocale === "ko" ? "/typing" : `/${newLocale}/typing`;
+                  document.cookie = `SLOX_LOCALE=${newLocale}; path=/; max-age=31536000`;
+                  router.push(newLocale === "ko" ? "/typing" : `/${newLocale}/typing`);
                 }}
                 className="sm:hidden bg-dark-800 text-white text-xs px-2 py-1 rounded border border-dark-700"
               >

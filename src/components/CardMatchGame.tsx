@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
@@ -89,6 +90,7 @@ const GAME_SETTINGS = {
 };
 
 export default function CardMatchGame() {
+  const router = useRouter();
   const [state, setState] = useState<GameState>("waiting");
   const [cards, setCards] = useState<Card[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
@@ -650,20 +652,20 @@ export default function CardMatchGame() {
                     <div className="fixed inset-0 z-40" onClick={() => setShowLanguageMenu(false)} />
                     <div className="absolute right-0 mt-2 w-40 bg-dark-900 border border-dark-700 rounded-xl shadow-xl z-50 overflow-hidden">
                       {languageOptions.map((lang) => (
-                        <Link
+                        <button
                           key={lang.locale}
-                          href={lang.path}
-                          className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-dark-800 transition-colors ${
+                          className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-dark-800 transition-colors w-full text-left ${
                             lang.locale === "ko" ? "bg-dark-800 text-white" : "text-dark-300"
                           }`}
                           onClick={() => {
                             document.cookie = `SLOX_LOCALE=${lang.locale}; path=/; max-age=31536000`;
                             setShowLanguageMenu(false);
+                            router.push(lang.path);
                           }}
                         >
                           <span>{lang.flag}</span>
                           <span>{lang.name}</span>
-                        </Link>
+                        </button>
                       ))}
                     </div>
                   </>

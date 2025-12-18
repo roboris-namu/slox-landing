@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
@@ -503,6 +504,7 @@ interface CpsTestProps {
 }
 
 export default function CpsTest({ initialLang }: CpsTestProps) {
+  const router = useRouter();
   const [state, setState] = useState<GameState>("waiting");
   const [clicks, setClicks] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -829,20 +831,20 @@ export default function CpsTest({ initialLang }: CpsTestProps) {
                 {showLangMenu && (
                   <div className="absolute right-0 mt-2 w-40 bg-dark-800 border border-dark-700 rounded-lg shadow-xl overflow-hidden">
                     {(Object.keys(langFlags) as Language[]).map((l) => (
-                      <Link
+                      <button
                         key={l}
-                        href={langUrls[l]}
                         onClick={() => {
                           document.cookie = `SLOX_LOCALE=${l}; path=/; max-age=31536000`;
                           setShowLangMenu(false);
+                          router.push(langUrls[l]);
                         }}
-                        className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-dark-700 transition-colors ${
+                        className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-dark-700 transition-colors text-left ${
                           lang === l ? "bg-dark-700 text-white" : "text-dark-300"
                         }`}
                       >
                         <span>{langFlags[l]}</span>
                         <span>{langNames[l]}</span>
-                      </Link>
+                      </button>
                     ))}
                   </div>
                 )}
