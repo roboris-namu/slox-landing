@@ -51,9 +51,15 @@ const templateData: Record<string, SubCategory[]> = {
       name: "포트폴리오",
       emoji: "🖼️",
       templates: [
-        { code: "P10", name: "갤러리 스타일", desc: "작품 중심 레이아웃", preview: "🎨", demoUrl: "/template/P10", available: false },
-        { code: "P11", name: "그리드 모던", desc: "정돈된 그리드 뷰", preview: "📐", demoUrl: "/template/P11", available: false },
-        { code: "P12", name: "스토리텔링", desc: "스크롤 애니메이션", preview: "📖", demoUrl: "/template/P12", available: false },
+        { code: "P10", name: "갤러리 화이트", desc: "작품 중심 밝은 레이아웃", preview: "🖼️", demoUrl: "/template/P10", available: true },
+        { code: "P11", name: "갤러리 다크", desc: "작품 중심 어두운 레이아웃", preview: "🎨", demoUrl: "/template/P11", available: true },
+        { code: "P12", name: "그리드 모던", desc: "정돈된 그리드 뷰", preview: "📐", demoUrl: "/template/P12", available: true },
+        { code: "P13", name: "마소니 레이아웃", desc: "핀터레스트 스타일", preview: "🧱", demoUrl: "/template/P13", available: true },
+        { code: "P14", name: "풀스크린 슬라이드", desc: "전체화면 슬라이더", preview: "🖥️", demoUrl: "/template/P14", available: true },
+        { code: "P15", name: "스토리텔링", desc: "스크롤 애니메이션", preview: "📖", demoUrl: "/template/P15", available: true },
+        { code: "P16", name: "케이스 스터디", desc: "프로젝트별 상세 소개", preview: "📋", demoUrl: "/template/P16", available: true },
+        { code: "P17", name: "크리에이티브", desc: "창의적 비대칭 구성", preview: "✨", demoUrl: "/template/P17", available: true },
+        { code: "P18", name: "미니멀 갤러리", desc: "여백 중심 디자인", preview: "⬜", demoUrl: "/template/P18", available: true },
       ],
     },
     {
@@ -61,9 +67,9 @@ const templateData: Record<string, SubCategory[]> = {
       name: "이력서",
       emoji: "📄",
       templates: [
-        { code: "P13", name: "클래식 이력서", desc: "전통적인 구성", preview: "📋", demoUrl: "/template/P13", available: false },
-        { code: "P14", name: "크리에이티브 CV", desc: "창의적인 디자인", preview: "✨", demoUrl: "/template/P14", available: false },
-        { code: "P15", name: "심플 원페이지", desc: "한 페이지 완결", preview: "📃", demoUrl: "/template/P15", available: false },
+        { code: "P19", name: "클래식 이력서", desc: "전통적인 구성", preview: "📋", demoUrl: "/template/P19", available: false },
+        { code: "P20", name: "크리에이티브 CV", desc: "창의적인 디자인", preview: "✨", demoUrl: "/template/P20", available: false },
+        { code: "P21", name: "심플 원페이지", desc: "한 페이지 완결", preview: "📃", demoUrl: "/template/P21", available: false },
       ],
     },
     {
@@ -71,9 +77,9 @@ const templateData: Record<string, SubCategory[]> = {
       name: "링크트리형",
       emoji: "🔗",
       templates: [
-        { code: "P16", name: "심플 링크", desc: "깔끔한 링크 모음", preview: "🔗", demoUrl: "/template/P16", available: false },
-        { code: "P17", name: "아이콘 카드", desc: "아이콘 중심 구성", preview: "🃏", demoUrl: "/template/P17", available: false },
-        { code: "P18", name: "프로필 링크", desc: "프로필+링크 조합", preview: "👤", demoUrl: "/template/P18", available: false },
+        { code: "P22", name: "심플 링크", desc: "깔끔한 링크 모음", preview: "🔗", demoUrl: "/template/P22", available: false },
+        { code: "P23", name: "아이콘 카드", desc: "아이콘 중심 구성", preview: "🃏", demoUrl: "/template/P23", available: false },
+        { code: "P24", name: "프로필 링크", desc: "프로필+링크 조합", preview: "👤", demoUrl: "/template/P24", available: false },
       ],
     },
     {
@@ -81,9 +87,9 @@ const templateData: Record<string, SubCategory[]> = {
       name: "개발자 프로필",
       emoji: "💻",
       templates: [
-        { code: "P19", name: "GitHub 스타일", desc: "개발자 감성", preview: "🐙", demoUrl: "/template/P19", available: false },
-        { code: "P20", name: "터미널 테마", desc: "해커 감성 디자인", preview: "⌨️", demoUrl: "/template/P20", available: false },
-        { code: "P21", name: "테크 모던", desc: "기술 중심 레이아웃", preview: "🚀", demoUrl: "/template/P21", available: false },
+        { code: "P25", name: "GitHub 스타일", desc: "개발자 감성", preview: "🐙", demoUrl: "/template/P25", available: false },
+        { code: "P26", name: "터미널 테마", desc: "해커 감성 디자인", preview: "⌨️", demoUrl: "/template/P26", available: false },
+        { code: "P27", name: "테크 모던", desc: "기술 중심 레이아웃", preview: "🚀", demoUrl: "/template/P27", available: false },
       ],
     },
   ],
