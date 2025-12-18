@@ -162,7 +162,35 @@ interface LeaderboardEntry {
   time_seconds: number;
   created_at: string;
   grade?: string;
+  country?: string;
 }
+
+// 국가 옵션
+const COUNTRY_OPTIONS = [
+  { code: "KR", flag: "🇰🇷", name: "한국" },
+  { code: "US", flag: "🇺🇸", name: "미국" },
+  { code: "JP", flag: "🇯🇵", name: "일본" },
+  { code: "CN", flag: "🇨🇳", name: "중국" },
+  { code: "DE", flag: "🇩🇪", name: "독일" },
+  { code: "FR", flag: "🇫🇷", name: "프랑스" },
+  { code: "ES", flag: "🇪🇸", name: "스페인" },
+  { code: "BR", flag: "🇧🇷", name: "브라질" },
+  { code: "GB", flag: "🇬🇧", name: "영국" },
+  { code: "CA", flag: "🇨🇦", name: "캐나다" },
+  { code: "AU", flag: "🇦🇺", name: "호주" },
+  { code: "IN", flag: "🇮🇳", name: "인도" },
+  { code: "RU", flag: "🇷🇺", name: "러시아" },
+  { code: "IT", flag: "🇮🇹", name: "이탈리아" },
+  { code: "MX", flag: "🇲🇽", name: "멕시코" },
+  { code: "TH", flag: "🇹🇭", name: "태국" },
+  { code: "VN", flag: "🇻🇳", name: "베트남" },
+  { code: "ID", flag: "🇮🇩", name: "인도네시아" },
+  { code: "PH", flag: "🇵🇭", name: "필리핀" },
+  { code: "MY", flag: "🇲🇾", name: "말레이시아" },
+  { code: "SG", flag: "🇸🇬", name: "싱가포르" },
+  { code: "NZ", flag: "🇳🇿", name: "뉴질랜드" },
+  { code: "OTHER", flag: "🌍", name: "기타" },
+];
 
 const QUESTION_TIME = 15;
 const QUESTIONS_PER_GAME = 10;
@@ -199,6 +227,7 @@ export default function QuizGame() {
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("KR");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -316,6 +345,7 @@ export default function QuizGame() {
         correct_count: correctCount,
         time_seconds: totalTime,
         grade: gradeInfo.grade,
+        country: selectedCountry,
       });
       if (!error) { setHasSubmitted(true); setShowNicknameModal(false); setShowRankingPrompt(false); fetchLeaderboard(); }
     } catch (error) { console.error("Failed to submit score:", error); }
@@ -672,7 +702,10 @@ export default function QuizGame() {
                   <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
                     <div className="flex-1 min-w-0 text-left">
-                      <p className="text-white font-medium truncate">{entry.nickname}</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
+                        <p className="text-white font-medium truncate">{entry.nickname}</p>
+                      </div>
                       <div className="flex items-center gap-2 text-xs text-dark-400">
                         <span className={entry.grade === "천재" ? "text-purple-400" : entry.grade === "박학다식" ? "text-blue-400" : entry.grade === "상식왕" ? "text-yellow-400" : "text-dark-400"}>{entry.grade || "평범"}</span>
                         <span>•</span>
@@ -763,6 +796,12 @@ export default function QuizGame() {
                   <p className="text-dark-400 text-sm">{getFinalScore().toLocaleString()}점 ({correctCount}/10)</p>
                 </div>
                 <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder="닉네임..." className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+                <div className="mb-4">
+                  <label className="block text-dark-400 text-sm mb-2">국가 선택</label>
+                  <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white">
+                    {COUNTRY_OPTIONS.map((country) => (<option key={country.code} value={country.code}>{country.flag} {country.name}</option>))}
+                  </select>
+                </div>
                 <div className="flex gap-3">
                   <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 text-white rounded-xl">취소</button>
                   <button onClick={submitScore} disabled={!nickname.trim() || isSubmitting} className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl disabled:opacity-50">{isSubmitting ? "..." : "등록!"}</button>

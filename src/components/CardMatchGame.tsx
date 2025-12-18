@@ -28,7 +28,35 @@ interface CardMatchLeaderboardEntry {
   grade?: string;
   percentile?: number;
   score?: number;
+  country?: string;
 }
+
+// 국가 옵션
+const COUNTRY_OPTIONS = [
+  { code: "KR", flag: "🇰🇷", name: "한국" },
+  { code: "US", flag: "🇺🇸", name: "미국" },
+  { code: "JP", flag: "🇯🇵", name: "일본" },
+  { code: "CN", flag: "🇨🇳", name: "중국" },
+  { code: "DE", flag: "🇩🇪", name: "독일" },
+  { code: "FR", flag: "🇫🇷", name: "프랑스" },
+  { code: "ES", flag: "🇪🇸", name: "스페인" },
+  { code: "BR", flag: "🇧🇷", name: "브라질" },
+  { code: "GB", flag: "🇬🇧", name: "영국" },
+  { code: "CA", flag: "🇨🇦", name: "캐나다" },
+  { code: "AU", flag: "🇦🇺", name: "호주" },
+  { code: "IN", flag: "🇮🇳", name: "인도" },
+  { code: "RU", flag: "🇷🇺", name: "러시아" },
+  { code: "IT", flag: "🇮🇹", name: "이탈리아" },
+  { code: "MX", flag: "🇲🇽", name: "멕시코" },
+  { code: "TH", flag: "🇹🇭", name: "태국" },
+  { code: "VN", flag: "🇻🇳", name: "베트남" },
+  { code: "ID", flag: "🇮🇩", name: "인도네시아" },
+  { code: "PH", flag: "🇵🇭", name: "필리핀" },
+  { code: "MY", flag: "🇲🇾", name: "말레이시아" },
+  { code: "SG", flag: "🇸🇬", name: "싱가포르" },
+  { code: "NZ", flag: "🇳🇿", name: "뉴질랜드" },
+  { code: "OTHER", flag: "🌍", name: "기타" },
+];
 
 type GameState = "waiting" | "memorize" | "countdown" | "playing" | "result";
 
@@ -90,6 +118,7 @@ export default function CardMatchGame() {
   const [totalCount, setTotalCount] = useState(0);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("KR");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
@@ -125,6 +154,7 @@ export default function CardMatchGame() {
         score: currentScore,
         grade: gradeInfo.grade,
         percentile: percentile,
+        country: selectedCountry,
       });
       if (error) throw error;
       setHasSubmittedScore(true);
@@ -999,6 +1029,7 @@ export default function CardMatchGame() {
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
                     <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2">
+                        <span className="text-lg">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
                         <p className="text-white font-medium truncate">{entry.nickname}</p>
                         <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
                       </div>
@@ -1115,6 +1146,12 @@ export default function CardMatchGame() {
               <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full">
                 <div className="text-center mb-6"><div className="text-5xl mb-3">{getGrade().emoji}</div><h3 className="text-white text-xl font-bold">🏆 랭킹 등록</h3><p className="text-dark-400 text-sm">{getFinalScore()}점 ({moves}회)</p></div>
                 <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder="닉네임..." className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+                <div className="mb-4">
+                  <label className="block text-dark-400 text-sm mb-2">국가 선택</label>
+                  <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white">
+                    {COUNTRY_OPTIONS.map((country) => (<option key={country.code} value={country.code}>{country.flag} {country.name}</option>))}
+                  </select>
+                </div>
                 <div className="flex gap-3">
                   <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 text-white rounded-xl">취소</button>
                   <button onClick={submitScore} disabled={!nickname.trim() || isSubmitting} className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl disabled:opacity-50">{isSubmitting ? "..." : "등록!"}</button>
