@@ -2346,7 +2346,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-2 text-center">{t.tierTable}</h3>
             <p className="text-accent-cyan text-xs text-center mb-6">
-              📱 모바일 / 🖥️ PC 동일 기준
+              {t.sameTierNote}
             </p>
             <div className="flex flex-col items-center gap-2">
               <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
@@ -2383,7 +2383,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
               </div>
             </div>
             <p className="text-dark-500 text-xs mt-6 text-center">
-              💡 평균 반응속도는 약 250~300ms (골드~실버) 입니다
+              {t.desktopNote}
             </p>
           </div>
 

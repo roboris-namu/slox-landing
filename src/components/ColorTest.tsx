@@ -39,6 +39,7 @@ const translations = {
     tryAgain: "다시 도전",
     share: "📤 공유하기",
     tierTable: "👁️ 색각 등급표",
+    tierNote: "💡 레벨이 높을수록 색상 차이가 미세해집니다",
     otherTools: "🔗 다른 도구",
     reactionTest: "⚡ 반응속도 테스트",
     memoryTest: "🧠 숫자 기억 게임",
@@ -88,6 +89,7 @@ const translations = {
     tryAgain: "Try Again",
     share: "📤 Share",
     tierTable: "👁️ Color Vision Tiers",
+    tierNote: "💡 Higher levels = more subtle color differences",
     otherTools: "🔗 Other Tools",
     reactionTest: "⚡ Reaction Test",
     memoryTest: "🧠 Memory Game",
@@ -137,6 +139,7 @@ const translations = {
     tryAgain: "再挑戦",
     share: "📤 共有",
     tierTable: "👁️ 色覚ランク表",
+    tierNote: "💡 レベルが高いほど色の差が微細になります",
     otherTools: "🔗 他のツール",
     reactionTest: "⚡ 反応速度テスト",
     memoryTest: "🧠 数字記憶ゲーム",
@@ -186,6 +189,7 @@ const translations = {
     tryAgain: "再试一次",
     share: "📤 分享",
     tierTable: "👁️ 色觉等级表",
+    tierNote: "💡 等级越高，颜色差异越细微",
     otherTools: "🔗 其他工具",
     reactionTest: "⚡ 反应速度测试",
     memoryTest: "🧠 数字记忆游戏",
@@ -235,6 +239,7 @@ const translations = {
     tryAgain: "Intentar de Nuevo",
     share: "📤 Compartir",
     tierTable: "👁️ Tabla de Rangos",
+    tierNote: "💡 Niveles más altos = diferencias de color más sutiles",
     otherTools: "🔗 Otras Herramientas",
     reactionTest: "⚡ Test de Reacción",
     memoryTest: "🧠 Juego de Memoria",
@@ -284,6 +289,7 @@ const translations = {
     tryAgain: "Tentar Novamente",
     share: "📤 Compartilhar",
     tierTable: "👁️ Tabela de Ranks",
+    tierNote: "💡 Níveis mais altos = diferenças de cor mais sutis",
     otherTools: "🔗 Outras Ferramentas",
     reactionTest: "⚡ Teste de Reação",
     memoryTest: "🧠 Jogo de Memória",
@@ -333,6 +339,7 @@ const translations = {
     tryAgain: "Nochmal Versuchen",
     share: "📤 Teilen",
     tierTable: "👁️ Farbsehen Rang-Tabelle",
+    tierNote: "💡 Höhere Level = subtilere Farbunterschiede",
     otherTools: "🔗 Andere Tools",
     reactionTest: "⚡ Reaktionstest",
     memoryTest: "🧠 Gedächtnisspiel",
@@ -382,6 +389,7 @@ const translations = {
     tryAgain: "Réessayer",
     share: "📤 Partager",
     tierTable: "👁️ Tableau des Rangs",
+    tierNote: "💡 Niveaux plus élevés = différences de couleur plus subtiles",
     otherTools: "🔗 Autres Outils",
     reactionTest: "⚡ Test de Réaction",
     memoryTest: "🧠 Jeu de Mémoire",
@@ -1014,7 +1022,7 @@ export default function ColorTest({ locale }: ColorTestProps) {
           {/* 등급 안내 (난이도 상향으로 기준 조정) */}
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-2 text-center">{t.tierTable}</h3>
-            <p className="text-dark-400 text-xs text-center mb-6">💡 레벨이 높을수록 색상 차이가 미세해집니다 (난이도 상향!)</p>
+            <p className="text-dark-400 text-xs text-center mb-6">{t.tierNote}</p>
             <div className="flex flex-col items-center gap-2">
               <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
                 <span className="text-cyan-300 text-sm font-bold">👑 {t.challenger}</span>

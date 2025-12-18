@@ -72,6 +72,7 @@ const translations = {
     tryAgain: "다시 도전",
     share: "📤 공유하기",
     tierTable: "🎮 에임 등급표",
+    tierNote: "💡 점수 = 명중수 × 정확도 × 속도보너스",
     otherTools: "🔗 다른 도구",
     reactionTest: "⚡ 반응속도 테스트",
     cpsTest: "🖱️ CPS 테스트",
@@ -122,6 +123,7 @@ const translations = {
     tryAgain: "Try Again",
     share: "📤 Share",
     tierTable: "🎮 Aim Tier Chart",
+    tierNote: "💡 Score = Hits × Accuracy × Speed Bonus",
     otherTools: "🔗 Other Tools",
     reactionTest: "⚡ Reaction Test",
     cpsTest: "🖱️ CPS Test",
@@ -172,6 +174,7 @@ const translations = {
     tryAgain: "再挑戦",
     share: "📤 共有",
     tierTable: "🎮 エイムランク表",
+    tierNote: "💡 スコア = 命中数 × 精度 × 速度ボーナス",
     otherTools: "🔗 他のツール",
     reactionTest: "⚡ 反応速度テスト",
     cpsTest: "🖱️ CPSテスト",
@@ -222,6 +225,7 @@ const translations = {
     tryAgain: "再试一次",
     share: "📤 分享",
     tierTable: "🎮 瞄准等级表",
+    tierNote: "💡 分数 = 命中数 × 精准度 × 速度加成",
     otherTools: "🔗 其他工具",
     reactionTest: "⚡ 反应速度测试",
     cpsTest: "🖱️ CPS测试",
@@ -272,6 +276,7 @@ const translations = {
     tryAgain: "Intentar de Nuevo",
     share: "📤 Compartir",
     tierTable: "🎮 Tabla de Rangos",
+    tierNote: "💡 Puntos = Aciertos × Precisión × Bonus de velocidad",
     otherTools: "🔗 Otras Herramientas",
     reactionTest: "⚡ Test de Reacción",
     cpsTest: "🖱️ Test CPS",
@@ -322,6 +327,7 @@ const translations = {
     tryAgain: "Tentar Novamente",
     share: "📤 Compartilhar",
     tierTable: "🎮 Tabela de Ranks",
+    tierNote: "💡 Pontos = Acertos × Precisão × Bônus de velocidade",
     otherTools: "🔗 Outras Ferramentas",
     reactionTest: "⚡ Teste de Reação",
     cpsTest: "🖱️ Teste CPS",
@@ -372,6 +378,7 @@ const translations = {
     tryAgain: "Nochmal Versuchen",
     share: "📤 Teilen",
     tierTable: "🎮 Aim Rang-Tabelle",
+    tierNote: "💡 Punkte = Treffer × Genauigkeit × Geschwindigkeitsbonus",
     otherTools: "🔗 Andere Tools",
     reactionTest: "⚡ Reaktionstest",
     cpsTest: "🖱️ CPS Test",
@@ -422,6 +429,7 @@ const translations = {
     tryAgain: "Réessayer",
     share: "📤 Partager",
     tierTable: "🎮 Tableau des Rangs",
+    tierNote: "💡 Score = Touches × Précision × Bonus de vitesse",
     otherTools: "🔗 Autres Outils",
     reactionTest: "⚡ Test de Réaction",
     cpsTest: "🖱️ Test CPS",
@@ -1458,7 +1466,7 @@ export default function AimTest({ locale }: AimTestProps) {
           {/* 등급 안내 */}
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-2 text-center">{t.tierTable}</h3>
-            <p className="text-dark-400 text-xs text-center mb-6">💡 점수 = 명중수 × 정확도 × 속도보너스</p>
+            <p className="text-dark-400 text-xs text-center mb-6">{t.tierNote}</p>
             <div className="flex flex-col items-center gap-2">
               <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
                 <span className="text-cyan-300 text-sm font-bold">👑 {t.challenger}</span>

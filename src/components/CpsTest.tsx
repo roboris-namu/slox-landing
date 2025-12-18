@@ -65,6 +65,7 @@ const translations = {
     share: "📤 공유하기",
     reset: "🔄 초기화",
     tierTable: "🎮 CPS 등급표",
+    tierNote: "💡 CPS = 초당 클릭 횟수",
     otherTools: "🔗 다른 도구",
     reactionTest: "⚡ 반응속도 테스트",
     typingTest: "⌨️ 타자 속도 테스트",
@@ -115,6 +116,7 @@ const translations = {
     share: "📤 Share",
     reset: "🔄 Reset",
     tierTable: "🎮 CPS Tier Chart",
+    tierNote: "💡 CPS = Clicks Per Second",
     otherTools: "🔗 Other Tools",
     reactionTest: "⚡ Reaction Speed Test",
     typingTest: "⌨️ Typing Speed Test",
@@ -165,6 +167,7 @@ const translations = {
     share: "📤 共有",
     reset: "🔄 リセット",
     tierTable: "🎮 CPSランク表",
+    tierNote: "💡 CPS = 1秒あたりのクリック数",
     otherTools: "🔗 他のツール",
     reactionTest: "⚡ 反応速度テスト",
     typingTest: "⌨️ タイピングテスト",
@@ -215,6 +218,7 @@ const translations = {
     share: "📤 分享",
     reset: "🔄 重置",
     tierTable: "🎮 CPS等级表",
+    tierNote: "💡 CPS = 每秒点击次数",
     otherTools: "🔗 其他工具",
     reactionTest: "⚡ 反应速度测试",
     typingTest: "⌨️ 打字速度测试",
@@ -265,6 +269,7 @@ const translations = {
     share: "📤 Compartir",
     reset: "🔄 Reiniciar",
     tierTable: "🎮 Tabla de Rangos CPS",
+    tierNote: "💡 CPS = Clics por segundo",
     otherTools: "🔗 Otras Herramientas",
     reactionTest: "⚡ Test de Reacción",
     typingTest: "⌨️ Test de Escritura",
@@ -315,6 +320,7 @@ const translations = {
     share: "📤 Compartilhar",
     reset: "🔄 Reiniciar",
     tierTable: "🎮 Tabela de Ranks CPS",
+    tierNote: "💡 CPS = Cliques por segundo",
     otherTools: "🔗 Outras Ferramentas",
     reactionTest: "⚡ Teste de Reação",
     typingTest: "⌨️ Teste de Digitação",
@@ -365,6 +371,7 @@ const translations = {
     share: "📤 Teilen",
     reset: "🔄 Zurücksetzen",
     tierTable: "🎮 CPS Rang-Tabelle",
+    tierNote: "💡 CPS = Klicks pro Sekunde",
     otherTools: "🔗 Andere Tools",
     reactionTest: "⚡ Reaktionstest",
     typingTest: "⌨️ Tippgeschwindigkeit",
@@ -415,6 +422,7 @@ const translations = {
     share: "📤 Partager",
     reset: "🔄 Réinitialiser",
     tierTable: "🎮 Tableau des Rangs CPS",
+    tierNote: "💡 CPS = Clics par seconde",
     otherTools: "🔗 Autres Outils",
     reactionTest: "⚡ Test de Réaction",
     typingTest: "⌨️ Test de Frappe",
@@ -1230,7 +1238,7 @@ export default function CpsTest({ locale }: CpsTestProps) {
           {/* 등급 안내 */}
           <div className="glass-card p-6 rounded-xl mb-8">
             <h3 className="text-white font-medium mb-2 text-center">{t.tierTable}</h3>
-            <p className="text-dark-400 text-xs text-center mb-6">💡 CPS = 초당 클릭 횟수</p>
+            <p className="text-dark-400 text-xs text-center mb-6">{t.tierNote}</p>
             <div className="flex flex-col items-center gap-2">
               <div className="w-32 p-2 bg-gradient-to-r from-cyan-500/20 to-cyan-400/20 rounded-lg text-center border border-cyan-400/50">
                 <span className="text-cyan-300 text-sm font-bold">👑 {t.challenger}</span>
