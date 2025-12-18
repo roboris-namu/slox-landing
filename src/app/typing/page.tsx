@@ -30,6 +30,13 @@ interface TypingLeaderboardEntry {
   country?: string;
 }
 
+// 등급 번역 (영어→한국어)
+const gradeTranslations: Record<string, string> = {
+  "Challenger": "챌린저", "Master": "마스터", "Diamond": "다이아몬드", "Platinum": "플래티넘",
+  "Gold": "골드", "Silver": "실버", "Bronze": "브론즈", "Iron": "아이언"
+};
+const translateGrade = (grade: string): string => gradeTranslations[grade] || grade;
+
 // 국가 옵션
 const COUNTRY_OPTIONS = [
   { code: "KR", flag: "🇰🇷", name: "한국" },
@@ -601,15 +608,15 @@ export default function TypingTest() {
                       </div>
                       <div className="flex items-center gap-2 text-xs text-dark-400">
                         <span className={
-                          entry.grade === "챌린저" ? "text-cyan-300" :
-                          entry.grade === "마스터" ? "text-purple-400" :
-                          entry.grade === "다이아몬드" ? "text-blue-400" :
-                          entry.grade === "플래티넘" ? "text-teal-400" :
-                          entry.grade === "골드" ? "text-yellow-400" :
-                          entry.grade === "실버" ? "text-gray-300" :
-                          entry.grade === "브론즈" ? "text-orange-400" :
+                          ["Challenger", "챌린저"].includes(entry.grade || "") ? "text-cyan-300" :
+                          ["Master", "마스터"].includes(entry.grade || "") ? "text-purple-400" :
+                          ["Diamond", "다이아몬드"].includes(entry.grade || "") ? "text-blue-400" :
+                          ["Platinum", "플래티넘"].includes(entry.grade || "") ? "text-teal-400" :
+                          ["Gold", "골드"].includes(entry.grade || "") ? "text-yellow-400" :
+                          ["Silver", "실버"].includes(entry.grade || "") ? "text-gray-300" :
+                          ["Bronze", "브론즈"].includes(entry.grade || "") ? "text-orange-400" :
                           "text-stone-400"
-                        }>{entry.grade || getGrade(entry.wpm).grade}</span>
+                        }>{translateGrade(entry.grade || getGrade(entry.wpm).grade)}</span>
                         <span>•</span>
                         <span>{new Date(entry.created_at).toLocaleDateString()}</span>
                       </div>

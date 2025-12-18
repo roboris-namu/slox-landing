@@ -766,6 +766,59 @@ const COUNTRY_OPTIONS = [
   { code: "NZ", flag: "🇳🇿", name: { ko: "뉴질랜드", en: "New Zealand", ja: "ニュージーランド", zh: "新西兰", de: "Neuseeland", fr: "Nouvelle-Zélande", es: "Nueva Zelanda", pt: "Nova Zelândia" } },
 ];
 
+// 등급 번역 (양방향)
+const gradeTranslations: Record<Language, Record<string, string>> = {
+  ko: {
+    "Challenger": "챌린저", "Master": "마스터", "Diamond": "다이아몬드", "Platinum": "플래티넘",
+    "Gold": "골드", "Silver": "실버", "Bronze": "브론즈", "Iron": "아이언",
+  },
+  en: {
+    "챌린저": "Challenger", "마스터": "Master", "다이아몬드": "Diamond", "플래티넘": "Platinum",
+    "골드": "Gold", "실버": "Silver", "브론즈": "Bronze", "아이언": "Iron",
+  },
+  ja: {
+    "Challenger": "チャレンジャー", "Master": "マスター", "Diamond": "ダイヤモンド", "Platinum": "プラチナ",
+    "Gold": "ゴールド", "Silver": "シルバー", "Bronze": "ブロンズ", "Iron": "アイアン",
+    "챌린저": "チャレンジャー", "마스터": "マスター", "다이아몬드": "ダイヤモンド", "플래티넘": "プラチナ",
+    "골드": "ゴールド", "실버": "シルバー", "브론즈": "ブロンズ", "아이언": "アイアン",
+  },
+  zh: {
+    "Challenger": "挑战者", "Master": "大师", "Diamond": "钻石", "Platinum": "铂金",
+    "Gold": "黄金", "Silver": "白银", "Bronze": "青铜", "Iron": "黑铁",
+    "챌린저": "挑战者", "마스터": "大师", "다이아몬드": "钻石", "플래티넘": "铂金",
+    "골드": "黄金", "실버": "白银", "브론즈": "青铜", "아이언": "黑铁",
+  },
+  de: {
+    "Challenger": "Challenger", "Master": "Meister", "Diamond": "Diamant", "Platinum": "Platin",
+    "Gold": "Gold", "Silver": "Silber", "Bronze": "Bronze", "Iron": "Eisen",
+    "챌린저": "Challenger", "마스터": "Meister", "다이아몬드": "Diamant", "플래티넘": "Platin",
+    "골드": "Gold", "실버": "Silber", "브론즈": "Bronze", "아이언": "Eisen",
+  },
+  fr: {
+    "Challenger": "Challenger", "Master": "Maître", "Diamond": "Diamant", "Platinum": "Platine",
+    "Gold": "Or", "Silver": "Argent", "Bronze": "Bronze", "Iron": "Fer",
+    "챌린저": "Challenger", "마스터": "Maître", "다이아몬드": "Diamant", "플래티넘": "Platine",
+    "골드": "Or", "실버": "Argent", "브론즈": "Bronze", "아이언": "Fer",
+  },
+  es: {
+    "Challenger": "Challenger", "Master": "Maestro", "Diamond": "Diamante", "Platinum": "Platino",
+    "Gold": "Oro", "Silver": "Plata", "Bronze": "Bronce", "Iron": "Hierro",
+    "챌린저": "Challenger", "마스터": "Maestro", "다이아몬드": "Diamante", "플래티넘": "Platino",
+    "골드": "Oro", "실버": "Plata", "브론즈": "Bronce", "아이언": "Hierro",
+  },
+  pt: {
+    "Challenger": "Challenger", "Master": "Mestre", "Diamond": "Diamante", "Platinum": "Platina",
+    "Gold": "Ouro", "Silver": "Prata", "Bronze": "Bronze", "Iron": "Ferro",
+    "챌린저": "Challenger", "마스터": "Mestre", "다이아몬드": "Diamante", "플래티넘": "Platina",
+    "골드": "Ouro", "실버": "Prata", "브론즈": "Bronze", "아이언": "Ferro",
+  },
+};
+
+// 등급 번역 함수
+const translateGrade = (grade: string, lang: Language): string => {
+  return gradeTranslations[lang]?.[grade] || grade;
+};
+
 // locale별 기본 국가 코드
 const DEFAULT_COUNTRY: Record<Language, string> = {
   ko: "KR", en: "US", ja: "JP", zh: "CN", de: "DE", fr: "FR", es: "ES", pt: "BR"
@@ -1882,12 +1935,12 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                       </div>
                       <div className="flex items-center gap-2 text-xs text-dark-400">
                         <span className={
-                          entry.grade === t.challenger ? "text-cyan-300" :
-                          entry.grade === t.master ? "text-purple-400" :
-                          entry.grade === t.diamond ? "text-blue-400" :
-                          entry.grade === t.platinum ? "text-teal-400" :
+                          entry.grade === t.challenger || entry.grade === "Challenger" || entry.grade === "챌린저" ? "text-cyan-300" :
+                          entry.grade === t.master || entry.grade === "Master" || entry.grade === "마스터" ? "text-purple-400" :
+                          entry.grade === t.diamond || entry.grade === "Diamond" || entry.grade === "다이아몬드" ? "text-blue-400" :
+                          entry.grade === t.platinum || entry.grade === "Platinum" || entry.grade === "플래티넘" ? "text-teal-400" :
                           "text-yellow-400"
-                        }>{entry.grade}</span>
+                        }>{translateGrade(entry.grade, lang)}</span>
                         <span>•</span>
                         <span>{new Date(entry.created_at).toLocaleDateString()}</span>
                       </div>
