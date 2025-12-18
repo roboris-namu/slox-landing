@@ -21,7 +21,7 @@ export default function JapaneseHome() {
       <Navigation />
       <MainBanner locale="ja" />
       <HallOfFameCarousel locale="ja" />
-      <CategoryQuickLinks />
+      {/* <CategoryQuickLinks /> */}
       <FreeToolsSection />
       <Footer />
     </main>
@@ -65,77 +65,7 @@ function Navigation() {
 }
 
 
-function CategoryQuickLinks() {
-  const categories = [
-    {
-      name: "🎮 ゲーム",
-      count: 10,
-      tools: [
-        { name: "反応速度テスト", href: "/ja/reaction", badge: "🎁" },
-        { name: "IQテスト", href: "/ja/iq", badge: "NEW" },
-        { name: "常識クイズ", href: "/ja/quiz", badge: "NEW" },
-        { name: "数独", href: "/ja/sudoku", badge: "NEW" },
-        { name: "色探しゲーム", href: "/ja/color" },
-        { name: "CPSテスト", href: "/ja/cps" },
-        { name: "記憶力テスト", href: "/ja/memory" },
-        { name: "エイムテスト", href: "/ja/aim" },
-      ],
-    },
-    {
-      name: "🧮 計算機",
-      count: 6,
-      tools: [
-        { name: "BMI計算機", href: "/ja/bmi" },
-        { name: "パーセント", href: "/ja/percent" },
-        { name: "D-Day", href: "/ja/dday" },
-        { name: "年齢計算", href: "/ja/age" },
-      ],
-    },
-    {
-      name: "🔧 生成器",
-      count: 4,
-      tools: [
-        { name: "QRコード", href: "/ja/qr" },
-        { name: "パスワード", href: "/ja/password" },
-        { name: "ランダム", href: "/ja/random" },
-        { name: "文字数カウント", href: "/ja/character-count" },
-      ],
-    },
-  ];
-
-  return (
-    <section className="py-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-center gap-2 md:gap-4 flex-wrap">
-          {categories.map((category) => (
-            <div key={category.name} className="relative group">
-              <button className="px-4 py-3 bg-dark-800/50 hover:bg-dark-700/50 border border-dark-700 hover:border-dark-600 rounded-xl transition-all flex items-center gap-2">
-                <span className="font-medium text-white">{category.name}</span>
-                <span className="text-xs text-dark-400 bg-dark-700/50 px-2 py-0.5 rounded-full">{category.count}</span>
-              </button>
-              <div className="absolute left-0 top-full mt-2 w-56 bg-dark-900/95 backdrop-blur-xl rounded-xl border border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-40">
-                {category.tools.map((tool) => (
-                  <Link
-                    key={tool.name}
-                    href={tool.href}
-                    className="flex items-center justify-between px-4 py-2.5 text-sm text-dark-300 hover:text-white hover:bg-white/5 transition-colors first:rounded-t-xl last:rounded-b-xl"
-                  >
-                    <span>{tool.name}</span>
-                    {tool.badge && (
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded ${tool.badge === '🎁' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-cyan-500/20 text-cyan-400'}`}>
-                        {tool.badge}
-                      </span>
-                    )}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
+/* CategoryQuickLinks 임시 숨김 */
 
 function FreeToolsSection() {
   const tools = [
