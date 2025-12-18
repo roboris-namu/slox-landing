@@ -168,7 +168,7 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     rows={5}
-                    placeholder="프로젝트에 대해 자세히 알려주세요. 예산, 일정, 참고 사이트 등을 알려주시면 더 정확한 상담이 가능합니다."
+                    placeholder="예시) P03 템플릿 주문합니다.&#10;&#10;• 이름: 홍길동&#10;• 직업/소속: 프리랜서 개발자&#10;• 한 줄 소개: 10년차 풀스택 개발자입니다&#10;• SNS/포트폴리오 링크: github.com/hong&#10;• 기타 요청사항: 프로필 사진 첨부 예정"
                     className="w-full px-5 py-4 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all resize-none text-base"
                   />
                 </div>
