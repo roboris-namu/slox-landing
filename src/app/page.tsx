@@ -3,8 +3,7 @@ import FreeTools from "@/components/FreeTools";
 import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 import MainBanner from "@/components/MainBanner";
 import CategoryQuickLinks from "@/components/CategoryQuickLinks";
-import Services from "@/components/Services";
-import Pricing from "@/components/Pricing";
+import TemplateService from "@/components/TemplateService";
 import Portfolio from "@/components/Portfolio";
 import Contact from "@/components/Contact";
 import MobileToolsButton from "@/components/MobileToolsButton";
@@ -27,8 +26,7 @@ export default function Home() {
       <HallOfFameCarousel />
       <FreeTools />
       <Hero />
-      <Services />
-      <Pricing />
+      <TemplateService />
       <Portfolio />
       <Contact />
       <Footer />
