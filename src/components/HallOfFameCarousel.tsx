@@ -305,18 +305,33 @@ const gradeColors: Record<string, string> = {
   "초보자": "text-orange-400",
 };
 
-// 등급 번역 (한국어 → 다국어)
+// 등급 번역 (양방향: 한국어 ↔ 다국어)
 const gradeTranslations: Record<string, Record<string, string>> = {
-  ko: {},
+  ko: {
+    // 영어 → 한국어 역번역
+    "Challenger": "챌린저", "Master": "마스터", "Diamond": "다이아몬드", "Platinum": "플래티넘",
+    "Gold": "골드", "Silver": "실버", "Bronze": "브론즈", "Iron": "아이언",
+    "Genius": "천재", "Scholar": "박학다식", "Expert": "상식왕", "Average": "평범",
+    "Needs Work": "노력필요", "Beginner": "초보자", "Gifted": "수재", "Excellent": "우수",
+    "Legend": "전설", "Skilled": "숙련자", "Intermediate": "중급자",
+    // 일본어 → 한국어
+    "チャレンジャー": "챌린저", "マスター": "마스터", "ダイヤモンド": "다이아몬드", "プラチナ": "플래티넘",
+    "ゴールド": "골드", "シルバー": "실버", "ブロンズ": "브론즈", "アイアン": "아이언",
+    // 중국어 → 한국어
+    "挑战者": "챌린저", "大师": "마스터", "钻石": "다이아몬드", "铂金": "플래티넘",
+    "黄金": "골드", "白银": "실버", "青铜": "브론즈", "黑铁": "아이언",
+  },
   en: {
     "챌린저": "Challenger", "마스터": "Master", "다이아몬드": "Diamond", "플래티넘": "Platinum",
     "골드": "Gold", "실버": "Silver", "브론즈": "Bronze", "아이언": "Iron",
     "천재": "Genius", "박학다식": "Scholar", "상식왕": "Expert", "평범": "Average",
     "노력필요": "Needs Work", "공부하자": "Beginner", "수재": "Gifted", "우수": "Excellent",
-    "평균": "Average", 
-    // 스도쿠 등급 (마스터는 위에서 이미 정의됨)
-    "전설": "Legend", "전문가": "Expert", "숙련자": "Skilled",
+    "평균": "Average", "전설": "Legend", "전문가": "Expert", "숙련자": "Skilled",
     "중급자": "Intermediate", "초보자": "Beginner",
+    // 일본어 → 영어
+    "チャレンジャー": "Challenger", "マスター": "Master", "ダイヤモンド": "Diamond", "プラチナ": "Platinum",
+    // 중국어 → 영어
+    "挑战者": "Challenger", "大师": "Master", "钻石": "Diamond", "铂金": "Platinum",
   },
   ja: {
     "챌린저": "チャレンジャー", "마스터": "マスター", "다이아몬드": "ダイヤモンド", "플래티넘": "プラチナ",
@@ -325,6 +340,10 @@ const gradeTranslations: Record<string, Record<string, string>> = {
     "노력필요": "努力必要", "공부하자": "初心者", "수재": "秀才", "우수": "優秀",
     "평균": "平均", "전설": "伝説", "전문가": "エキスパート", "숙련자": "熟練者",
     "중급자": "中級者", "초보자": "初心者",
+    // 영어 → 일본어
+    "Challenger": "チャレンジャー", "Master": "マスター", "Diamond": "ダイヤモンド", "Platinum": "プラチナ",
+    "Gold": "ゴールド", "Silver": "シルバー", "Bronze": "ブロンズ", "Iron": "アイアン",
+    "Legend": "伝説", "Expert": "エキスパート", "Skilled": "熟練者", "Intermediate": "中級者", "Beginner": "初心者",
   },
   zh: {
     "챌린저": "挑战者", "마스터": "大师", "다이아몬드": "钻石", "플래티넘": "铂金",
@@ -333,6 +352,10 @@ const gradeTranslations: Record<string, Record<string, string>> = {
     "노력필요": "需努力", "공부하자": "初学者", "수재": "英才", "우수": "优秀",
     "평균": "平均", "전설": "传说", "전문가": "专家", "숙련자": "熟练者",
     "중급자": "中级者", "초보자": "初学者",
+    // 영어 → 중국어
+    "Challenger": "挑战者", "Master": "大师", "Diamond": "钻石", "Platinum": "铂金",
+    "Gold": "黄金", "Silver": "白银", "Bronze": "青铜", "Iron": "黑铁",
+    "Legend": "传说", "Expert": "专家", "Skilled": "熟练者", "Intermediate": "中级者", "Beginner": "初学者",
   },
   de: {
     "챌린저": "Challenger", "마스터": "Meister", "다이아몬드": "Diamant", "플래티넘": "Platin",
@@ -341,6 +364,10 @@ const gradeTranslations: Record<string, Record<string, string>> = {
     "노력필요": "Übung nötig", "공부하자": "Anfänger", "수재": "Begabt", "우수": "Exzellent",
     "평균": "Durchschnitt", "전설": "Legende", "전문가": "Experte", "숙련자": "Geübt",
     "중급자": "Mittelstufe", "초보자": "Anfänger",
+    // 영어 → 독일어
+    "Challenger": "Challenger", "Master": "Meister", "Diamond": "Diamant", "Platinum": "Platin",
+    "Gold": "Gold", "Silver": "Silber", "Bronze": "Bronze", "Iron": "Eisen",
+    "Legend": "Legende", "Expert": "Experte", "Skilled": "Geübt", "Intermediate": "Mittelstufe", "Beginner": "Anfänger",
   },
   fr: {
     "챌린저": "Challenger", "마스터": "Maître", "다이아몬드": "Diamant", "플래티넘": "Platine",
@@ -349,6 +376,10 @@ const gradeTranslations: Record<string, Record<string, string>> = {
     "노력필요": "À améliorer", "공부하자": "Débutant", "수재": "Doué", "우수": "Excellent",
     "평균": "Moyen", "전설": "Légende", "전문가": "Expert", "숙련자": "Expérimenté",
     "중급자": "Intermédiaire", "초보자": "Débutant",
+    // 영어 → 프랑스어
+    "Challenger": "Challenger", "Master": "Maître", "Diamond": "Diamant", "Platinum": "Platine",
+    "Gold": "Or", "Silver": "Argent", "Bronze": "Bronze", "Iron": "Fer",
+    "Legend": "Légende", "Expert": "Expert", "Skilled": "Expérimenté", "Intermediate": "Intermédiaire", "Beginner": "Débutant",
   },
   es: {
     "챌린저": "Challenger", "마스터": "Maestro", "다이아몬드": "Diamante", "플래티넘": "Platino",
@@ -357,6 +388,10 @@ const gradeTranslations: Record<string, Record<string, string>> = {
     "노력필요": "Mejorar", "공부하자": "Principiante", "수재": "Dotado", "우수": "Excelente",
     "평균": "Promedio", "전설": "Leyenda", "전문가": "Experto", "숙련자": "Hábil",
     "중급자": "Intermedio", "초보자": "Principiante",
+    // 영어 → 스페인어
+    "Challenger": "Challenger", "Master": "Maestro", "Diamond": "Diamante", "Platinum": "Platino",
+    "Gold": "Oro", "Silver": "Plata", "Bronze": "Bronce", "Iron": "Hierro",
+    "Legend": "Leyenda", "Expert": "Experto", "Skilled": "Hábil", "Intermediate": "Intermedio", "Beginner": "Principiante",
   },
   pt: {
     "챌린저": "Challenger", "마스터": "Mestre", "다이아몬드": "Diamante", "플래티넘": "Platina",
@@ -365,6 +400,10 @@ const gradeTranslations: Record<string, Record<string, string>> = {
     "노력필요": "Melhorar", "공부하자": "Iniciante", "수재": "Talentoso", "우수": "Excelente",
     "평균": "Média", "전설": "Lenda", "전문가": "Especialista", "숙련자": "Habilidoso",
     "중급자": "Intermediário", "초보자": "Iniciante",
+    // 영어 → 포르투갈어
+    "Challenger": "Challenger", "Master": "Mestre", "Diamond": "Diamante", "Platinum": "Platina",
+    "Gold": "Ouro", "Silver": "Prata", "Bronze": "Bronze", "Iron": "Ferro",
+    "Legend": "Lenda", "Expert": "Especialista", "Skilled": "Habilidoso", "Intermediate": "Intermediário", "Beginner": "Iniciante",
   },
 };
 
