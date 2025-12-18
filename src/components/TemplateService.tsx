@@ -414,7 +414,7 @@ export default function TemplateService() {
                 { icon: "🌐", text: "Vercel 무료 호스팅" },
                 { icon: "🔒", text: "SSL 보안 인증서" },
                 { icon: "✏️", text: "내용 수정 1회 무료" },
-                { icon: "📅", text: "주문일로부터 2~3일 완성" },
+                { icon: "📅", text: "2~3일 완성" },
               ].map((item) => (
                 <div key={item.text} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-700/30">
                   <span className="text-xl">{item.icon}</span>
