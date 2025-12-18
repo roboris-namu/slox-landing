@@ -67,7 +67,7 @@ function LanguageSelector({ mobile }: { mobile?: boolean }) {
             key={lang.code}
             onClick={() => {
               document.cookie = `SLOX_LOCALE=${lang.code}; path=/; max-age=31536000`;
-              window.location.href = lang.path;
+              setTimeout(() => { window.location.href = lang.path; }, 50);
             }}
             className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-white/5 transition-colors first:rounded-t-xl last:rounded-b-xl ${
               lang.code === 'ko' ? 'text-cyan-400' : 'text-dark-300 hover:text-white'
