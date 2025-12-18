@@ -4,7 +4,7 @@ import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 import MainBanner from "@/components/MainBanner";
 import CategoryQuickLinks from "@/components/CategoryQuickLinks";
 import TemplateService from "@/components/TemplateService";
-import Portfolio from "@/components/Portfolio";
+// import Portfolio from "@/components/Portfolio"; // 임시 숨김
 import Contact from "@/components/Contact";
 import MobileToolsButton from "@/components/MobileToolsButton";
 import LanguageSelector from "@/components/LanguageSelector";
@@ -27,7 +27,7 @@ export default function Home() {
       <FreeTools />
       <Hero />
       <TemplateService />
-      <Portfolio />
+      {/* <Portfolio /> */}{/* 임시 숨김 - 나중에 사용 */}
       <Contact />
       <Footer />
       <MobileToolsButton />
