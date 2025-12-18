@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
@@ -125,7 +124,6 @@ const COUNTRY_OPTIONS = [
 ];
 
 export default function Sudoku() {
-  const router = useRouter();
   const [gameState, setGameState] = useState<GameState>("ready");
   const [difficulty, setDifficulty] = useState<Difficulty>("hard"); // 기본값: 고수
   const [solvedBoard, setSolvedBoard] = useState<number[][]>([]);
@@ -425,7 +423,7 @@ export default function Sudoku() {
                           onClick={() => {
                             document.cookie = `SLOX_LOCALE=${lang.locale}; path=/; max-age=31536000`;
                             setShowLanguageMenu(false);
-                            router.push(lang.path);
+                            window.location.href = lang.path;
                           }}
                         >
                           <span>{lang.flag}</span>

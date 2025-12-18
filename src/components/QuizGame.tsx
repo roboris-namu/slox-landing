@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
@@ -197,7 +196,6 @@ const QUESTION_TIME = 15;
 const QUESTIONS_PER_GAME = 10;
 
 export default function QuizGame() {
-  const router = useRouter();
   const [gameState, setGameState] = useState<GameState>("ready");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -469,7 +467,7 @@ export default function QuizGame() {
                           onClick={() => {
                             document.cookie = `SLOX_LOCALE=${lang.locale}; path=/; max-age=31536000`;
                             setShowLanguageMenu(false);
-                            router.push(lang.path);
+                            window.location.href = lang.path;
                           }}
                         >
                           <span>{lang.flag}</span>

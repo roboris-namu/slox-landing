@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
@@ -501,7 +500,6 @@ interface CpsTestProps {
 }
 
 export default function CpsTest({ locale }: CpsTestProps) {
-  const router = useRouter();
   const lang = locale;
   const [state, setState] = useState<GameState>("waiting");
   const [clicks, setClicks] = useState(0);
@@ -833,7 +831,7 @@ export default function CpsTest({ locale }: CpsTestProps) {
                         onClick={() => {
                           document.cookie = `SLOX_LOCALE=${opt.locale}; path=/; max-age=31536000`;
                           setShowLangMenu(false);
-                          router.push(opt.path);
+                          window.location.href = opt.path;
                         }}
                         className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-dark-700 transition-colors text-left ${
                           lang === opt.locale ? "bg-dark-700 text-white" : "text-dark-300"

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
 // 지원 언어
@@ -444,7 +443,6 @@ interface Props {
 
 export default function SudokuMulti({ locale }: Props) {
   const t = translations[locale];
-  const router = useRouter();
   
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">("hard");
   const [gameState, setGameState] = useState<"ready" | "playing" | "complete" | "gameover">("ready");
@@ -625,7 +623,7 @@ export default function SudokuMulti({ locale }: Props) {
                           onClick={() => {
                             document.cookie = `SLOX_LOCALE=${lang.locale}; path=/; max-age=31536000`;
                             setShowLanguageMenu(false);
-                            router.push(getSudokuPath(lang.locale));
+                            window.location.href = getSudokuPath(lang.locale);
                           }}
                         >
                           <span>{lang.flag}</span>

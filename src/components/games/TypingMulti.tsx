@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
@@ -633,7 +632,6 @@ interface Props {
 
 export default function TypingMulti({ locale }: Props) {
   const t = translations[locale];
-  const router = useRouter();
   
   const [sentence, setSentence] = useState<string>("");
   const [input, setInput] = useState<string>("");
@@ -941,7 +939,7 @@ export default function TypingMulti({ locale }: Props) {
                     key={l}
                     onClick={() => {
                       document.cookie = `SLOX_LOCALE=${l}; path=/; max-age=31536000`;
-                      router.push(l === "ko" ? "/typing" : `/${l}/typing`);
+                      window.location.href = l === "ko" ? "/typing" : `/${l}/typing`;
                     }}
                     className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
                       locale === l
@@ -959,7 +957,7 @@ export default function TypingMulti({ locale }: Props) {
                 onChange={(e) => {
                   const newLocale = e.target.value as Locale;
                   document.cookie = `SLOX_LOCALE=${newLocale}; path=/; max-age=31536000`;
-                  router.push(newLocale === "ko" ? "/typing" : `/${newLocale}/typing`);
+                  window.location.href = newLocale === "ko" ? "/typing" : `/${newLocale}/typing`;
                 }}
                 className="sm:hidden bg-dark-800 text-white text-xs px-2 py-1 rounded border border-dark-700"
               >

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
@@ -90,7 +89,6 @@ const GAME_SETTINGS = {
 };
 
 export default function CardMatchGame() {
-  const router = useRouter();
   const [state, setState] = useState<GameState>("waiting");
   const [cards, setCards] = useState<Card[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
@@ -660,7 +658,7 @@ export default function CardMatchGame() {
                           onClick={() => {
                             document.cookie = `SLOX_LOCALE=${lang.locale}; path=/; max-age=31536000`;
                             setShowLanguageMenu(false);
-                            router.push(lang.path);
+                            window.location.href = lang.path;
                           }}
                         >
                           <span>{lang.flag}</span>

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 
@@ -94,7 +93,6 @@ const QUESTION_TIME = 30;
 const QUESTIONS_PER_GAME = 12;
 
 export default function IQTest() {
-  const router = useRouter();
   const [gameState, setGameState] = useState<GameState>("ready");
   const [questions, setQuestions] = useState<IQQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -355,7 +353,7 @@ export default function IQTest() {
                           onClick={() => {
                             document.cookie = `SLOX_LOCALE=${lang.locale}; path=/; max-age=31536000`;
                             setShowLanguageMenu(false);
-                            router.push(lang.path);
+                            window.location.href = lang.path;
                           }}
                         >
                           <span>{lang.flag}</span>
