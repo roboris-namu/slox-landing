@@ -168,7 +168,7 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     rows={5}
-                    placeholder="예시) P01 주문합니다. 김길동"
+                    placeholder="예시) P01 주문합니다. 홍길동 -> 김길동으로 수정해서 제작 부탁드려요."
                     className="w-full px-5 py-4 rounded-xl border border-white/10 bg-white/5 text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500/50 transition-all resize-none text-base"
                   />
                 </div>
