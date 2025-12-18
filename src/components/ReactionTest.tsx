@@ -1748,7 +1748,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                       {index + 1}
                     </div>
                     
-                    <span className="text-base bg-dark-700 px-1.5 py-0.5 rounded flex-shrink-0">{getCountryFlag(entry.country)}</span>
+                    <span className="text-base  flex-shrink-0">{getCountryFlag(entry.country)}</span>
                     {/* 정보 */}
                     <div className="flex-1 min-w-0 text-left">
                       <div className="flex items-center gap-2">

@@ -749,7 +749,7 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
 
                         {/* 국기 */}
                         {entry.country && (
-                          <span className="text-base bg-dark-700 px-1.5 py-0.5 rounded flex-shrink-0">{getCountryFlag(entry.country)}</span>
+                          <span className="text-base flex-shrink-0">{getCountryFlag(entry.country)}</span>
                         )}
 
                         {/* 닉네임 & 등급 */}
