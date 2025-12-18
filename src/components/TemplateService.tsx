@@ -199,9 +199,15 @@ const templateData: Record<string, SubCategory[]> = {
       name: "1인 사업자",
       emoji: "👤",
       templates: [
-        { code: "B10", name: "프리랜서 프로", desc: "전문가 이미지", preview: "💪", demoUrl: "/template/B10", available: false },
-        { code: "B11", name: "크리에이터", desc: "창작자용", preview: "🎨", demoUrl: "/template/B11", available: false },
-        { code: "B12", name: "컨설턴트", desc: "전문 서비스", preview: "📊", demoUrl: "/template/B12", available: false },
+        { code: "B10", name: "프리랜서 프로", desc: "전문가 이미지", preview: "💪", demoUrl: "/template/B10", available: true },
+        { code: "B11", name: "크리에이터", desc: "창작자용", preview: "🎨", demoUrl: "/template/B11", available: true },
+        { code: "B12", name: "컨설턴트", desc: "전문 서비스", preview: "📊", demoUrl: "/template/B12", available: true },
+        { code: "B13", name: "포토그래퍼", desc: "사진 작가", preview: "📷", demoUrl: "/template/B13", available: true },
+        { code: "B14", name: "강사/튜터", desc: "교육 전문가", preview: "📚", demoUrl: "/template/B14", available: true },
+        { code: "B15", name: "디자이너", desc: "디자인 전문가", preview: "🎨", demoUrl: "/template/B15", available: true },
+        { code: "B16", name: "개발자", desc: "프리랜서 개발자", preview: "💻", demoUrl: "/template/B16", available: true },
+        { code: "B17", name: "마케터", desc: "마케팅 전문가", preview: "📈", demoUrl: "/template/B17", available: true },
+        { code: "B18", name: "코치", desc: "라이프/비즈니스 코치", preview: "🎯", demoUrl: "/template/B18", available: true },
       ],
     },
     {
@@ -209,9 +215,9 @@ const templateData: Record<string, SubCategory[]> = {
       name: "카페/식당",
       emoji: "☕",
       templates: [
-        { code: "B13", name: "카페 무드", desc: "아늑한 카페 분위기", preview: "☕", demoUrl: "/template/B13", available: false },
-        { code: "B14", name: "레스토랑", desc: "메뉴 중심 구성", preview: "🍽️", demoUrl: "/template/B14", available: false },
-        { code: "B15", name: "베이커리", desc: "빵집/디저트 샵", preview: "🥐", demoUrl: "/template/B15", available: false },
+        { code: "B19", name: "카페 무드", desc: "아늑한 카페 분위기", preview: "☕", demoUrl: "/template/B19", available: false },
+        { code: "B20", name: "레스토랑", desc: "메뉴 중심 구성", preview: "🍽️", demoUrl: "/template/B20", available: false },
+        { code: "B21", name: "베이커리", desc: "빵집/디저트 샵", preview: "🥐", demoUrl: "/template/B21", available: false },
       ],
     },
     {
@@ -219,9 +225,9 @@ const templateData: Record<string, SubCategory[]> = {
       name: "헤어샵/네일",
       emoji: "💇",
       templates: [
-        { code: "B16", name: "헤어 살롱", desc: "미용실용", preview: "💇", demoUrl: "/template/B16", available: false },
-        { code: "B17", name: "네일 아트", desc: "네일샵용", preview: "💅", demoUrl: "/template/B17", available: false },
-        { code: "B18", name: "뷰티 샵", desc: "종합 뷰티", preview: "💄", demoUrl: "/template/B18", available: false },
+        { code: "B22", name: "헤어 살롱", desc: "미용실용", preview: "💇", demoUrl: "/template/B22", available: false },
+        { code: "B23", name: "네일 아트", desc: "네일샵용", preview: "💅", demoUrl: "/template/B23", available: false },
+        { code: "B24", name: "뷰티 샵", desc: "종합 뷰티", preview: "💄", demoUrl: "/template/B24", available: false },
       ],
     },
     {
@@ -229,9 +235,9 @@ const templateData: Record<string, SubCategory[]> = {
       name: "온라인 명함",
       emoji: "💳",
       templates: [
-        { code: "B19", name: "심플 명함", desc: "깔끔한 명함", preview: "📇", demoUrl: "/template/B19", available: false },
-        { code: "B20", name: "QR 명함", desc: "QR코드 포함", preview: "📱", demoUrl: "/template/B20", available: false },
-        { code: "B21", name: "프리미엄 명함", desc: "고급스러운 디자인", preview: "✨", demoUrl: "/template/B21", available: false },
+        { code: "B25", name: "심플 명함", desc: "깔끔한 명함", preview: "📇", demoUrl: "/template/B25", available: false },
+        { code: "B26", name: "QR 명함", desc: "QR코드 포함", preview: "📱", demoUrl: "/template/B26", available: false },
+        { code: "B27", name: "프리미엄 명함", desc: "고급스러운 디자인", preview: "✨", demoUrl: "/template/B27", available: false },
       ],
     },
   ],
