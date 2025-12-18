@@ -190,9 +190,9 @@ export default function TemplateService() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
                 { icon: "📱", text: "모바일 최적화" },
-                { icon: "🌐", text: "무료 호스팅 1년" },
+                { icon: "🌐", text: "Vercel 무료 호스팅" },
                 { icon: "🔒", text: "SSL 보안 인증서" },
-                { icon: "✏️", text: "내용 수정 1회" },
+                { icon: "✏️", text: "내용 수정 1회 무료" },
               ].map((item) => (
                 <div key={item.text} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-700/30">
                   <span className="text-xl">{item.icon}</span>
@@ -209,15 +209,12 @@ export default function TemplateService() {
             href="#contact"
             className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 text-white font-bold rounded-2xl hover:shadow-glow-md transition-all duration-300 hover:-translate-y-1"
           >
-            <span className="text-lg">💬</span>
+            <span className="text-lg">📧</span>
             <span>지금 바로 신청하기</span>
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
           </a>
-          <p className="mt-4 text-sm text-white/40">
-            카카오톡으로 간편하게 상담받으세요
-          </p>
         </div>
       </div>
     </section>
