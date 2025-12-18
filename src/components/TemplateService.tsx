@@ -408,12 +408,13 @@ export default function TemplateService() {
             <h4 className="text-lg font-bold text-white mb-6 text-center">
               🎁 9,900원에 모두 포함
             </h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {[
                 { icon: "📱", text: "모바일 최적화" },
                 { icon: "🌐", text: "Vercel 무료 호스팅" },
                 { icon: "🔒", text: "SSL 보안 인증서" },
                 { icon: "✏️", text: "내용 수정 1회 무료" },
+                { icon: "📅", text: "주문일로부터 2~3일 완성" },
               ].map((item) => (
                 <div key={item.text} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-slate-700/30">
                   <span className="text-xl">{item.icon}</span>
