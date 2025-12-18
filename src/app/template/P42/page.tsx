@@ -1,107 +1,101 @@
 export default function TemplateP42() {
-  const stats = [
-    { label: "Repositories", value: "42" },
-    { label: "Stars", value: "1.2k" },
-    { label: "Followers", value: "500+" },
-    { label: "Contributions", value: "2,345" },
-  ];
-
   return (
-    <div className="min-h-screen bg-[#0d1117] text-[#c9d1d9]">
-      {/* 헤더 */}
-      <header className="border-b border-[#30363d] py-4 px-6">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <span className="text-2xl">🐙</span>
-          <nav className="flex gap-6 text-sm text-[#8b949e]">
-            <a href="#" className="hover:text-white">Overview</a>
-            <a href="#" className="hover:text-white">Repositories</a>
-            <a href="#" className="hover:text-white">Projects</a>
-          </nav>
-        </div>
-      </header>
-
-      <div className="max-w-5xl mx-auto px-6 py-8">
+    <div className="min-h-screen bg-gradient-to-b from-amber-100 via-orange-100 to-red-100">
+      {/* 메인 */}
+      <div className="max-w-lg mx-auto px-6 py-8 text-center">
         {/* 프로필 */}
-        <div className="flex flex-col md:flex-row gap-8 mb-12">
-          <div className="flex-shrink-0">
-            <div className="w-48 h-48 bg-[#21262d] rounded-full flex items-center justify-center text-7xl border-4 border-[#30363d]">
-              👨‍💻
-            </div>
+        <div className="w-32 h-32 bg-gradient-to-br from-orange-400 to-red-500 rounded-full mx-auto flex items-center justify-center text-6xl border-4 border-white shadow-xl">
+          🍳
+        </div>
+
+        {/* 채널명 */}
+        <h1 className="text-3xl font-bold text-orange-700 mt-6">
+          맛있는 한끼
+        </h1>
+        <p className="text-orange-500 mt-2">푸드 크리에이터 • 먹방 유튜버</p>
+
+        {/* 통계 */}
+        <div className="mt-6 flex justify-center gap-4">
+          <div className="bg-white rounded-xl px-5 py-3 shadow">
+            <p className="text-xl font-bold text-orange-600">320K</p>
+            <p className="text-slate-500 text-xs">구독자</p>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold text-white">김다크허브</h1>
-            <p className="text-[#8b949e] text-lg mb-4">@darkgithub</p>
-            <p className="text-[#c9d1d9] mb-4">
-              Open source enthusiast. Building tools for developers.<br />
-              Currently working on awesome projects.
-            </p>
-            <div className="flex flex-wrap gap-4 text-sm text-[#8b949e]">
-              <span>📍 Seoul, Korea</span>
-              <span>🏢 @TechCorp</span>
-              <span>🔗 darkdev.io</span>
-              <span>✉️ dark@github.io</span>
+          <div className="bg-white rounded-xl px-5 py-3 shadow">
+            <p className="text-xl font-bold text-orange-600">500+</p>
+            <p className="text-slate-500 text-xs">영상</p>
+          </div>
+          <div className="bg-white rounded-xl px-5 py-3 shadow">
+            <p className="text-xl font-bold text-orange-600">1M+</p>
+            <p className="text-slate-500 text-xs">총 조회수</p>
+          </div>
+        </div>
+
+        {/* 소개 */}
+        <div className="mt-8 p-6 bg-white/80 backdrop-blur rounded-2xl">
+          <p className="text-slate-600 leading-relaxed">
+            맛있는 음식을 함께 나눠요! 🍜<br /><br />
+            먹방 | 요리 레시피 | 맛집 리뷰<br />
+            매주 화/금 업로드!
+          </p>
+        </div>
+
+        {/* 콘텐츠 카테고리 */}
+        <div className="mt-8 grid grid-cols-3 gap-3">
+          <div className="bg-white rounded-xl p-4 shadow">
+            <span className="text-3xl">🍜</span>
+            <p className="text-orange-600 text-sm mt-2">먹방</p>
+          </div>
+          <div className="bg-white rounded-xl p-4 shadow">
+            <span className="text-3xl">👨‍🍳</span>
+            <p className="text-orange-600 text-sm mt-2">요리</p>
+          </div>
+          <div className="bg-white rounded-xl p-4 shadow">
+            <span className="text-3xl">📍</span>
+            <p className="text-orange-600 text-sm mt-2">맛집</p>
+          </div>
+        </div>
+
+        {/* SNS 링크 */}
+        <div className="mt-8 space-y-3">
+          <a href="#" className="flex items-center gap-4 bg-red-600 text-white rounded-xl p-4 hover:scale-105 transition-transform">
+            <span className="text-2xl">▶️</span>
+            <span className="font-bold">YouTube</span>
+            <span className="ml-auto text-sm opacity-80">맛있는 한끼</span>
+          </a>
+          <a href="#" className="flex items-center gap-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl p-4 hover:scale-105 transition-transform">
+            <span className="text-2xl">📷</span>
+            <span className="font-bold">Instagram</span>
+            <span className="ml-auto text-sm opacity-80">@yummy_meal</span>
+          </a>
+        </div>
+
+        {/* 최근 영상 */}
+        <div className="mt-8 bg-white rounded-2xl p-6 shadow">
+          <p className="text-orange-600 font-bold mb-4">🔥 인기 영상</p>
+          <div className="space-y-3 text-left">
+            <div className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg">
+              <span className="text-xl">🍖</span>
+              <p className="text-slate-700 text-sm">고기뷔페 먹방 (조회수 100만)</p>
+            </div>
+            <div className="flex items-center gap-3 p-2 bg-orange-50 rounded-lg">
+              <span className="text-xl">🍝</span>
+              <p className="text-slate-700 text-sm">10분 파스타 레시피</p>
             </div>
           </div>
         </div>
 
-        {/* 스탯 */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-          {stats.map((stat) => (
-            <div key={stat.label} className="bg-[#161b22] border border-[#30363d] rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-white">{stat.value}</div>
-              <div className="text-sm text-[#8b949e]">{stat.label}</div>
-            </div>
-          ))}
+        {/* 협찬 문의 */}
+        <div className="mt-8 p-4 bg-orange-100 rounded-xl">
+          <p className="text-orange-500 text-sm">💼 협찬/맛집 제보</p>
+          <p className="text-orange-700 font-medium">yummy@email.com</p>
         </div>
-
-        {/* Pinned */}
-        <section className="mb-12">
-          <h2 className="text-lg font-semibold text-white mb-4">Pinned</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            {[
-              { name: "awesome-tools", desc: "A collection of developer tools", lang: "TypeScript", stars: 234 },
-              { name: "react-components", desc: "Reusable React components", lang: "JavaScript", stars: 156 },
-              { name: "cli-helper", desc: "CLI utilities for productivity", lang: "Rust", stars: 89 },
-              { name: "dotfiles", desc: "My personal dotfiles", lang: "Shell", stars: 45 },
-            ].map((repo) => (
-              <div key={repo.name} className="bg-[#161b22] border border-[#30363d] rounded-lg p-4">
-                <h3 className="text-[#58a6ff] font-semibold mb-2">📦 {repo.name}</h3>
-                <p className="text-sm text-[#8b949e] mb-4">{repo.desc}</p>
-                <div className="flex items-center gap-4 text-xs text-[#8b949e]">
-                  <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded-full bg-yellow-400" />
-                    {repo.lang}
-                  </span>
-                  <span>⭐ {repo.stars}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 기여 */}
-        <section>
-          <h2 className="text-lg font-semibold text-white mb-4">Contribution Graph</h2>
-          <div className="bg-[#161b22] border border-[#30363d] rounded-lg p-4">
-            <div className="grid grid-cols-12 gap-1">
-              {Array.from({ length: 48 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-full aspect-square rounded-sm ${
-                    Math.random() > 0.7 ? "bg-[#39d353]" : Math.random() > 0.5 ? "bg-[#26a641]" : Math.random() > 0.3 ? "bg-[#006d32]" : "bg-[#0e4429]"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
       </div>
 
       {/* 주문 배너 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-[#238636] text-white py-3 px-4 z-50">
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <span className="text-sm"><strong>P42</strong> 깃허브 다크</span>
-          <a href="https://slox.co.kr#contact" className="px-4 py-1.5 bg-white text-[#238636] text-sm font-bold rounded-full">
+      <div className="fixed bottom-0 left-0 right-0 bg-orange-500 text-white py-3 px-4 z-50">
+        <div className="max-w-lg mx-auto flex items-center justify-between">
+          <span className="text-sm"><strong>P42</strong> 푸드 크리에이터</span>
+          <a href="https://slox.co.kr#contact" className="px-4 py-1.5 bg-white text-orange-600 text-sm font-bold rounded-full">
             9,900원 주문
           </a>
         </div>
@@ -109,4 +103,3 @@ export default function TemplateP42() {
     </div>
   );
 }
-

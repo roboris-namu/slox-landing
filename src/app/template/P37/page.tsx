@@ -1,103 +1,77 @@
 export default function TemplateP37() {
-  const repos = [
-    { name: "awesome-project", stars: 1234, lang: "TypeScript", color: "bg-blue-500" },
-    { name: "react-components", stars: 567, lang: "JavaScript", color: "bg-yellow-400" },
-    { name: "cli-tools", stars: 234, lang: "Rust", color: "bg-orange-500" },
-  ];
-
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-100">
-      {/* 헤더 */}
-      <header className="border-b border-gray-800 py-4 px-6">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <span className="text-xl">🐙</span>
-          <nav className="flex gap-6 text-sm text-gray-400">
-            <a href="#overview" className="text-white">Overview</a>
-            <a href="#repos" className="hover:text-white">Repositories</a>
-            <a href="#contact" className="hover:text-white">Contact</a>
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-b from-red-600 via-red-700 to-slate-900">
+      {/* 메인 */}
+      <div className="max-w-lg mx-auto px-6 py-8 text-center">
+        {/* 유튜브 로고 스타일 */}
+        <div className="text-6xl mb-4">▶️</div>
 
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        {/* 프로필 */}
-        <div className="flex gap-8 mb-12">
-          <div className="w-32 h-32 bg-gray-800 rounded-full flex items-center justify-center text-5xl flex-shrink-0">
-            👨‍💻
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold">김깃허브</h1>
-            <p className="text-gray-400 mb-3">@github-style</p>
-            <p className="text-gray-300 mb-4">
-              Full-stack developer passionate about open source.<br />
-              Building tools that developers love.
-            </p>
-            <div className="flex gap-4 text-sm text-gray-400">
-              <span>📍 Seoul, Korea</span>
-              <span>🔗 github.com/dev</span>
-              <span>👥 1.2k followers</span>
-            </div>
-          </div>
+        {/* 채널명 */}
+        <h1 className="text-4xl font-bold text-white">
+          크리에이터 TV
+        </h1>
+        <p className="text-red-200 mt-2">@creator_tv</p>
+
+        {/* 구독자 */}
+        <div className="mt-8 py-6 bg-white/10 backdrop-blur rounded-2xl">
+          <p className="text-red-200 text-sm">SUBSCRIBERS</p>
+          <p className="text-4xl font-bold text-white mt-2">1.2M</p>
         </div>
 
-        {/* 기여 그래프 */}
-        <section className="mb-12">
-          <h2 className="text-lg font-semibold mb-4">Contribution Activity</h2>
-          <div className="bg-gray-800 rounded-lg p-4">
-            <div className="grid grid-cols-12 gap-1">
-              {Array.from({ length: 48 }).map((_, i) => (
-                <div
-                  key={i}
-                  className={`w-full aspect-square rounded-sm ${
-                    Math.random() > 0.7 ? "bg-green-500" : Math.random() > 0.5 ? "bg-green-700" : "bg-gray-700"
-                  }`}
-                />
-              ))}
-            </div>
-            <p className="text-xs text-gray-500 mt-2">1,234 contributions in the last year</p>
-          </div>
-        </section>
+        {/* 소개 */}
+        <div className="mt-8 p-6 bg-white/10 backdrop-blur rounded-2xl">
+          <p className="text-white leading-relaxed">
+            안녕하세요! 크리에이터 TV입니다 👋<br /><br />
+            매주 화/금 저녁 6시<br />
+            재미있는 콘텐츠로 찾아옵니다!
+          </p>
+        </div>
 
-        {/* 인기 저장소 */}
-        <section id="repos" className="mb-12">
-          <h2 className="text-lg font-semibold mb-4">Popular Repositories</h2>
-          <div className="grid md:grid-cols-2 gap-4">
-            {repos.map((repo) => (
-              <div key={repo.name} className="bg-gray-800 rounded-lg p-5 border border-gray-700">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-blue-400 font-medium">{repo.name}</span>
-                </div>
-                <p className="text-sm text-gray-400 mb-4">A sample repository description</p>
-                <div className="flex items-center gap-4 text-xs text-gray-500">
-                  <span className="flex items-center gap-1">
-                    <span className={`w-3 h-3 rounded-full ${repo.color}`} />
-                    {repo.lang}
-                  </span>
-                  <span>⭐ {repo.stars}</span>
-                </div>
+        {/* 채널 링크 */}
+        <a href="#" className="block mt-8 bg-red-500 text-white rounded-xl p-4 font-bold text-lg hover:bg-red-600 transition-colors">
+          ▶️ 유튜브 채널 구독하기
+        </a>
+
+        {/* 최근 영상 */}
+        <div className="mt-8">
+          <p className="text-red-300 font-bold mb-4">📺 최근 영상</p>
+          <div className="space-y-3">
+            <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-left flex gap-4">
+              <div className="w-24 h-16 bg-slate-700 rounded-lg flex items-center justify-center text-2xl">🎬</div>
+              <div>
+                <p className="text-white font-medium text-sm">최신 브이로그 업로드!</p>
+                <p className="text-red-300 text-xs mt-1">조회수 12만회 • 3일 전</p>
               </div>
-            ))}
+            </div>
+            <div className="bg-white/10 backdrop-blur rounded-xl p-4 text-left flex gap-4">
+              <div className="w-24 h-16 bg-slate-700 rounded-lg flex items-center justify-center text-2xl">🎬</div>
+              <div>
+                <p className="text-white font-medium text-sm">Q&A 라이브 다시보기</p>
+                <p className="text-red-300 text-xs mt-1">조회수 8만회 • 1주 전</p>
+              </div>
+            </div>
           </div>
-        </section>
+        </div>
 
-        {/* 스킬 */}
-        <section className="mb-12">
-          <h2 className="text-lg font-semibold mb-4">Tech Stack</h2>
-          <div className="flex flex-wrap gap-2">
-            {["TypeScript", "React", "Node.js", "PostgreSQL", "Docker", "AWS", "Rust", "Go"].map((tech) => (
-              <span key={tech} className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-sm">
-                {tech}
-              </span>
-            ))}
-          </div>
-        </section>
+        {/* SNS 링크 */}
+        <div className="mt-8 flex justify-center gap-4">
+          <a href="#" className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-xl">📷</a>
+          <a href="#" className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white text-xl">🐦</a>
+          <a href="#" className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center text-white text-xl">🎵</a>
+        </div>
+
+        {/* 비즈니스 문의 */}
+        <div className="mt-8 p-4 bg-white/5 rounded-xl">
+          <p className="text-red-300 text-sm">비즈니스 문의</p>
+          <p className="text-white">creator@email.com</p>
+        </div>
       </div>
 
       {/* 주문 배너 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-green-600 text-white py-3 px-4 z-50">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <span className="text-sm"><strong>P37</strong> GitHub 스타일</span>
-          <a href="https://slox.co.kr#contact" className="px-4 py-1.5 bg-white text-green-700 text-sm font-bold rounded-full">
+      <div className="fixed bottom-0 left-0 right-0 bg-red-600 text-white py-3 px-4 z-50">
+        <div className="max-w-lg mx-auto flex items-center justify-between">
+          <span className="text-sm"><strong>P37</strong> 유튜버</span>
+          <a href="https://slox.co.kr#contact" className="px-4 py-1.5 bg-white text-red-600 text-sm font-bold rounded-full">
             9,900원 주문
           </a>
         </div>
@@ -105,4 +79,3 @@ export default function TemplateP37() {
     </div>
   );
 }
-
