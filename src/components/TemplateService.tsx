@@ -183,9 +183,15 @@ const templateData: Record<string, SubCategory[]> = {
       name: "회사 소개",
       emoji: "🏢",
       templates: [
-        { code: "B01", name: "코퍼레이트", desc: "정통 기업 스타일", preview: "🏢", demoUrl: "/template/B01", available: false },
-        { code: "B02", name: "스타트업", desc: "활기찬 스타트업", preview: "🚀", demoUrl: "/template/B02", available: false },
-        { code: "B03", name: "모던 비즈니스", desc: "세련된 기업 이미지", preview: "💼", demoUrl: "/template/B03", available: false },
+        { code: "B01", name: "코퍼레이트", desc: "정통 기업 스타일", preview: "🏢", demoUrl: "/template/B01", available: true },
+        { code: "B02", name: "스타트업", desc: "활기찬 스타트업", preview: "🚀", demoUrl: "/template/B02", available: true },
+        { code: "B03", name: "모던 비즈니스", desc: "세련된 기업 이미지", preview: "💼", demoUrl: "/template/B03", available: true },
+        { code: "B04", name: "테크 기업", desc: "IT/기술 회사", preview: "💻", demoUrl: "/template/B04", available: true },
+        { code: "B05", name: "컨설팅 펌", desc: "전문 컨설팅", preview: "📊", demoUrl: "/template/B05", available: true },
+        { code: "B06", name: "제조업체", desc: "공장/생산 기업", preview: "🏭", demoUrl: "/template/B06", available: true },
+        { code: "B07", name: "글로벌 기업", desc: "다국적 기업", preview: "🌐", demoUrl: "/template/B07", available: true },
+        { code: "B08", name: "중소기업", desc: "믿음직한 중견기업", preview: "🤝", demoUrl: "/template/B08", available: true },
+        { code: "B09", name: "사회적 기업", desc: "가치 중심 기업", preview: "💚", demoUrl: "/template/B09", available: true },
       ],
     },
     {
@@ -193,9 +199,9 @@ const templateData: Record<string, SubCategory[]> = {
       name: "1인 사업자",
       emoji: "👤",
       templates: [
-        { code: "B04", name: "프리랜서 프로", desc: "전문가 이미지", preview: "💪", demoUrl: "/template/B04", available: false },
-        { code: "B05", name: "크리에이터", desc: "창작자용", preview: "🎨", demoUrl: "/template/B05", available: false },
-        { code: "B06", name: "컨설턴트", desc: "전문 서비스", preview: "📊", demoUrl: "/template/B06", available: false },
+        { code: "B10", name: "프리랜서 프로", desc: "전문가 이미지", preview: "💪", demoUrl: "/template/B10", available: false },
+        { code: "B11", name: "크리에이터", desc: "창작자용", preview: "🎨", demoUrl: "/template/B11", available: false },
+        { code: "B12", name: "컨설턴트", desc: "전문 서비스", preview: "📊", demoUrl: "/template/B12", available: false },
       ],
     },
     {
@@ -203,9 +209,9 @@ const templateData: Record<string, SubCategory[]> = {
       name: "카페/식당",
       emoji: "☕",
       templates: [
-        { code: "B07", name: "카페 무드", desc: "아늑한 카페 분위기", preview: "☕", demoUrl: "/template/B07", available: false },
-        { code: "B08", name: "레스토랑", desc: "메뉴 중심 구성", preview: "🍽️", demoUrl: "/template/B08", available: false },
-        { code: "B09", name: "베이커리", desc: "빵집/디저트 샵", preview: "🥐", demoUrl: "/template/B09", available: false },
+        { code: "B13", name: "카페 무드", desc: "아늑한 카페 분위기", preview: "☕", demoUrl: "/template/B13", available: false },
+        { code: "B14", name: "레스토랑", desc: "메뉴 중심 구성", preview: "🍽️", demoUrl: "/template/B14", available: false },
+        { code: "B15", name: "베이커리", desc: "빵집/디저트 샵", preview: "🥐", demoUrl: "/template/B15", available: false },
       ],
     },
     {
@@ -213,9 +219,9 @@ const templateData: Record<string, SubCategory[]> = {
       name: "헤어샵/네일",
       emoji: "💇",
       templates: [
-        { code: "B10", name: "헤어 살롱", desc: "미용실용", preview: "💇", demoUrl: "/template/B10", available: false },
-        { code: "B11", name: "네일 아트", desc: "네일샵용", preview: "💅", demoUrl: "/template/B11", available: false },
-        { code: "B12", name: "뷰티 샵", desc: "종합 뷰티", preview: "💄", demoUrl: "/template/B12", available: false },
+        { code: "B16", name: "헤어 살롱", desc: "미용실용", preview: "💇", demoUrl: "/template/B16", available: false },
+        { code: "B17", name: "네일 아트", desc: "네일샵용", preview: "💅", demoUrl: "/template/B17", available: false },
+        { code: "B18", name: "뷰티 샵", desc: "종합 뷰티", preview: "💄", demoUrl: "/template/B18", available: false },
       ],
     },
     {
@@ -223,9 +229,9 @@ const templateData: Record<string, SubCategory[]> = {
       name: "온라인 명함",
       emoji: "💳",
       templates: [
-        { code: "B13", name: "심플 명함", desc: "깔끔한 명함", preview: "📇", demoUrl: "/template/B13", available: false },
-        { code: "B14", name: "QR 명함", desc: "QR코드 포함", preview: "📱", demoUrl: "/template/B14", available: false },
-        { code: "B15", name: "프리미엄 명함", desc: "고급스러운 디자인", preview: "✨", demoUrl: "/template/B15", available: false },
+        { code: "B19", name: "심플 명함", desc: "깔끔한 명함", preview: "📇", demoUrl: "/template/B19", available: false },
+        { code: "B20", name: "QR 명함", desc: "QR코드 포함", preview: "📱", demoUrl: "/template/B20", available: false },
+        { code: "B21", name: "프리미엄 명함", desc: "고급스러운 디자인", preview: "✨", demoUrl: "/template/B21", available: false },
       ],
     },
   ],
