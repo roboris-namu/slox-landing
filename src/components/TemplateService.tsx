@@ -338,24 +338,36 @@ export default function TemplateService() {
             >
               {/* 카드 배경 */}
               <div className={`relative bg-slate-800/70 border border-white/10 ${template.available ? "group-hover:border-white/20" : ""} rounded-2xl overflow-hidden`}>
-                {/* 미리보기 영역 */}
-                <div className="relative h-48 bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
-                  <span className="text-6xl opacity-80">{template.preview}</span>
-                  
-                  {/* 호버 오버레이 */}
-                  {template.available && (
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <span className="px-4 py-2 bg-white text-slate-900 rounded-full text-sm font-bold">
-                        미리보기 →
-                      </span>
-                    </div>
-                  )}
-                  
-                  {/* 준비중 뱃지 */}
-                  {!template.available && (
-                    <div className="absolute top-3 right-3 px-3 py-1 bg-slate-900/80 text-white/60 rounded-full text-xs">
-                      준비중
-                    </div>
+                {/* 미리보기 영역 - iframe 실시간 프리뷰 */}
+                <div className="relative h-48 bg-gradient-to-br from-slate-700 to-slate-800 overflow-hidden">
+                  {template.available ? (
+                    <>
+                      {/* 실제 페이지 축소 미리보기 */}
+                      <div className="absolute inset-0 origin-top-left scale-[0.25] w-[400%] h-[400%] pointer-events-none">
+                        <iframe 
+                          src={template.demoUrl}
+                          className="w-full h-full border-0"
+                          loading="lazy"
+                          title={`${template.name} 미리보기`}
+                        />
+                      </div>
+                      {/* 호버 오버레이 */}
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
+                        <span className="px-4 py-2 bg-white text-slate-900 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                          미리보기 →
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-6xl opacity-40">{template.preview}</span>
+                      </div>
+                      {/* 준비중 뱃지 */}
+                      <div className="absolute top-3 right-3 px-3 py-1 bg-slate-900/80 text-white/60 rounded-full text-xs">
+                        준비중
+                      </div>
+                    </>
                   )}
                 </div>
 
