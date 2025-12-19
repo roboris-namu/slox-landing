@@ -663,7 +663,42 @@ export default function CpsTest({ locale }: CpsTestProps) {
 
   // 점수 등록 (API 프록시 사용)
   const submitScore = async () => {
-    const finalNickname = currentUserId && currentUserNickname ? currentUserNickname : nickname.trim();
+    // 🔄 실시간 세션 재확인 (로그아웃 후 등록 방지)
+    let realUserId: string | null = null;
+    let realUserNickname: string | null = null;
+    try {
+      const sloxSession = localStorage.getItem("slox-session");
+      if (sloxSession) {
+        const parsed = JSON.parse(sloxSession);
+        if (parsed?.user?.id) {
+          realUserId = parsed.user.id;
+          const res = await fetch(`/api/profile?userId=${parsed.user.id}`);
+          const { profile } = await res.json();
+          if (profile?.nickname) realUserNickname = profile.nickname;
+        }
+      }
+      if (!realUserId) {
+        const keys = Object.keys(localStorage);
+        for (const key of keys) {
+          if (key.includes("sb-") && key.includes("-auth-token")) {
+            const value = localStorage.getItem(key);
+            if (value) {
+              const parsed = JSON.parse(value);
+              if (parsed?.user?.id) { 
+                realUserId = parsed.user.id;
+                const res = await fetch(`/api/profile?userId=${parsed.user.id}`);
+                const { profile } = await res.json();
+                if (profile?.nickname) realUserNickname = profile.nickname;
+                break; 
+              }
+            }
+          }
+        }
+      }
+    } catch { /* 무시 */ }
+    
+    const finalNickname = realUserId && realUserNickname ? realUserNickname : nickname.trim();
+    const finalUserId = realUserId;
     if (!finalNickname || isSubmitting) return;
     setIsSubmitting(true);
     try {
@@ -684,7 +719,7 @@ export default function CpsTest({ locale }: CpsTestProps) {
             percentile: percentile,
             country: selectedCountry,
           },
-          userId: currentUserId,
+          userId: finalUserId,
         }),
       });
       const result = await response.json();
@@ -1313,7 +1348,7 @@ export default function CpsTest({ locale }: CpsTestProps) {
                   {!currentUserId && (
                     <div className="mt-3 p-3 bg-accent-purple/10 rounded-lg border border-accent-purple/20">
                       <p className="text-xs text-dark-300 mb-1">{lang === "ko" ? "💡 로그인하면 회원 점수에 반영됩니다" : "💡 Login to save your score to your profile"}</p>
-                      <a href={lang === "ko" ? "/login" : `/${lang}/login`} className="text-accent-purple text-xs hover:underline">{lang === "ko" ? "로그인하러 가기 →" : "Go to login →"}</a>
+                      <a href={lang === "ko" ? "/login" : `/${lang}/login`} target="_blank" rel="noopener noreferrer" className="text-accent-purple text-xs hover:underline">{lang === "ko" ? "로그인하러 가기 (새 탭) →" : "Go to login (new tab) →"}</a>
                     </div>
                   )}
                 </div>

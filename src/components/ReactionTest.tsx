@@ -1252,10 +1252,50 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
 
   // 점수 등록
   const submitScore = async () => {
-    // 👤 회원이면 회원 닉네임 사용, 비회원이면 입력된 닉네임 사용
-    const finalNickname = currentUserId && currentUserNickname 
-      ? currentUserNickname 
+    // 🔄 실시간 세션 재확인 (로그아웃 후 등록 방지)
+    let realUserId: string | null = null;
+    let realUserNickname: string | null = null;
+    
+    try {
+      const sloxSession = localStorage.getItem("slox-session");
+      if (sloxSession) {
+        const parsed = JSON.parse(sloxSession);
+        if (parsed?.user?.id) {
+          realUserId = parsed.user.id;
+          // 프로필에서 닉네임 가져오기
+          const res = await fetch(`/api/profile?userId=${parsed.user.id}`);
+          const { profile } = await res.json();
+          if (profile?.nickname) realUserNickname = profile.nickname;
+        }
+      }
+      // Supabase 기본 세션 키도 확인 (fallback)
+      if (!realUserId) {
+        const keys = Object.keys(localStorage);
+        for (const key of keys) {
+          if (key.includes("sb-") && key.includes("-auth-token")) {
+            const value = localStorage.getItem(key);
+            if (value) {
+              const parsed = JSON.parse(value);
+              if (parsed?.user?.id) { 
+                realUserId = parsed.user.id;
+                const res = await fetch(`/api/profile?userId=${parsed.user.id}`);
+                const { profile } = await res.json();
+                if (profile?.nickname) realUserNickname = profile.nickname;
+                break; 
+              }
+            }
+          }
+        }
+      }
+    } catch { /* 무시 */ }
+    
+    // 👤 실시간 확인된 회원이면 회원 닉네임 사용, 비회원이면 입력된 닉네임 사용
+    const finalNickname = realUserId && realUserNickname 
+      ? realUserNickname 
       : nickname.trim();
+    
+    // 실시간 userId로 업데이트
+    const finalUserId = realUserId;
     
     if (!finalNickname || isSubmitting) return;
     
@@ -1281,7 +1321,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
             device_type: isMobile ? "mobile" : "pc",
             country: selectedCountry,
           },
-          userId: currentUserId,
+          userId: finalUserId, // 실시간 확인된 userId 사용
         }),
       });
       
@@ -2303,14 +2343,19 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                       {lang === "ko" ? "💡 회원은 프로필 닉네임으로 자동 등록됩니다" : "💡 Members use their profile nickname"}
                     </p>
                   )}
-                  {/* 🔐 비로그인 시 로그인 유도 */}
+                  {/* 🔐 비로그인 시 로그인 유도 - 새 탭으로 열어서 게임 상태 유지 */}
                   {!currentUserId && (
                     <div className="mt-3 p-3 bg-accent-purple/10 rounded-lg border border-accent-purple/20">
                       <p className="text-xs text-dark-300 mb-1">
                         {lang === "ko" ? "💡 로그인하면 회원 점수에 반영됩니다" : "💡 Login to save your score to your profile"}
                       </p>
-                      <a href={lang === "ko" ? "/login" : `/${lang}/login`} className="text-accent-purple text-xs hover:underline">
-                        {lang === "ko" ? "로그인하러 가기 →" : "Go to login →"}
+                      <a 
+                        href={lang === "ko" ? "/login" : `/${lang}/login`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-accent-purple text-xs hover:underline"
+                      >
+                        {lang === "ko" ? "로그인하러 가기 (새 탭) →" : "Go to login (new tab) →"}
                       </a>
                     </div>
                   )}

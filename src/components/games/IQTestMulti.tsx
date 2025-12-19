@@ -665,9 +665,10 @@ export default function IQTestMulti({ locale }: Props) {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
   
-  // 👤 사용자 인증 상태
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const [currentUserNickname, setCurrentUserNickname] = useState<string>("");
+  // 👤 사용자 인증 상태 (초기 로드용, submitScore에서는 실시간 확인)
+  const [_currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [_currentUserNickname, setCurrentUserNickname] = useState<string>("");
+  void _currentUserId; void _currentUserNickname; // ESLint 경고 방지
 
   // 👤 사용자 인증 체크 (광고 차단기 우회)
   useEffect(() => {
@@ -837,9 +838,45 @@ export default function IQTestMulti({ locale }: Props) {
 
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting || hasSubmitted) return;
+    
+    // 🔄 실시간 세션 재확인 (로그아웃 후 등록 방지)
+    let realUserId: string | null = null;
+    let realUserNickname: string | null = null;
+    try {
+      const sloxSession = localStorage.getItem("slox-session");
+      if (sloxSession) {
+        const parsed = JSON.parse(sloxSession);
+        if (parsed?.user?.id) {
+          realUserId = parsed.user.id;
+          const res = await fetch(`/api/profile?userId=${parsed.user.id}`);
+          const { profile } = await res.json();
+          if (profile?.nickname) realUserNickname = profile.nickname;
+        }
+      }
+      if (!realUserId) {
+        const keys = Object.keys(localStorage);
+        for (const key of keys) {
+          if (key.includes("sb-") && key.includes("-auth-token")) {
+            const value = localStorage.getItem(key);
+            if (value) {
+              const parsed = JSON.parse(value);
+              if (parsed?.user?.id) { 
+                realUserId = parsed.user.id;
+                const res = await fetch(`/api/profile?userId=${parsed.user.id}`);
+                const { profile } = await res.json();
+                if (profile?.nickname) realUserNickname = profile.nickname;
+                break; 
+              }
+            }
+          }
+        }
+      }
+    } catch { /* 무시 */ }
+    
     const iqScore = calculateIQ();
     const gradeInfo = getIQGrade(iqScore);
-    const finalNickname = currentUserId && currentUserNickname ? currentUserNickname : nickname.trim();
+    const finalNickname = realUserId && realUserNickname ? realUserNickname : nickname.trim();
+    const finalUserId = realUserId;
     setIsSubmitting(true);
     try {
       const response = await fetch("/api/leaderboard", {
@@ -856,7 +893,7 @@ export default function IQTestMulti({ locale }: Props) {
             grade: gradeInfo.grade,
             country: selectedCountry,
           },
-          userId: currentUserId,
+          userId: finalUserId,
         }),
       });
       const result = await response.json();
@@ -1321,10 +1358,10 @@ export default function IQTestMulti({ locale }: Props) {
               <p className="text-dark-400 text-sm">IQ {iqScore} ({correctCount}/12)</p>
             </div>
             <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder={t.nickname} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-3" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
-            {/* 🔐 로그인 유도 */}
+            {/* 🔐 로그인 유도 - 새 탭으로 열어서 게임 상태 유지 */}
             <div className="mb-3 p-3 bg-accent-purple/10 rounded-lg border border-accent-purple/20">
               <p className="text-xs text-dark-300 mb-1">{locale === "ko" ? "💡 로그인하면 회원 점수에 반영됩니다" : "💡 Login to save your score to your profile"}</p>
-              <a href={locale === "ko" ? "/login" : `/${locale}/login`} className="text-accent-purple text-xs hover:underline">{locale === "ko" ? "로그인하러 가기 →" : "Go to login →"}</a>
+              <a href={locale === "ko" ? "/login" : `/${locale}/login`} target="_blank" rel="noopener noreferrer" className="text-accent-purple text-xs hover:underline">{locale === "ko" ? "로그인하러 가기 (새 탭) →" : "Go to login (new tab) →"}</a>
             </div>
             <div className="mb-4">
               <label className="text-dark-400 text-sm mb-1 block">{t.country}</label>
