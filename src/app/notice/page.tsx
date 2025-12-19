@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 
 // 공지사항 타입
@@ -55,19 +54,21 @@ export default function NoticePage() {
   const [selectedNotice, setSelectedNotice] = useState<Notice | null>(null);
   const [filter, setFilter] = useState<string>("all");
 
-  // 공지사항 로드
+  // 공지사항 로드 (API 프록시 사용 - 광고 차단기 우회)
   useEffect(() => {
     const fetchNotices = async () => {
-      const { data, error } = await supabase
-        .from("notices")
-        .select("*")
-        .order("is_pinned", { ascending: false })
-        .order("created_at", { ascending: false });
-
-      if (!error && data) {
-        setNotices(data);
+      try {
+        const response = await fetch("/api/notices");
+        const result = await response.json();
+        
+        if (result.data) {
+          setNotices(result.data);
+        }
+      } catch (err) {
+        console.error("공지사항 로드 실패:", err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchNotices();
