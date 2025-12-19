@@ -106,9 +106,10 @@ export default function LoginPage() {
         return;
       }
 
-      if (data.id) {
-        console.log("✅ [Profile] 로드 성공:", data.nickname);
-        setProfile(data);
+      // API 응답이 { profile: data } 형식
+      if (data.profile?.id) {
+        console.log("✅ [Profile] 로드 성공:", data.profile.nickname);
+        setProfile(data.profile);
         setNeedsNicknameSetup(false);
       }
     } catch (err) {
