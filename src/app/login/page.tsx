@@ -433,9 +433,9 @@ export default function LoginPage() {
       console.log("signOut 타임아웃 또는 차단됨 (무시)");
     }
 
-    // 4. 홈으로 리다이렉트
-    console.log("🏠 [Logout] 홈으로 이동...");
-    window.location.href = "/";
+    // 4. 현재 페이지 새로고침 (로그인 폼 표시)
+    console.log("🔄 [Logout] 페이지 새로고침...");
+    window.location.reload();
   };
 
   // 신규 가입자 닉네임 설정 (API 프록시 사용)
