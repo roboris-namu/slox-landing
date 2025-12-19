@@ -586,6 +586,7 @@ interface CardMatchLeaderboardEntry {
   score?: number;
   user_id?: string;
   avatar_url?: string;
+  overall_rank?: number;
 }
 
 type GameState = "waiting" | "memorize" | "countdown" | "playing" | "result";
@@ -1165,12 +1166,7 @@ export default function CardMatchMulti({ locale }: Props) {
               <div className="text-center py-8"><div className="text-4xl mb-3">🃏</div><p className="text-dark-400">{t.noRecords}</p></div>
             ) : (
               <div className="space-y-2">
-                {(() => {
-                  const memberRankMap = new Map<string, number>();
-                  let memberRank = 0;
-                  leaderboard.forEach(e => { if (e.user_id) { memberRank++; memberRankMap.set(e.user_id, memberRank); } });
-                  return leaderboard.map((entry, index) => {
-                    const memberRankNum = entry.user_id ? memberRankMap.get(entry.user_id) || 0 : 0;
+                {leaderboard.map((entry, index) => {
                   // 점수 기반으로 등급 계산 (번역된 등급 사용)
                   const score = entry.score || 0;
                   const entryGrade = score >= 2500 ? { grade: t.grades.challenger, color: "text-cyan-300" }
@@ -1204,15 +1200,16 @@ export default function CardMatchMulti({ locale }: Props) {
                           {entry.user_id && (
                             <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">✓ {locale === "ko" ? "회원" : "M"}</span>
                           )}
-                          {entry.user_id && memberRankNum <= 10 && (
-                            memberRankNum === 1 ? (
-                              <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gradient-to-r from-yellow-500/30 to-amber-500/30 text-yellow-300 border border-yellow-500/50 font-bold shadow-[0_0_8px_rgba(234,179,8,0.3)] animate-pulse">👑 {locale === "ko" ? "1위" : "#1"}</span>
-                            ) : memberRankNum === 2 ? (
-                              <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gray-400/20 text-gray-300 border border-gray-400/40 font-bold">🥈 {locale === "ko" ? "2위" : "#2"}</span>
-                            ) : memberRankNum === 3 ? (
-                              <span className="text-xs px-1.5 py-0.5 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold">🥉 {locale === "ko" ? "3위" : "#3"}</span>
+                          {/* 종합 순위 배지 */}
+                          {entry.user_id && entry.overall_rank && entry.overall_rank <= 10 && (
+                            entry.overall_rank === 1 ? (
+                              <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gradient-to-r from-yellow-500/30 to-amber-500/30 text-yellow-300 border border-yellow-500/50 font-bold shadow-[0_0_8px_rgba(234,179,8,0.3)] animate-pulse">👑 {locale === "ko" ? "종합1위" : "#1"}</span>
+                            ) : entry.overall_rank === 2 ? (
+                              <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gray-400/20 text-gray-300 border border-gray-400/40 font-bold">🥈 {locale === "ko" ? "종합2위" : "#2"}</span>
+                            ) : entry.overall_rank === 3 ? (
+                              <span className="text-xs px-1.5 py-0.5 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold">🥉 {locale === "ko" ? "종합3위" : "#3"}</span>
                             ) : (
-                              <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">🏆 {memberRankNum}{locale === "ko" ? "위" : "th"}</span>
+                              <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">🏆 {locale === "ko" ? "종합" : ""}{entry.overall_rank}{locale === "ko" ? "위" : "th"}</span>
                             )
                           )}
                         </div>
@@ -1228,8 +1225,7 @@ export default function CardMatchMulti({ locale }: Props) {
                       </div>
                     </div>
                   );
-                });
-              })()}
+                })}
               </div>
             )}
           </div>

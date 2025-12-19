@@ -500,6 +500,7 @@ interface LeaderboardEntry {
   country?: string;
   user_id?: string;
   avatar_url?: string;
+  overall_rank?: number;
 }
 
 // 언어 선택기 옵션
@@ -780,14 +781,9 @@ export default function SudokuMulti({ locale }: Props) {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {(() => {
-                      const memberRankMap = new Map<string, number>();
-                      let memberRank = 0;
-                      leaderboard.forEach(e => { if (e.user_id) { memberRank++; memberRankMap.set(e.user_id, memberRank); } });
-                      return leaderboard.map((entry, idx) => {
-                        const memberRankNum = entry.user_id ? memberRankMap.get(entry.user_id) || 0 : 0;
-                        const entryGrade = getGradeByTime(entry.time_seconds);
-                        return (
+                    {leaderboard.map((entry, idx) => {
+                      const entryGrade = getGradeByTime(entry.time_seconds);
+                      return (
                         <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${idx === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : idx === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : idx === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
                           {/* 순위 */}
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${idx === 0 ? "bg-yellow-500 text-black" : idx === 1 ? "bg-gray-300 text-black" : idx === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{idx + 1}</div>
@@ -810,15 +806,16 @@ export default function SudokuMulti({ locale }: Props) {
                               {entry.user_id && (
                                 <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">✓ {locale === "ko" ? "회원" : "M"}</span>
                               )}
-                              {entry.user_id && memberRankNum <= 10 && (
-                                memberRankNum === 1 ? (
-                                  <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gradient-to-r from-yellow-500/30 to-amber-500/30 text-yellow-300 border border-yellow-500/50 font-bold shadow-[0_0_8px_rgba(234,179,8,0.3)] animate-pulse">👑 {locale === "ko" ? "1위" : "#1"}</span>
-                                ) : memberRankNum === 2 ? (
-                                  <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gray-400/20 text-gray-300 border border-gray-400/40 font-bold">🥈 {locale === "ko" ? "2위" : "#2"}</span>
-                                ) : memberRankNum === 3 ? (
-                                  <span className="text-xs px-1.5 py-0.5 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold">🥉 {locale === "ko" ? "3위" : "#3"}</span>
+                              {/* 종합 순위 배지 */}
+                              {entry.user_id && entry.overall_rank && entry.overall_rank <= 10 && (
+                                entry.overall_rank === 1 ? (
+                                  <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gradient-to-r from-yellow-500/30 to-amber-500/30 text-yellow-300 border border-yellow-500/50 font-bold shadow-[0_0_8px_rgba(234,179,8,0.3)] animate-pulse">👑 {locale === "ko" ? "종합1위" : "#1"}</span>
+                                ) : entry.overall_rank === 2 ? (
+                                  <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gray-400/20 text-gray-300 border border-gray-400/40 font-bold">🥈 {locale === "ko" ? "종합2위" : "#2"}</span>
+                                ) : entry.overall_rank === 3 ? (
+                                  <span className="text-xs px-1.5 py-0.5 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold">🥉 {locale === "ko" ? "종합3위" : "#3"}</span>
                                 ) : (
-                                  <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">🏆 {memberRankNum}{locale === "ko" ? "위" : "th"}</span>
+                                  <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">🏆 {locale === "ko" ? "종합" : ""}{entry.overall_rank}{locale === "ko" ? "위" : "th"}</span>
                                 )
                               )}
                             </div>
@@ -834,8 +831,7 @@ export default function SudokuMulti({ locale }: Props) {
                           </div>
                         </div>
                       );
-                    });
-                  })()}
+                    })}
                   </div>
                 )}
               </div>

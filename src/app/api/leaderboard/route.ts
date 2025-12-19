@@ -57,24 +57,41 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // 회원 닉네임 + 프로필사진 동기화
+    // 회원 닉네임 + 프로필사진 + 종합순위 동기화
     if (data && data.length > 0) {
       const userIds = data.filter((d) => d.user_id).map((d) => d.user_id);
       if (userIds.length > 0) {
+        // 프로필 정보 + total_score 가져오기
         const { data: profiles } = await supabase
           .from("profiles")
-          .select("id, nickname, avatar_url")
+          .select("id, nickname, avatar_url, total_score")
           .in("id", userIds);
 
         if (profiles) {
-          const profileMap = new Map(
-            profiles.map((p) => [p.id, { nickname: p.nickname, avatar_url: p.avatar_url }])
-          );
+          // 종합 순위 계산을 위해 각 회원의 total_score보다 높은 사람 수 계산
+          const profileMap = new Map<string, { nickname: string; avatar_url: string; overall_rank: number }>();
+          
+          for (const profile of profiles) {
+            // 해당 회원보다 높은 점수를 가진 사람 수 조회
+            const { count } = await supabase
+              .from("profiles")
+              .select("*", { count: "exact", head: true })
+              .gt("total_score", profile.total_score || 0);
+            
+            const overallRank = (count || 0) + 1;
+            profileMap.set(profile.id, {
+              nickname: profile.nickname,
+              avatar_url: profile.avatar_url,
+              overall_rank: overallRank,
+            });
+          }
+          
           data.forEach((entry) => {
             if (entry.user_id && profileMap.has(entry.user_id)) {
               const profile = profileMap.get(entry.user_id);
               entry.nickname = profile?.nickname || entry.nickname;
               entry.avatar_url = profile?.avatar_url;
+              entry.overall_rank = profile?.overall_rank; // 종합 순위 추가
             }
           });
         }

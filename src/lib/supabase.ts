@@ -17,5 +17,6 @@ export interface LeaderboardEntry {
   country?: string;
   user_id?: string; // 👤 회원이면 user_id 있음
   avatar_url?: string; // 👤 회원 프로필 사진
+  overall_rank?: number; // 🏆 종합 순위 (total_score 기준)
 }
 
