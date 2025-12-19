@@ -78,22 +78,19 @@ export default function LoginPage() {
   const [needsNicknameSetup, setNeedsNicknameSetup] = useState(false);
   const [setupNickname, setSetupNickname] = useState("");
 
-  // 프로필 가져오기
+  // 프로필 가져오기 (API 프록시 사용 - 광고 차단기 우회)
   const fetchProfile = useCallback(async (userId: string, userEmail?: string, userName?: string) => {
-    console.log("🔄 [Profile] 프로필 로드 시작 - userId:", userId);
+    console.log("🔄 [Profile] API 호출 시작 - userId:", userId);
     setProfileLoading(true);
     setProfileError(false);
     
     try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
+      const response = await fetch(`/api/profile?userId=${userId}`);
+      const data = await response.json();
 
-      console.log("📊 [Profile] 응답:", { data, error });
+      console.log("📊 [Profile] API 응답:", data);
 
-      if (error && error.code === "PGRST116") {
+      if (data.notFound) {
         // 프로필이 없음 = 신규 가입자
         console.log("🆕 [Profile] 신규 가입자 - 닉네임 설정 필요");
         setSetupNickname(userName || "");
@@ -102,14 +99,14 @@ export default function LoginPage() {
         return;
       }
 
-      if (error) {
-        console.error("❌ [Profile] 조회 에러:", error);
+      if (data.error) {
+        console.error("❌ [Profile] 조회 에러:", data.error);
         setProfileError(true);
         setProfileLoading(false);
         return;
       }
 
-      if (data) {
+      if (data.id) {
         console.log("✅ [Profile] 로드 성공:", data.nickname);
         setProfile(data);
         setNeedsNicknameSetup(false);
@@ -122,23 +119,18 @@ export default function LoginPage() {
     }
   }, []);
 
-  // 오늘 출석 체크 여부 확인
+  // 오늘 출석 체크 여부 확인 (API 프록시 사용)
   const checkTodayAttendance = useCallback(async (userId: string) => {
     try {
-      const today = new Date().toISOString().split("T")[0];
-      const { data, error } = await supabase
-        .from("attendance")
-        .select("id")
-        .eq("user_id", userId)
-        .eq("check_date", today)
-        .maybeSingle();
+      const response = await fetch(`/api/attendance?userId=${userId}`);
+      const data = await response.json();
 
-      if (error) {
-        console.error("출석 확인 에러:", error);
+      if (data.error) {
+        console.error("출석 확인 에러:", data.error);
         return;
       }
 
-      setCheckedInToday(!!data);
+      setCheckedInToday(data.checkedIn);
     } catch (err) {
       console.error("출석 체크 확인 실패:", err);
     }
@@ -234,7 +226,7 @@ export default function LoginPage() {
     }
   };
 
-  // 신규 가입자 닉네임 설정
+  // 신규 가입자 닉네임 설정 (API 프록시 사용)
   const handleNicknameSetup = async () => {
     if (!user || !setupNickname.trim()) return;
     
@@ -247,26 +239,23 @@ export default function LoginPage() {
         throw new Error("닉네임은 2~20자로 입력해주세요.");
       }
 
-      // 중복 확인
-      const { data: existing } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("nickname", setupNickname.trim())
-        .single();
-
-      if (existing) {
-        throw new Error("이미 사용 중인 닉네임입니다.");
-      }
-
-      // 프로필 생성
-      const { error } = await supabase.from("profiles").insert({
-        id: user.id,
-        nickname: setupNickname.trim(),
-        email: user.email,
-        avatar_url: user.user_metadata?.avatar_url || null,
+      // 프로필 생성 (API에서 중복 확인도 처리)
+      const response = await fetch("/api/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: user.id,
+          nickname: setupNickname.trim(),
+          email: user.email,
+          avatar_url: user.user_metadata?.avatar_url || null,
+        }),
       });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "프로필 생성 실패");
+      }
 
       // 프로필 다시 가져오기
       await fetchProfile(user.id);
@@ -279,7 +268,7 @@ export default function LoginPage() {
     }
   };
 
-  // 닉네임 변경
+  // 닉네임 변경 (API 프록시 사용)
   const handleNicknameChange = async () => {
     if (!user || !newNickname.trim()) return;
     
@@ -292,25 +281,21 @@ export default function LoginPage() {
         throw new Error("닉네임은 2~20자로 입력해주세요.");
       }
 
-      // 중복 확인
-      const { data: existing } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("nickname", newNickname.trim())
-        .neq("id", user.id)
-        .single();
+      // 닉네임 업데이트 (API에서 중복 확인도 처리)
+      const response = await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user.id,
+          nickname: newNickname.trim(),
+        }),
+      });
 
-      if (existing) {
-        throw new Error("이미 사용 중인 닉네임입니다.");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "닉네임 변경 실패");
       }
-
-      // 닉네임 업데이트
-      const { error } = await supabase
-        .from("profiles")
-        .update({ nickname: newNickname.trim(), updated_at: new Date().toISOString() })
-        .eq("id", user.id);
-
-      if (error) throw error;
 
       // 프로필 새로고침
       await fetchProfile(user.id);
@@ -325,18 +310,26 @@ export default function LoginPage() {
     }
   };
 
-  // 국가 변경
+  // 국가 변경 (API 프록시 사용)
   const handleCountryChange = async (countryCode: string) => {
     if (!user) return;
     
     setCountrySaving(true);
     try {
-      const { error } = await supabase
-        .from("profiles")
-        .update({ country: countryCode, updated_at: new Date().toISOString() })
-        .eq("id", user.id);
+      const response = await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user.id,
+          country: countryCode,
+        }),
+      });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "국가 변경 실패");
+      }
 
       // 프로필 새로고침
       await fetchProfile(user.id);
@@ -349,7 +342,7 @@ export default function LoginPage() {
     }
   };
 
-  // 프로필 사진 업로드
+  // 프로필 사진 업로드 (API 프록시 사용)
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
@@ -368,34 +361,23 @@ export default function LoginPage() {
     
     setAvatarUploading(true);
     try {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${user.id}/${Date.now()}.${fileExt}`;
-      
-      // 이전 이미지 삭제 (있다면)
-      if (profile?.avatar_url && profile.avatar_url.includes("avatars")) {
-        const oldPath = profile.avatar_url.split("/avatars/")[1];
-        if (oldPath) {
-          await supabase.storage.from("avatars").remove([oldPath]);
-        }
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("userId", user.id);
+      if (profile?.avatar_url) {
+        formData.append("oldAvatarUrl", profile.avatar_url);
       }
-      
-      // 새 이미지 업로드
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(fileName, file, { upsert: true });
-      
-      if (uploadError) throw uploadError;
-      
-      // Public URL 가져오기
-      const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(fileName);
-      
-      // 프로필 업데이트
-      const { error: updateError } = await supabase
-        .from("profiles")
-        .update({ avatar_url: urlData.publicUrl, updated_at: new Date().toISOString() })
-        .eq("id", user.id);
-      
-      if (updateError) throw updateError;
+
+      const response = await fetch("/api/avatar", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "업로드 실패");
+      }
       
       await fetchProfile(user.id);
       alert("프로필 사진이 변경되었습니다!");
@@ -464,19 +446,20 @@ export default function LoginPage() {
       
       console.log("로그인 성공:", data);
       
-      // 프로필이 없으면 생성
+      // 프로필이 없으면 생성 (API 프록시 사용)
       if (data.user) {
-        const { data: existingProfile } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("id", data.user.id)
-          .single();
+        const profileResponse = await fetch(`/api/profile?userId=${data.user.id}`);
+        const profileData = await profileResponse.json();
           
-        if (!existingProfile) {
-          await supabase.from("profiles").insert({
-            id: data.user.id,
-            nickname: data.user.user_metadata?.nickname || data.user.user_metadata?.full_name || "User",
-            email: data.user.email,
+        if (profileData.notFound) {
+          await fetch("/api/profile", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              id: data.user.id,
+              nickname: data.user.user_metadata?.nickname || data.user.user_metadata?.full_name || "User",
+              email: data.user.email,
+            }),
           });
         }
       }
@@ -488,25 +471,27 @@ export default function LoginPage() {
     }
   };
 
-  // 출석체크 함수
+  // 출석체크 함수 (API 프록시 사용)
   const handleAttendance = async () => {
     if (!user || checkedInToday || checkingIn) return;
 
     setCheckingIn(true);
 
     try {
-      const { error } = await supabase.from("attendance").insert({
-        user_id: user.id,
-        points_earned: 10,
+      const response = await fetch("/api/attendance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id }),
       });
 
-      if (error) {
-        if (error.code === "23505") {
-          // Unique constraint violation
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.alreadyChecked) {
           alert("이미 오늘 출석체크를 완료했어요!");
           setCheckedInToday(true);
         } else {
-          throw error;
+          throw new Error(data.error || "출석체크 실패");
         }
       } else {
         setCheckedInToday(true);
