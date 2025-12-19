@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 // 서버 사이드 Supabase 클라이언트 (광고 차단기 우회)
@@ -10,10 +10,15 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 /**
  * 🏆 실시간 랭킹 API
  * - 광고 차단기 우회를 위한 서버 사이드 프록시
- * - GET /api/rankings
+ * - GET /api/rankings (전체 랭킹)
+ * - GET /api/rankings?userId=xxx (내 순위 포함)
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
+
+    // 전체 랭킹 조회
     const { data, error } = await supabase
       .from("profiles")
       .select("id, nickname, total_score, attendance_count, avatar_url, country, game_scores")
@@ -28,8 +33,29 @@ export async function GET() {
       );
     }
 
+    // userId가 있으면 내 순위 계산
+    let myRank = null;
+    if (userId && data) {
+      // 먼저 내 프로필 점수 가져오기
+      const { data: myProfile } = await supabase
+        .from("profiles")
+        .select("total_score")
+        .eq("id", userId)
+        .single();
+
+      if (myProfile) {
+        // 나보다 점수 높은 사람 수 + 1 = 내 순위
+        const { count } = await supabase
+          .from("profiles")
+          .select("*", { count: "exact", head: true })
+          .gt("total_score", myProfile.total_score);
+
+        myRank = (count || 0) + 1;
+      }
+    }
+
     // 캐시 헤더 설정 (60초 캐시)
-    return NextResponse.json(data || [], {
+    return NextResponse.json({ data: data || [], myRank }, {
       headers: {
         "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
       },

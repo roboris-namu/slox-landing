@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
 
     if (error && error.code === "PGRST116") {
       // 프로필 없음 (신규 가입자)
-      return NextResponse.json({ notFound: true }, { status: 200 });
+      return NextResponse.json({ profile: null, notFound: true }, { status: 200 });
     }
 
     if (error) {
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json({ profile: data });
   } catch (err) {
     console.error("❌ [API/profile] GET 에러:", err);
     return NextResponse.json({ error: "서버 에러" }, { status: 500 });

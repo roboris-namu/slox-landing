@@ -35,45 +35,34 @@ export default function NavUserProfile({ locale = "ko" }: NavUserProfileProps) {
   const [myRank, setMyRank] = useState<number | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // 유저 정보 로드
+  // 유저 정보 로드 (API 프록시 사용 - 광고 차단기 우회)
   useEffect(() => {
-    // 3초 타임아웃
     const timeout = setTimeout(() => setLoading(false), 3000);
     
     const loadUser = async () => {
       try {
-        // 현재 세션 확인
+        // 현재 세션 확인 (SDK 필수)
         const { data: { session } } = await supabase.auth.getSession();
         
         if (session?.user) {
-          // 프로필 정보 가져오기
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", session.user.id)
-            .single();
+          // 프로필 정보 가져오기 (API 프록시)
+          const profileRes = await fetch(`/api/profile?userId=${session.user.id}`);
+          const profileData = await profileRes.json();
 
-          if (profile) {
-            setUser(profile);
+          if (profileData.profile) {
+            setUser(profileData.profile);
 
-            // 오늘 출석 체크 여부
-            const today = new Date().toISOString().split("T")[0];
-            const { data: attendance } = await supabase
-              .from("attendance")
-              .select("id")
-              .eq("user_id", session.user.id)
-              .eq("check_date", today)
-              .maybeSingle();
+            // 오늘 출석 체크 여부 (API 프록시)
+            const attendanceRes = await fetch(`/api/attendance?userId=${session.user.id}`);
+            const attendanceData = await attendanceRes.json();
+            setTodayChecked(attendanceData.checkedIn || false);
 
-            setTodayChecked(!!attendance);
-
-            // 내 순위 계산
-            const { count } = await supabase
-              .from("profiles")
-              .select("*", { count: "exact", head: true })
-              .gt("total_score", profile.total_score);
-
-            setMyRank((count || 0) + 1);
+            // 내 순위 계산 (API 프록시)
+            const rankRes = await fetch(`/api/rankings?userId=${session.user.id}`);
+            const rankData = await rankRes.json();
+            if (rankData.myRank) {
+              setMyRank(rankData.myRank);
+            }
           }
         }
       } catch (error) {
@@ -275,30 +264,24 @@ export function NavUserProfileMobile({ locale = "ko" }: NavUserProfileMobileProp
   const [todayChecked, setTodayChecked] = useState(false);
   const loginPath = locale === "ko" ? "/login" : `/${locale}/login`;
 
+  // 유저 정보 로드 (API 프록시 사용 - 광고 차단기 우회)
   useEffect(() => {
     const loadUser = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         
         if (session?.user) {
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("id", session.user.id)
-            .single();
+          // 프로필 정보 가져오기 (API 프록시)
+          const profileRes = await fetch(`/api/profile?userId=${session.user.id}`);
+          const profileData = await profileRes.json();
 
-          if (profile) {
-            setUser(profile);
+          if (profileData.profile) {
+            setUser(profileData.profile);
 
-            const today = new Date().toISOString().split("T")[0];
-            const { data: attendance } = await supabase
-              .from("attendance")
-              .select("id")
-              .eq("user_id", session.user.id)
-              .eq("check_date", today)
-              .maybeSingle();
-
-            setTodayChecked(!!attendance);
+            // 오늘 출석 체크 여부 (API 프록시)
+            const attendanceRes = await fetch(`/api/attendance?userId=${session.user.id}`);
+            const attendanceData = await attendanceRes.json();
+            setTodayChecked(attendanceData.checkedIn || false);
           }
         }
       } catch (error) {

@@ -72,17 +72,17 @@ export default function LiveRanking({ locale = "ko" }: LiveRankingProps) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       
-      const data = await response.json();
+      const result = await response.json();
 
-      console.log("📊 [LiveRanking] API 응답 data 길이:", data?.length);
+      console.log("📊 [LiveRanking] API 응답 data 길이:", result?.data?.length);
 
-      if (Array.isArray(data) && data.length > 0) {
-        console.log("✅ [LiveRanking] 성공! 유저 수:", data.length);
-        setRankings(data);
-        setError(false);
-      } else if (data.error) {
-        console.error("❌ [LiveRanking] API 에러:", data.error);
+      if (result.error) {
+        console.error("❌ [LiveRanking] API 에러:", result.error);
         setError(true);
+      } else if (Array.isArray(result.data) && result.data.length > 0) {
+        console.log("✅ [LiveRanking] 성공! 유저 수:", result.data.length);
+        setRankings(result.data);
+        setError(false);
       } else {
         console.warn("⚠️ [LiveRanking] 빈 배열!");
         setRankings([]);

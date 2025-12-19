@@ -50,7 +50,7 @@ export default function GameNavBar({
   // 로그인 경로
   const loginPath = locale === "ko" ? "/login" : `/${locale}/login`;
 
-  // 유저 정보 로드
+  // 유저 정보 로드 (API 프록시 사용 - 광고 차단기 우회)
   useEffect(() => {
     const timeout = setTimeout(() => setLoading(false), 3000);
 
@@ -59,14 +59,12 @@ export default function GameNavBar({
         const { data: { session } } = await supabase.auth.getSession();
         
         if (session?.user) {
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select("id, nickname, avatar_url, total_score")
-            .eq("id", session.user.id)
-            .single();
+          // 프로필 정보 가져오기 (API 프록시)
+          const profileRes = await fetch(`/api/profile?userId=${session.user.id}`);
+          const profileData = await profileRes.json();
 
-          if (profile) {
-            setUser(profile);
+          if (profileData.profile) {
+            setUser(profileData.profile);
           }
         }
       } catch (error) {
