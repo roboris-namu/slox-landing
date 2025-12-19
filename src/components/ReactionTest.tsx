@@ -1367,13 +1367,28 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
     }
   }, [state, hasSubmittedScore, reactionTime]);
 
+  // 초록불 타임아웃 ref (5초 안에 클릭 안하면 실패)
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   // 게임 시작
   const startGame = useCallback(() => {
+    // 이미 "click" 상태면 중복 시작 방지
+    if (state === "click") {
+      console.warn("⚠️ 이미 초록불 상태입니다. 중복 시작 방지.");
+      return;
+    }
+    
     setState("ready");
     playSound("ready");
     setBalloonScale(1);
     setHasSubmittedScore(false); // 새 게임시 등록 상태 리셋
     setShowRankingPrompt(false); // 랭킹 팝업도 닫기
+    
+    // 기존 타이머 정리
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+      clickTimeoutRef.current = null;
+    }
     
     const delay = Math.random() * 3000 + 2000;
     timeoutRef.current = setTimeout(() => {
@@ -1381,8 +1396,15 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
       setStartTime(Date.now());
       // 풍선 커지는 애니메이션
       setBalloonScale(1.1);
+      
+      // 🛡️ 치팅 방지: 5초 안에 클릭 안하면 자동 실패
+      clickTimeoutRef.current = setTimeout(() => {
+        console.log("⏰ 초록불 타임아웃 - 5초 초과");
+        playSound("fail");
+        setState("tooEarly"); // 타임아웃 상태로 변경
+      }, 5000);
     }, delay);
-  }, [playSound]);
+  }, [playSound, state]);
 
   // 클릭 처리
   const handleClick = useCallback((e?: React.MouseEvent<HTMLDivElement>) => {
@@ -1395,7 +1417,22 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
       playSound("fail");
       setState("tooEarly");
     } else if (state === "click") {
+      // 🛡️ 초록불 타임아웃 정리
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+        clickTimeoutRef.current = null;
+      }
+      
       const reaction = Date.now() - startTime;
+      
+      // 🛡️ 치팅 방지: 100ms 미만은 인간이 반응할 수 없는 시간
+      if (reaction < 100) {
+        console.warn(`⚠️ 비정상 반응 시간 감지: ${reaction}ms (치팅 의심)`);
+        playSound("fail");
+        setState("tooEarly");
+        return;
+      }
+      
       setReactionTime(reaction);
       setAttempts(prev => [...prev, reaction]);
       
@@ -1416,6 +1453,9 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
   const resetGame = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
+    }
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
     }
     setState("waiting");
     setReactionTime(0);
@@ -1597,6 +1637,9 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+      }
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
       }
     };
   }, []);
