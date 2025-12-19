@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { supabase } from "@/lib/supabase";
 import { Locale, liveRankingTranslations } from "@/locales";
 
 // 게임별 점수 타입
@@ -61,43 +60,40 @@ export default function LiveRanking({ locale = "ko" }: LiveRankingProps) {
   const [showAll, setShowAll] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
 
-  // 랭킹 데이터 로드 함수
+  // 랭킹 데이터 로드 함수 (API 라우트를 통해 호출 - 광고 차단기 우회)
   const fetchRankings = useCallback(async () => {
-    console.log("🔄 [LiveRanking] 시작 ========================");
+    console.log("🔄 [LiveRanking] API 호출 시작 ========================");
     
     try {
-      const response = await supabase
-        .from("profiles")
-        .select("id, nickname, total_score, attendance_count, avatar_url, country, game_scores")
-        .order("total_score", { ascending: false })
-        .limit(100);
+      // 자체 API 라우트를 통해 호출 (광고 차단기 우회)
+      const response = await fetch("/api/rankings");
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const data = await response.json();
 
-      const { data, error: fetchError } = response;
+      console.log("📊 [LiveRanking] API 응답 data 길이:", data?.length);
 
-      console.log("📊 [LiveRanking] 전체 응답:", response);
-      console.log("📊 [LiveRanking] data:", data);
-      console.log("📊 [LiveRanking] data 길이:", data?.length);
-      console.log("❓ [LiveRanking] error:", fetchError);
-
-      if (fetchError) {
-        console.error("❌ [LiveRanking] 에러:", fetchError);
-        setError(true);
-      } else if (data && data.length > 0) {
+      if (Array.isArray(data) && data.length > 0) {
         console.log("✅ [LiveRanking] 성공! 유저 수:", data.length);
-        console.log("✅ [LiveRanking] 첫번째 유저:", data[0]);
         setRankings(data);
         setError(false);
+      } else if (data.error) {
+        console.error("❌ [LiveRanking] API 에러:", data.error);
+        setError(true);
       } else {
-        console.warn("⚠️ [LiveRanking] 빈 배열! RLS 정책 확인 필요");
+        console.warn("⚠️ [LiveRanking] 빈 배열!");
         setRankings([]);
         setError(false);
       }
     } catch (err) {
-      console.error("❌ [LiveRanking] catch 에러:", err);
+      console.error("❌ [LiveRanking] fetch 에러:", err);
       setError(true);
     } finally {
       setLoading(false);
-      console.log("🔄 [LiveRanking] 완료 ========================");
+      console.log("🔄 [LiveRanking] API 호출 완료 ========================");
     }
   }, []);
 

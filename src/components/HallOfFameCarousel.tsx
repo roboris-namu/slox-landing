@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
 
 // 다국어 번역
 const translations: Record<string, {
@@ -448,54 +447,59 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
   const animationRef = useRef<number | null>(null);
   const scrollPositionRef = useRef(0);
 
+  // API 라우트를 통해 호출 (광고 차단기 우회)
   const fetchAllLeaderboards = useCallback(async () => {
+    console.log("🔄 [HallOfFame] API 호출 시작 ========================");
 
     try {
-      const results = await Promise.all(
-        gameConfigs.map(async (config) => {
-          // 각 테이블에 존재하는 컬럼만 선택
-          const { data, error } = await supabase
-            .from(config.table)
-            .select("*")
-            .order(config.scoreField, { ascending: config.orderAsc })
-            .limit(3);
+      const response = await fetch("/api/hall-of-fame");
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const apiResults = await response.json();
+      
+      console.log("📊 [HallOfFame] API 응답:", apiResults?.length, "개 게임");
 
-          if (error) {
-            console.error(`${config.game} 로드 실패:`, error);
-          }
-
-          return {
-            game: config.game,
-            gameName: config.gameName,
-            emoji: config.emoji,
-            href: config.href,
-            unit: config.unit,
-            color: config.color,
-            bgColor: config.bgColor,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            entries: (data || []).map((entry: any) => {
-              const score = parseFloat(entry[config.scoreField]) || 0;
-              // 스도쿠는 시간 기준으로 등급 재계산
-              const grade = config.game === "sudoku" 
-                ? getSudokuGrade(score) 
-                : (entry.grade as string || "");
-              return {
-                nickname: entry.nickname as string,
-                score,
-                grade,
-                percentile: entry.percentile as number || 0,
-                device_type: entry.device_type as string || "",
-                country: entry.country as string || "",
-                user_id: entry.user_id as string || null, // 👤 회원 ID
-              };
-            }),
-          };
-        })
-      );
+      // API 결과를 컴포넌트 형식에 맞게 변환
+      const results = gameConfigs.map((config) => {
+        const apiData = apiResults.find((r: { game: string }) => r.game === config.game);
+        const entries = apiData?.entries || [];
+        
+        return {
+          game: config.game,
+          gameName: config.gameName,
+          emoji: config.emoji,
+          href: config.href,
+          unit: config.unit,
+          color: config.color,
+          bgColor: config.bgColor,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          entries: entries.map((entry: any) => {
+            const scoreField = apiData?.scoreField || config.scoreField;
+            const score = parseFloat(entry[scoreField]) || 0;
+            // 스도쿠는 시간 기준으로 등급 재계산
+            const grade = config.game === "sudoku" 
+              ? getSudokuGrade(score) 
+              : (entry.grade as string || "");
+            return {
+              nickname: entry.nickname as string,
+              score,
+              grade,
+              percentile: entry.percentile as number || 0,
+              device_type: entry.device_type as string || "",
+              country: entry.country as string || "",
+              user_id: entry.user_id as string || null, // 👤 회원 ID
+            };
+          }),
+        };
+      });
 
       setLeaderboards(results);
+      console.log("✅ [HallOfFame] 성공!");
     } catch (err) {
-      console.error("리더보드 로드 실패:", err);
+      console.error("❌ [HallOfFame] API 호출 실패:", err);
       // 에러 시에도 기본 게임 목록 표시
       setLeaderboards(gameConfigs.map(config => ({
         game: config.game,
@@ -509,6 +513,7 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
       })));
     } finally {
       setIsLoading(false);
+      console.log("🔄 [HallOfFame] API 호출 완료 ========================");
     }
   }, []);
 
