@@ -170,36 +170,39 @@ export default function NavUserProfile({ locale = "ko" }: NavUserProfileProps) {
 
   // 로그아웃 (광고 차단기 우회)
   const handleLogout = async () => {
-    try {
-      // 1. localStorage에서 세션 삭제
-      localStorage.removeItem("slox-session");
-      console.log("🗑️ [Logout] slox-session 삭제");
-      
-      // Supabase 관련 키도 삭제
-      const keys = Object.keys(localStorage);
-      keys.forEach((key) => {
-        if (key.includes("sb-") || key.includes("supabase")) {
-          console.log("🗑️ [Logout] Supabase 키 삭제:", key);
-          localStorage.removeItem(key);
-        }
-      });
-
-      // 2. Supabase SDK signOut도 시도 (실패해도 괜찮음)
-      try {
-        await supabase.auth.signOut();
-      } catch {
-        console.log("signOut failed (blocked by ad-blocker), but localStorage cleared");
+    console.log("🚪 [Logout] 로그아웃 시작...");
+    
+    // 1. localStorage에서 세션 삭제
+    localStorage.removeItem("slox-session");
+    console.log("🗑️ [Logout] slox-session 삭제");
+    
+    // Supabase 관련 키도 삭제
+    const keys = Object.keys(localStorage);
+    keys.forEach((key) => {
+      if (key.includes("sb-") || key.includes("supabase")) {
+        console.log("🗑️ [Logout] Supabase 키 삭제:", key);
+        localStorage.removeItem(key);
       }
+    });
 
-      setUser(null);
-      setMenuOpen(false);
-      window.location.href = "/"; // 홈으로 리다이렉트
-    } catch (err) {
-      console.error("로그아웃 에러:", err);
-      // 에러가 나도 강제로 localStorage 삭제 후 새로고침
-      localStorage.clear();
-      window.location.href = "/";
+    // 2. 상태 초기화
+    setUser(null);
+    setMenuOpen(false);
+
+    // 3. Supabase SDK signOut 시도 (1초 타임아웃)
+    try {
+      const signOutPromise = supabase.auth.signOut();
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("timeout")), 1000)
+      );
+      await Promise.race([signOutPromise, timeoutPromise]);
+    } catch {
+      console.log("signOut 타임아웃 또는 차단됨 (무시)");
     }
+
+    // 4. 홈으로 리다이렉트
+    console.log("🏠 [Logout] 홈으로 이동...");
+    window.location.href = "/";
   };
 
   // 로딩 중
