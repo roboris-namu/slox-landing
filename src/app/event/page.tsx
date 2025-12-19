@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
 
 interface Winner {
   id: string;
@@ -457,43 +456,31 @@ export default function EventPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // 데이터 로드
+  // 데이터 로드 (API 프록시 사용 - 광고 차단기 우회)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data: configData } = await supabase
-          .from("event_config")
-          .select("*")
-          .eq("is_active", true)
-          .single();
+        const response = await fetch("/api/event");
+        const data = await response.json();
 
-        if (configData) {
-          setEventConfig(configData);
-        }
+        if (response.ok && data) {
+          if (data.config) {
+            setEventConfig(data.config);
+          }
 
-        const { data: leaderData } = await supabase
-          .from("reaction_leaderboard")
-          .select("nickname, score, email")
-          .order("score", { ascending: true })
-          .limit(1)
-          .single();
+          if (data.currentLeader) {
+            setCurrentLeader({
+              nickname: data.currentLeader.nickname,
+              score: data.currentLeader.score,
+              email: data.currentLeader.email,
+            });
+          }
 
-        if (leaderData) {
-          setCurrentLeader({
-            nickname: leaderData.nickname,
-            score: leaderData.score,
-            email: leaderData.email,
-          });
-        }
-
-        const { data: winnersData } = await supabase
-          .from("winners")
-          .select("*")
-          .order("created_at", { ascending: false })
-          .limit(12);
-
-        if (winnersData) {
-          setWinners(winnersData);
+          if (data.winners) {
+            setWinners(data.winners);
+          }
+        } else {
+          console.error("이벤트 데이터 로드 실패:", data.error);
         }
       } catch (err) {
         console.error("Data load failed:", err);
