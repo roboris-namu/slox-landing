@@ -4,6 +4,7 @@ import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 import MainBanner from "@/components/MainBanner";
 import CategoryQuickLinks from "@/components/CategoryQuickLinks";
 import TemplateService from "@/components/TemplateService";
+import LiveRanking from "@/components/LiveRanking";
 // import Portfolio from "@/components/Portfolio"; // 임시 숨김
 import Contact from "@/components/Contact";
 import MobileToolsButton from "@/components/MobileToolsButton";
@@ -11,16 +12,18 @@ import LanguageSelector from "@/components/LanguageSelector";
 import DesktopToolsDropdown from "@/components/DesktopToolsDropdown";
 import InstallPWA from "@/components/InstallPWA";
 import InstallButton from "@/components/InstallButton";
+import NavUserProfile, { NavUserProfileMobile } from "@/components/NavUserProfile";
 
 /**
  * SLOX 메인 랜딩페이지
  * - 프리미엄 다크 테마 적용
- * - 순서: 배너 → 카테고리 → 명예의전당 → 무료도구 → 서비스소개
+ * - 순서: 🏆실시간랭킹 → 배너 → 카테고리 → 명예의전당 → 무료도구 → 서비스소개
  */
 export default function Home() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
+      <LiveRanking />
       <MainBanner />
       <CategoryQuickLinks />
       <HallOfFameCarousel />
@@ -56,32 +59,16 @@ function Navigation() {
             
             {/* 데스크탑 메뉴 */}
             <div className="hidden md:flex items-center gap-1">
-              <a href="#services" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
-                서비스
+              {/* 공지사항 */}
+              <a href="/notice" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
+                📢 공지
               </a>
-              <a href="#pricing" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
-                가격
-              </a>
-              <a href="#portfolio" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
-                포트폴리오
-              </a>
-              {/* 도구 드롭다운 - 카테고리 분류 + 힌트 */}
+              {/* 도구 드롭다운 */}
               <DesktopToolsDropdown />
-              {/* EVENT 버튼 */}
-              <a href="/event" className="relative px-4 py-2 text-sm font-bold text-yellow-400 hover:text-yellow-300 rounded-xl hover:bg-yellow-500/10 transition-all duration-300 flex items-center gap-1.5">
-                <span className="text-base">🎁</span>
-                <span>EVENT</span>
-                {/* 깜빡이는 점 */}
-                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full animate-ping" />
-                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full" />
-              </a>
               {/* 언어 선택 */}
               <LanguageSelector />
-              {/* 앱 설치 버튼 */}
-              <InstallButton />
-              <a href="#contact" className="ml-2 px-5 py-2.5 bg-gradient-to-r from-indigo-500 via-accent-500 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:shadow-glow-sm transition-all duration-300 hover:-translate-y-0.5">
-                문의하기
-              </a>
+              {/* 👤 유저 프로필 / 로그인 */}
+              <NavUserProfile />
             </div>
             
             {/* 모바일 CTA */}
@@ -90,14 +77,8 @@ function Navigation() {
               <LanguageSelector mobile />
               {/* 앱 설치 버튼 */}
               <InstallButton />
-              {/* 모바일 EVENT 버튼 */}
-              <a href="/event" className="relative px-3 py-2 text-sm font-bold text-yellow-400 rounded-xl bg-yellow-500/10 flex items-center gap-1">
-                <span>🎁</span>
-                <span className="text-xs">EVENT</span>
-                {/* 깜빡이는 점 */}
-                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full animate-ping" />
-                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full" />
-              </a>
+              {/* 👤 유저 프로필 / 로그인 (모바일) */}
+              <NavUserProfileMobile />
             </div>
           </div>
         </div>

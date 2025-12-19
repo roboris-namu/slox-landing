@@ -246,6 +246,7 @@ interface LeaderboardEntry {
   percentile: number;
   device_type: string;
   country?: string;
+  user_id?: string | null;
 }
 
 // 국가 코드 → 국기 이모지 변환
@@ -485,6 +486,7 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
                 percentile: entry.percentile as number || 0,
                 device_type: entry.device_type as string || "",
                 country: entry.country as string || "",
+                user_id: entry.user_id as string || null, // 👤 회원 ID
               };
             }),
           };
@@ -512,7 +514,27 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
 
   useEffect(() => {
     fetchAllLeaderboards();
-  }, [fetchAllLeaderboards]);
+    
+    // 8초 후에도 로딩중이면 강제 해제
+    const timeout = setTimeout(() => {
+      if (isLoading) {
+        setIsLoading(false);
+        // 기본 게임 목록 표시
+        setLeaderboards(gameConfigs.map(config => ({
+          game: config.game,
+          gameName: config.gameName,
+          emoji: config.emoji,
+          href: config.href,
+          unit: config.unit,
+          color: config.color,
+          bgColor: config.bgColor,
+          entries: [],
+        })));
+      }
+    }, 8000);
+    
+    return () => clearTimeout(timeout);
+  }, [fetchAllLeaderboards, isLoading]);
 
   // 자동 스크롤 애니메이션 (JavaScript 기반)
   useEffect(() => {
@@ -793,9 +815,17 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
 
                         {/* 닉네임 & 등급 */}
                         <div className="flex-1 min-w-0">
-                          <p className="text-white font-bold truncate">
-                            {entry.nickname}
-                          </p>
+                          <div className="flex items-center gap-1.5">
+                            <p className="text-white font-bold truncate">
+                              {entry.nickname}
+                            </p>
+                            {/* 👤 회원 마크 */}
+                            {entry.user_id && (
+                              <span className="text-[10px] px-1 py-0.5 rounded bg-accent-500/20 text-accent-400 border border-accent-500/30 font-medium flex-shrink-0">
+                                ✓
+                              </span>
+                            )}
+                          </div>
                           <p className={`text-xs font-medium ${gradeColors[entry.grade] || "text-dark-400"}`}>
                             {gradeTranslations[locale]?.[entry.grade] || entry.grade || "-"}
                           </p>

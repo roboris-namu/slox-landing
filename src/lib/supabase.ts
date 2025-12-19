@@ -15,5 +15,6 @@ export interface LeaderboardEntry {
   device_type: string;
   created_at: string;
   country?: string;
+  user_id?: string; // 👤 회원이면 user_id 있음
 }
 

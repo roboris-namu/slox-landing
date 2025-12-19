@@ -3,6 +3,9 @@ import Link from "next/link";
 import MainBanner from "@/components/MainBanner";
 import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 import LanguageSelector from "@/components/LanguageSelector";
+import LiveRanking from "@/components/LiveRanking";
+import DesktopToolsDropdown from "@/components/DesktopToolsDropdown";
+import NavUserProfile, { NavUserProfileMobile } from "@/components/NavUserProfile";
 
 export const metadata: Metadata = {
   title: "SLOX - Free Online Tools | IQ Test, Reaction Test, Games & More",
@@ -20,9 +23,9 @@ export default function EnglishHome() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
+      <LiveRanking locale="en" />
       <MainBanner locale="en" />
       <HallOfFameCarousel locale="en" />
-      {/* <CategoryQuickLinks /> */}
       <FreeToolsSection />
       <Footer />
     </main>
@@ -43,20 +46,17 @@ function Navigation() {
             </a>
             
             <div className="hidden md:flex items-center gap-1">
-              <Link href="/en/reaction" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
-                🎮 Games
+              <Link href="/en/notice" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
+                📢 Notice
               </Link>
-              <Link href="/en/bmi" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
-                🧮 Calculators
-              </Link>
-              <Link href="/en/qr" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
-                🔧 Generators
-              </Link>
+              <DesktopToolsDropdown locale="en" />
               <LanguageSelector currentLocale="en" />
+              <NavUserProfile locale="en" />
             </div>
             
-            <div className="md:hidden">
-              <LanguageSelector currentLocale="en" />
+            <div className="md:hidden flex items-center gap-2">
+              <LanguageSelector currentLocale="en" mobile />
+              <NavUserProfileMobile locale="en" />
             </div>
           </div>
         </div>

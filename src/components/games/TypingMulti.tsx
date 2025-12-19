@@ -4,9 +4,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
+import GameNavBar from "@/components/GameNavBar";
+import { Locale } from "@/locales";
 
-// 다국어 타입 정의
-type Locale = "ko" | "en" | "ja" | "zh" | "de" | "fr" | "es" | "pt";
+// 다국어 타입은 @/locales에서 import
 
 // 국가 옵션
 const COUNTRY_OPTIONS = [
@@ -653,6 +654,26 @@ export default function TypingMulti({ locale }: Props) {
   const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  
+  // 👤 사용자 인증 상태
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserNickname, setCurrentUserNickname] = useState<string>("");
+
+  // 👤 사용자 인증 체크
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setCurrentUserId(user.id);
+        const { data: profile } = await supabase.from("profiles").select("nickname").eq("id", user.id).single();
+        if (profile) {
+          setCurrentUserNickname(profile.nickname);
+          setNickname(profile.nickname);
+        }
+      }
+    };
+    checkUser();
+  }, []);
 
   // 초기 문장 설정
   useEffect(() => {
@@ -699,7 +720,24 @@ export default function TypingMulti({ locale }: Props) {
         .order("wpm", { ascending: false })
         .limit(10);
       if (error) throw error;
-      if (data) setLeaderboard(data);
+      // 👤 회원 닉네임 + 프로필사진 동기화
+      if (data && data.length > 0) {
+        const userIds = data.filter(d => d.user_id).map(d => d.user_id);
+        if (userIds.length > 0) {
+          const { data: profiles } = await supabase.from("profiles").select("id, nickname, avatar_url").in("id", userIds);
+          if (profiles) {
+            const profileMap = new Map(profiles.map(p => [p.id, { nickname: p.nickname, avatar_url: p.avatar_url }]));
+            data.forEach(entry => {
+              if (entry.user_id && profileMap.has(entry.user_id)) {
+                const profile = profileMap.get(entry.user_id);
+                entry.nickname = profile?.nickname || entry.nickname;
+                entry.avatar_url = profile?.avatar_url;
+              }
+            });
+          }
+        }
+        setLeaderboard(data);
+      }
     } catch (err) {
       console.error("Failed to load leaderboard:", err);
     }
@@ -744,6 +782,24 @@ export default function TypingMulti({ locale }: Props) {
     };
   };
 
+  // 👤 순위에 따른 점수 계산
+  const getRankPoints = (rank: number): number => { if (rank === 1) return 200; if (rank <= 3) return 100; if (rank <= 10) return 50; return 0; };
+  
+  const updateMemberScore = async (userId: string, gameType: string, newRank: number) => {
+    const points = getRankPoints(newRank); if (points === 0) return;
+    try {
+      const { data: profile } = await supabase.from("profiles").select("total_score, game_scores").eq("id", userId).single();
+      if (!profile) return;
+      const gameScores = profile.game_scores || {};
+      const prevRank = gameScores[gameType]?.rank || Infinity;
+      if (newRank >= prevRank) return;
+      const previousPoints = gameScores[gameType]?.points || 0;
+      const pointsDiff = points - previousPoints;
+      if (pointsDiff <= 0) return;
+      await supabase.from("profiles").update({ total_score: profile.total_score + pointsDiff, game_scores: { ...gameScores, [gameType]: { rank: newRank, points } }, updated_at: new Date().toISOString() }).eq("id", userId);
+    } catch (err) { console.error("점수 업데이트 실패:", err); }
+  };
+
   // 점수 등록
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting || !result) return;
@@ -752,17 +808,28 @@ export default function TypingMulti({ locale }: Props) {
     const percentile = isMobile 
       ? (result.cpm >= 480 ? 1 : result.cpm >= 400 ? 5 : result.cpm >= 330 ? 15 : result.cpm >= 270 ? 30 : result.cpm >= 210 ? 50 : result.cpm >= 150 ? 70 : result.cpm >= 90 ? 85 : 95)
       : (result.cpm >= 650 ? 1 : result.cpm >= 550 ? 5 : result.cpm >= 450 ? 15 : result.cpm >= 370 ? 30 : result.cpm >= 300 ? 50 : result.cpm >= 230 ? 70 : result.cpm >= 150 ? 85 : 95);
+    
+    const finalNickname = currentUserId && currentUserNickname ? currentUserNickname : nickname.trim().slice(0, 20);
+    
     try {
       const { error } = await supabase.from("typing_leaderboard").insert({ 
-        nickname: nickname.trim().slice(0, 20), 
+        nickname: finalNickname, 
         wpm: result.cpm,
         accuracy: result.accuracy, 
         device_type: isMobile ? "mobile" : "pc",
         grade: gradeInfo.grade,
         percentile: percentile,
         country: selectedCountry,
+        user_id: currentUserId || null,
       });
       if (error) throw error;
+      
+      // 👤 회원이면 순위 업데이트 (typing은 높을수록 좋음)
+      if (currentUserId) {
+        const { count } = await supabase.from("typing_leaderboard").select("*", { count: "exact", head: true }).gt("wpm", result.cpm);
+        await updateMemberScore(currentUserId, "typing", (count || 0) + 1);
+      }
+      
       setHasSubmittedScore(true);
       setShowNicknameModal(false);
       setNickname("");
@@ -916,70 +983,12 @@ export default function TypingMulti({ locale }: Props) {
   };
 
   // 메인 경로
-  const mainPath = locale === "ko" ? "/" : `/${locale}`;
   const reactionPath = locale === "ko" ? "/reaction" : `/${locale}/reaction`;
 
   return (
     <div className="min-h-screen bg-dark-950">
-      {/* 네비게이션 */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-900/80 backdrop-blur-xl border-b border-dark-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href={mainPath} className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-accent-purple to-accent-cyan rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">S</span>
-              </div>
-              <span className="text-white font-semibold">SLOX</span>
-            </Link>
-            <div className="flex items-center gap-4">
-              {/* 언어 선택 */}
-              <div className="hidden sm:flex items-center gap-1">
-                {(["ko", "en", "ja", "zh", "de", "fr", "es", "pt"] as Locale[]).map((l) => (
-                  <button
-                    key={l}
-                    onClick={() => {
-                      document.cookie = `SLOX_LOCALE=${l}; path=/; max-age=31536000`;
-                      window.location.href = l === "ko" ? "/typing" : `/${l}/typing`;
-                    }}
-                    className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
-                      locale === l
-                        ? "bg-accent-purple text-white"
-                        : "text-dark-400 hover:text-white hover:bg-dark-800"
-                    }`}
-                  >
-                    {l.toUpperCase()}
-                  </button>
-                ))}
-              </div>
-              {/* 모바일 언어 선택 */}
-              <select
-                value={locale}
-                onChange={(e) => {
-                  const newLocale = e.target.value as Locale;
-                  document.cookie = `SLOX_LOCALE=${newLocale}; path=/; max-age=31536000`;
-                  window.location.href = newLocale === "ko" ? "/typing" : `/${newLocale}/typing`;
-                }}
-                className="sm:hidden bg-dark-800 text-white text-xs px-2 py-1 rounded border border-dark-700"
-              >
-                <option value="ko">🇰🇷 한국어</option>
-                <option value="en">🇺🇸 English</option>
-                <option value="ja">🇯🇵 日本語</option>
-                <option value="zh">🇨🇳 中文</option>
-                <option value="de">🇩🇪 Deutsch</option>
-                <option value="fr">🇫🇷 Français</option>
-                <option value="es">🇪🇸 Español</option>
-                <option value="pt">🇧🇷 Português</option>
-              </select>
-              <Link 
-                href={mainPath}
-                className="text-dark-300 hover:text-white transition-colors text-sm"
-              >
-                {t.backToMain}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* 네비게이션 - GameNavBar 사용 */}
+      <GameNavBar locale={locale} gamePath="/typing" />
 
       {/* 메인 콘텐츠 */}
       <main className="pt-24 pb-16 px-4">
@@ -1101,14 +1110,47 @@ export default function TypingMulti({ locale }: Props) {
               <div className="text-center py-8"><div className="text-4xl mb-3">⌨️</div><p className="text-dark-400">{t.noRecords} {t.firstChallenger}</p></div>
             ) : (
               <div className="space-y-2">
-                {leaderboard.map((entry, index) => (
+                {(() => {
+                  const memberRankMap = new Map<string, number>();
+                  let memberRank = 0;
+                  leaderboard.forEach(e => { if (e.user_id) { memberRank++; memberRankMap.set(e.user_id, memberRank); } });
+                  return leaderboard.map((entry, index) => {
+                    const memberRankNum = entry.user_id ? memberRankMap.get(entry.user_id) || 0 : 0;
+                    return (
                   <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
-                    <span className="text-base  flex-shrink-0">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
+                    {/* 순위 */}
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
+                    {/* 아바타 */}
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 overflow-hidden ${entry.user_id ? "ring-2 ring-accent-500/50" : "bg-dark-600 text-dark-400"}`}>
+                      {entry.user_id && entry.avatar_url ? (
+                        <img src={entry.avatar_url} alt="" className="w-full h-full object-cover" />
+                      ) : entry.user_id ? (
+                        <div className="w-full h-full bg-gradient-to-br from-accent-500 to-purple-600 flex items-center justify-center text-white">{entry.nickname?.charAt(0).toUpperCase()}</div>
+                      ) : (
+                        <span>{entry.nickname?.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    {/* 국기 */}
+                    <span className="text-base flex-shrink-0">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
                     <div className="flex-1 min-w-0 text-left">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         <p className="text-white font-medium truncate">{entry.nickname}</p>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
+                        {/* 👤 회원 배지 + 순위 배지 (분리) */}
+                        {entry.user_id && (
+                          <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">✓ {locale === "ko" ? "회원" : "M"}</span>
+                        )}
+                        {entry.user_id && memberRankNum <= 10 && (
+                          memberRankNum === 1 ? (
+                            <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gradient-to-r from-yellow-500/30 to-amber-500/30 text-yellow-300 border border-yellow-500/50 font-bold shadow-[0_0_8px_rgba(234,179,8,0.3)] animate-pulse">👑 {locale === "ko" ? "1위" : "#1"}</span>
+                          ) : memberRankNum === 2 ? (
+                            <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gray-400/20 text-gray-300 border border-gray-400/40 font-bold">🥈 {locale === "ko" ? "2위" : "#2"}</span>
+                          ) : memberRankNum === 3 ? (
+                            <span className="text-xs px-1.5 py-0.5 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold">🥉 {locale === "ko" ? "3위" : "#3"}</span>
+                          ) : (
+                            <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">🏆 {memberRankNum}{locale === "ko" ? "위" : "th"}</span>
+                          )
+                        )}
+                        <span className="text-xs px-1.5 py-0.5 rounded-full bg-dark-700 text-dark-400">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-dark-400">
                         <span className={getGrade(entry.wpm).color}>{getGrade(entry.wpm).grade}</span>
@@ -1121,7 +1163,9 @@ export default function TypingMulti({ locale }: Props) {
                       <div className="text-xs text-dark-500">#{index + 1}</div>
                     </div>
                   </div>
-                ))}
+                    );
+                  });
+                })()}
               </div>
             )}
           </div>
@@ -1227,6 +1271,11 @@ export default function TypingMulti({ locale }: Props) {
                   autoFocus
                   onKeyDown={(e) => e.key === "Enter" && submitScore()}
                 />
+                {/* 🔐 로그인 유도 */}
+                <div className="mb-3 p-3 bg-accent-purple/10 rounded-lg border border-accent-purple/20">
+                  <p className="text-xs text-dark-300 mb-1">{locale === "ko" ? "💡 로그인하면 회원 점수에 반영됩니다" : "💡 Login to save your score to your profile"}</p>
+                  <a href={locale === "ko" ? "/login" : `/${locale}/login`} className="text-accent-purple text-xs hover:underline">{locale === "ko" ? "로그인하러 가기 →" : "Go to login →"}</a>
+                </div>
                 <div className="mb-4">
                   <label className="text-dark-400 text-sm mb-1 block">{t.country}</label>
                   <select 

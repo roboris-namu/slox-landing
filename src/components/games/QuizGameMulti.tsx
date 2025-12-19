@@ -2,11 +2,11 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import GameNavBar from "@/components/GameNavBar";
+import { Locale } from "@/locales";
 
-// 지원 언어
-type Locale = "ko" | "en" | "ja" | "zh" | "de" | "fr" | "es" | "pt";
+// 다국어 타입은 @/locales에서 import
 
 // 국가 옵션
 const COUNTRY_OPTIONS = [
@@ -383,17 +383,7 @@ const questionsByLocale: Record<Locale, { q: string; options: string[]; answer: 
   ],
 };
 
-// 언어 선택기 옵션
-const languageOptions: { locale: Locale; flag: string; name: string }[] = [
-  { locale: "ko", flag: "🇰🇷", name: "한국어" },
-  { locale: "en", flag: "🇺🇸", name: "English" },
-  { locale: "ja", flag: "🇯🇵", name: "日本語" },
-  { locale: "zh", flag: "🇨🇳", name: "中文" },
-  { locale: "de", flag: "🇩🇪", name: "Deutsch" },
-  { locale: "fr", flag: "🇫🇷", name: "Français" },
-  { locale: "es", flag: "🇪🇸", name: "Español" },
-  { locale: "pt", flag: "🇧🇷", name: "Português" },
-];
+// 언어 선택기 옵션은 GameNavBar에서 처리
 
 interface LeaderboardEntry {
   id: string;
@@ -424,7 +414,26 @@ export default function QuizGameMulti({ locale }: Props) {
   const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY[locale]);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  
+  // 👤 사용자 인증 상태
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserNickname, setCurrentUserNickname] = useState<string>("");
+
+  // 👤 사용자 인증 체크
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setCurrentUserId(user.id);
+        const { data: profile } = await supabase.from("profiles").select("nickname").eq("id", user.id).single();
+        if (profile) {
+          setCurrentUserNickname(profile.nickname);
+          setNickname(profile.nickname);
+        }
+      }
+    };
+    checkUser();
+  }, []);
 
   const correctCount = answers.filter((a, i) => a === questions[i].answer).length;
   const score = correctCount * 100 + answers.reduce((acc, a, i) => acc + (a === questions[i].answer ? 10 : 0), 0);
@@ -454,7 +463,24 @@ export default function QuizGameMulti({ locale }: Props) {
       .select("*")
       .order("score", { ascending: false })
       .limit(10);
-    if (data) setLeaderboard(data);
+    // 👤 회원 닉네임 + 프로필사진 동기화
+    if (data && data.length > 0) {
+      const userIds = data.filter(d => d.user_id).map(d => d.user_id);
+      if (userIds.length > 0) {
+        const { data: profiles } = await supabase.from("profiles").select("id, nickname, avatar_url").in("id", userIds);
+        if (profiles) {
+          const profileMap = new Map(profiles.map(p => [p.id, { nickname: p.nickname, avatar_url: p.avatar_url }]));
+          data.forEach(entry => {
+            if (entry.user_id && profileMap.has(entry.user_id)) {
+              const profile = profileMap.get(entry.user_id);
+              entry.nickname = profile?.nickname || entry.nickname;
+              entry.avatar_url = profile?.avatar_url;
+            }
+          });
+        }
+      }
+      setLeaderboard(data);
+    }
   }, []);
 
   useEffect(() => {
@@ -498,15 +524,43 @@ export default function QuizGameMulti({ locale }: Props) {
     }
   };
 
+  // 👤 순위에 따른 점수 계산
+  const getRankPoints = (rank: number): number => { if (rank === 1) return 200; if (rank <= 3) return 100; if (rank <= 10) return 50; return 0; };
+  
+  const updateMemberScore = async (userId: string, gameType: string, newRank: number) => {
+    const points = getRankPoints(newRank); if (points === 0) return;
+    try {
+      const { data: profile } = await supabase.from("profiles").select("total_score, game_scores").eq("id", userId).single();
+      if (!profile) return;
+      const gameScores = profile.game_scores || {};
+      const prevRank = gameScores[gameType]?.rank || Infinity;
+      if (newRank >= prevRank) return;
+      const previousPoints = gameScores[gameType]?.points || 0;
+      const pointsDiff = points - previousPoints;
+      if (pointsDiff <= 0) return;
+      await supabase.from("profiles").update({ total_score: profile.total_score + pointsDiff, game_scores: { ...gameScores, [gameType]: { rank: newRank, points } }, updated_at: new Date().toISOString() }).eq("id", userId);
+    } catch (err) { console.error("점수 업데이트 실패:", err); }
+  };
+
   const submitScore = async () => {
     if (!nickname.trim() || hasSubmitted) return;
+    const finalNickname = currentUserId && currentUserNickname ? currentUserNickname : nickname.trim();
+    
     await supabase.from("quiz_leaderboard").insert({
-      nickname: nickname.trim(),
+      nickname: finalNickname,
       score,
       correct_count: correctCount,
       time_seconds: 150 - timeLeft,
       country: selectedCountry,
+      user_id: currentUserId || null,
     });
+    
+    // 👤 회원이면 순위 업데이트 (quiz는 높을수록 좋음)
+    if (currentUserId) {
+      const { count } = await supabase.from("quiz_leaderboard").select("*", { count: "exact", head: true }).gt("score", score);
+      await updateMemberScore(currentUserId, "quiz", (count || 0) + 1);
+    }
+    
     setHasSubmitted(true);
     setShowNicknameModal(false);
     fetchLeaderboard();
@@ -523,65 +577,10 @@ export default function QuizGameMulti({ locale }: Props) {
     setTimeout(() => setShowCopied(false), 2000);
   };
 
-  const getQuizPath = (targetLocale: Locale) => {
-    return targetLocale === "ko" ? "/quiz" : `/${targetLocale}/quiz`;
-  };
-
-  const currentLang = languageOptions.find(l => l.locale === locale);
-
   return (
     <div className="min-h-screen bg-dark-950">
-      {/* 네비게이션 바 */}
-      <nav className="fixed top-0 left-0 right-0 z-50">
-        <div className="mx-4 mt-4">
-          <div className="max-w-4xl mx-auto bg-dark-900/80 backdrop-blur-xl rounded-2xl border border-white/10">
-            <div className="flex items-center justify-between h-14 px-4">
-              <Link href={locale === "ko" ? "/" : `/${locale}`} className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">S</span>
-                </div>
-                <span className="font-bold text-white">SLOX</span>
-              </Link>
-              
-              {/* 언어 선택 드롭다운 */}
-              <div className="relative">
-                <button 
-                  onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                  className="flex items-center gap-2 px-3 py-1.5 text-sm text-dark-300 hover:text-white bg-dark-800 rounded-lg border border-dark-700"
-                >
-                  <span>{currentLang?.flag}</span>
-                  <span className="hidden sm:inline">{currentLang?.name}</span>
-                  <span>▼</span>
-                </button>
-                
-                {showLanguageMenu && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setShowLanguageMenu(false)} />
-                    <div className="absolute right-0 mt-2 w-40 bg-dark-900 border border-dark-700 rounded-xl shadow-xl z-50 overflow-hidden">
-                      {languageOptions.map((lang) => (
-                        <button
-                          key={lang.locale}
-                          className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-dark-800 transition-colors w-full text-left ${
-                            lang.locale === locale ? "bg-dark-800 text-white" : "text-dark-300"
-                          }`}
-                          onClick={() => {
-                            document.cookie = `SLOX_LOCALE=${lang.locale}; path=/; max-age=31536000`;
-                            setShowLanguageMenu(false);
-                            router.push(getQuizPath(lang.locale));
-                          }}
-                        >
-                          <span>{lang.flag}</span>
-                          <span>{lang.name}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* 네비게이션 바 - GameNavBar 사용 */}
+      <GameNavBar locale={locale} gamePath="/quiz" />
 
       <div className="pt-24 pb-16 px-4">
         <div className="max-w-4xl mx-auto">
@@ -609,14 +608,48 @@ export default function QuizGameMulti({ locale }: Props) {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {leaderboard.map((entry, idx) => {
-                      const entryGrade = getGradeByScore(entry.score);
-                      return (
+                    {(() => {
+                      const memberRankMap = new Map<string, number>();
+                      let memberRank = 0;
+                      leaderboard.forEach(e => { if (e.user_id) { memberRank++; memberRankMap.set(e.user_id, memberRank); } });
+                      return leaderboard.map((entry, idx) => {
+                        const memberRankNum = entry.user_id ? memberRankMap.get(entry.user_id) || 0 : 0;
+                        const entryGrade = getGradeByScore(entry.score);
+                        return (
                         <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${idx === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : idx === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : idx === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${idx === 0 ? "bg-yellow-500 text-black" : idx === 1 ? "bg-gray-300 text-black" : idx === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{idx + 1}</div>
-                          <span className="text-base  flex-shrink-0">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
+                          {/* 순위 */}
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${idx === 0 ? "bg-yellow-500 text-black" : idx === 1 ? "bg-gray-300 text-black" : idx === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{idx + 1}</div>
+                          {/* 아바타 */}
+                          <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 overflow-hidden ${entry.user_id ? "ring-2 ring-accent-500/50" : "bg-dark-600 text-dark-400"}`}>
+                            {entry.user_id && entry.avatar_url ? (
+                              <img src={entry.avatar_url} alt="" className="w-full h-full object-cover" />
+                            ) : entry.user_id ? (
+                              <div className="w-full h-full bg-gradient-to-br from-accent-500 to-purple-600 flex items-center justify-center text-white">{entry.nickname?.charAt(0).toUpperCase()}</div>
+                            ) : (
+                              <span>{entry.nickname?.charAt(0).toUpperCase()}</span>
+                            )}
+                          </div>
+                          {/* 국기 */}
+                          <span className="text-base flex-shrink-0">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
                           <div className="flex-1 min-w-0 text-left">
-                            <p className="text-white font-medium truncate">{entry.nickname}</p>
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <p className="text-white font-medium truncate">{entry.nickname}</p>
+                              {/* 👤 회원 배지 + 순위 배지 (분리) */}
+                              {entry.user_id && (
+                                <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">✓ {locale === "ko" ? "회원" : "M"}</span>
+                              )}
+                              {entry.user_id && memberRankNum <= 10 && (
+                                memberRankNum === 1 ? (
+                                  <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gradient-to-r from-yellow-500/30 to-amber-500/30 text-yellow-300 border border-yellow-500/50 font-bold shadow-[0_0_8px_rgba(234,179,8,0.3)] animate-pulse">👑 {locale === "ko" ? "1위" : "#1"}</span>
+                                ) : memberRankNum === 2 ? (
+                                  <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gray-400/20 text-gray-300 border border-gray-400/40 font-bold">🥈 {locale === "ko" ? "2위" : "#2"}</span>
+                                ) : memberRankNum === 3 ? (
+                                  <span className="text-xs px-1.5 py-0.5 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold">🥉 {locale === "ko" ? "3위" : "#3"}</span>
+                                ) : (
+                                  <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">🏆 {memberRankNum}{locale === "ko" ? "위" : "th"}</span>
+                                )
+                              )}
+                            </div>
                             <div className="flex items-center gap-2 text-xs text-dark-400">
                               <span className={entryGrade.color}>{entryGrade.grade}</span>
                               <span>•</span>
@@ -629,7 +662,8 @@ export default function QuizGameMulti({ locale }: Props) {
                           </div>
                         </div>
                       );
-                    })}
+                    });
+                  })()}
                   </div>
                 )}
               </div>
@@ -728,6 +762,11 @@ export default function QuizGameMulti({ locale }: Props) {
           <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-sm w-full">
             <h3 className="text-xl font-bold text-white mb-4 text-center">{t.enterNickname}</h3>
             <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value)} placeholder={t.nickname} maxLength={10} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-3 focus:outline-none focus:border-blue-500" />
+            {/* 🔐 로그인 유도 */}
+            <div className="mb-3 p-3 bg-accent-purple/10 rounded-lg border border-accent-purple/20">
+              <p className="text-xs text-dark-300 mb-1">{locale === "ko" ? "💡 로그인하면 회원 점수에 반영됩니다" : "💡 Login to save your score to your profile"}</p>
+              <a href={locale === "ko" ? "/login" : `/${locale}/login`} className="text-accent-purple text-xs hover:underline">{locale === "ko" ? "로그인하러 가기 →" : "Go to login →"}</a>
+            </div>
             <div className="mb-4">
               <label className="text-dark-400 text-sm mb-1 block">{t.country}</label>
               <select 

@@ -2,21 +2,9 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
-
-// 언어 선택기 옵션
-const languageOptions = [
-  { locale: "ko", flag: "🇰🇷", name: "한국어", path: "/typing" },
-  { locale: "en", flag: "🇺🇸", name: "English", path: "/en/typing" },
-  { locale: "ja", flag: "🇯🇵", name: "日本語", path: "/ja/typing" },
-  { locale: "zh", flag: "🇨🇳", name: "中文", path: "/zh/typing" },
-  { locale: "de", flag: "🇩🇪", name: "Deutsch", path: "/de/typing" },
-  { locale: "fr", flag: "🇫🇷", name: "Français", path: "/fr/typing" },
-  { locale: "es", flag: "🇪🇸", name: "Español", path: "/es/typing" },
-  { locale: "pt", flag: "🇧🇷", name: "Português", path: "/pt/typing" },
-];
+import GameNavBar from "@/components/GameNavBar";
 
 interface TypingLeaderboardEntry {
   id: string;
@@ -28,6 +16,7 @@ interface TypingLeaderboardEntry {
   grade?: string;
   percentile?: number;
   country?: string;
+  user_id?: string; // 👤 회원이면 user_id 있음
 }
 
 // 등급 번역 (영어→한국어)
@@ -165,11 +154,34 @@ export default function TypingTest() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  
+  // 👤 로그인 유저 상태
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserNickname, setCurrentUserNickname] = useState<string | null>(null);
 
   // 초기 문장 설정
   useEffect(() => {
     setSentence(getRandomSentence());
+  }, []);
+  
+  // 👤 로그인 상태 확인
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setCurrentUserId(session.user.id);
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("nickname")
+          .eq("id", session.user.id)
+          .single();
+        if (profile) {
+          setCurrentUserNickname(profile.nickname);
+          setNickname(profile.nickname);
+        }
+      }
+    };
+    checkUser();
   }, []);
 
   // 타이머 + 실시간 타수 계산 🔥
@@ -199,13 +211,88 @@ export default function TypingTest() {
     try {
       const { data, error } = await supabase.from("typing_leaderboard").select("*").order("wpm", { ascending: false }).limit(10);
       if (error) throw error;
-      if (data) setLeaderboard(data);
+      // 👤 회원 닉네임 + 프로필사진 동기화
+      if (data && data.length > 0) {
+        const userIds = data.filter(d => d.user_id).map(d => d.user_id);
+        if (userIds.length > 0) {
+          const { data: profiles } = await supabase.from("profiles").select("id, nickname, avatar_url").in("id", userIds);
+          if (profiles) {
+            const profileMap = new Map(profiles.map(p => [p.id, { nickname: p.nickname, avatar_url: p.avatar_url }]));
+            data.forEach(entry => {
+              if (entry.user_id && profileMap.has(entry.user_id)) {
+                const profile = profileMap.get(entry.user_id);
+                entry.nickname = profile?.nickname || entry.nickname;
+                entry.avatar_url = profile?.avatar_url;
+              }
+            });
+          }
+        }
+        setLeaderboard(data);
+      }
     } catch (err) { console.error("리더보드 로드 실패:", err); }
   }, []);
 
+  // 👤 순위에 따른 점수 계산 (1등:200, 2~3등:100, 4~10등:50)
+  const getRankPoints = (rank: number): number => {
+    if (rank === 1) return 200;
+    if (rank <= 3) return 100;
+    if (rank <= 10) return 50;
+    return 0;
+  };
+
+  // 👤 회원 점수 업데이트
+  const updateMemberScore = async (userId: string, gameType: string, newRank: number) => {
+    const points = getRankPoints(newRank);
+    if (points === 0) return;
+
+    try {
+      // 현재 프로필 가져오기
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("total_score, game_scores")
+        .eq("id", userId)
+        .single();
+
+      if (!profile) return;
+
+      const gameScores = profile.game_scores || {};
+      const prevRank = gameScores[gameType]?.rank || Infinity;
+      if (newRank >= prevRank) return; // 더 좋은 순위일 때만 업데이트
+      
+      const previousPoints = gameScores[gameType]?.points || 0;
+      const pointsDiff = points - previousPoints;
+
+      if (pointsDiff <= 0) return; // 이전보다 낮으면 무시
+
+      // 점수 업데이트
+      const newGameScores = {
+        ...gameScores,
+        [gameType]: { rank: newRank, points }
+      };
+
+      await supabase
+        .from("profiles")
+        .update({
+          total_score: profile.total_score + pointsDiff,
+          game_scores: newGameScores,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", userId);
+
+      console.log(`✅ [${gameType}] ${newRank}등 달성! +${pointsDiff}점`);
+    } catch (err) {
+      console.error("점수 업데이트 실패:", err);
+    }
+  };
+
   // 점수 등록
   const submitScore = async () => {
-    if (!nickname.trim() || isSubmitting || !result) return;
+    // 👤 회원이면 회원 닉네임 사용
+    const finalNickname = currentUserId && currentUserNickname 
+      ? currentUserNickname 
+      : nickname.trim();
+    
+    if (!finalNickname || isSubmitting || !result) return;
     setIsSubmitting(true);
     const gradeInfo = getGrade(result.cpm);
     // 백분위 (난이도 상향)
@@ -214,15 +301,27 @@ export default function TypingTest() {
       : (result.cpm >= 650 ? 1 : result.cpm >= 550 ? 5 : result.cpm >= 450 ? 15 : result.cpm >= 370 ? 30 : result.cpm >= 300 ? 50 : result.cpm >= 230 ? 70 : result.cpm >= 150 ? 85 : 95);
     try {
       const { error } = await supabase.from("typing_leaderboard").insert({ 
-        nickname: nickname.trim().slice(0, 20), 
+        nickname: finalNickname.slice(0, 20), 
         wpm: result.cpm,  // 타/분
         accuracy: result.accuracy, 
         device_type: isMobile ? "mobile" : "pc",
         grade: gradeInfo.grade,
         percentile: percentile,
         country: selectedCountry,
+        user_id: currentUserId, // 👤 로그인 유저면 user_id 저장
       });
       if (error) throw error;
+      
+      // 👤 회원이면 순위 계산 후 점수 업데이트
+      if (currentUserId) {
+        const { count } = await supabase
+          .from("typing_leaderboard")
+          .select("*", { count: "exact", head: true })
+          .gt("wpm", result.cpm);
+        const rank = (count || 0) + 1;
+        await updateMemberScore(currentUserId, "typing", rank);
+      }
+      
       setHasSubmittedScore(true);
       setShowNicknameModal(false);
       setNickname("");
@@ -405,56 +504,8 @@ export default function TypingTest() {
 
   return (
     <div className="min-h-screen bg-dark-950">
-      {/* 네비게이션 */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-900/80 backdrop-blur-xl border-b border-dark-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-accent-purple to-accent-cyan rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">S</span>
-              </div>
-              <span className="text-white font-semibold">SLOX</span>
-            </Link>
-            <div className="flex items-center gap-4">
-              {/* 언어 선택 드롭다운 */}
-              <div className="relative">
-                <button 
-                  onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                  className="flex items-center gap-2 px-3 py-1.5 text-sm text-dark-300 hover:text-white bg-dark-800 rounded-lg border border-dark-700"
-                >
-                  <span>🇰🇷</span>
-                  <span className="hidden sm:inline">한국어</span>
-                  <span className="text-xs">▼</span>
-                </button>
-                {showLanguageMenu && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setShowLanguageMenu(false)} />
-                    <div className="absolute right-0 mt-2 w-40 bg-dark-900 border border-dark-700 rounded-xl shadow-xl z-50 overflow-hidden">
-                      {languageOptions.map((lang) => (
-                        <button
-                          key={lang.locale}
-                          className={`flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-dark-800 transition-colors w-full text-left ${
-                            lang.locale === "ko" ? "bg-dark-800 text-white" : "text-dark-300"
-                          }`}
-                          onClick={() => {
-                            document.cookie = `SLOX_LOCALE=${lang.locale}; path=/; max-age=31536000`;
-                            setShowLanguageMenu(false);
-                            router.push(lang.path);
-                          }}
-                        >
-                          <span>{lang.flag}</span>
-                          <span>{lang.name}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </div>
-              <Link href="/" className="text-dark-300 hover:text-white transition-colors text-sm">← 메인</Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* 네비게이션 - GameNavBar 사용 */}
+      <GameNavBar locale="ko" gamePath="/typing" />
 
       {/* 메인 콘텐츠 */}
       <main className="pt-24 pb-16 px-4">
@@ -597,14 +648,47 @@ export default function TypingTest() {
               <div className="text-center py-8"><div className="text-4xl mb-3">⌨️</div><p className="text-dark-400">아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!</p></div>
             ) : (
               <div className="space-y-2">
-                {leaderboard.map((entry, index) => (
+                {(() => {
+                  const memberRankMap = new Map<string, number>();
+                  let memberRank = 0;
+                  leaderboard.forEach(e => { if (e.user_id) { memberRank++; memberRankMap.set(e.user_id, memberRank); } });
+                  return leaderboard.map((entry, index) => {
+                    const memberRankNum = entry.user_id ? memberRankMap.get(entry.user_id) || 0 : 0;
+                    return (
                   <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
+                    {/* 순위 */}
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
+                    {/* 아바타 */}
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 overflow-hidden ${entry.user_id ? "ring-2 ring-accent-500/50" : "bg-dark-600 text-dark-400"}`}>
+                      {entry.user_id && entry.avatar_url ? (
+                        <img src={entry.avatar_url} alt="" className="w-full h-full object-cover" />
+                      ) : entry.user_id ? (
+                        <div className="w-full h-full bg-gradient-to-br from-accent-500 to-purple-600 flex items-center justify-center text-white">{entry.nickname?.charAt(0).toUpperCase()}</div>
+                      ) : (
+                        <span>{entry.nickname?.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    {/* 국기 */}
+                    <span className="text-base flex-shrink-0">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
                     <div className="flex-1 min-w-0 text-left">
-                      <div className="flex items-center gap-2">
-                        <span className="text-base bg-dark-700 px-1.5 py-0.5 rounded">{COUNTRY_OPTIONS.find(c => c.code === entry.country)?.flag || "🌍"}</span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         <p className="text-white font-medium truncate">{entry.nickname}</p>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
+                        {/* 👤 회원 배지 + 순위 배지 (분리) */}
+                        {entry.user_id && (
+                          <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">✓ 회원</span>
+                        )}
+                        {entry.user_id && memberRankNum <= 10 && (
+                          memberRankNum === 1 ? (
+                            <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gradient-to-r from-yellow-500/30 to-amber-500/30 text-yellow-300 border border-yellow-500/50 font-bold shadow-[0_0_8px_rgba(234,179,8,0.3)] animate-pulse">👑 1위</span>
+                          ) : memberRankNum === 2 ? (
+                            <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gray-400/20 text-gray-300 border border-gray-400/40 font-bold">🥈 2위</span>
+                          ) : memberRankNum === 3 ? (
+                            <span className="text-xs px-1.5 py-0.5 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold">🥉 3위</span>
+                          ) : (
+                            <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">🏆 {memberRankNum}위</span>
+                          )
+                        )}
+                        <span className="text-xs px-1.5 py-0.5 rounded-full bg-dark-700 text-dark-400">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-dark-400">
                         <span className={
@@ -626,7 +710,9 @@ export default function TypingTest() {
                       <div className="text-xs text-dark-500">{index + 1}위 / {leaderboard.length}명</div>
                     </div>
                   </div>
-                ))}
+                    );
+                  });
+                })()}
               </div>
             )}
           </div>
@@ -710,7 +796,25 @@ export default function TypingTest() {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
               <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full">
                 <div className="text-center mb-6"><div className="text-5xl mb-3">{getGrade(result.cpm).emoji}</div><h3 className="text-white text-xl font-bold">🏆 랭킹 등록</h3><p className="text-dark-400 text-sm">{result.cpm}타/분 (정확도 {result.accuracy}%)</p></div>
-                <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder="닉네임..." className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+                {/* 👤 회원 로그인 시 닉네임 고정 */}
+                {currentUserId && currentUserNickname ? (
+                  <div className="relative mb-4">
+                    <input type="text" value={currentUserNickname} disabled className="w-full px-4 py-3 bg-dark-900 border border-accent-500/50 rounded-xl text-white cursor-not-allowed opacity-80" />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <span className="text-xs px-2 py-1 rounded bg-accent-500/20 text-accent-400 border border-accent-500/30 font-medium">✓ 회원</span>
+                    </div>
+                  </div>
+                ) : (
+                  <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder="닉네임..." className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+                )}
+                {currentUserId && <p className="text-xs text-dark-500 mb-4 -mt-2">💡 회원은 프로필 닉네임으로 자동 등록됩니다</p>}
+                {/* 🔐 비로그인 시 로그인 유도 */}
+                {!currentUserId && (
+                  <div className="mb-4 p-3 bg-accent-purple/10 rounded-lg border border-accent-purple/20">
+                    <p className="text-xs text-dark-300 mb-1">💡 로그인하면 회원 점수에 반영됩니다</p>
+                    <a href="/login" className="text-accent-purple text-xs hover:underline">로그인하러 가기 →</a>
+                  </div>
+                )}
                 <div className="mb-4">
                   <label className="block text-dark-400 text-sm mb-2">국가 선택</label>
                   <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white">

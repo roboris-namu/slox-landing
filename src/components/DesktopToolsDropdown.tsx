@@ -2,84 +2,91 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Locale, navTranslations } from "@/locales";
 
 // 도구 타입 정의
 interface Tool {
-  href: string;
+  path: string;
   emoji: string;
-  label: string;
+  labels: Record<Locale, string>;
   best?: boolean;
   isNew?: boolean;
-  event?: boolean; // 이벤트 진행 중
+  event?: boolean;
 }
 
 interface ToolCategory {
-  name: string;
+  names: Record<Locale, string>;
   color: string;
   tools: Tool[];
 }
 
-// 카테고리별 도구 분류
+// 카테고리별 도구 분류 (다국어)
 const toolCategories: ToolCategory[] = [
   {
-    name: "🎮 게임 & 테스트",
+    names: { ko: "🎮 게임 & 테스트", en: "🎮 Games & Tests", ja: "🎮 ゲーム & テスト", zh: "🎮 游戏 & 测试", de: "🎮 Spiele & Tests", fr: "🎮 Jeux & Tests", es: "🎮 Juegos & Tests", pt: "🎮 Jogos & Testes" },
     color: "purple",
     tools: [
-      { href: "/reaction", emoji: "⚡", label: "반응속도 테스트", best: true, event: true },
-      { href: "/quiz", emoji: "📚", label: "상식 퀴즈", isNew: true },
-      { href: "/iq", emoji: "🧩", label: "IQ 테스트", isNew: true },
-      { href: "/sudoku", emoji: "🔢", label: "스도쿠", isNew: true },
-      { href: "/color", emoji: "🎨", label: "색상 찾기 게임" },
-      { href: "/card-match", emoji: "🃏", label: "카드 짝 맞추기" },
-      { href: "/cps", emoji: "🖱️", label: "CPS 테스트" },
-      { href: "/typing", emoji: "⌨️", label: "타자 테스트" },
-      { href: "/aim", emoji: "🎯", label: "에임 트레이너" },
-      { href: "/memory", emoji: "🧠", label: "숫자 기억 게임" },
+      { path: "/reaction", emoji: "⚡", labels: { ko: "반응속도 테스트", en: "Reaction Test", ja: "反応速度テスト", zh: "反应速度测试", de: "Reaktionstest", fr: "Test de réaction", es: "Test de reacción", pt: "Teste de reação" }, best: true, event: true },
+      { path: "/quiz", emoji: "📚", labels: { ko: "상식 퀴즈", en: "Trivia Quiz", ja: "一般常識クイズ", zh: "常识问答", de: "Wissensquiz", fr: "Quiz culture", es: "Quiz de cultura", pt: "Quiz de conhecimentos" }, isNew: true },
+      { path: "/iq", emoji: "🧩", labels: { ko: "IQ 테스트", en: "IQ Test", ja: "IQテスト", zh: "IQ测试", de: "IQ-Test", fr: "Test de QI", es: "Test de IQ", pt: "Teste de QI" }, isNew: true },
+      { path: "/sudoku", emoji: "🔢", labels: { ko: "스도쿠", en: "Sudoku", ja: "数独", zh: "数独", de: "Sudoku", fr: "Sudoku", es: "Sudoku", pt: "Sudoku" }, isNew: true },
+      { path: "/color", emoji: "🎨", labels: { ko: "색상 찾기 게임", en: "Color Finder", ja: "色探しゲーム", zh: "找颜色", de: "Farbe finden", fr: "Trouver la couleur", es: "Busca el color", pt: "Encontre a cor" } },
+      { path: "/card-match", emoji: "🃏", labels: { ko: "카드 짝 맞추기", en: "Card Match", ja: "カードマッチ", zh: "卡片配对", de: "Karten-Memory", fr: "Memory", es: "Memoria", pt: "Memória" } },
+      { path: "/cps", emoji: "🖱️", labels: { ko: "CPS 테스트", en: "CPS Test", ja: "CPSテスト", zh: "CPS测试", de: "CPS-Test", fr: "Test CPS", es: "Test CPS", pt: "Teste CPS" } },
+      { path: "/typing", emoji: "⌨️", labels: { ko: "타자 테스트", en: "Typing Test", ja: "タイピングテスト", zh: "打字测试", de: "Tipptest", fr: "Test de frappe", es: "Test de tecleo", pt: "Teste de digitação" } },
+      { path: "/aim", emoji: "🎯", labels: { ko: "에임 트레이너", en: "Aim Trainer", ja: "エイムトレーナー", zh: "瞄准训练", de: "Zieltrainer", fr: "Visée", es: "Entrenador de puntería", pt: "Treinador de mira" } },
+      { path: "/memory", emoji: "🧠", labels: { ko: "숫자 기억 게임", en: "Memory Game", ja: "記憶ゲーム", zh: "记忆游戏", de: "Gedächtnisspiel", fr: "Jeu de mémoire", es: "Juego de memoria", pt: "Jogo de memória" } },
     ],
   },
   {
-    name: "💰 금융 계산기",
+    names: { ko: "💰 금융 계산기", en: "💰 Finance", ja: "💰 金融計算機", zh: "💰 金融计算器", de: "💰 Finanzen", fr: "💰 Finance", es: "💰 Finanzas", pt: "💰 Finanças" },
     color: "emerald",
     tools: [
-      { href: "/salary", emoji: "💵", label: "연봉 계산기", best: true },
-      { href: "/severance", emoji: "💼", label: "퇴직금 계산기" },
-      { href: "/loan", emoji: "🏦", label: "대출이자 계산기" },
-      { href: "/savings", emoji: "🏧", label: "적금이자 계산기" },
+      { path: "/salary", emoji: "💵", labels: { ko: "연봉 계산기", en: "Salary Calculator", ja: "年収計算機", zh: "年薪计算器", de: "Gehaltsrechner", fr: "Calcul salaire", es: "Calculadora de salario", pt: "Calculadora de salário" }, best: true },
+      { path: "/severance", emoji: "💼", labels: { ko: "퇴직금 계산기", en: "Severance Calculator", ja: "退職金計算機", zh: "离职金计算器", de: "Abfindungsrechner", fr: "Calcul indemnité", es: "Calculadora de finiquito", pt: "Calculadora de rescisão" } },
+      { path: "/loan", emoji: "🏦", labels: { ko: "대출이자 계산기", en: "Loan Calculator", ja: "ローン計算機", zh: "贷款计算器", de: "Kreditrechner", fr: "Calcul prêt", es: "Calculadora de préstamo", pt: "Calculadora de empréstimo" } },
+      { path: "/savings", emoji: "🏧", labels: { ko: "적금이자 계산기", en: "Savings Calculator", ja: "積立計算機", zh: "储蓄计算器", de: "Sparrechner", fr: "Calcul épargne", es: "Calculadora de ahorro", pt: "Calculadora de poupança" } },
     ],
   },
   {
-    name: "🧮 생활 계산기",
+    names: { ko: "🧮 생활 계산기", en: "🧮 Calculators", ja: "🧮 生活計算機", zh: "🧮 生活计算器", de: "🧮 Rechner", fr: "🧮 Calculateurs", es: "🧮 Calculadoras", pt: "🧮 Calculadoras" },
     color: "blue",
     tools: [
-      { href: "/bmi", emoji: "⚖️", label: "BMI 계산기" },
-      { href: "/dday", emoji: "📅", label: "D-day 계산기" },
-      { href: "/age", emoji: "🎂", label: "나이 계산기" },
-      { href: "/percent", emoji: "🔢", label: "퍼센트 계산기" },
+      { path: "/bmi", emoji: "⚖️", labels: { ko: "BMI 계산기", en: "BMI Calculator", ja: "BMI計算機", zh: "BMI计算器", de: "BMI-Rechner", fr: "Calcul IMC", es: "Calculadora BMI", pt: "Calculadora IMC" } },
+      { path: "/dday", emoji: "📅", labels: { ko: "D-day 계산기", en: "D-Day Calculator", ja: "D-day計算機", zh: "D-day计算器", de: "D-Day Rechner", fr: "Calcul D-Day", es: "Calculadora D-Day", pt: "Calculadora D-Day" } },
+      { path: "/age", emoji: "🎂", labels: { ko: "나이 계산기", en: "Age Calculator", ja: "年齢計算機", zh: "年龄计算器", de: "Altersrechner", fr: "Calcul âge", es: "Calculadora de edad", pt: "Calculadora de idade" } },
+      { path: "/percent", emoji: "🔢", labels: { ko: "퍼센트 계산기", en: "Percent Calculator", ja: "パーセント計算機", zh: "百分比计算器", de: "Prozentrechner", fr: "Calcul pourcentage", es: "Calculadora de porcentaje", pt: "Calculadora de porcentagem" } },
     ],
   },
   {
-    name: "🛠️ 유틸리티",
+    names: { ko: "🛠️ 유틸리티", en: "🛠️ Utilities", ja: "🛠️ ユーティリティ", zh: "🛠️ 工具", de: "🛠️ Werkzeuge", fr: "🛠️ Utilitaires", es: "🛠️ Utilidades", pt: "🛠️ Utilitários" },
     color: "cyan",
     tools: [
-      { href: "/character-count", emoji: "✍️", label: "글자수 세기" },
-      { href: "/qr", emoji: "📱", label: "QR코드 생성기" },
-      { href: "/password", emoji: "🔐", label: "비밀번호 생성기" },
-      { href: "/random", emoji: "🎲", label: "랜덤 뽑기" },
-      { href: "/lotto", emoji: "🎰", label: "로또 번호 생성기" },
+      { path: "/character-count", emoji: "✍️", labels: { ko: "글자수 세기", en: "Character Count", ja: "文字数カウント", zh: "字符计数", de: "Zeichenzähler", fr: "Compteur de caractères", es: "Contador de caracteres", pt: "Contador de caracteres" } },
+      { path: "/qr", emoji: "📱", labels: { ko: "QR코드 생성기", en: "QR Generator", ja: "QRコード生成", zh: "QR码生成器", de: "QR-Generator", fr: "Générateur QR", es: "Generador QR", pt: "Gerador QR" } },
+      { path: "/password", emoji: "🔐", labels: { ko: "비밀번호 생성기", en: "Password Generator", ja: "パスワード生成", zh: "密码生成器", de: "Passwort-Generator", fr: "Générateur mot de passe", es: "Generador de contraseñas", pt: "Gerador de senhas" } },
+      { path: "/random", emoji: "🎲", labels: { ko: "랜덤 뽑기", en: "Random Picker", ja: "ランダム抽選", zh: "随机抽选", de: "Zufallsauswahl", fr: "Tirage au sort", es: "Selección aleatoria", pt: "Seleção aleatória" } },
+      { path: "/lotto", emoji: "🎰", labels: { ko: "로또 번호 생성기", en: "Lotto Generator", ja: "ロト番号生成", zh: "彩票号码生成", de: "Lotto-Generator", fr: "Générateur loto", es: "Generador de lotería", pt: "Gerador de loteria" } },
     ],
   },
   {
-    name: "🎭 심리 테스트",
+    names: { ko: "🎭 심리 테스트", en: "🎭 Psychology", ja: "🎭 心理テスト", zh: "🎭 心理测试", de: "🎭 Psychologie", fr: "🎭 Psychologie", es: "🎭 Psicología", pt: "🎭 Psicologia" },
     color: "pink",
     tools: [
-      { href: "/slox-test", emoji: "🐂", label: "나와 닮은 황소" },
-      { href: "/fortune", emoji: "🔮", label: "오늘의 운세", isNew: true },
-      { href: "/quote", emoji: "💬", label: "오늘의 명언", isNew: true },
+      { path: "/slox-test", emoji: "🐂", labels: { ko: "나와 닮은 황소", en: "Which Bull Are You?", ja: "あなたに似た牛", zh: "你像哪头牛", de: "Welcher Stier bist du?", fr: "Quel taureau êtes-vous?", es: "¿Qué toro eres?", pt: "Qual touro você é?" } },
+      { path: "/fortune", emoji: "🔮", labels: { ko: "오늘의 운세", en: "Daily Fortune", ja: "今日の運勢", zh: "今日运势", de: "Tageshoroskop", fr: "Horoscope du jour", es: "Horóscopo del día", pt: "Horóscopo do dia" }, isNew: true },
+      { path: "/quote", emoji: "💬", labels: { ko: "오늘의 명언", en: "Daily Quote", ja: "今日の名言", zh: "每日名言", de: "Zitat des Tages", fr: "Citation du jour", es: "Frase del día", pt: "Frase do dia" }, isNew: true },
     ],
   },
 ];
 
-export default function DesktopToolsDropdown() {
+interface DesktopToolsDropdownProps {
+  locale?: Locale;
+}
+
+export default function DesktopToolsDropdown({ locale = "ko" }: DesktopToolsDropdownProps) {
+  const t = navTranslations[locale];
+  const basePath = locale === "ko" ? "" : `/${locale}`;
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -101,7 +108,7 @@ export default function DesktopToolsDropdown() {
       <button 
         className="px-4 py-2 text-sm font-medium rounded-xl transition-all duration-300 flex items-center gap-1 text-dark-300 hover:text-white hover:bg-white/[0.05]"
       >
-        도구
+        {t.tools}
         <svg className="w-3 h-3 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
@@ -120,15 +127,15 @@ export default function DesktopToolsDropdown() {
           {/* 헤더 */}
           <div className="flex items-center justify-between mb-3 pb-3 border-b border-white/[0.05]">
             <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-              🛠️ 무료 도구 모음
+              🛠️ {locale === "ko" ? "무료 도구 모음" : locale === "ja" ? "無料ツール" : locale === "zh" ? "免费工具" : "Free Tools"}
             </h3>
-            <span className="text-xs text-dark-500">클릭하여 이용하세요</span>
+            <span className="text-xs text-dark-500">{locale === "ko" ? "클릭하여 이용하세요" : locale === "ja" ? "クリックして利用" : locale === "zh" ? "点击使用" : "Click to use"}</span>
           </div>
 
           {/* 카테고리 그리드 */}
           <div className="grid grid-cols-2 gap-5">
             {toolCategories.map((category) => (
-              <div key={category.name} className={`${category.name === "🎭 심리 테스트" ? "col-span-2" : ""} pb-4 border-b border-white/[0.04] last:border-0 last:pb-0`}>
+              <div key={category.names.ko} className={`${category.color === "pink" ? "col-span-2" : ""} pb-4 border-b border-white/[0.04] last:border-0 last:pb-0`}>
                 {/* 카테고리 헤더 */}
                 <h4 className={`text-xs font-semibold mb-2.5 flex items-center gap-1.5 ${
                   category.color === "purple" ? "text-purple-400" :
@@ -137,16 +144,16 @@ export default function DesktopToolsDropdown() {
                   category.color === "cyan" ? "text-cyan-400" :
                   "text-pink-400"
                 }`}>
-                  {category.name}
+                  {category.names[locale]}
                   <span className="text-dark-600 text-[10px] font-normal">({category.tools.length})</span>
                 </h4>
                 
                 {/* 도구 리스트 */}
-                <div className={`space-y-0.5 ${category.name === "🎭 심리 테스트" ? "flex gap-2" : ""}`}>
+                <div className={`space-y-0.5 ${category.color === "pink" ? "flex gap-2" : ""}`}>
                   {category.tools.map((tool) => (
                     <Link
-                      key={tool.href}
-                      href={tool.href}
+                      key={tool.path}
+                      href={`${basePath}${tool.path}`}
                       className={`flex items-center gap-2 px-2.5 py-1.5 text-sm rounded-lg transition-all whitespace-nowrap ${
                         tool.best 
                           ? "text-purple-400 hover:text-purple-300 hover:bg-purple-500/10 font-medium" 
@@ -156,7 +163,7 @@ export default function DesktopToolsDropdown() {
                       }`}
                     >
                       <span className="text-base">{tool.emoji}</span>
-                      <span className="text-xs">{tool.label}</span>
+                      <span className="text-xs">{tool.labels[locale]}</span>
                       {tool.best && (
                         <span className="text-[9px] bg-purple-500/20 px-1.5 py-0.5 rounded text-purple-400">BEST</span>
                       )}
@@ -176,7 +183,7 @@ export default function DesktopToolsDropdown() {
           {/* 푸터 */}
           <div className="mt-4 pt-3 border-t border-white/[0.05] text-center">
             <p className="text-dark-500 text-xs">
-              Powered by <span className="text-purple-400 font-medium">SLOX</span> · 모든 도구 무료 이용
+              Powered by <span className="text-purple-400 font-medium">SLOX</span> · {locale === "ko" ? "모든 도구 무료 이용" : locale === "ja" ? "すべて無料" : locale === "zh" ? "全部免费" : "All Free"}
             </p>
           </div>
         </div>

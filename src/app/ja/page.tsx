@@ -3,6 +3,9 @@ import Link from "next/link";
 import MainBanner from "@/components/MainBanner";
 import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 import LanguageSelector from "@/components/LanguageSelector";
+import LiveRanking from "@/components/LiveRanking";
+import DesktopToolsDropdown from "@/components/DesktopToolsDropdown";
+import NavUserProfile, { NavUserProfileMobile } from "@/components/NavUserProfile";
 
 export const metadata: Metadata = {
   title: "SLOX - 無料オンラインツール | IQテスト・反応速度テスト・ゲーム",
@@ -19,9 +22,9 @@ export default function JapaneseHome() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
+      <LiveRanking locale="ja" />
       <MainBanner locale="ja" />
       <HallOfFameCarousel locale="ja" />
-      {/* <CategoryQuickLinks /> */}
       <FreeToolsSection />
       <Footer />
     </main>
@@ -42,20 +45,17 @@ function Navigation() {
             </a>
             
             <div className="hidden md:flex items-center gap-1">
-              <Link href="/ja/reaction" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
-                🎮 ゲーム
+              <Link href="/ja/notice" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
+                📢 お知らせ
               </Link>
-              <Link href="/ja/bmi" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
-                🧮 計算機
-              </Link>
-              <Link href="/ja/qr" className="px-4 py-2 text-sm font-medium text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all duration-300">
-                🔧 生成器
-              </Link>
+              <DesktopToolsDropdown locale="ja" />
               <LanguageSelector currentLocale="ja" />
+              <NavUserProfile locale="ja" />
             </div>
             
-            <div className="md:hidden">
-              <LanguageSelector currentLocale="ja" />
+            <div className="md:hidden flex items-center gap-2">
+              <LanguageSelector currentLocale="ja" mobile />
+              <NavUserProfileMobile locale="ja" />
             </div>
           </div>
         </div>

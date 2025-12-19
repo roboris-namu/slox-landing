@@ -1088,11 +1088,680 @@ export const gameTranslations: Record<Locale, {
   },
 };
 
+// 네비게이션 번역
+export const navTranslations: Record<Locale, {
+  notice: string;
+  tools: string;
+  language: string;
+  login: string;
+  logout: string;
+  myProfile: string;
+  liveRanking: string;
+  rank: string;
+  points: string;
+}> = {
+  ko: {
+    notice: '공지',
+    tools: '도구',
+    language: '한국어',
+    login: '로그인',
+    logout: '로그아웃',
+    myProfile: '내 정보',
+    liveRanking: '실시간 랭킹',
+    rank: '위',
+    points: '점',
+  },
+  en: {
+    notice: 'Notice',
+    tools: 'Tools',
+    language: 'English',
+    login: 'Login',
+    logout: 'Logout',
+    myProfile: 'Profile',
+    liveRanking: 'Live Ranking',
+    rank: 'th',
+    points: 'pts',
+  },
+  ja: {
+    notice: 'お知らせ',
+    tools: 'ツール',
+    language: '日本語',
+    login: 'ログイン',
+    logout: 'ログアウト',
+    myProfile: 'マイページ',
+    liveRanking: 'リアルタイムランキング',
+    rank: '位',
+    points: '点',
+  },
+  zh: {
+    notice: '公告',
+    tools: '工具',
+    language: '中文',
+    login: '登录',
+    logout: '退出',
+    myProfile: '我的资料',
+    liveRanking: '实时排名',
+    rank: '名',
+    points: '分',
+  },
+  de: {
+    notice: 'Hinweis',
+    tools: 'Tools',
+    language: 'Deutsch',
+    login: 'Anmelden',
+    logout: 'Abmelden',
+    myProfile: 'Mein Profil',
+    liveRanking: 'Live-Rangliste',
+    rank: '.',
+    points: 'Pkt',
+  },
+  fr: {
+    notice: 'Annonces',
+    tools: 'Outils',
+    language: 'Français',
+    login: 'Connexion',
+    logout: 'Déconnexion',
+    myProfile: 'Mon profil',
+    liveRanking: 'Classement Live',
+    rank: 'e',
+    points: 'pts',
+  },
+  es: {
+    notice: 'Avisos',
+    tools: 'Herramientas',
+    language: 'Español',
+    login: 'Iniciar sesión',
+    logout: 'Cerrar sesión',
+    myProfile: 'Mi perfil',
+    liveRanking: 'Ranking en vivo',
+    rank: 'º',
+    points: 'pts',
+  },
+  pt: {
+    notice: 'Avisos',
+    tools: 'Ferramentas',
+    language: 'Português',
+    login: 'Entrar',
+    logout: 'Sair',
+    myProfile: 'Meu perfil',
+    liveRanking: 'Ranking ao vivo',
+    rank: 'º',
+    points: 'pts',
+  },
+};
+
+// 실시간 랭킹 번역
+export const liveRankingTranslations: Record<Locale, {
+  title: string;
+  subtitle: string;
+  loading: string;
+  noMembers: string;
+  firstPlace: string;
+  champion: string;
+  prizeInfo: string;
+  prizeWinner: string;
+  attendance: string;
+  days: string;
+  top: string;
+  viewAll: string;
+  viewTop10: string;
+  members: string;
+  joinCta: string;
+  joinDesc: string;
+  joinButton: string;
+  retry: string;
+  errorTitle: string;
+  errorDesc: string;
+}> = {
+  ko: {
+    title: '회원 실시간 랭킹',
+    subtitle: '출석 + 게임점수 종합 랭킹',
+    loading: '랭킹 데이터를 불러오는 중...',
+    noMembers: '아직 랭킹에 등록된 회원이 없습니다',
+    firstPlace: '1등',
+    champion: 'CHAMPION',
+    prizeInfo: '매달 종합 1위에게 문화상품권 5,000원 메일 발송!',
+    prizeWinner: '이번 달 상품권 수령 유력!',
+    attendance: '출석',
+    days: '일',
+    top: '상위',
+    viewAll: '100위까지 전체 보기',
+    viewTop10: 'TOP 10만 보기',
+    members: '명',
+    joinCta: '나도 랭킹에 도전하고 싶다면?',
+    joinDesc: '로그인 후 출석체크 + 게임 도전으로 점수를 모아보세요!',
+    joinButton: '참여하기',
+    retry: '다시 시도',
+    errorTitle: '랭킹을 불러오지 못했어요',
+    errorDesc: '네트워크 연결을 확인하고 다시 시도해주세요',
+  },
+  en: {
+    title: 'Member Live Ranking',
+    subtitle: 'Attendance + Game Score Combined',
+    loading: 'Loading rankings...',
+    noMembers: 'No members registered yet',
+    firstPlace: '#1',
+    champion: 'CHAMPION',
+    prizeInfo: '$5 gift card for monthly #1!',
+    prizeWinner: 'Likely to receive this month\'s prize!',
+    attendance: 'Attendance',
+    days: 'days',
+    top: 'Top',
+    viewAll: 'View all 100',
+    viewTop10: 'View Top 10 only',
+    members: 'members',
+    joinCta: 'Want to join the ranking?',
+    joinDesc: 'Login, check-in daily, and challenge games to earn points!',
+    joinButton: 'Join Now',
+    retry: 'Retry',
+    errorTitle: 'Failed to load rankings',
+    errorDesc: 'Please check your connection and try again',
+  },
+  ja: {
+    title: '会員リアルタイムランキング',
+    subtitle: '出席 + ゲームスコア総合',
+    loading: 'ランキングを読み込み中...',
+    noMembers: 'まだ登録されたメンバーがいません',
+    firstPlace: '1位',
+    champion: 'チャンピオン',
+    prizeInfo: '毎月1位に5,000円ギフト券プレゼント!',
+    prizeWinner: '今月のプレゼント受賞有力!',
+    attendance: '出席',
+    days: '日',
+    top: '上位',
+    viewAll: '100位まで全て見る',
+    viewTop10: 'TOP 10のみ表示',
+    members: '名',
+    joinCta: 'ランキングに挑戦したい?',
+    joinDesc: 'ログインして出席チェック + ゲームに挑戦してポイントを貯めよう!',
+    joinButton: '参加する',
+    retry: '再試行',
+    errorTitle: 'ランキングを読み込めませんでした',
+    errorDesc: '接続を確認してもう一度お試しください',
+  },
+  zh: {
+    title: '会员实时排名',
+    subtitle: '出勤 + 游戏积分综合',
+    loading: '正在加载排名...',
+    noMembers: '还没有注册会员',
+    firstPlace: '第1名',
+    champion: '冠军',
+    prizeInfo: '每月第一名获赠5美元礼品卡!',
+    prizeWinner: '本月极有可能获奖!',
+    attendance: '出勤',
+    days: '天',
+    top: '前',
+    viewAll: '查看全部100名',
+    viewTop10: '只看前10名',
+    members: '人',
+    joinCta: '想加入排名吗?',
+    joinDesc: '登录后每日签到 + 挑战游戏赚取积分!',
+    joinButton: '立即参与',
+    retry: '重试',
+    errorTitle: '无法加载排名',
+    errorDesc: '请检查网络连接后重试',
+  },
+  de: {
+    title: 'Mitglieder Live-Rangliste',
+    subtitle: 'Anwesenheit + Spielpunkte Gesamt',
+    loading: 'Rangliste wird geladen...',
+    noMembers: 'Noch keine Mitglieder registriert',
+    firstPlace: '#1',
+    champion: 'CHAMPION',
+    prizeInfo: '5€ Gutschein für monatlichen #1!',
+    prizeWinner: 'Wahrscheinlicher Preisträger dieses Monats!',
+    attendance: 'Anwesenheit',
+    days: 'Tage',
+    top: 'Top',
+    viewAll: 'Alle 100 anzeigen',
+    viewTop10: 'Nur Top 10 anzeigen',
+    members: 'Mitglieder',
+    joinCta: 'Möchtest du der Rangliste beitreten?',
+    joinDesc: 'Anmelden, täglich einchecken und Spiele spielen für Punkte!',
+    joinButton: 'Jetzt teilnehmen',
+    retry: 'Erneut versuchen',
+    errorTitle: 'Rangliste konnte nicht geladen werden',
+    errorDesc: 'Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut',
+  },
+  fr: {
+    title: 'Classement Membres Live',
+    subtitle: 'Présence + Score de jeu combiné',
+    loading: 'Chargement du classement...',
+    noMembers: 'Aucun membre enregistré pour le moment',
+    firstPlace: '#1',
+    champion: 'CHAMPION',
+    prizeInfo: 'Carte cadeau de 5€ pour le #1 mensuel!',
+    prizeWinner: 'Probable gagnant du prix ce mois-ci!',
+    attendance: 'Présence',
+    days: 'jours',
+    top: 'Top',
+    viewAll: 'Voir les 100',
+    viewTop10: 'Voir seulement le Top 10',
+    members: 'membres',
+    joinCta: 'Vous voulez rejoindre le classement?',
+    joinDesc: 'Connectez-vous, pointez quotidiennement et jouez pour gagner des points!',
+    joinButton: 'Rejoindre',
+    retry: 'Réessayer',
+    errorTitle: 'Échec du chargement du classement',
+    errorDesc: 'Veuillez vérifier votre connexion et réessayer',
+  },
+  es: {
+    title: 'Ranking de Miembros en Vivo',
+    subtitle: 'Asistencia + Puntos de juego combinados',
+    loading: 'Cargando ranking...',
+    noMembers: 'Aún no hay miembros registrados',
+    firstPlace: '#1',
+    champion: 'CAMPEÓN',
+    prizeInfo: '¡Tarjeta regalo de 5€ para el #1 mensual!',
+    prizeWinner: '¡Probable ganador del premio este mes!',
+    attendance: 'Asistencia',
+    days: 'días',
+    top: 'Top',
+    viewAll: 'Ver los 100',
+    viewTop10: 'Ver solo Top 10',
+    members: 'miembros',
+    joinCta: '¿Quieres unirte al ranking?',
+    joinDesc: '¡Inicia sesión, registra asistencia diaria y juega para ganar puntos!',
+    joinButton: 'Unirse ahora',
+    retry: 'Reintentar',
+    errorTitle: 'Error al cargar el ranking',
+    errorDesc: 'Por favor verifica tu conexión e intenta de nuevo',
+  },
+  pt: {
+    title: 'Ranking de Membros ao Vivo',
+    subtitle: 'Presença + Pontos de jogo combinados',
+    loading: 'Carregando ranking...',
+    noMembers: 'Ainda não há membros registrados',
+    firstPlace: '#1',
+    champion: 'CAMPEÃO',
+    prizeInfo: 'Vale-presente de R$25 para o #1 mensal!',
+    prizeWinner: 'Provável ganhador do prêmio deste mês!',
+    attendance: 'Presença',
+    days: 'dias',
+    top: 'Top',
+    viewAll: 'Ver todos os 100',
+    viewTop10: 'Ver apenas Top 10',
+    members: 'membros',
+    joinCta: 'Quer entrar no ranking?',
+    joinDesc: 'Faça login, registre presença diariamente e jogue para ganhar pontos!',
+    joinButton: 'Participar agora',
+    retry: 'Tentar novamente',
+    errorTitle: 'Falha ao carregar ranking',
+    errorDesc: 'Por favor verifique sua conexão e tente novamente',
+  },
+};
+
+// 회원가입/로그인 번역
+export const authTranslations: Record<Locale, {
+  login: {
+    title: string;
+    subtitle: string;
+    googleLogin: string;
+    kakaoLogin: string;
+    benefits: string;
+    benefit1: string;
+    benefit2: string;
+    benefit3: string;
+    benefit4: string;
+  };
+  profile: {
+    title: string;
+    nickname: string;
+    nicknamePlaceholder: string;
+    email: string;
+    totalScore: string;
+    attendance: string;
+    rank: string;
+    save: string;
+    saving: string;
+    logout: string;
+    deleteAccount: string;
+    deleteConfirm: string;
+    nicknameRequired: string;
+    nicknameTooShort: string;
+    nicknameUpdated: string;
+    days: string;
+    points: string;
+  };
+  attendance: {
+    checkIn: string;
+    checkInComplete: string;
+    alreadyChecked: string;
+    earnedPoints: string;
+    consecutiveDays: string;
+    bonus: string;
+  };
+}> = {
+  ko: {
+    login: {
+      title: '로그인',
+      subtitle: '소셜 계정으로 간편하게 시작하세요',
+      googleLogin: 'Google로 로그인',
+      kakaoLogin: 'Kakao로 로그인',
+      benefits: '회원 혜택',
+      benefit1: '📅 매일 출석체크로 포인트 적립',
+      benefit2: '🏆 게임 랭킹 등록 및 경쟁',
+      benefit3: '🎁 매월 1위 상품권 지급',
+      benefit4: '📊 내 기록 관리 및 분석',
+    },
+    profile: {
+      title: '내 정보',
+      nickname: '닉네임',
+      nicknamePlaceholder: '닉네임을 입력하세요',
+      email: '이메일',
+      totalScore: '총 점수',
+      attendance: '출석 일수',
+      rank: '현재 순위',
+      save: '저장',
+      saving: '저장 중...',
+      logout: '로그아웃',
+      deleteAccount: '회원 탈퇴',
+      deleteConfirm: '정말로 탈퇴하시겠습니까? 모든 데이터가 삭제됩니다.',
+      nicknameRequired: '닉네임을 입력해주세요',
+      nicknameTooShort: '닉네임은 2자 이상이어야 합니다',
+      nicknameUpdated: '닉네임이 변경되었습니다',
+      days: '일',
+      points: '점',
+    },
+    attendance: {
+      checkIn: '출석체크',
+      checkInComplete: '출석 완료!',
+      alreadyChecked: '오늘 이미 출석했어요',
+      earnedPoints: '포인트 획득',
+      consecutiveDays: '연속 출석',
+      bonus: '보너스',
+    },
+  },
+  en: {
+    login: {
+      title: 'Login',
+      subtitle: 'Start easily with your social account',
+      googleLogin: 'Login with Google',
+      kakaoLogin: 'Login with Kakao',
+      benefits: 'Member Benefits',
+      benefit1: '📅 Earn points with daily check-in',
+      benefit2: '🏆 Register and compete in game rankings',
+      benefit3: '🎁 Monthly prize for #1',
+      benefit4: '📊 Track and analyze your records',
+    },
+    profile: {
+      title: 'My Profile',
+      nickname: 'Nickname',
+      nicknamePlaceholder: 'Enter your nickname',
+      email: 'Email',
+      totalScore: 'Total Score',
+      attendance: 'Attendance Days',
+      rank: 'Current Rank',
+      save: 'Save',
+      saving: 'Saving...',
+      logout: 'Logout',
+      deleteAccount: 'Delete Account',
+      deleteConfirm: 'Are you sure? All your data will be deleted.',
+      nicknameRequired: 'Please enter a nickname',
+      nicknameTooShort: 'Nickname must be at least 2 characters',
+      nicknameUpdated: 'Nickname updated',
+      days: 'days',
+      points: 'pts',
+    },
+    attendance: {
+      checkIn: 'Check-in',
+      checkInComplete: 'Check-in Complete!',
+      alreadyChecked: 'Already checked in today',
+      earnedPoints: 'Points earned',
+      consecutiveDays: 'Consecutive days',
+      bonus: 'Bonus',
+    },
+  },
+  ja: {
+    login: {
+      title: 'ログイン',
+      subtitle: 'ソーシャルアカウントで簡単に始めましょう',
+      googleLogin: 'Googleでログイン',
+      kakaoLogin: 'Kakaoでログイン',
+      benefits: '会員特典',
+      benefit1: '📅 毎日の出席でポイント獲得',
+      benefit2: '🏆 ゲームランキングに登録して競争',
+      benefit3: '🎁 毎月1位に賞品進呈',
+      benefit4: '📊 記録の管理と分析',
+    },
+    profile: {
+      title: 'マイページ',
+      nickname: 'ニックネーム',
+      nicknamePlaceholder: 'ニックネームを入力',
+      email: 'メール',
+      totalScore: '総得点',
+      attendance: '出席日数',
+      rank: '現在の順位',
+      save: '保存',
+      saving: '保存中...',
+      logout: 'ログアウト',
+      deleteAccount: '退会',
+      deleteConfirm: '本当に退会しますか？全てのデータが削除されます。',
+      nicknameRequired: 'ニックネームを入力してください',
+      nicknameTooShort: 'ニックネームは2文字以上必要です',
+      nicknameUpdated: 'ニックネームを変更しました',
+      days: '日',
+      points: '点',
+    },
+    attendance: {
+      checkIn: '出席チェック',
+      checkInComplete: '出席完了!',
+      alreadyChecked: '今日はすでに出席しました',
+      earnedPoints: 'ポイント獲得',
+      consecutiveDays: '連続出席',
+      bonus: 'ボーナス',
+    },
+  },
+  zh: {
+    login: {
+      title: '登录',
+      subtitle: '使用社交账号快速开始',
+      googleLogin: '使用Google登录',
+      kakaoLogin: '使用Kakao登录',
+      benefits: '会员福利',
+      benefit1: '📅 每日签到赚取积分',
+      benefit2: '🏆 注册并参与游戏排名竞争',
+      benefit3: '🎁 每月第一名获奖',
+      benefit4: '📊 跟踪和分析您的记录',
+    },
+    profile: {
+      title: '我的资料',
+      nickname: '昵称',
+      nicknamePlaceholder: '输入您的昵称',
+      email: '邮箱',
+      totalScore: '总积分',
+      attendance: '签到天数',
+      rank: '当前排名',
+      save: '保存',
+      saving: '保存中...',
+      logout: '退出登录',
+      deleteAccount: '删除账户',
+      deleteConfirm: '确定要删除吗？所有数据将被删除。',
+      nicknameRequired: '请输入昵称',
+      nicknameTooShort: '昵称至少需要2个字符',
+      nicknameUpdated: '昵称已更新',
+      days: '天',
+      points: '分',
+    },
+    attendance: {
+      checkIn: '签到',
+      checkInComplete: '签到完成!',
+      alreadyChecked: '今天已经签到了',
+      earnedPoints: '获得积分',
+      consecutiveDays: '连续签到',
+      bonus: '奖励',
+    },
+  },
+  de: {
+    login: {
+      title: 'Anmelden',
+      subtitle: 'Starten Sie einfach mit Ihrem Social-Konto',
+      googleLogin: 'Mit Google anmelden',
+      kakaoLogin: 'Mit Kakao anmelden',
+      benefits: 'Mitgliedervorteile',
+      benefit1: '📅 Punkte sammeln mit täglichem Check-in',
+      benefit2: '🏆 Registrieren und in Spielranglisten konkurrieren',
+      benefit3: '🎁 Monatlicher Preis für #1',
+      benefit4: '📊 Verfolgen und analysieren Sie Ihre Rekorde',
+    },
+    profile: {
+      title: 'Mein Profil',
+      nickname: 'Nickname',
+      nicknamePlaceholder: 'Geben Sie Ihren Nickname ein',
+      email: 'E-Mail',
+      totalScore: 'Gesamtpunktzahl',
+      attendance: 'Anwesenheitstage',
+      rank: 'Aktueller Rang',
+      save: 'Speichern',
+      saving: 'Speichern...',
+      logout: 'Abmelden',
+      deleteAccount: 'Konto löschen',
+      deleteConfirm: 'Sind Sie sicher? Alle Daten werden gelöscht.',
+      nicknameRequired: 'Bitte geben Sie einen Nickname ein',
+      nicknameTooShort: 'Nickname muss mindestens 2 Zeichen haben',
+      nicknameUpdated: 'Nickname aktualisiert',
+      days: 'Tage',
+      points: 'Pkt',
+    },
+    attendance: {
+      checkIn: 'Einchecken',
+      checkInComplete: 'Check-in abgeschlossen!',
+      alreadyChecked: 'Heute bereits eingecheckt',
+      earnedPoints: 'Punkte verdient',
+      consecutiveDays: 'Aufeinanderfolgende Tage',
+      bonus: 'Bonus',
+    },
+  },
+  fr: {
+    login: {
+      title: 'Connexion',
+      subtitle: 'Commencez facilement avec votre compte social',
+      googleLogin: 'Se connecter avec Google',
+      kakaoLogin: 'Se connecter avec Kakao',
+      benefits: 'Avantages membres',
+      benefit1: '📅 Gagnez des points avec le check-in quotidien',
+      benefit2: '🏆 Inscrivez-vous et rivalisez dans les classements',
+      benefit3: '🎁 Prix mensuel pour le #1',
+      benefit4: '📊 Suivez et analysez vos records',
+    },
+    profile: {
+      title: 'Mon profil',
+      nickname: 'Pseudo',
+      nicknamePlaceholder: 'Entrez votre pseudo',
+      email: 'E-mail',
+      totalScore: 'Score total',
+      attendance: 'Jours de présence',
+      rank: 'Rang actuel',
+      save: 'Enregistrer',
+      saving: 'Enregistrement...',
+      logout: 'Déconnexion',
+      deleteAccount: 'Supprimer le compte',
+      deleteConfirm: 'Êtes-vous sûr? Toutes les données seront supprimées.',
+      nicknameRequired: 'Veuillez entrer un pseudo',
+      nicknameTooShort: 'Le pseudo doit comporter au moins 2 caractères',
+      nicknameUpdated: 'Pseudo mis à jour',
+      days: 'jours',
+      points: 'pts',
+    },
+    attendance: {
+      checkIn: 'Pointer',
+      checkInComplete: 'Pointage effectué!',
+      alreadyChecked: 'Déjà pointé aujourd\'hui',
+      earnedPoints: 'Points gagnés',
+      consecutiveDays: 'Jours consécutifs',
+      bonus: 'Bonus',
+    },
+  },
+  es: {
+    login: {
+      title: 'Iniciar sesión',
+      subtitle: 'Comienza fácilmente con tu cuenta social',
+      googleLogin: 'Iniciar sesión con Google',
+      kakaoLogin: 'Iniciar sesión con Kakao',
+      benefits: 'Beneficios de miembro',
+      benefit1: '📅 Gana puntos con el check-in diario',
+      benefit2: '🏆 Regístrate y compite en los rankings',
+      benefit3: '🎁 Premio mensual para el #1',
+      benefit4: '📊 Rastrea y analiza tus récords',
+    },
+    profile: {
+      title: 'Mi perfil',
+      nickname: 'Apodo',
+      nicknamePlaceholder: 'Ingresa tu apodo',
+      email: 'Correo electrónico',
+      totalScore: 'Puntuación total',
+      attendance: 'Días de asistencia',
+      rank: 'Rango actual',
+      save: 'Guardar',
+      saving: 'Guardando...',
+      logout: 'Cerrar sesión',
+      deleteAccount: 'Eliminar cuenta',
+      deleteConfirm: '¿Estás seguro? Todos los datos serán eliminados.',
+      nicknameRequired: 'Por favor ingresa un apodo',
+      nicknameTooShort: 'El apodo debe tener al menos 2 caracteres',
+      nicknameUpdated: 'Apodo actualizado',
+      days: 'días',
+      points: 'pts',
+    },
+    attendance: {
+      checkIn: 'Registrar asistencia',
+      checkInComplete: '¡Asistencia registrada!',
+      alreadyChecked: 'Ya registraste asistencia hoy',
+      earnedPoints: 'Puntos ganados',
+      consecutiveDays: 'Días consecutivos',
+      bonus: 'Bono',
+    },
+  },
+  pt: {
+    login: {
+      title: 'Entrar',
+      subtitle: 'Comece facilmente com sua conta social',
+      googleLogin: 'Entrar com Google',
+      kakaoLogin: 'Entrar com Kakao',
+      benefits: 'Benefícios de membro',
+      benefit1: '📅 Ganhe pontos com check-in diário',
+      benefit2: '🏆 Registre-se e compita nos rankings',
+      benefit3: '🎁 Prêmio mensal para o #1',
+      benefit4: '📊 Acompanhe e analise seus recordes',
+    },
+    profile: {
+      title: 'Meu perfil',
+      nickname: 'Apelido',
+      nicknamePlaceholder: 'Digite seu apelido',
+      email: 'E-mail',
+      totalScore: 'Pontuação total',
+      attendance: 'Dias de presença',
+      rank: 'Posição atual',
+      save: 'Salvar',
+      saving: 'Salvando...',
+      logout: 'Sair',
+      deleteAccount: 'Excluir conta',
+      deleteConfirm: 'Tem certeza? Todos os dados serão excluídos.',
+      nicknameRequired: 'Por favor digite um apelido',
+      nicknameTooShort: 'O apelido deve ter pelo menos 2 caracteres',
+      nicknameUpdated: 'Apelido atualizado',
+      days: 'dias',
+      points: 'pts',
+    },
+    attendance: {
+      checkIn: 'Registrar presença',
+      checkInComplete: 'Presença registrada!',
+      alreadyChecked: 'Você já registrou presença hoje',
+      earnedPoints: 'Pontos ganhos',
+      consecutiveDays: 'Dias consecutivos',
+      bonus: 'Bônus',
+    },
+  },
+};
+
 // 유틸리티 함수
 export function getTranslation(locale: Locale) {
   return {
     main: mainPageTranslations[locale],
     game: gameTranslations[locale],
+    nav: navTranslations[locale],
+    liveRanking: liveRankingTranslations[locale],
+    auth: authTranslations[locale],
   };
 }
 

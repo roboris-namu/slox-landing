@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
+import GameNavBar from "@/components/GameNavBar";
 
 interface ColorLeaderboardEntry {
   id: string;
@@ -520,7 +521,6 @@ export default function ColorTest({ locale }: ColorTestProps) {
   const [baseColor, setBaseColor] = useState({ h: 0, s: 70, l: 50 });
   const [differentIndex, setDifferentIndex] = useState(0);
   const [colorDiff, setColorDiff] = useState(30);
-  const [showLangMenu, setShowLangMenu] = useState(false);
   const [showCorrect, setShowCorrect] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [leaderboard, setLeaderboard] = useState<ColorLeaderboardEntry[]>([]);
@@ -531,40 +531,96 @@ export default function ColorTest({ locale }: ColorTestProps) {
   const [hasSubmittedScore, setHasSubmittedScore] = useState(false);
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY[lang]);
+  
+  // 👤 로그인 유저 상태
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserNickname, setCurrentUserNickname] = useState<string | null>(null);
+  
   const shareCardRef = useRef<HTMLDivElement>(null);
 
   const t = translations[lang];
 
   useEffect(() => { setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window); }, []);
+  
+  // 👤 로그인 상태 확인
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        setCurrentUserId(session.user.id);
+        const { data: profile } = await supabase.from("profiles").select("nickname").eq("id", session.user.id).single();
+        if (profile) { setCurrentUserNickname(profile.nickname); setNickname(profile.nickname); }
+      }
+    };
+    checkUser();
+  }, []);
 
   const fetchLeaderboard = useCallback(async () => {
     try {
       const { data, error } = await supabase.from("color_leaderboard").select("*").order("score", { ascending: false }).limit(10);
       const { count } = await supabase.from("color_leaderboard").select("*", { count: "exact", head: true });
       if (error) throw error;
-      if (data) setLeaderboard(data);
+      // 👤 회원 닉네임 + 프로필사진 동기화
+      if (data && data.length > 0) {
+        const userIds = data.filter(d => d.user_id).map(d => d.user_id);
+        if (userIds.length > 0) {
+          const { data: profiles } = await supabase.from("profiles").select("id, nickname, avatar_url").in("id", userIds);
+          if (profiles) {
+            const profileMap = new Map(profiles.map(p => [p.id, { nickname: p.nickname, avatar_url: p.avatar_url }]));
+            data.forEach(entry => {
+              if (entry.user_id && profileMap.has(entry.user_id)) {
+                const profile = profileMap.get(entry.user_id);
+                entry.nickname = profile?.nickname || entry.nickname;
+                entry.avatar_url = profile?.avatar_url;
+              }
+            });
+          }
+        }
+        setLeaderboard(data);
+      }
       if (count !== null) setTotalCount(count);
     } catch (err) { console.error("리더보드 로드 실패:", err); }
   }, []);
 
+  // 👤 순위에 따른 점수 계산
+  const getRankPoints = (rank: number): number => { if (rank === 1) return 200; if (rank <= 3) return 100; if (rank <= 10) return 50; return 0; };
+  const updateMemberScore = async (userId: string, gameType: string, newRank: number) => {
+    const points = getRankPoints(newRank); if (points === 0) return;
+    try {
+      const { data: profile } = await supabase.from("profiles").select("total_score, game_scores").eq("id", userId).single();
+      if (!profile) return;
+      const gameScores = profile.game_scores || {};
+      const prevRank = gameScores[gameType]?.rank || Infinity;
+      if (newRank >= prevRank) return; // 더 좋은 순위일 때만 업데이트
+      const previousPoints = gameScores[gameType]?.points || 0;
+      const pointsDiff = points - previousPoints;
+      if (pointsDiff <= 0) return;
+      await supabase.from("profiles").update({ total_score: profile.total_score + pointsDiff, game_scores: { ...gameScores, [gameType]: { rank: newRank, points } }, updated_at: new Date().toISOString() }).eq("id", userId);
+    } catch (err) { console.error("점수 업데이트 실패:", err); }
+  };
+
   const submitScore = async () => {
-    if (!nickname.trim() || isSubmitting) return;
+    const finalNickname = currentUserId && currentUserNickname ? currentUserNickname : nickname.trim();
+    if (!finalNickname || isSubmitting) return;
     setIsSubmitting(true);
     const gradeInfo = getGrade(level);
-    // 백분위: Lv35+ = 1%, 28+ = 5%, 20+ = 15%, 14+ = 30%, 9+ = 50%, 5+ = 70%, 3+ = 85%, 나머지 = 95%
-    // 백분위 (난이도 상향으로 기준 조정)
     const percentile = level >= 25 ? 1 : level >= 20 ? 5 : level >= 15 ? 15 : level >= 11 ? 30 : level >= 7 ? 50 : level >= 4 ? 70 : level >= 2 ? 85 : 95;
     try {
       const { error } = await supabase.from("color_leaderboard").insert({ 
-        nickname: nickname.trim().slice(0, 20), 
+        nickname: finalNickname.slice(0, 20), 
         score, 
         level, 
         device_type: isMobile ? "mobile" : "pc",
         grade: gradeInfo.grade,
         percentile: percentile,
         country: selectedCountry,
+        user_id: currentUserId,
       });
       if (error) throw error;
+      if (currentUserId) {
+        const { count } = await supabase.from("color_leaderboard").select("*", { count: "exact", head: true }).gt("score", score);
+        await updateMemberScore(currentUserId, "color", (count || 0) + 1);
+      }
       setHasSubmittedScore(true);
       setShowNicknameModal(false);
       setNickname("");
@@ -749,53 +805,12 @@ export default function ColorTest({ locale }: ColorTestProps) {
 
   return (
     <div className="min-h-screen bg-dark-950">
-      {/* 네비게이션 */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-900/80 backdrop-blur-xl border-b border-dark-800">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-accent-purple to-accent-cyan rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">S</span>
-              </div>
-              <span className="text-white font-semibold">SLOX</span>
-            </Link>
-            <div className="flex items-center gap-4">
-              <div className="relative">
-                <button
-                  onClick={() => setShowLangMenu(!showLangMenu)}
-                  className="flex items-center gap-1 px-3 py-1.5 bg-dark-800 hover:bg-dark-700 rounded-lg text-sm transition-colors"
-                >
-                  <span>{languageOptions.find(l => l.locale === lang)?.flag}</span>
-                  <span className="text-dark-300 hidden sm:inline">{languageOptions.find(l => l.locale === lang)?.name}</span>
-                </button>
-                {showLangMenu && (
-                  <div className="absolute right-0 mt-2 w-40 bg-dark-800 border border-dark-700 rounded-lg shadow-xl overflow-hidden">
-                    {languageOptions.map((opt) => (
-                      <button
-                        key={opt.locale}
-                        onClick={() => {
-                          document.cookie = `SLOX_LOCALE=${opt.locale}; path=/; max-age=31536000`;
-                          setShowLangMenu(false);
-                          window.location.href = opt.path;
-                        }}
-                        className={`w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-dark-700 transition-colors text-left ${
-                          lang === opt.locale ? "bg-dark-700 text-white" : "text-dark-300"
-                        }`}
-                      >
-                        <span>{opt.flag}</span>
-                        <span>{opt.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <Link href="/" className="text-dark-300 hover:text-white transition-colors text-sm">
-                {t.backToMain}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* 네비게이션 - 로그인 상태 표시 포함 */}
+      <GameNavBar
+        locale={lang}
+        backText={t.backToMain}
+        languageOptions={languageOptions}
+      />
 
       {/* 메인 콘텐츠 */}
       <main className="pt-24 pb-16 px-4">
@@ -910,14 +925,47 @@ export default function ColorTest({ locale }: ColorTestProps) {
               <div className="text-center py-8"><div className="text-4xl mb-3">👁️</div><p className="text-dark-400">{t.noRecords}</p></div>
             ) : (
               <div className="space-y-2">
-                {leaderboard.map((entry, index) => (
+                {(() => {
+                  const memberRankMap = new Map<string, number>();
+                  let memberRank = 0;
+                  leaderboard.forEach(e => { if (e.user_id) { memberRank++; memberRankMap.set(e.user_id, memberRank); } });
+                  return leaderboard.map((entry, index) => {
+                    const memberRankNum = entry.user_id ? memberRankMap.get(entry.user_id) || 0 : 0;
+                    return (
                   <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
-                    <span className="text-base  flex-shrink-0">{getCountryFlag(entry.country)}</span>
+                    {/* 순위 */}
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
+                    {/* 아바타 */}
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 overflow-hidden ${entry.user_id ? "ring-2 ring-accent-500/50" : "bg-dark-600 text-dark-400"}`}>
+                      {entry.user_id && entry.avatar_url ? (
+                        <img src={entry.avatar_url} alt="" className="w-full h-full object-cover" />
+                      ) : entry.user_id ? (
+                        <div className="w-full h-full bg-gradient-to-br from-accent-500 to-purple-600 flex items-center justify-center text-white">{entry.nickname?.charAt(0).toUpperCase()}</div>
+                      ) : (
+                        <span>{entry.nickname?.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    {/* 국기 */}
+                    <span className="text-base flex-shrink-0">{getCountryFlag(entry.country)}</span>
                     <div className="flex-1 min-w-0 text-left">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         <p className="text-white font-medium truncate">{entry.nickname}</p>
-                        <span className="text-xs px-2 py-0.5 rounded-full bg-dark-700 text-dark-300">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
+                        {/* 👤 회원 배지 + 순위 배지 (분리) */}
+                        {entry.user_id && (
+                          <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">✓ {lang === "ko" ? "회원" : "M"}</span>
+                        )}
+                        {entry.user_id && memberRankNum <= 10 && (
+                          memberRankNum === 1 ? (
+                            <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gradient-to-r from-yellow-500/30 to-amber-500/30 text-yellow-300 border border-yellow-500/50 font-bold shadow-[0_0_8px_rgba(234,179,8,0.3)] animate-pulse">👑 {lang === "ko" ? "1위" : "#1"}</span>
+                          ) : memberRankNum === 2 ? (
+                            <span className="text-xs px-1.5 py-0.5 rounded-lg bg-gray-400/20 text-gray-300 border border-gray-400/40 font-bold">🥈 {lang === "ko" ? "2위" : "#2"}</span>
+                          ) : memberRankNum === 3 ? (
+                            <span className="text-xs px-1.5 py-0.5 rounded-lg bg-orange-500/20 text-orange-300 border border-orange-500/40 font-bold">🥉 {lang === "ko" ? "3위" : "#3"}</span>
+                          ) : (
+                            <span className="text-xs px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">🏆 {memberRankNum}{lang === "ko" ? "위" : "th"}</span>
+                          )
+                        )}
+                        <span className="text-xs px-1.5 py-0.5 rounded-full bg-dark-700 text-dark-400">{entry.device_type === "mobile" ? "📱" : "🖥️"}</span>
                       </div>
                       <div className="flex items-center gap-2 text-xs text-dark-400">
                         <span className={
@@ -939,7 +987,9 @@ export default function ColorTest({ locale }: ColorTestProps) {
                       <div className="text-xs text-dark-500">{index + 1}위 / {totalCount}명</div>
                     </div>
                   </div>
-                ))}
+                    );
+                  });
+                })()}
               </div>
             )}
           </div>
@@ -1029,7 +1079,17 @@ export default function ColorTest({ locale }: ColorTestProps) {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
               <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full">
                 <div className="text-center mb-6"><div className="text-5xl mb-3">{getGrade(level).emoji}</div><h3 className="text-white text-xl font-bold">🏆 {lang === "ko" ? "랭킹 등록" : lang === "ja" ? "ランキング登録" : "Hall of Fame"}</h3><p className="text-dark-400 text-sm">{score}{lang === "ko" ? "점" : "pts"} (Lv.{level})</p></div>
-                <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder={lang === "ko" ? "닉네임..." : "Nickname..."} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
+                {currentUserId && currentUserNickname ? (
+                  <div className="relative mb-4"><input type="text" value={currentUserNickname} disabled className="w-full px-4 py-3 bg-dark-900 border border-accent-500/50 rounded-xl text-white cursor-not-allowed opacity-80" /><div className="absolute right-3 top-1/2 -translate-y-1/2"><span className="text-xs px-2 py-1 rounded bg-accent-500/20 text-accent-400 border border-accent-500/30 font-medium">✓ 회원</span></div></div>
+                ) : (<input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder={lang === "ko" ? "닉네임..." : "Nickname..."} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-4" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />)}
+                {currentUserId && <p className="text-xs text-dark-500 mb-4 -mt-2">💡 회원은 프로필 닉네임으로 자동 등록됩니다</p>}
+                {/* 🔐 비로그인 시 로그인 유도 */}
+                {!currentUserId && (
+                  <div className="mb-4 p-3 bg-accent-purple/10 rounded-lg border border-accent-purple/20">
+                    <p className="text-xs text-dark-300 mb-1">{lang === "ko" ? "💡 로그인하면 회원 점수에 반영됩니다" : "💡 Login to save your score to your profile"}</p>
+                    <a href={lang === "ko" ? "/login" : `/${lang}/login`} className="text-accent-purple text-xs hover:underline">{lang === "ko" ? "로그인하러 가기 →" : "Go to login →"}</a>
+                  </div>
+                )}
                 <div className="relative mb-4">
                   <select value={selectedCountry} onChange={(e) => setSelectedCountry(e.target.value)} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white appearance-none focus:outline-none focus:border-emerald-500">
                     {COUNTRY_OPTIONS.map((option) => (<option key={option.code} value={option.code}>{option.flag} {option.name[lang]}</option>))}
