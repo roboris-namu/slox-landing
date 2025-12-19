@@ -393,24 +393,25 @@ export default function QuizGame() {
     return 0;
   };
 
-  // 👤 회원 점수 업데이트
+  // 👤 회원 점수 업데이트 (API 프록시 사용)
   const updateMemberScore = async (userId: string, gameType: string, newRank: number) => {
     const points = getRankPoints(newRank);
     if (points === 0) return;
     try {
-      const { data: profile } = await supabase.from("profiles").select("total_score, game_scores").eq("id", userId).single();
+      const profileRes = await fetch(`/api/profile?userId=${userId}`);
+      const { profile } = await profileRes.json();
       if (!profile) return;
       const gameScores = profile.game_scores || {};
       const prevRank = gameScores[gameType]?.rank || Infinity;
-      if (newRank >= prevRank) return; // 더 좋은 순위일 때만 업데이트
+      if (newRank >= prevRank) return;
       const previousPoints = gameScores[gameType]?.points || 0;
       const pointsDiff = points - previousPoints;
       if (pointsDiff <= 0) return;
-      await supabase.from("profiles").update({
-        total_score: profile.total_score + pointsDiff,
-        game_scores: { ...gameScores, [gameType]: { rank: newRank, points } },
-        updated_at: new Date().toISOString()
-      }).eq("id", userId);
+      await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, total_score: profile.total_score + pointsDiff, game_scores: { ...gameScores, [gameType]: { rank: newRank, points } } }),
+      });
       console.log(`✅ [${gameType}] ${newRank}등 달성! +${pointsDiff}점`);
     } catch (err) { console.error("점수 업데이트 실패:", err); }
   };
@@ -422,23 +423,30 @@ export default function QuizGame() {
     const gradeInfo = getGrade();
     const finalScore = getFinalScore();
     try {
-      const { error } = await supabase.from("quiz_leaderboard").insert({
-        nickname: finalNickname.slice(0, 20),
-        score: finalScore,
-        correct_count: correctCount,
-        time_seconds: totalTime,
-        grade: gradeInfo.grade,
-        country: selectedCountry,
-        user_id: currentUserId,
+      const response = await fetch("/api/leaderboard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          game: "quiz",
+          data: {
+            nickname: finalNickname.slice(0, 20),
+            score: finalScore,
+            correct_count: correctCount,
+            time_seconds: totalTime,
+            grade: gradeInfo.grade,
+            country: selectedCountry,
+          },
+          userId: currentUserId,
+        }),
       });
-      if (!error) {
-        // 👤 회원이면 순위 계산 후 점수 업데이트
+      const result = await response.json();
+      if (response.ok) {
         if (currentUserId) {
-          const { count } = await supabase.from("quiz_leaderboard").select("*", { count: "exact", head: true }).gt("score", finalScore);
-          const rank = (count || 0) + 1;
-          await updateMemberScore(currentUserId, "quiz", rank);
+          updateMemberScore(currentUserId, "quiz", 10).catch(() => {});
         }
         setHasSubmitted(true); setShowNicknameModal(false); setShowRankingPrompt(false); fetchLeaderboard();
+      } else {
+        throw new Error(result.error);
       }
     } catch (error) { console.error("Failed to submit score:", error); }
     finally { setIsSubmitting(false); }

@@ -658,25 +658,29 @@ export default function CpsTest({ locale }: CpsTestProps) {
     }
   }, []);
 
-  // 👤 순위에 따른 점수 계산
+  // 👤 순위에 따른 점수 계산 (API 프록시 사용)
   const getRankPoints = (rank: number): number => { if (rank === 1) return 200; if (rank <= 3) return 100; if (rank <= 10) return 50; return 0; };
   const updateMemberScore = async (userId: string, gameType: string, newRank: number) => {
     const points = getRankPoints(newRank); if (points === 0) return;
     try {
-      const { data: profile } = await supabase.from("profiles").select("total_score, game_scores").eq("id", userId).single();
+      const profileRes = await fetch(`/api/profile?userId=${userId}`);
+      const { profile } = await profileRes.json();
       if (!profile) return;
       const gameScores = profile.game_scores || {};
       const prevRank = gameScores[gameType]?.rank || Infinity;
-      // 더 좋은 순위일 때만 업데이트
       if (newRank >= prevRank) return;
       const previousPoints = gameScores[gameType]?.points || 0;
       const pointsDiff = points - previousPoints;
       if (pointsDiff <= 0) return;
-      await supabase.from("profiles").update({ total_score: profile.total_score + pointsDiff, game_scores: { ...gameScores, [gameType]: { rank: newRank, points } }, updated_at: new Date().toISOString() }).eq("id", userId);
+      await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, total_score: profile.total_score + pointsDiff, game_scores: { ...gameScores, [gameType]: { rank: newRank, points } } }),
+      });
     } catch (err) { console.error("점수 업데이트 실패:", err); }
   };
 
-  // 점수 등록
+  // 점수 등록 (API 프록시 사용)
   const submitScore = async () => {
     const finalNickname = currentUserId && currentUserNickname ? currentUserNickname : nickname.trim();
     if (!finalNickname || isSubmitting) return;
@@ -684,23 +688,28 @@ export default function CpsTest({ locale }: CpsTestProps) {
     try {
       const gradeInfo = getGrade(cps);
       const percentile = cps >= 16 ? 1 : cps >= 12 ? 5 : cps >= 9 ? 15 : cps >= 7 ? 30 : cps >= 5 ? 50 : cps >= 3 ? 70 : cps >= 2 ? 85 : 95;
-      const { error } = await supabase
-        .from("cps_leaderboard")
-        .insert({
-          nickname: finalNickname.slice(0, 20),
-          score: parseFloat(cps.toFixed(2)),
-          clicks: clicks,
-          duration: duration,
-          device_type: isMobile ? "mobile" : "pc",
-          grade: gradeInfo.grade,
-          percentile: percentile,
-          country: selectedCountry,
-          user_id: currentUserId,
-        });
-      if (error) throw error;
+      const response = await fetch("/api/leaderboard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          game: "cps",
+          data: {
+            nickname: finalNickname.slice(0, 20),
+            score: parseFloat(cps.toFixed(2)),
+            clicks: clicks,
+            duration: duration,
+            device_type: isMobile ? "mobile" : "pc",
+            grade: gradeInfo.grade,
+            percentile: percentile,
+            country: selectedCountry,
+          },
+          userId: currentUserId,
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
       if (currentUserId) {
-        const { count } = await supabase.from("cps_leaderboard").select("*", { count: "exact", head: true }).gt("score", cps);
-        await updateMemberScore(currentUserId, "cps", (count || 0) + 1);
+        updateMemberScore(currentUserId, "cps", 10).catch(() => {});
       }
       setHasSubmittedScore(true);
       setShowNicknameModal(false);

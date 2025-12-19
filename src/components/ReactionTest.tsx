@@ -1247,21 +1247,31 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
     }, 500);
   }, []);
 
-  // 👤 순위에 따른 점수 계산
+  // 👤 순위에 따른 점수 계산 (API 프록시 사용 - 광고 차단기 우회)
   const getRankPoints = (rank: number): number => { if (rank === 1) return 200; if (rank <= 3) return 100; if (rank <= 10) return 50; return 0; };
   const updateMemberScore = async (userId: string, gameType: string, newRank: number) => {
     const points = getRankPoints(newRank); if (points === 0) return;
     try {
-      const { data: profile } = await supabase.from("profiles").select("total_score, game_scores").eq("id", userId).single();
+      // API 프록시 사용
+      const profileRes = await fetch(`/api/profile?userId=${userId}`);
+      const { profile } = await profileRes.json();
       if (!profile) return;
       const gameScores = profile.game_scores || {};
       const prevRank = gameScores[gameType]?.rank || Infinity;
-      // 더 좋은 순위일 때만 업데이트
       if (newRank >= prevRank) return;
       const previousPoints = gameScores[gameType]?.points || 0;
       const pointsDiff = points - previousPoints;
       if (pointsDiff <= 0) return;
-      await supabase.from("profiles").update({ total_score: profile.total_score + pointsDiff, game_scores: { ...gameScores, [gameType]: { rank: newRank, points } }, updated_at: new Date().toISOString() }).eq("id", userId);
+      // API 프록시로 프로필 업데이트
+      await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          total_score: profile.total_score + pointsDiff,
+          game_scores: { ...gameScores, [gameType]: { rank: newRank, points } },
+        }),
+      });
     } catch (err) { console.error("점수 업데이트 실패:", err); }
   };
 

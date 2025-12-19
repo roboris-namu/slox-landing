@@ -803,13 +803,14 @@ export default function TypingMulti({ locale }: Props) {
     };
   };
 
-  // 👤 순위에 따른 점수 계산
+  // 👤 순위에 따른 점수 계산 (API 프록시 사용)
   const getRankPoints = (rank: number): number => { if (rank === 1) return 200; if (rank <= 3) return 100; if (rank <= 10) return 50; return 0; };
   
   const updateMemberScore = async (userId: string, gameType: string, newRank: number) => {
     const points = getRankPoints(newRank); if (points === 0) return;
     try {
-      const { data: profile } = await supabase.from("profiles").select("total_score, game_scores").eq("id", userId).single();
+      const profileRes = await fetch(`/api/profile?userId=${userId}`);
+      const { profile } = await profileRes.json();
       if (!profile) return;
       const gameScores = profile.game_scores || {};
       const prevRank = gameScores[gameType]?.rank || Infinity;
@@ -817,11 +818,15 @@ export default function TypingMulti({ locale }: Props) {
       const previousPoints = gameScores[gameType]?.points || 0;
       const pointsDiff = points - previousPoints;
       if (pointsDiff <= 0) return;
-      await supabase.from("profiles").update({ total_score: profile.total_score + pointsDiff, game_scores: { ...gameScores, [gameType]: { rank: newRank, points } }, updated_at: new Date().toISOString() }).eq("id", userId);
+      await fetch("/api/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, total_score: profile.total_score + pointsDiff, game_scores: { ...gameScores, [gameType]: { rank: newRank, points } } }),
+      });
     } catch (err) { console.error("점수 업데이트 실패:", err); }
   };
 
-  // 점수 등록
+  // 점수 등록 (API 프록시 사용)
   const submitScore = async () => {
     if (!nickname.trim() || isSubmitting || !result) return;
     setIsSubmitting(true);
@@ -833,22 +838,28 @@ export default function TypingMulti({ locale }: Props) {
     const finalNickname = currentUserId && currentUserNickname ? currentUserNickname : nickname.trim().slice(0, 20);
     
     try {
-      const { error } = await supabase.from("typing_leaderboard").insert({ 
-        nickname: finalNickname, 
-        wpm: result.cpm,
-        accuracy: result.accuracy, 
-        device_type: isMobile ? "mobile" : "pc",
-        grade: gradeInfo.grade,
-        percentile: percentile,
-        country: selectedCountry,
-        user_id: currentUserId || null,
+      const response = await fetch("/api/leaderboard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          game: "typing",
+          data: {
+            nickname: finalNickname, 
+            wpm: result.cpm,
+            accuracy: result.accuracy, 
+            device_type: isMobile ? "mobile" : "pc",
+            grade: gradeInfo.grade,
+            percentile: percentile,
+            country: selectedCountry,
+          },
+          userId: currentUserId,
+        }),
       });
-      if (error) throw error;
+      const apiResult = await response.json();
+      if (!response.ok) throw new Error(apiResult.error);
       
-      // 👤 회원이면 순위 업데이트 (typing은 높을수록 좋음)
       if (currentUserId) {
-        const { count } = await supabase.from("typing_leaderboard").select("*", { count: "exact", head: true }).gt("wpm", result.cpm);
-        await updateMemberScore(currentUserId, "typing", (count || 0) + 1);
+        updateMemberScore(currentUserId, "typing", 10).catch(() => {});
       }
       
       setHasSubmittedScore(true);
