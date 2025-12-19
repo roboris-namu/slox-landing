@@ -1162,42 +1162,18 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
     return 95;
   };
 
-  // 리더보드 가져오기
+  // 리더보드 가져오기 (API 프록시 사용 - 광고 차단기 우회)
   const fetchLeaderboard = useCallback(async () => {
     try {
-      // Top 10 가져오기
-      const { data, error } = await supabase
-        .from("reaction_leaderboard")
-        .select("*")
-        .order("score", { ascending: true })
-        .limit(10);
+      const response = await fetch("/api/leaderboard?game=reaction&limit=10");
+      const result = await response.json();
       
-      // 전체 참가자 수 가져오기
-      const { count } = await supabase
-        .from("reaction_leaderboard")
-        .select("*", { count: "exact", head: true });
+      if (result.error) throw new Error(result.error);
       
-      if (error) throw error;
-      
-      // 👤 회원 닉네임 + 프로필사진 동기화
-      if (data && data.length > 0) {
-        const userIds = data.filter(d => d.user_id).map(d => d.user_id);
-        if (userIds.length > 0) {
-          const { data: profiles } = await supabase.from("profiles").select("id, nickname, avatar_url").in("id", userIds);
-          if (profiles) {
-            const profileMap = new Map(profiles.map(p => [p.id, { nickname: p.nickname, avatar_url: p.avatar_url }]));
-            data.forEach(entry => {
-              if (entry.user_id && profileMap.has(entry.user_id)) {
-                const profile = profileMap.get(entry.user_id);
-                entry.nickname = profile?.nickname || entry.nickname;
-                entry.avatar_url = profile?.avatar_url;
-              }
-            });
-          }
-        }
-        setLeaderboard(data);
+      if (result.data && result.data.length > 0) {
+        setLeaderboard(result.data);
       }
-      if (count !== null) setTotalCount(count);
+      if (result.totalCount !== undefined) setTotalCount(result.totalCount);
     } catch (err) {
       console.error("리더보드 로드 실패:", err);
     }
@@ -1276,26 +1252,30 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
       const gradeInfo = getGrade(reactionTime);
       const percentile = getPercentile(reactionTime);
       
-      const { data, error } = await supabase
-        .from("reaction_leaderboard")
-        .insert({
-          nickname: finalNickname.slice(0, 20),
-          score: reactionTime,
-          grade: gradeInfo.grade,
-          percentile: percentile,
-          device_type: isMobile ? "mobile" : "pc",
-          country: selectedCountry,
-          user_id: currentUserId, // 👤 로그인 유저면 user_id 저장
-        })
-        .select()
-        .single();
+      // API 프록시 사용 (광고 차단기 우회)
+      const response = await fetch("/api/leaderboard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          game: "reaction",
+          data: {
+            nickname: finalNickname.slice(0, 20),
+            score: reactionTime,
+            grade: gradeInfo.grade,
+            percentile: percentile,
+            device_type: isMobile ? "mobile" : "pc",
+            country: selectedCountry,
+          },
+          userId: currentUserId,
+        }),
+      });
       
-      if (error) throw error;
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
       
       // 👤 회원이면 순위 업데이트 (reaction은 낮을수록 좋음)
       if (currentUserId) {
-        const { count } = await supabase.from("reaction_leaderboard").select("*", { count: "exact", head: true }).lt("score", reactionTime);
-        await updateMemberScore(currentUserId, "reaction", (count || 0) + 1);
+        await updateMemberScore(currentUserId, "reaction", willBeFirstPlace ? 1 : 10);
       }
       
       setHasSubmittedScore(true);
@@ -1303,8 +1283,8 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
       setNickname("");
       
       // 등록된 엔트리 ID 저장
-      if (data) {
-        setMyEntryId(data.id);
+      if (result.data) {
+        setMyEntryId(result.data.id);
       }
       
       // 1등이면 축하 팝업!
@@ -1322,7 +1302,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
     }
   };
   
-  // 📧 이메일 등록 (1등 전용)
+  // 📧 이메일 등록 (1등 전용) - API 프록시 사용
   const submitEmail = async () => {
     if (!email.trim() || !myEntryId || isEmailSubmitting) return;
     
@@ -1335,12 +1315,18 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
     
     setIsEmailSubmitting(true);
     try {
-      const { error } = await supabase
-        .from("reaction_leaderboard")
-        .update({ email: email.trim() })
-        .eq("id", myEntryId);
+      const response = await fetch("/api/leaderboard", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          game: "reaction",
+          id: myEntryId,
+          updates: { email: email.trim() },
+        }),
+      });
       
-      if (error) throw error;
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
       
       setEmailSubmitted(true);
       setTimeout(() => {

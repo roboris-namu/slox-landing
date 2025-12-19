@@ -469,30 +469,14 @@ export default function QuizGameMulti({ locale }: Props) {
 
   const gradeInfo = getGrade();
 
+  // 리더보드 가져오기 (API 프록시 - 광고 차단기 우회)
   const fetchLeaderboard = useCallback(async () => {
-    const { data } = await supabase
-      .from("quiz_leaderboard")
-      .select("*")
-      .order("score", { ascending: false })
-      .limit(10);
-    // 👤 회원 닉네임 + 프로필사진 동기화
-    if (data && data.length > 0) {
-      const userIds = data.filter(d => d.user_id).map(d => d.user_id);
-      if (userIds.length > 0) {
-        const { data: profiles } = await supabase.from("profiles").select("id, nickname, avatar_url").in("id", userIds);
-        if (profiles) {
-          const profileMap = new Map(profiles.map(p => [p.id, { nickname: p.nickname, avatar_url: p.avatar_url }]));
-          data.forEach(entry => {
-            if (entry.user_id && profileMap.has(entry.user_id)) {
-              const profile = profileMap.get(entry.user_id);
-              entry.nickname = profile?.nickname || entry.nickname;
-              entry.avatar_url = profile?.avatar_url;
-            }
-          });
-        }
-      }
-      setLeaderboard(data);
-    }
+    try {
+      const response = await fetch("/api/leaderboard?game=quiz&limit=10");
+      const result = await response.json();
+      if (result.error) throw new Error(result.error);
+      if (result.data) setLeaderboard(result.data);
+    } catch (err) { console.error("Failed to load leaderboard:", err); }
   }, []);
 
   useEffect(() => {
