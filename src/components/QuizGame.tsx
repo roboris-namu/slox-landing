@@ -244,21 +244,45 @@ export default function QuizGame() {
   const totalTimerRef = useRef<NodeJS.Timeout | null>(null);
   const shareCardRef = useRef<HTMLDivElement>(null);
   
-  // 👤 로그인 상태 확인
+  // 👤 로그인 상태 확인 (광고 차단기 우회)
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        setCurrentUserId(session.user.id);
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("nickname")
-          .eq("id", session.user.id)
-          .single();
-        if (profile) {
-          setCurrentUserNickname(profile.nickname);
-          setNickname(profile.nickname);
+      let userId: string | null = null;
+      try {
+        const sloxSession = localStorage.getItem("slox-session");
+        if (sloxSession) {
+          const parsed = JSON.parse(sloxSession);
+          if (parsed?.user?.id) userId = parsed.user.id;
         }
+        if (!userId) {
+          const keys = Object.keys(localStorage);
+          for (const key of keys) {
+            if (key.includes("sb-") && key.includes("-auth-token")) {
+              const value = localStorage.getItem(key);
+              if (value) {
+                const parsed = JSON.parse(value);
+                if (parsed?.user?.id) { userId = parsed.user.id; break; }
+              }
+            }
+          }
+        }
+      } catch { /* 무시 */ }
+      if (!userId) {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user?.id) userId = session.user.id;
+        } catch { /* 차단됨 */ }
+      }
+      if (userId) {
+        setCurrentUserId(userId);
+        try {
+          const response = await fetch(`/api/profile?userId=${userId}`);
+          const { profile } = await response.json();
+          if (profile?.nickname) {
+            setCurrentUserNickname(profile.nickname);
+            setNickname(profile.nickname);
+          }
+        } catch { /* 무시 */ }
       }
     };
     checkUser();

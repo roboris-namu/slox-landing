@@ -668,17 +668,42 @@ export default function IQTestMulti({ locale }: Props) {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [currentUserNickname, setCurrentUserNickname] = useState<string>("");
 
-  // 👤 사용자 인증 체크
+  // 👤 사용자 인증 체크 (광고 차단기 우회)
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setCurrentUserId(user.id);
-        const { data: profile } = await supabase.from("profiles").select("nickname").eq("id", user.id).single();
-        if (profile) {
-          setCurrentUserNickname(profile.nickname);
-          setNickname(profile.nickname);
+      let userId: string | null = null;
+      try {
+        const sloxSession = localStorage.getItem("slox-session");
+        if (sloxSession) {
+          const parsed = JSON.parse(sloxSession);
+          if (parsed?.user?.id) userId = parsed.user.id;
         }
+        if (!userId) {
+          const keys = Object.keys(localStorage);
+          for (const key of keys) {
+            if (key.includes("sb-") && key.includes("-auth-token")) {
+              const value = localStorage.getItem(key);
+              if (value) {
+                const parsed = JSON.parse(value);
+                if (parsed?.user?.id) { userId = parsed.user.id; break; }
+              }
+            }
+          }
+        }
+      } catch { /* 무시 */ }
+      if (!userId) {
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user?.id) userId = user.id;
+        } catch { /* 차단됨 */ }
+      }
+      if (userId) {
+        setCurrentUserId(userId);
+        try {
+          const response = await fetch(`/api/profile?userId=${userId}`);
+          const { profile } = await response.json();
+          if (profile?.nickname) { setCurrentUserNickname(profile.nickname); setNickname(profile.nickname); }
+        } catch { /* 무시 */ }
       }
     };
     checkUser();
