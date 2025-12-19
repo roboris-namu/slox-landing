@@ -189,10 +189,18 @@ export default function LoginPage() {
       try {
         console.log("🔄 [Login] 세션 확인 시작...");
         
+        // 🔍 OAuth 리다이렉트 감지 (URL에 access_token이 있으면 잠시 대기)
+        const hash = window.location.hash;
+        if (hash && (hash.includes("access_token") || hash.includes("refresh_token"))) {
+          console.log("🔐 [Login] OAuth 리다이렉트 감지, Supabase 처리 대기...");
+          // Supabase가 해시를 처리할 시간을 줌
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        
         // 1️⃣ 먼저 로컬 스토리지에서 세션 확인 (광고 차단기 우회)
         const storedSession = getSessionFromStorage();
         
-        // 2️⃣ SDK도 시도 (2초 타임아웃)
+        // 2️⃣ SDK도 시도 (3초 타임아웃 - OAuth 처리 시간 고려)
         let userId = storedSession?.userId;
         let userEmail = storedSession?.email;
         let userName = storedSession?.name;
@@ -200,7 +208,7 @@ export default function LoginPage() {
         
         if (!userId) {
           const sessionPromise = supabase.auth.getSession();
-          const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 2000));
+          const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000));
           const result = await Promise.race([sessionPromise, timeoutPromise]);
           
           if (result && 'data' in result) {
@@ -213,6 +221,20 @@ export default function LoginPage() {
               userEmail = result.data.session.user.email;
               userName = result.data.session.user.user_metadata?.full_name || result.data.session.user.user_metadata?.name;
               console.log("📊 [Login] SDK 세션:", userId);
+              
+              // 🔧 OAuth 로그인 성공 시 세션 수동 저장
+              try {
+                const sessionData = {
+                  user: result.data.session.user,
+                  access_token: result.data.session.access_token,
+                  refresh_token: result.data.session.refresh_token,
+                  expires_at: result.data.session.expires_at,
+                };
+                localStorage.setItem("slox-session", JSON.stringify(sessionData));
+                console.log("💾 [Login] OAuth 세션 수동 저장 완료");
+              } catch (e) {
+                console.error("❌ [Login] 세션 저장 실패:", e);
+              }
             }
           }
         }
