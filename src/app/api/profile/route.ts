@@ -101,6 +101,8 @@ export async function PATCH(request: NextRequest) {
     const body = await request.json();
     const { userId, nickname, country, avatar_url } = body;
 
+    console.log("🔄 [API/profile] PATCH 요청:", { userId, nickname, country });
+
     if (!userId) {
       return NextResponse.json({ error: "userId가 필요합니다" }, { status: 400 });
     }
@@ -127,11 +129,15 @@ export async function PATCH(request: NextRequest) {
     if (country) updates.country = country;
     if (avatar_url !== undefined) updates.avatar_url = avatar_url;
 
+    console.log("🔄 [API/profile] 업데이트 시도:", { userId, updates });
+
     const { data, error } = await supabase
       .from("profiles")
       .update(updates)
       .eq("id", userId)
       .select();
+
+    console.log("📊 [API/profile] 업데이트 결과:", { data, error });
 
     if (error) {
       console.error("❌ [API/profile] 수정 에러:", error);
@@ -139,9 +145,24 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (!data || data.length === 0) {
-      return NextResponse.json({ error: "프로필을 찾을 수 없습니다" }, { status: 404 });
+      // 프로필이 없으면 먼저 조회해보기
+      const { data: existingProfile } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("id", userId)
+        .maybeSingle();
+      
+      console.log("📊 [API/profile] 기존 프로필 확인:", existingProfile);
+      
+      if (!existingProfile) {
+        return NextResponse.json({ error: "프로필을 찾을 수 없습니다. userId: " + userId }, { status: 404 });
+      }
+      
+      // 프로필은 있는데 업데이트가 안됐으면 다시 시도
+      return NextResponse.json({ error: "업데이트 실패" }, { status: 500 });
     }
 
+    console.log("✅ [API/profile] 수정 성공:", data[0].nickname);
     return NextResponse.json({ success: true, profile: data[0] });
   } catch (err) {
     console.error("❌ [API/profile] PATCH 에러:", err);
