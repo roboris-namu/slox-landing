@@ -189,6 +189,49 @@ export default function LoginPage() {
       try {
         console.log("🔄 [Login] 세션 확인 시작...");
         
+        // 📱 PKCE 플로우 감지 (모바일에서 code 파라미터로 전달)
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get("code");
+        
+        if (authCode) {
+          console.log("📱 [Login] PKCE 코드 감지, Supabase로 세션 교환...");
+          
+          try {
+            // Supabase가 code를 자동으로 처리하도록 대기
+            const { data, error } = await supabase.auth.exchangeCodeForSession(authCode);
+            
+            if (error) {
+              console.error("❌ [Login] PKCE 세션 교환 실패:", error);
+            } else if (data.session) {
+              console.log("✅ [Login] PKCE 세션 교환 성공:", data.session.user.id);
+              
+              const sessionData = {
+                user: data.session.user,
+                access_token: data.session.access_token,
+                refresh_token: data.session.refresh_token,
+                expires_at: data.session.expires_at,
+              };
+              localStorage.setItem("slox-session", JSON.stringify(sessionData));
+              
+              // URL에서 code 파라미터 제거
+              window.history.replaceState(null, "", window.location.pathname);
+              
+              setUser(data.session.user);
+              
+              const userName = data.session.user.user_metadata?.full_name || 
+                              data.session.user.user_metadata?.name ||
+                              (data.session.user.email?.split("@")[0] ?? null);
+              
+              await fetchProfile(data.session.user.id, data.session.user.email, userName);
+              await checkTodayAttendance(data.session.user.id);
+              setLoading(false);
+              return;
+            }
+          } catch (e) {
+            console.error("❌ [Login] PKCE 처리 에러:", e);
+          }
+        }
+        
         // 🔍 OAuth 리다이렉트 감지 (URL에 access_token이 있으면 직접 처리)
         const hash = window.location.hash;
         if (hash && hash.includes("access_token")) {

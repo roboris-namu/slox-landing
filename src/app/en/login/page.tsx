@@ -117,6 +117,35 @@ export default function LoginPageEN() {
   // 유저 확인
   useEffect(() => {
     const checkUser = async () => {
+      // 📱 PKCE 플로우 감지 (모바일에서 code 파라미터로 전달)
+      const urlParams = new URLSearchParams(window.location.search);
+      const authCode = urlParams.get("code");
+      
+      if (authCode) {
+        console.log("📱 [Login] PKCE 코드 감지, 세션 교환...");
+        try {
+          const { data, error } = await supabase.auth.exchangeCodeForSession(authCode);
+          if (!error && data.session) {
+            const sessionData = {
+              user: data.session.user,
+              access_token: data.session.access_token,
+              refresh_token: data.session.refresh_token,
+              expires_at: data.session.expires_at,
+            };
+            localStorage.setItem("slox-session", JSON.stringify(sessionData));
+            window.history.replaceState(null, "", window.location.pathname);
+            setUser(data.session.user);
+            await fetchProfile(data.session.user.id, data.session.user.user_metadata?.name);
+            await checkTodayAttendance(data.session.user.id);
+            setLoading(false);
+            return;
+          }
+        } catch (e) {
+          console.error("❌ [Login] PKCE 처리 에러:", e);
+        }
+      }
+      
+      // 기존 로직
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         setUser(session.user);
