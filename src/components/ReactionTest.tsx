@@ -1247,33 +1247,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
     }, 500);
   }, []);
 
-  // 👤 순위에 따른 점수 계산 (API 프록시 사용 - 광고 차단기 우회)
-  const getRankPoints = (rank: number): number => { if (rank === 1) return 200; if (rank <= 3) return 100; if (rank <= 10) return 50; return 0; };
-  const updateMemberScore = async (userId: string, gameType: string, newRank: number) => {
-    const points = getRankPoints(newRank); if (points === 0) return;
-    try {
-      // API 프록시 사용
-      const profileRes = await fetch(`/api/profile?userId=${userId}`);
-      const { profile } = await profileRes.json();
-      if (!profile) return;
-      const gameScores = profile.game_scores || {};
-      const prevRank = gameScores[gameType]?.rank || Infinity;
-      if (newRank >= prevRank) return;
-      const previousPoints = gameScores[gameType]?.points || 0;
-      const pointsDiff = points - previousPoints;
-      if (pointsDiff <= 0) return;
-      // API 프록시로 프로필 업데이트
-      await fetch("/api/profile", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId,
-          total_score: profile.total_score + pointsDiff,
-          game_scores: { ...gameScores, [gameType]: { rank: newRank, points } },
-        }),
-      });
-    } catch (err) { console.error("점수 업데이트 실패:", err); }
-  };
+  // 👤 회원 점수 업데이트는 API에서 자동 처리됨
 
   // 점수 등록
   const submitScore = async () => {
@@ -1313,10 +1287,8 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error);
       
-      // 👤 회원이면 순위 업데이트 (reaction은 낮을수록 좋음)
-      if (currentUserId) {
-        await updateMemberScore(currentUserId, "reaction", willBeFirstPlace ? 1 : 10);
-      }
+      // 👤 회원 점수 업데이트는 API에서 자동 처리됨
+      console.log(`📊 [ReactionTest] 등록 완료, 순위: ${result.rank}등, 획득 점수: ${result.pointsEarned}점`);
       
       setHasSubmittedScore(true);
       setShowNicknameModal(false);

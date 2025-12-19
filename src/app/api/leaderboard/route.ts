@@ -113,8 +113,16 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// 순위에 따른 점수 계산
+const getRankPoints = (rank: number): number => {
+  if (rank === 1) return 200;
+  if (rank <= 3) return 100;
+  if (rank <= 10) return 50;
+  return 0; // 10등 밖은 점수 없음
+};
+
 /**
- * 🏆 점수 제출 API
+ * 🏆 점수 제출 API (회원 점수 업데이트 포함)
  * POST /api/leaderboard
  * Body: { game, data: { nickname, score, ... }, userId? }
  */
@@ -153,7 +161,71 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, data }, { status: 201 });
+    // 👤 회원이면 순위 계산 후 점수 업데이트
+    let rank = null;
+    let pointsEarned = 0;
+    
+    if (userId && data) {
+      const scoreValue = data[config.scoreField];
+      
+      // 순위 계산: 나보다 좋은 점수를 가진 사람 수 + 1
+      const compareOperator = config.orderAsc ? "lt" : "gt"; // 낮을수록 좋으면 lt, 높을수록 좋으면 gt
+      const { count } = await supabase
+        .from(config.table)
+        .select("*", { count: "exact", head: true })
+        [compareOperator](config.scoreField, scoreValue);
+      
+      rank = (count || 0) + 1;
+      console.log(`📊 [API/leaderboard] ${game} 순위 계산: ${rank}등 (점수: ${scoreValue})`);
+      
+      // 10등 이내일 때만 회원 점수 업데이트
+      if (rank <= 10) {
+        const points = getRankPoints(rank);
+        
+        // 현재 프로필 가져오기
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("total_score, game_scores")
+          .eq("id", userId)
+          .single();
+        
+        if (profile) {
+          const gameScores = profile.game_scores || {};
+          const prevRank = gameScores[game]?.rank || Infinity;
+          
+          // 더 좋은 순위일 때만 업데이트
+          if (rank < prevRank) {
+            const previousPoints = gameScores[game]?.points || 0;
+            const pointsDiff = points - previousPoints;
+            
+            if (pointsDiff > 0) {
+              await supabase
+                .from("profiles")
+                .update({
+                  total_score: (profile.total_score || 0) + pointsDiff,
+                  game_scores: { ...gameScores, [game]: { rank, points } },
+                  updated_at: new Date().toISOString(),
+                })
+                .eq("id", userId);
+              
+              pointsEarned = pointsDiff;
+              console.log(`✅ [API/leaderboard] ${game} 회원 점수 업데이트: ${rank}등, +${pointsDiff}점`);
+            }
+          } else {
+            console.log(`ℹ️ [API/leaderboard] ${game} 이전 순위(${prevRank}등)보다 낮음, 업데이트 스킵`);
+          }
+        }
+      } else {
+        console.log(`ℹ️ [API/leaderboard] ${game} ${rank}등 - 10등 밖이므로 점수 없음`);
+      }
+    }
+
+    return NextResponse.json({ 
+      success: true, 
+      data,
+      rank, // 순위 반환
+      pointsEarned, // 획득 점수 반환
+    }, { status: 201 });
   } catch (err) {
     console.error("❌ [API/leaderboard] POST 에러:", err);
     return NextResponse.json({ error: "서버 에러" }, { status: 500 });

@@ -385,36 +385,7 @@ export default function QuizGame() {
     return { grade: "공부하자", emoji: "😅", color: "text-red-400" };
   };
 
-  // 👤 순위에 따른 점수 계산
-  const getRankPoints = (rank: number): number => {
-    if (rank === 1) return 200;
-    if (rank <= 3) return 100;
-    if (rank <= 10) return 50;
-    return 0;
-  };
-
-  // 👤 회원 점수 업데이트 (API 프록시 사용)
-  const updateMemberScore = async (userId: string, gameType: string, newRank: number) => {
-    const points = getRankPoints(newRank);
-    if (points === 0) return;
-    try {
-      const profileRes = await fetch(`/api/profile?userId=${userId}`);
-      const { profile } = await profileRes.json();
-      if (!profile) return;
-      const gameScores = profile.game_scores || {};
-      const prevRank = gameScores[gameType]?.rank || Infinity;
-      if (newRank >= prevRank) return;
-      const previousPoints = gameScores[gameType]?.points || 0;
-      const pointsDiff = points - previousPoints;
-      if (pointsDiff <= 0) return;
-      await fetch("/api/profile", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, total_score: profile.total_score + pointsDiff, game_scores: { ...gameScores, [gameType]: { rank: newRank, points } } }),
-      });
-      console.log(`✅ [${gameType}] ${newRank}등 달성! +${pointsDiff}점`);
-    } catch (err) { console.error("점수 업데이트 실패:", err); }
-  };
+  // 👤 회원 점수 업데이트는 API에서 자동 처리됨
 
   const submitScore = async () => {
     const finalNickname = currentUserId && currentUserNickname ? currentUserNickname : nickname.trim();
@@ -441,9 +412,7 @@ export default function QuizGame() {
       });
       const result = await response.json();
       if (response.ok) {
-        if (currentUserId) {
-          updateMemberScore(currentUserId, "quiz", 10).catch(() => {});
-        }
+        // 👤 회원 점수 업데이트는 API에서 자동 처리됨
         setHasSubmitted(true); setShowNicknameModal(false); setShowRankingPrompt(false); fetchLeaderboard();
       } else {
         throw new Error(result.error);
