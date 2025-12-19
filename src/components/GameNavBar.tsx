@@ -130,11 +130,39 @@ export default function GameNavBar({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 로그아웃
+  // 로그아웃 (광고 차단기 우회)
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    console.log("🚪 [GameNavBar] 로그아웃 시작...");
+    
+    // 1. localStorage에서 세션 삭제
+    try {
+      localStorage.removeItem("slox-session");
+      const keys = Object.keys(localStorage);
+      keys.forEach((key) => {
+        if (key.includes("sb-") || key.includes("supabase")) {
+          localStorage.removeItem(key);
+        }
+      });
+    } catch (e) {
+      console.error("localStorage 삭제 실패:", e);
+    }
+    
+    // 2. 상태 초기화
     setUser(null);
     setMenuOpen(false);
+    
+    // 3. Supabase SDK signOut 시도 (1초 타임아웃)
+    try {
+      const signOutPromise = supabase.auth.signOut();
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("timeout")), 1000)
+      );
+      await Promise.race([signOutPromise, timeoutPromise]);
+    } catch {
+      console.log("signOut 실패 또는 타임아웃 (무시)");
+    }
+    
+    console.log("✅ [GameNavBar] 로그아웃 완료 - 현재 페이지 유지");
   };
 
   return (
