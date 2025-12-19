@@ -50,22 +50,47 @@ export default function GameNavBar({
   // 로그인 경로
   const loginPath = locale === "ko" ? "/login" : `/${locale}/login`;
 
-  // 유저 정보 로드 (API 프록시 사용 - 광고 차단기 우회)
+  // 🔧 로컬 스토리지에서 세션 직접 읽기 (광고 차단기 우회)
+  const getSessionFromStorage = (): { userId: string } | null => {
+    try {
+      const storageKey = `sb-xtqpbyfgptuxwrevxxtm-auth-token`;
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.user?.id) return { userId: parsed.user.id };
+      }
+    } catch { /* ignore */ }
+    return null;
+  };
+
+  // 유저 정보 로드 (API 프록시 + 로컬 스토리지 - 광고 차단기 우회)
   useEffect(() => {
     const timeout = setTimeout(() => setLoading(false), 3000);
 
     const loadUser = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        // 로컬 스토리지에서 먼저 확인
+        const storedSession = getSessionFromStorage();
+        let userId = storedSession?.userId;
         
-        if (session?.user) {
-          // 프로필 정보 가져오기 (API 프록시)
-          const profileRes = await fetch(`/api/profile?userId=${session.user.id}`);
-          const profileData = await profileRes.json();
-
-          if (profileData.profile) {
-            setUser(profileData.profile);
+        if (!userId) {
+          // SDK 시도 (2초 타임아웃)
+          const sessionPromise = supabase.auth.getSession();
+          const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 2000));
+          const result = await Promise.race([sessionPromise, timeoutPromise]);
+          if (result && 'data' in result && result.data.session?.user) {
+            userId = result.data.session.user.id;
           }
+        }
+        
+        if (!userId) return;
+        
+        // 프로필 정보 가져오기 (API 프록시)
+        const profileRes = await fetch(`/api/profile?userId=${userId}`);
+        const profileData = await profileRes.json();
+
+        if (profileData.profile) {
+          setUser(profileData.profile);
         }
       } catch (error) {
         console.error("Error loading user:", error);

@@ -35,6 +35,26 @@ export default function NavUserProfile({ locale = "ko" }: NavUserProfileProps) {
   const [myRank, setMyRank] = useState<number | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // 🔧 로컬 스토리지에서 세션 직접 읽기 (광고 차단기 우회)
+  const getSessionFromStorage = (): { userId: string } | null => {
+    try {
+      // Supabase가 저장하는 로컬 스토리지 키
+      const storageKey = `sb-xtqpbyfgptuxwrevxxtm-auth-token`;
+      const stored = localStorage.getItem(storageKey);
+      
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.user?.id) {
+          console.log("✅ [NavUserProfile] 로컬 스토리지에서 세션 찾음:", parsed.user.id);
+          return { userId: parsed.user.id };
+        }
+      }
+    } catch (e) {
+      console.error("❌ [NavUserProfile] 로컬 스토리지 읽기 실패:", e);
+    }
+    return null;
+  };
+
   // 유저 정보 로드 (API 프록시 사용 - 광고 차단기 우회)
   useEffect(() => {
     const timeout = setTimeout(() => setLoading(false), 3000);
@@ -43,41 +63,55 @@ export default function NavUserProfile({ locale = "ko" }: NavUserProfileProps) {
       try {
         console.log("🔄 [NavUserProfile] 세션 확인 시작...");
         
-        // 현재 세션 확인 (SDK 필수)
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        // 1️⃣ 먼저 로컬 스토리지에서 세션 확인 (광고 차단기 우회)
+        const storedSession = getSessionFromStorage();
         
-        if (sessionError) {
-          console.error("❌ [NavUserProfile] 세션 에러:", sessionError);
+        // 2️⃣ SDK도 시도 (타임아웃 설정)
+        let userId = storedSession?.userId;
+        
+        if (!userId) {
+          // SDK 호출 (2초 타임아웃)
+          const sessionPromise = supabase.auth.getSession();
+          const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 2000));
+          
+          const result = await Promise.race([sessionPromise, timeoutPromise]);
+          
+          if (result && 'data' in result && result.data.session?.user) {
+            userId = result.data.session.user.id;
+            console.log("📊 [NavUserProfile] SDK 세션:", userId);
+          }
+        }
+        
+        if (!userId) {
+          console.log("📊 [NavUserProfile] 세션 없음 (로그인 필요)");
           return;
         }
         
-        console.log("📊 [NavUserProfile] 세션:", session ? `있음 (${session.user.id})` : "없음");
+        console.log("📊 [NavUserProfile] userId 확인:", userId);
         
-        if (session?.user) {
-          // 프로필 정보 가져오기 (API 프록시)
-          console.log("🔄 [NavUserProfile] 프로필 API 호출...");
-          const profileRes = await fetch(`/api/profile?userId=${session.user.id}`);
-          const profileData = await profileRes.json();
-          console.log("📊 [NavUserProfile] 프로필 응답:", profileData);
+        // 프로필 정보 가져오기 (API 프록시)
+        console.log("🔄 [NavUserProfile] 프로필 API 호출...");
+        const profileRes = await fetch(`/api/profile?userId=${userId}`);
+        const profileData = await profileRes.json();
+        console.log("📊 [NavUserProfile] 프로필 응답:", profileData);
 
-          if (profileData.profile) {
-            setUser(profileData.profile);
-            console.log("✅ [NavUserProfile] 프로필 설정 완료:", profileData.profile.nickname);
+        if (profileData.profile) {
+          setUser(profileData.profile);
+          console.log("✅ [NavUserProfile] 프로필 설정 완료:", profileData.profile.nickname);
 
-            // 오늘 출석 체크 여부 (API 프록시)
-            const attendanceRes = await fetch(`/api/attendance?userId=${session.user.id}`);
-            const attendanceData = await attendanceRes.json();
-            setTodayChecked(attendanceData.checkedIn || false);
+          // 오늘 출석 체크 여부 (API 프록시)
+          const attendanceRes = await fetch(`/api/attendance?userId=${userId}`);
+          const attendanceData = await attendanceRes.json();
+          setTodayChecked(attendanceData.checkedIn || false);
 
-            // 내 순위 계산 (API 프록시)
-            const rankRes = await fetch(`/api/rankings?userId=${session.user.id}`);
-            const rankData = await rankRes.json();
-            if (rankData.myRank) {
-              setMyRank(rankData.myRank);
-            }
-          } else {
-            console.warn("⚠️ [NavUserProfile] 프로필 없음:", profileData);
+          // 내 순위 계산 (API 프록시)
+          const rankRes = await fetch(`/api/rankings?userId=${userId}`);
+          const rankData = await rankRes.json();
+          if (rankData.myRank) {
+            setMyRank(rankData.myRank);
           }
+        } else {
+          console.warn("⚠️ [NavUserProfile] 프로필 없음:", profileData);
         }
       } catch (error) {
         console.error("❌ [NavUserProfile] 로드 에러:", error);
@@ -278,25 +312,50 @@ export function NavUserProfileMobile({ locale = "ko" }: NavUserProfileMobileProp
   const [todayChecked, setTodayChecked] = useState(false);
   const loginPath = locale === "ko" ? "/login" : `/${locale}/login`;
 
-  // 유저 정보 로드 (API 프록시 사용 - 광고 차단기 우회)
+  // 🔧 로컬 스토리지에서 세션 직접 읽기 (광고 차단기 우회)
+  const getSessionFromStorage = (): { userId: string } | null => {
+    try {
+      const storageKey = `sb-xtqpbyfgptuxwrevxxtm-auth-token`;
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.user?.id) return { userId: parsed.user.id };
+      }
+    } catch { /* ignore */ }
+    return null;
+  };
+
+  // 유저 정보 로드 (API 프록시 + 로컬 스토리지 - 광고 차단기 우회)
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
+        // 로컬 스토리지에서 먼저 확인
+        const storedSession = getSessionFromStorage();
+        let userId = storedSession?.userId;
         
-        if (session?.user) {
-          // 프로필 정보 가져오기 (API 프록시)
-          const profileRes = await fetch(`/api/profile?userId=${session.user.id}`);
-          const profileData = await profileRes.json();
-
-          if (profileData.profile) {
-            setUser(profileData.profile);
-
-            // 오늘 출석 체크 여부 (API 프록시)
-            const attendanceRes = await fetch(`/api/attendance?userId=${session.user.id}`);
-            const attendanceData = await attendanceRes.json();
-            setTodayChecked(attendanceData.checkedIn || false);
+        if (!userId) {
+          // SDK 시도 (2초 타임아웃)
+          const sessionPromise = supabase.auth.getSession();
+          const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 2000));
+          const result = await Promise.race([sessionPromise, timeoutPromise]);
+          if (result && 'data' in result && result.data.session?.user) {
+            userId = result.data.session.user.id;
           }
+        }
+        
+        if (!userId) return;
+        
+        // 프로필 정보 가져오기 (API 프록시)
+        const profileRes = await fetch(`/api/profile?userId=${userId}`);
+        const profileData = await profileRes.json();
+
+        if (profileData.profile) {
+          setUser(profileData.profile);
+
+          // 오늘 출석 체크 여부 (API 프록시)
+          const attendanceRes = await fetch(`/api/attendance?userId=${userId}`);
+          const attendanceData = await attendanceRes.json();
+          setTodayChecked(attendanceData.checkedIn || false);
         }
       } catch (error) {
         console.error("Error loading user:", error);
