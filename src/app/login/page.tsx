@@ -189,12 +189,59 @@ export default function LoginPage() {
       try {
         console.log("🔄 [Login] 세션 확인 시작...");
         
-        // 🔍 OAuth 리다이렉트 감지 (URL에 access_token이 있으면 잠시 대기)
+        // 🔍 OAuth 리다이렉트 감지 (URL에 access_token이 있으면 직접 처리)
         const hash = window.location.hash;
-        if (hash && (hash.includes("access_token") || hash.includes("refresh_token"))) {
-          console.log("🔐 [Login] OAuth 리다이렉트 감지, Supabase 처리 대기...");
-          // Supabase가 해시를 처리할 시간을 줌
-          await new Promise(resolve => setTimeout(resolve, 1000));
+        if (hash && hash.includes("access_token")) {
+          console.log("🔐 [Login] OAuth 리다이렉트 감지, 토큰 직접 파싱...");
+          
+          // URL 해시에서 토큰 파싱
+          const params = new URLSearchParams(hash.substring(1));
+          const accessToken = params.get("access_token");
+          const refreshToken = params.get("refresh_token");
+          
+          if (accessToken && refreshToken) {
+            console.log("🔑 [Login] 토큰 발견, setSession 시도...");
+            
+            try {
+              // Supabase setSession으로 세션 설정
+              const { data, error } = await supabase.auth.setSession({
+                access_token: accessToken,
+                refresh_token: refreshToken,
+              });
+              
+              if (error) {
+                console.error("❌ [Login] setSession 에러:", error);
+              } else if (data.session) {
+                console.log("✅ [Login] setSession 성공:", data.session.user.id);
+                
+                // 세션 수동 저장
+                const sessionData = {
+                  user: data.session.user,
+                  access_token: data.session.access_token,
+                  refresh_token: data.session.refresh_token,
+                  expires_at: data.session.expires_at,
+                };
+                localStorage.setItem("slox-session", JSON.stringify(sessionData));
+                console.log("💾 [Login] 세션 수동 저장 완료");
+                
+                // URL 해시 제거 (깔끔하게)
+                window.history.replaceState(null, "", window.location.pathname);
+                
+                // 유저 설정 및 프로필 로드
+                setUser(data.session.user);
+                await fetchProfile(
+                  data.session.user.id,
+                  data.session.user.email,
+                  data.session.user.user_metadata?.full_name || data.session.user.user_metadata?.name
+                );
+                await checkTodayAttendance(data.session.user.id);
+                setLoading(false);
+                return; // 여기서 종료
+              }
+            } catch (e) {
+              console.error("❌ [Login] OAuth 처리 에러:", e);
+            }
+          }
         }
         
         // 1️⃣ 먼저 로컬 스토리지에서 세션 확인 (광고 차단기 우회)
