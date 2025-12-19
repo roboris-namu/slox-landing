@@ -24,16 +24,16 @@ export async function GET(request: NextRequest) {
       .from("profiles")
       .select("*")
       .eq("id", userId)
-      .single();
-
-    if (error && error.code === "PGRST116") {
-      // 프로필 없음 (신규 가입자)
-      return NextResponse.json({ profile: null, notFound: true }, { status: 200 });
-    }
+      .maybeSingle();  // single() 대신 maybeSingle() 사용
 
     if (error) {
       console.error("❌ [API/profile] 조회 에러:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    if (!data) {
+      // 프로필 없음 (신규 가입자)
+      return NextResponse.json({ profile: null, notFound: true }, { status: 200 });
     }
 
     return NextResponse.json({ profile: data });
@@ -77,15 +77,14 @@ export async function POST(request: NextRequest) {
         email,
         avatar_url: avatar_url || null,
       })
-      .select()
-      .single();
+      .select();
 
     if (error) {
       console.error("❌ [API/profile] 생성 에러:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json(data, { status: 201 });
+    return NextResponse.json(data?.[0] || data, { status: 201 });
   } catch (err) {
     console.error("❌ [API/profile] POST 에러:", err);
     return NextResponse.json({ error: "서버 에러" }, { status: 500 });
@@ -132,15 +131,18 @@ export async function PATCH(request: NextRequest) {
       .from("profiles")
       .update(updates)
       .eq("id", userId)
-      .select()
-      .single();
+      .select();
 
     if (error) {
       console.error("❌ [API/profile] 수정 에러:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    return NextResponse.json(data);
+    if (!data || data.length === 0) {
+      return NextResponse.json({ error: "프로필을 찾을 수 없습니다" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, profile: data[0] });
   } catch (err) {
     console.error("❌ [API/profile] PATCH 에러:", err);
     return NextResponse.json({ error: "서버 에러" }, { status: 500 });
