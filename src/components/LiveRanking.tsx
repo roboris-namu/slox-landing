@@ -346,13 +346,11 @@ export default function LiveRanking({ locale = "ko" }: LiveRankingProps) {
                       {user.nickname}
                       {rank === 1 && <span className="ml-2 text-sm">👑 {t.champion}</span>}
                     </p>
-                    {/* 1등 문화상품권 유력 배너 */}
+                    {/* 1등 문화상품권 유력 배지 - 간결한 가로 형태 */}
                     {rank === 1 && (
-                      <div className="inline-flex items-center gap-1.5 mt-1.5 px-3 py-1 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/40 rounded-lg">
-                        <span className="text-sm">🎁</span>
-                        <span className="text-xs font-bold text-green-400">{t.prizeWinner}</span>
-                        <span className="text-green-500 animate-pulse">✓</span>
-                      </div>
+                      <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-green-500/20 border border-green-500/40 rounded text-xs font-bold text-green-400 whitespace-nowrap">
+                        🎁 {t.prizeWinner} ✓
+                      </span>
                     )}
                     {/* 👤 게임 순위 배지들 */}
                     {user.game_scores && Object.keys(user.game_scores).length > 0 && (
