@@ -38,18 +38,27 @@ export default function NavUserProfile({ locale = "ko" }: NavUserProfileProps) {
   // 🔧 로컬 스토리지에서 세션 직접 읽기 (광고 차단기 우회)
   const getSessionFromStorage = (): { userId: string } | null => {
     try {
+      // 디버그: 모든 localStorage 키 출력
+      const allKeys = Object.keys(localStorage);
+      console.log("🔍 [NavUserProfile] localStorage 전체 키:", allKeys);
+      
+      // sb- 관련 키 찾기
+      const sbKeys = allKeys.filter(k => k.includes("sb-") || k.includes("supabase"));
+      console.log("🔍 [NavUserProfile] Supabase 관련 키:", sbKeys);
+      
       // 모든 sb-로 시작하는 키를 찾아서 세션 확인
-      const keys = Object.keys(localStorage);
-      for (const key of keys) {
-        if (key.startsWith("sb-") && key.includes("-auth-token")) {
+      for (const key of allKeys) {
+        if (key.includes("sb-") || key.includes("supabase") || key.includes("auth")) {
           const stored = localStorage.getItem(key);
+          console.log("🔍 [NavUserProfile] 키 확인:", key, "값 길이:", stored?.length);
           if (stored) {
             try {
               const parsed = JSON.parse(stored);
+              console.log("🔍 [NavUserProfile] 파싱된 값 구조:", Object.keys(parsed));
               // 여러 형식 시도
-              const userId = parsed?.user?.id || parsed?.currentSession?.user?.id;
+              const userId = parsed?.user?.id || parsed?.currentSession?.user?.id || parsed?.session?.user?.id;
               if (userId) {
-                console.log("✅ [NavUserProfile] 로컬 스토리지에서 세션 찾음:", userId, "키:", key);
+                console.log("✅ [NavUserProfile] 세션 찾음! userId:", userId, "키:", key);
                 return { userId };
               }
             } catch {
@@ -58,7 +67,7 @@ export default function NavUserProfile({ locale = "ko" }: NavUserProfileProps) {
           }
         }
       }
-      console.log("⚠️ [NavUserProfile] 로컬 스토리지에 세션 없음");
+      console.log("⚠️ [NavUserProfile] 세션 키를 찾지 못함");
     } catch (e) {
       console.error("❌ [NavUserProfile] 로컬 스토리지 읽기 실패:", e);
     }
