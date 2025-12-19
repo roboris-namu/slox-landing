@@ -57,12 +57,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "id와 nickname이 필요합니다" }, { status: 400 });
     }
 
-    // 닉네임 중복 확인
+    // 닉네임 중복 확인 (maybeSingle 사용 - 결과 없어도 에러 안남)
     const { data: existing } = await supabase
       .from("profiles")
       .select("id")
       .eq("nickname", nickname.trim())
-      .single();
+      .maybeSingle();
 
     if (existing) {
       return NextResponse.json({ error: "이미 사용 중인 닉네임입니다" }, { status: 409 });
@@ -113,7 +113,7 @@ export async function PATCH(request: NextRequest) {
         .select("id")
         .eq("nickname", nickname.trim())
         .neq("id", userId)
-        .single();
+        .maybeSingle();  // single() 대신 maybeSingle() 사용 (결과 없어도 에러 안남)
 
       if (existing) {
         return NextResponse.json({ error: "이미 사용 중인 닉네임입니다" }, { status: 409 });
