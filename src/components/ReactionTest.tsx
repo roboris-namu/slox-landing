@@ -1963,6 +1963,20 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
               </button>
             </div>
             
+            {/* 🛡️ 공정성 안내 */}
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 mb-4">
+              <p className="text-blue-400 text-xs leading-relaxed">
+                {lang === "ko" 
+                  ? "⚡ 100ms 미만의 기록은 예측 샷 또는 버그로 간주되어 등록이 제한됩니다. 공정한 이벤트를 위해 순수 반응속도만 측정합니다."
+                  : lang === "ja"
+                  ? "⚡ 100ms未満の記録は予測ショットまたはバグとみなされ、登録が制限されます。"
+                  : lang === "zh"
+                  ? "⚡ 100ms以下的记录被视为预测或bug，将被限制注册。"
+                  : "⚡ Records under 100ms are considered prediction shots or bugs and registration is restricted for fair competition."
+                }
+              </p>
+            </div>
+            
             {leaderboard.length === 0 ? (
               <div className="text-center py-8">
                 <div className="text-4xl mb-3">🎮</div>
