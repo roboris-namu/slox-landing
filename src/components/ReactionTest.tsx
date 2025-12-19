@@ -963,6 +963,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
   // 명예의전당 관련 상태
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [totalCount, setTotalCount] = useState(0); // 전체 참가자 수
+  const [myRank, setMyRank] = useState<number | null>(null); // 정확한 순위
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -1357,13 +1358,32 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
     fetchLeaderboard();
   }, [fetchLeaderboard]);
   
-  // 🚀 결과 나오면 0.8초 후 자동 랭킹 등록 팝업 표시
+  // 🚀 결과 나오면 정확한 순위 계산 + 0.8초 후 팝업 표시
   useEffect(() => {
-    if (state === "result" && !hasSubmittedScore && reactionTime > 0) {
-      const timer = setTimeout(() => {
-        setShowRankingPrompt(true);
-      }, 800);
-      return () => clearTimeout(timer);
+    if (state === "result" && reactionTime > 0) {
+      // 정확한 순위 계산 (API 호출)
+      fetch(`/api/leaderboard?game=reaction&limit=10&myScore=${reactionTime}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.myRank) {
+            setMyRank(result.myRank);
+          }
+          if (result.data) {
+            setLeaderboard(result.data);
+          }
+          if (result.totalCount !== undefined) {
+            setTotalCount(result.totalCount);
+          }
+        })
+        .catch(err => console.error("순위 계산 실패:", err));
+      
+      // 팝업 표시
+      if (!hasSubmittedScore) {
+        const timer = setTimeout(() => {
+          setShowRankingPrompt(true);
+        }, 800);
+        return () => clearTimeout(timer);
+      }
     }
   }, [state, hasSubmittedScore, reactionTime]);
 
@@ -1511,9 +1531,10 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
     // 1등 정보
     const firstPlace = leaderboard.length > 0 ? leaderboard[0] : null;
     const isNewFirst = !firstPlace || reactionTime < firstPlace.score;
-    const myRank = isNewFirst ? 1 : (leaderboard.findIndex(e => reactionTime < e.score) === -1 
-      ? leaderboard.length + 1 
-      : leaderboard.findIndex(e => reactionTime < e.score) + 1);
+    // 정확한 순위 사용 (API에서 계산된 myRank 상태 우선)
+    const calculatedRank = myRank || (isNewFirst ? 1 : (leaderboard.findIndex(e => reactionTime < e.score) === -1 
+      ? totalCount + 1 
+      : leaderboard.findIndex(e => reactionTime < e.score) + 1));
     
     // 이벤트 마감일 계산 (2025년 12월 31일)
     const eventEnd = new Date("2025-12-31T23:59:59");
@@ -1531,8 +1552,8 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
     
     // 공유 텍스트 (풍부한 정보)
     const text = lang === "ko"
-      ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 새로운 1등 달성!" : `📊 현재 ${myRank}위`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlace.score}ms)\n\n` : ""}🎁 EVENT! 1등에게 문화상품권 5천원!\n⏰ 마감까지 ${timeLeftText} 남음!\n\n🎮 나도 도전하기 👉 ${shareUrl}`
-      : `⚡ Reaction Speed Test!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 New #1!" : `📊 Rank #${myRank}`}\n\n🎁 EVENT! Win a $5 gift card!\n⏰ ${timeLeftText} left!\n\n🎮 Try it 👉 ${shareUrl}`;
+      ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 새로운 1등 달성!" : `📊 현재 ${calculatedRank}위`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlace.score}ms)\n\n` : ""}🎁 EVENT! 1등에게 문화상품권 5천원!\n⏰ 마감까지 ${timeLeftText} 남음!\n\n🎮 나도 도전하기 👉 ${shareUrl}`
+      : `⚡ Reaction Speed Test!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 New #1!" : `📊 Rank #${calculatedRank}`}\n\n🎁 EVENT! Win a $5 gift card!\n⏰ ${timeLeftText} left!\n\n🎮 Try it 👉 ${shareUrl}`;
     
     // 카카오톡 인앱 브라우저면 바로 클립보드 복사 (Web Share API 미지원)
     const isKakao = navigator.userAgent.toLowerCase().includes("kakaotalk");
@@ -1829,10 +1850,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                         <div className="text-center">
                           <p className="text-dark-500 text-[10px] uppercase tracking-wider">{t.myRank}</p>
                           <p className="text-purple-400 font-bold text-lg">
-                            {(() => {
-                              const rank = leaderboard.findIndex(e => reactionTime < e.score);
-                              return rank === -1 ? leaderboard.length + 1 : rank + 1;
-                            })()}{t.rank}
+                            {myRank || "?"}{t.rank}
                           </p>
                           <p className="text-dark-500 text-xs">+{reactionTime - leaderboard[0].score}ms</p>
                         </div>
@@ -2088,35 +2106,35 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                   {/* 내 순위 표시 */}
                   <div className="text-center mb-4">
                     {(() => {
-                      const myRank = leaderboard.length === 0 
+                      const calculatedRank = myRank || (leaderboard.length === 0 
                         ? 1 
                         : leaderboard.findIndex(e => reactionTime < e.score) === -1 
-                          ? leaderboard.length + 1 
-                          : leaderboard.findIndex(e => reactionTime < e.score) + 1;
+                          ? totalCount + 1 
+                          : leaderboard.findIndex(e => reactionTime < e.score) + 1);
                       const isFirstPlace = leaderboard.length === 0 || reactionTime < leaderboard[0].score;
                       
                       return (
                         <>
                           <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
-                            {isFirstPlace ? "👑" : myRank <= 3 ? "🏆" : myRank <= 10 ? "🔥" : "📊"}
+                            {isFirstPlace ? "👑" : calculatedRank <= 3 ? "🏆" : calculatedRank <= 10 ? "🔥" : "📊"}
                           </div>
                           <h3 className={`text-2xl font-black mb-1 ${
                             isFirstPlace 
                               ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" 
-                              : myRank <= 3 
+                              : calculatedRank <= 3 
                                 ? "text-yellow-400"
                                 : "text-white"
                           }`}>
                             {isFirstPlace 
                               ? (lang === "ko" ? "🔥 새로운 1등!" : "🔥 New #1!") 
-                              : (lang === "ko" ? `현재 ${myRank}위!` : `Rank #${myRank}!`)}
+                              : (lang === "ko" ? `현재 ${calculatedRank}위!` : `Rank #${calculatedRank}!`)}
                           </h3>
                           <p className="text-dark-400 text-sm">
                             {isFirstPlace 
                               ? (lang === "ko" ? "역대 최고 기록을 달성했어요!" : "You beat the record!") 
-                              : myRank <= 3
+                              : calculatedRank <= 3
                                 ? (lang === "ko" ? "TOP 3 진입! 대단해요!" : "TOP 3! Amazing!")
-                                : myRank <= 10
+                                : calculatedRank <= 10
                                   ? (lang === "ko" ? "TOP 10 진입 가능!" : "TOP 10 potential!")
                                   : (lang === "ko" ? "기록을 남겨보세요!" : "Save your record!")}
                           </p>
@@ -2200,12 +2218,8 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                   </h3>
                   <p className="text-dark-400 text-sm">
                     {lang === "ko" 
-                      ? `${reactionTime}ms로 ${leaderboard.length > 0 
-                          ? `${leaderboard.findIndex(e => reactionTime < e.score) === -1 
-                              ? leaderboard.length + 1 
-                              : leaderboard.findIndex(e => reactionTime < e.score) + 1}위 예상!` 
-                          : "1위 도전!"}` 
-                      : `${reactionTime}ms`}
+                      ? `${reactionTime}ms로 ${myRank ? `${myRank}위 예상!` : "순위 계산중..."}` 
+                      : `${reactionTime}ms${myRank ? ` - Rank #${myRank}` : ""}`}
                   </p>
                 </div>
                 
@@ -2576,7 +2590,7 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                   fontWeight: "bold", 
                   marginTop: "2px" 
                 }}>
-                  {leaderboard.length === 0 ? "1위!" : reactionTime <= leaderboard[0].score ? "1위!" : `${Math.min(leaderboard.findIndex(e => reactionTime < e.score) + 1 || leaderboard.length + 1, 10)}위`}
+                  {leaderboard.length === 0 ? "1위!" : reactionTime <= leaderboard[0].score ? "1위!" : `${myRank || "?"}위`}
                 </div>
                 <div style={{ color: "#9ca3af", fontSize: "10px" }}>{reactionTime}ms</div>
               </div>

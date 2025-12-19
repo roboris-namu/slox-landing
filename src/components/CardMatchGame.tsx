@@ -127,6 +127,7 @@ export default function CardMatchGame() {
   const [isMobile, setIsMobile] = useState(false);
   const [leaderboard, setLeaderboard] = useState<CardMatchLeaderboardEntry[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [myRank, setMyRank] = useState<number | null>(null);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("KR");
@@ -236,11 +237,21 @@ export default function CardMatchGame() {
 
   useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
 
-  // 🚀 게임 완료/시간초과 0.8초 후 자동 랭킹 등록 팝업
+  // 🚀 게임 완료/시간초과 시 정확한 순위 계산 + 0.8초 후 팝업
   useEffect(() => {
-    if (state === "result" && !hasSubmittedScore && matchedPairs > 0) {
-      const timerRef = setTimeout(() => { setShowRankingPrompt(true); }, 800);
-      return () => clearTimeout(timerRef);
+    if (state === "result" && matchedPairs > 0) {
+      fetch(`/api/leaderboard?game=cardmatch&limit=10&myScore=${matchedPairs}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.myRank) setMyRank(result.myRank);
+          if (result.data) setLeaderboard(result.data);
+          if (result.totalCount !== undefined) setTotalCount(result.totalCount);
+        })
+        .catch(err => console.error("순위 계산 실패:", err));
+      if (!hasSubmittedScore) {
+        const timerRef = setTimeout(() => { setShowRankingPrompt(true); }, 800);
+        return () => clearTimeout(timerRef);
+      }
     }
   }, [state, hasSubmittedScore, matchedPairs]);
 
@@ -1143,15 +1154,15 @@ export default function CardMatchGame() {
                     {(() => {
                       const currentScore = getFinalScore();
                       // 점수 기준 내림차순 정렬 - 높은 점수가 높은 순위
-                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => currentScore > (e.score || 0)) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => currentScore > (e.score || 0)) + 1;
+                      const calculatedRank = myRank || (leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => currentScore > (e.score || 0)) === -1 ? totalCount + 1 : leaderboard.findIndex(e => currentScore > (e.score || 0)) + 1);
                       const isFirstPlace = leaderboard.length === 0 || currentScore > (leaderboard[0].score || 0);
                       return (
                         <>
                           <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
-                            {isFirstPlace ? "👑" : myRank <= 3 ? "🏆" : myRank <= 10 ? "🔥" : "📊"}
+                            {isFirstPlace ? "👑" : calculatedRank <= 3 ? "🏆" : calculatedRank <= 10 ? "🔥" : "📊"}
                           </div>
-                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : myRank <= 3 ? "text-yellow-400" : "text-white"}`}>
-                            {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${myRank}위!`}
+                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : calculatedRank <= 3 ? "text-yellow-400" : "text-white"}`}>
+                            {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${calculatedRank}위!`}
                           </h3>
                           <p className="text-dark-400 text-sm">{currentScore}점 ({moves}회)</p>
                         </>

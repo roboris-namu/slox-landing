@@ -23,13 +23,15 @@ const GAME_CONFIG: Record<string, { table: string; scoreField: string; orderAsc:
 
 /**
  * 🏆 범용 리더보드 조회 API
- * GET /api/leaderboard?game=reaction&limit=10
+ * GET /api/leaderboard?game=reaction&limit=10&myScore=957
+ * myScore 파라미터가 있으면 해당 점수의 정확한 순위도 반환
  */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const game = searchParams.get("game");
     const limit = parseInt(searchParams.get("limit") || "10");
+    const myScore = searchParams.get("myScore"); // 정확한 순위 계산용
 
     if (!game || !GAME_CONFIG[game]) {
       return NextResponse.json(
@@ -51,6 +53,20 @@ export async function GET(request: NextRequest) {
     const { count } = await supabase
       .from(config.table)
       .select("*", { count: "exact", head: true });
+    
+    // 📊 myScore가 있으면 정확한 순위 계산
+    let myRank = null;
+    if (myScore) {
+      const scoreValue = parseFloat(myScore);
+      // 나보다 좋은 점수를 가진 사람 수 + 1 = 내 순위
+      const compareOperator = config.orderAsc ? "lt" : "gt"; // 낮을수록 좋으면 lt, 높을수록 좋으면 gt
+      const { count: betterCount } = await supabase
+        .from(config.table)
+        .select("*", { count: "exact", head: true })
+        [compareOperator](config.scoreField, scoreValue);
+      
+      myRank = (betterCount || 0) + 1;
+    }
 
     if (error) {
       console.error(`❌ [API/leaderboard] ${game} 조회 에러:`, error);
@@ -102,6 +118,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       data: data || [],
       totalCount: count || 0,
+      myRank, // 정확한 순위 (myScore 파라미터 사용 시)
     }, {
       headers: {
         "Cache-Control": "no-cache, no-store, must-revalidate",

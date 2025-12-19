@@ -228,6 +228,7 @@ export default function QuizGame() {
   
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [myRank, setMyRank] = useState<number | null>(null);
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
@@ -300,6 +301,20 @@ export default function QuizGame() {
   }, []);
 
   useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
+
+  // 🚀 게임 결과 시 정확한 순위 계산
+  useEffect(() => {
+    if (gameState === "result" && correctCount > 0) {
+      fetch(`/api/leaderboard?game=quiz&limit=10&myScore=${correctCount}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.myRank) setMyRank(result.myRank);
+          if (result.data) setLeaderboard(result.data);
+          if (result.totalCount !== undefined) setTotalCount(result.totalCount);
+        })
+        .catch(err => console.error("순위 계산 실패:", err));
+    }
+  }, [gameState, correctCount]);
 
   const startGame = () => {
     const shuffled = [...quizQuestions].sort(() => Math.random() - 0.5);
@@ -792,15 +807,15 @@ export default function QuizGame() {
                   <div className="text-center mb-4">
                     {(() => {
                       const myScore = getFinalScore();
-                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => myScore > (e.score || 0)) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => myScore > (e.score || 0)) + 1;
+                      const calculatedRank = myRank || (leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => myScore > (e.score || 0)) === -1 ? totalCount + 1 : leaderboard.findIndex(e => myScore > (e.score || 0)) + 1);
                       const isFirstPlace = leaderboard.length === 0 || myScore > (leaderboard[0]?.score || 0);
                       return (
                         <>
                           <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
-                            {isFirstPlace ? "👑" : myRank <= 3 ? "🏆" : "📚"}
+                            {isFirstPlace ? "👑" : calculatedRank <= 3 ? "🏆" : "📚"}
                           </div>
-                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : myRank <= 3 ? "text-yellow-400" : "text-white"}`}>
-                            {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${myRank}위!`}
+                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : calculatedRank <= 3 ? "text-yellow-400" : "text-white"}`}>
+                            {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${calculatedRank}위!`}
                           </h3>
                           <p className={`text-3xl font-black ${gradeInfo.color}`}>{getFinalScore().toLocaleString()}점</p>
                           <p className="text-dark-400 text-sm">{gradeInfo.grade} ({correctCount}/10)</p>

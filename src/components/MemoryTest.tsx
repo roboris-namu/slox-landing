@@ -540,6 +540,7 @@ export default function MemoryTest({ locale }: MemoryTestProps) {
   const [isMobile, setIsMobile] = useState(false);
   const [leaderboard, setLeaderboard] = useState<MemoryLeaderboardEntry[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [myRank, setMyRank] = useState<number | null>(null);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -653,11 +654,21 @@ export default function MemoryTest({ locale }: MemoryTestProps) {
 
   useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
 
-  // 🚀 게임 오버 0.8초 후 자동 랭킹 등록 팝업
+  // 🚀 게임 오버 시 정확한 순위 계산 + 0.8초 후 팝업
   useEffect(() => {
-    if (state === "wrong" && !hasSubmittedScore && bestLevel >= 1) {
-      const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
-      return () => clearTimeout(timer);
+    if (state === "wrong" && bestLevel >= 1) {
+      fetch(`/api/leaderboard?game=memory&limit=10&myScore=${bestLevel}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.myRank) setMyRank(result.myRank);
+          if (result.data) setLeaderboard(result.data);
+          if (result.totalCount !== undefined) setTotalCount(result.totalCount);
+        })
+        .catch(err => console.error("순위 계산 실패:", err));
+      if (!hasSubmittedScore) {
+        const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
+        return () => clearTimeout(timer);
+      }
     }
   }, [state, hasSubmittedScore, bestLevel]);
 
@@ -1057,15 +1068,15 @@ export default function MemoryTest({ locale }: MemoryTestProps) {
                 <div className="relative z-10">
                   <div className="text-center mb-4">
                     {(() => {
-                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => bestLevel > e.score) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => bestLevel > e.score) + 1;
+                      const calculatedRank = myRank || (leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => bestLevel > e.score) === -1 ? totalCount + 1 : leaderboard.findIndex(e => bestLevel > e.score) + 1);
                       const isFirstPlace = leaderboard.length === 0 || bestLevel > leaderboard[0].score;
                       return (
                         <>
                           <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
-                            {isFirstPlace ? "👑" : myRank <= 3 ? "🏆" : myRank <= 10 ? "🔥" : "📊"}
+                            {isFirstPlace ? "👑" : calculatedRank <= 3 ? "🏆" : calculatedRank <= 10 ? "🔥" : "📊"}
                           </div>
-                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : myRank <= 3 ? "text-yellow-400" : "text-white"}`}>
-                            {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${myRank}위!`}
+                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : calculatedRank <= 3 ? "text-yellow-400" : "text-white"}`}>
+                            {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${calculatedRank}위!`}
                           </h3>
                           <p className="text-dark-400 text-sm">{bestLevel} {t.digits}</p>
                         </>

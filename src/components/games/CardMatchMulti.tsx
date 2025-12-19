@@ -636,6 +636,8 @@ export default function CardMatchMulti({ locale }: Props) {
   const [isMobile, setIsMobile] = useState(false);
   const [leaderboard, setLeaderboard] = useState<CardMatchLeaderboardEntry[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [myRank, setMyRank] = useState<number | null>(null);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY[locale]);
@@ -768,10 +770,21 @@ export default function CardMatchMulti({ locale }: Props) {
 
   useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
 
+  // 🚀 게임 결과 시 정확한 순위 계산 + 0.8초 후 팝업
   useEffect(() => {
-    if (state === "result" && !hasSubmittedScore && matchedPairs > 0) {
-      const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
-      return () => clearTimeout(timer);
+    if (state === "result" && matchedPairs > 0) {
+      fetch(`/api/leaderboard?game=cardmatch&limit=10&myScore=${matchedPairs}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.myRank) setMyRank(result.myRank);
+          if (result.data) setLeaderboard(result.data);
+          if (result.totalCount !== undefined) setTotalCount(result.totalCount);
+        })
+        .catch(err => console.error("순위 계산 실패:", err));
+      if (!hasSubmittedScore) {
+        const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
+        return () => clearTimeout(timer);
+      }
     }
   }, [state, hasSubmittedScore, matchedPairs]);
 

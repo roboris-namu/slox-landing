@@ -662,6 +662,10 @@ export default function TypingMulti({ locale }: Props) {
   const shareCardRef = useRef<HTMLDivElement>(null);
   
   const [leaderboard, setLeaderboard] = useState<TypingLeaderboardEntry[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [totalCount, setTotalCount] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [myRank, setMyRank] = useState<number | null>(null);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY[locale]);
@@ -1212,14 +1216,14 @@ export default function TypingMulti({ locale }: Props) {
                 <div className="relative z-10">
                   <div className="text-center mb-4">
                     {(() => {
-                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => result.cpm > e.wpm) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => result.cpm > e.wpm) + 1;
+                      const calculatedRank = myRank || (leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => result.cpm > e.wpm) === -1 ? totalCount + 1 : leaderboard.findIndex(e => result.cpm > e.wpm) + 1);
                       const isFirstPlace = leaderboard.length === 0 || result.cpm > leaderboard[0].wpm;
                       return (
                         <>
                           <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
-                            {isFirstPlace ? "👑" : myRank <= 3 ? "🏆" : myRank <= 10 ? "🔥" : "📊"}
+                            {isFirstPlace ? "👑" : calculatedRank <= 3 ? "🏆" : calculatedRank <= 10 ? "🔥" : "📊"}
                           </div>
-                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : myRank <= 3 ? "text-yellow-400" : "text-white"}`}>
+                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : calculatedRank <= 3 ? "text-yellow-400" : "text-white"}`}>
                             {isFirstPlace ? t.newFirst : `${t.currentRank} #${myRank}!`}
                           </h3>
                           <p className="text-dark-400 text-sm">{result.cpm} {t.speed} ({t.accuracy} {result.accuracy}%)</p>

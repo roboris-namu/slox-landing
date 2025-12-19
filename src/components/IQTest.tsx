@@ -110,6 +110,7 @@ export default function IQTest() {
   
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const [myRank, setMyRank] = useState<number | null>(null);
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
@@ -179,6 +180,21 @@ export default function IQTest() {
   }, []);
 
   useEffect(() => { fetchLeaderboard(); }, [fetchLeaderboard]);
+
+  // 🚀 게임 결과 시 정확한 순위 계산
+  useEffect(() => {
+    if (gameState === "result" && score > 0) {
+      const calculatedIQ = 70 + Math.round(score * 3);
+      fetch(`/api/leaderboard?game=iq&limit=10&myScore=${calculatedIQ}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.myRank) setMyRank(result.myRank);
+          if (result.data) setLeaderboard(result.data);
+          if (result.totalCount !== undefined) setTotalCount(result.totalCount);
+        })
+        .catch(err => console.error("순위 계산 실패:", err));
+    }
+  }, [gameState, score]);
 
   const startGame = () => {
     const easy = iqQuestions.filter(q => q.difficulty <= 2).sort(() => Math.random() - 0.5).slice(0, 4);
@@ -671,15 +687,15 @@ export default function IQTest() {
                 <div className="relative z-10">
                   <div className="text-center mb-4">
                     {(() => {
-                      const myRank = leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => iqScore > (e.iq_score || 0)) === -1 ? leaderboard.length + 1 : leaderboard.findIndex(e => iqScore > (e.iq_score || 0)) + 1;
+                      const calculatedRank = myRank || (leaderboard.length === 0 ? 1 : leaderboard.findIndex(e => iqScore > (e.iq_score || 0)) === -1 ? totalCount + 1 : leaderboard.findIndex(e => iqScore > (e.iq_score || 0)) + 1);
                       const isFirstPlace = leaderboard.length === 0 || iqScore > (leaderboard[0]?.iq_score || 0);
                       return (
                         <>
                           <div className={`text-5xl mb-3 ${isFirstPlace ? "animate-bounce" : ""}`}>
-                            {isFirstPlace ? "👑" : myRank <= 3 ? "🏆" : "🧠"}
+                            {isFirstPlace ? "👑" : calculatedRank <= 3 ? "🏆" : "🧠"}
                           </div>
-                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : myRank <= 3 ? "text-yellow-400" : "text-white"}`}>
-                            {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${myRank}위!`}
+                          <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : calculatedRank <= 3 ? "text-yellow-400" : "text-white"}`}>
+                            {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${calculatedRank}위!`}
                           </h3>
                           <p className={`text-3xl font-black ${iqGrade.color}`}>IQ {iqScore}</p>
                           <p className="text-dark-400 text-sm">{iqGrade.grade} ({correctCount}/12)</p>
