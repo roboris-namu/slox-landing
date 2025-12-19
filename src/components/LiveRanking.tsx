@@ -378,7 +378,7 @@ export default function LiveRanking({ locale = "ko" }: LiveRankingProps) {
                         )}
                       </div>
                     )}
-                    <p className="text-dark-500 text-xs flex items-center gap-2 mt-1">
+                    <p className="text-dark-500 text-xs flex items-center gap-2 mt-1 whitespace-nowrap">
                       <span>📅 {t.attendance} {user.attendance_count}{t.days}</span>
                       {rank <= 3 && <span className="text-yellow-500">• {t.top} {rank}!</span>}
                     </p>
