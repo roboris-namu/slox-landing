@@ -208,20 +208,35 @@ export default function LoginPage() {
               if (tokenParts.length === 3) {
                 const payload = JSON.parse(atob(tokenParts[1]));
                 console.log("📊 [Login] 토큰 페이로드:", payload);
+                console.log("📊 [Login] user_metadata:", payload.user_metadata);
                 
                 const userId = payload.sub;
                 const userEmail = payload.email;
                 const expiresAt = payload.exp;
                 
+                // Google에서 이름 추출 (여러 필드 확인)
+                const userName = 
+                  payload.user_metadata?.full_name ||
+                  payload.user_metadata?.name ||
+                  payload.name ||
+                  payload.full_name ||
+                  (userEmail ? userEmail.split("@")[0] : null); // 이메일 앞부분 사용
+                
+                console.log("📊 [Login] 추출된 이름:", userName);
+                
                 if (userId) {
                   console.log("✅ [Login] 사용자 ID 추출:", userId);
                   
-                  // 세션 수동 저장
+                  // 세션 수동 저장 (이름 정보 포함)
                   const sessionData = {
                     user: {
                       id: userId,
                       email: userEmail,
-                      user_metadata: payload.user_metadata || {},
+                      user_metadata: {
+                        ...payload.user_metadata,
+                        full_name: userName,
+                        name: userName,
+                      },
                     },
                     access_token: accessToken,
                     refresh_token: refreshToken,
@@ -236,12 +251,8 @@ export default function LoginPage() {
                   // 유저 설정
                   setUser({ id: userId, email: userEmail } as User);
                   
-                  // 프로필 로드
-                  await fetchProfile(
-                    userId,
-                    userEmail,
-                    payload.user_metadata?.full_name || payload.user_metadata?.name
-                  );
+                  // 프로필 로드 (이름 전달)
+                  await fetchProfile(userId, userEmail, userName);
                   await checkTodayAttendance(userId);
                   setLoading(false);
                   return; // 여기서 종료
