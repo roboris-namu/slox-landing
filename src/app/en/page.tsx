@@ -56,6 +56,7 @@ function Navigation() {
             
             <div className="md:hidden flex items-center gap-2">
               <LanguageSelector currentLocale="en" mobile />
+              <a href="/en/notice" className="w-10 h-10 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] flex items-center justify-center transition-all" title="Notice"><span className="text-lg">📢</span></a>
               <NavUserProfileMobile locale="en" />
             </div>
           </div>

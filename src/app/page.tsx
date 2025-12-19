@@ -75,6 +75,14 @@ function Navigation() {
             <div className="md:hidden flex items-center gap-2">
               {/* 언어 선택 (모바일) */}
               <LanguageSelector mobile />
+              {/* 📢 공지 아이콘 (모바일) */}
+              <a 
+                href="/notice" 
+                className="w-10 h-10 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] flex items-center justify-center transition-all"
+                title="공지사항"
+              >
+                <span className="text-lg">📢</span>
+              </a>
               {/* 앱 설치 버튼 */}
               <InstallButton />
               {/* 👤 유저 프로필 / 로그인 (모바일) */}
