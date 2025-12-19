@@ -140,19 +140,31 @@ export default function LoginPage() {
   // 🔧 로컬 스토리지에서 세션 직접 읽기 (광고 차단기 우회)
   const getSessionFromStorage = (): { userId: string; email?: string; name?: string } | null => {
     try {
-      const storageKey = `sb-xtqpbyfgptuxwrevxxtm-auth-token`;
-      const stored = localStorage.getItem(storageKey);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed?.user?.id) {
-          console.log("✅ [Login] 로컬 스토리지에서 세션 찾음:", parsed.user.id);
-          return { 
-            userId: parsed.user.id,
-            email: parsed.user.email,
-            name: parsed.user.user_metadata?.full_name || parsed.user.user_metadata?.name
-          };
+      // 모든 sb-로 시작하는 키를 찾아서 세션 확인
+      const keys = Object.keys(localStorage);
+      for (const key of keys) {
+        if (key.startsWith("sb-") && key.includes("-auth-token")) {
+          const stored = localStorage.getItem(key);
+          if (stored) {
+            try {
+              const parsed = JSON.parse(stored);
+              // 여러 형식 시도
+              const user = parsed?.user || parsed?.currentSession?.user;
+              if (user?.id) {
+                console.log("✅ [Login] 로컬 스토리지에서 세션 찾음:", user.id, "키:", key);
+                return { 
+                  userId: user.id,
+                  email: user.email,
+                  name: user.user_metadata?.full_name || user.user_metadata?.name
+                };
+              }
+            } catch {
+              continue;
+            }
+          }
         }
       }
+      console.log("⚠️ [Login] 로컬 스토리지에 세션 없음");
     } catch (e) {
       console.error("❌ [Login] 로컬 스토리지 읽기 실패:", e);
     }
@@ -275,7 +287,8 @@ export default function LoginPage() {
       // 1. localStorage에서 Supabase 세션 직접 삭제
       const keys = Object.keys(localStorage);
       keys.forEach((key) => {
-        if (key.startsWith("sb-") && key.endsWith("-auth-token")) {
+        if (key.startsWith("sb-") && key.includes("-auth-token")) {
+          console.log("🗑️ [Logout] 세션 키 삭제:", key);
           localStorage.removeItem(key);
         }
       });

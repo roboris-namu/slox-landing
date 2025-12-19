@@ -53,11 +53,19 @@ export default function GameNavBar({
   // 🔧 로컬 스토리지에서 세션 직접 읽기 (광고 차단기 우회)
   const getSessionFromStorage = (): { userId: string } | null => {
     try {
-      const storageKey = `sb-xtqpbyfgptuxwrevxxtm-auth-token`;
-      const stored = localStorage.getItem(storageKey);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed?.user?.id) return { userId: parsed.user.id };
+      // 모든 sb-로 시작하는 키를 찾아서 세션 확인
+      const keys = Object.keys(localStorage);
+      for (const key of keys) {
+        if (key.startsWith("sb-") && key.includes("-auth-token")) {
+          const stored = localStorage.getItem(key);
+          if (stored) {
+            try {
+              const parsed = JSON.parse(stored);
+              const userId = parsed?.user?.id || parsed?.currentSession?.user?.id;
+              if (userId) return { userId };
+            } catch { continue; }
+          }
+        }
       }
     } catch { /* ignore */ }
     return null;
