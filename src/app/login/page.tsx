@@ -137,30 +137,79 @@ export default function LoginPage() {
     }
   }, []);
 
+  // 🔧 로컬 스토리지에서 세션 직접 읽기 (광고 차단기 우회)
+  const getSessionFromStorage = (): { userId: string; email?: string; name?: string } | null => {
+    try {
+      const storageKey = `sb-xtqpbyfgptuxwrevxxtm-auth-token`;
+      const stored = localStorage.getItem(storageKey);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed?.user?.id) {
+          console.log("✅ [Login] 로컬 스토리지에서 세션 찾음:", parsed.user.id);
+          return { 
+            userId: parsed.user.id,
+            email: parsed.user.email,
+            name: parsed.user.user_metadata?.full_name || parsed.user.user_metadata?.name
+          };
+        }
+      }
+    } catch (e) {
+      console.error("❌ [Login] 로컬 스토리지 읽기 실패:", e);
+    }
+    return null;
+  };
+
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession();
+        console.log("🔄 [Login] 세션 확인 시작...");
         
-        if (error) {
-          console.error("세션 확인 에러:", error);
+        // 1️⃣ 먼저 로컬 스토리지에서 세션 확인 (광고 차단기 우회)
+        const storedSession = getSessionFromStorage();
+        
+        // 2️⃣ SDK도 시도 (2초 타임아웃)
+        let userId = storedSession?.userId;
+        let userEmail = storedSession?.email;
+        let userName = storedSession?.name;
+        let fullSession = null;
+        
+        if (!userId) {
+          const sessionPromise = supabase.auth.getSession();
+          const timeoutPromise = new Promise<null>((resolve) => setTimeout(() => resolve(null), 2000));
+          const result = await Promise.race([sessionPromise, timeoutPromise]);
+          
+          if (result && 'data' in result) {
+            if (result.error) {
+              console.error("세션 확인 에러:", result.error);
+            }
+            if (result.data.session?.user) {
+              fullSession = result.data.session;
+              userId = result.data.session.user.id;
+              userEmail = result.data.session.user.email;
+              userName = result.data.session.user.user_metadata?.full_name || result.data.session.user.user_metadata?.name;
+              console.log("📊 [Login] SDK 세션:", userId);
+            }
+          }
+        }
+
+        if (!userId) {
+          console.log("📊 [Login] 세션 없음 (로그인 필요)");
           setLoading(false);
           return;
         }
 
-        setUser(session?.user ?? null);
+        console.log("📊 [Login] userId 확인:", userId);
 
-        if (session?.user) {
-          await fetchProfile(
-            session.user.id,
-            session.user.email,
-            session.user.user_metadata?.full_name || session.user.user_metadata?.name
-          );
-          await checkTodayAttendance(session.user.id);
+        // user 객체 구성 (세션에서 가져오거나 최소한의 정보로)
+        if (fullSession?.user) {
+          setUser(fullSession.user);
+        } else {
+          // 로컬 스토리지에서 가져온 경우 - 최소한의 user 객체 구성
+          setUser({ id: userId, email: userEmail } as User);
         }
+
+        await fetchProfile(userId, userEmail, userName);
+        await checkTodayAttendance(userId);
       } catch (err) {
         console.error("인증 확인 에러:", err);
       } finally {
