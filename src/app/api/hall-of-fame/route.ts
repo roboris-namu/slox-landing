@@ -42,6 +42,30 @@ export async function GET() {
           return { game: config.game, entries: [], error: error.message };
         }
 
+        // 🔄 회원 닉네임 + 아바타 동기화 (최신 프로필 정보 반영)
+        if (data && data.length > 0) {
+          const userIds = data.filter((d) => d.user_id).map((d) => d.user_id);
+          if (userIds.length > 0) {
+            const { data: profiles } = await supabase
+              .from("profiles")
+              .select("id, nickname, avatar_url")
+              .in("id", userIds);
+
+            if (profiles) {
+              const profileMap = new Map(
+                profiles.map((p) => [p.id, { nickname: p.nickname, avatar_url: p.avatar_url }])
+              );
+              data.forEach((entry) => {
+                if (entry.user_id && profileMap.has(entry.user_id)) {
+                  const profile = profileMap.get(entry.user_id);
+                  entry.nickname = profile?.nickname || entry.nickname;
+                  entry.avatar_url = profile?.avatar_url;
+                }
+              });
+            }
+          }
+        }
+
         return {
           game: config.game,
           scoreField: config.scoreField,
@@ -50,10 +74,10 @@ export async function GET() {
       })
     );
 
-    // 캐시 헤더 설정 (60초 캐시)
+    // 캐시 비활성화 (실시간 데이터)
     return NextResponse.json(results, {
       headers: {
-        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
       },
     });
   } catch (err) {

@@ -81,12 +81,13 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // 캐시 비활성화 (실시간 데이터)
     return NextResponse.json({
       data: data || [],
       totalCount: count || 0,
     }, {
       headers: {
-        "Cache-Control": "public, s-maxage=30, stale-while-revalidate=60",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
       },
     });
   } catch (err) {

@@ -40,7 +40,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ profile: null, notFound: true }, { status: 200 });
     }
 
-    return NextResponse.json({ profile: data });
+    // 캐시 비활성화 (실시간 데이터)
+    return NextResponse.json({ profile: data }, {
+      headers: {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+      },
+    });
   } catch (err) {
     console.error("❌ [API/profile] GET 에러:", err);
     return NextResponse.json({ error: "서버 에러" }, { status: 500 });
