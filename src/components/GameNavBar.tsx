@@ -53,10 +53,17 @@ export default function GameNavBar({
   // 🔧 로컬 스토리지에서 세션 직접 읽기 (광고 차단기 우회)
   const getSessionFromStorage = (): { userId: string } | null => {
     try {
-      // 모든 sb-로 시작하는 키를 찾아서 세션 확인
+      // 1️⃣ 먼저 slox-session 키 확인 (수동 저장)
+      const sloxSession = localStorage.getItem("slox-session");
+      if (sloxSession) {
+        const parsed = JSON.parse(sloxSession);
+        if (parsed?.user?.id) return { userId: parsed.user.id };
+      }
+      
+      // 2️⃣ Supabase 기본 키 확인
       const keys = Object.keys(localStorage);
       for (const key of keys) {
-        if (key.startsWith("sb-") && key.includes("-auth-token")) {
+        if (key.includes("sb-") || key.includes("supabase") || key.includes("auth")) {
           const stored = localStorage.getItem(key);
           if (stored) {
             try {

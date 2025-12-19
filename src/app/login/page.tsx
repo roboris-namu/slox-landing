@@ -140,18 +140,31 @@ export default function LoginPage() {
   // 🔧 로컬 스토리지에서 세션 직접 읽기 (광고 차단기 우회)
   const getSessionFromStorage = (): { userId: string; email?: string; name?: string } | null => {
     try {
-      // 모든 sb-로 시작하는 키를 찾아서 세션 확인
+      // 1️⃣ 먼저 slox-session 키 확인 (수동 저장)
+      const sloxSession = localStorage.getItem("slox-session");
+      if (sloxSession) {
+        const parsed = JSON.parse(sloxSession);
+        if (parsed?.user?.id) {
+          console.log("✅ [Login] slox-session에서 세션 찾음:", parsed.user.id);
+          return { 
+            userId: parsed.user.id,
+            email: parsed.user.email,
+            name: parsed.user.user_metadata?.full_name || parsed.user.user_metadata?.name
+          };
+        }
+      }
+      
+      // 2️⃣ Supabase 기본 키 확인 (sb-*-auth-token)
       const keys = Object.keys(localStorage);
       for (const key of keys) {
-        if (key.startsWith("sb-") && key.includes("-auth-token")) {
+        if (key.includes("sb-") || key.includes("supabase") || key.includes("auth")) {
           const stored = localStorage.getItem(key);
           if (stored) {
             try {
               const parsed = JSON.parse(stored);
-              // 여러 형식 시도
               const user = parsed?.user || parsed?.currentSession?.user;
               if (user?.id) {
-                console.log("✅ [Login] 로컬 스토리지에서 세션 찾음:", user.id, "키:", key);
+                console.log("✅ [Login] Supabase 키에서 세션 찾음:", user.id);
                 return { 
                   userId: user.id,
                   email: user.email,
@@ -164,7 +177,7 @@ export default function LoginPage() {
           }
         }
       }
-      console.log("⚠️ [Login] 로컬 스토리지에 세션 없음");
+      console.log("⚠️ [Login] 세션 없음");
     } catch (e) {
       console.error("❌ [Login] 로컬 스토리지 읽기 실패:", e);
     }
@@ -245,8 +258,24 @@ export default function LoginPage() {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      console.log("🔔 [Login] Auth 상태 변경:", _event, session?.user?.id);
+      
       setUser(session?.user ?? null);
       if (session?.user) {
+        // 🔧 세션을 수동으로 localStorage에 저장 (광고 차단기 우회)
+        try {
+          const sessionData = {
+            user: session.user,
+            access_token: session.access_token,
+            refresh_token: session.refresh_token,
+            expires_at: session.expires_at,
+          };
+          localStorage.setItem("slox-session", JSON.stringify(sessionData));
+          console.log("💾 [Login] 세션 수동 저장 완료");
+        } catch (e) {
+          console.error("❌ [Login] 세션 저장 실패:", e);
+        }
+        
         await fetchProfile(
           session.user.id,
           session.user.email,
@@ -257,6 +286,8 @@ export default function LoginPage() {
         setProfile(null);
         setCheckedInToday(false);
         setNeedsNicknameSetup(false);
+        // 세션 삭제
+        localStorage.removeItem("slox-session");
       }
     });
 
@@ -284,11 +315,15 @@ export default function LoginPage() {
   // 로그아웃 (광고 차단기 우회)
   const handleLogout = async () => {
     try {
-      // 1. localStorage에서 Supabase 세션 직접 삭제
+      // 1. localStorage에서 세션 삭제
+      localStorage.removeItem("slox-session");
+      console.log("🗑️ [Logout] slox-session 삭제");
+      
+      // Supabase 관련 키도 삭제
       const keys = Object.keys(localStorage);
       keys.forEach((key) => {
-        if (key.startsWith("sb-") && key.includes("-auth-token")) {
-          console.log("🗑️ [Logout] 세션 키 삭제:", key);
+        if (key.includes("sb-") || key.includes("supabase")) {
+          console.log("🗑️ [Logout] Supabase 키 삭제:", key);
           localStorage.removeItem(key);
         }
       });
