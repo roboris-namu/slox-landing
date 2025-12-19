@@ -20,7 +20,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "userId가 필요합니다" }, { status: 400 });
     }
 
-    const today = new Date().toISOString().split("T")[0];
+    // 한국 시간(KST) 기준으로 오늘 날짜 계산
+    const now = new Date();
+    const kstOffset = 9 * 60; // UTC+9
+    const kstTime = new Date(now.getTime() + (kstOffset + now.getTimezoneOffset()) * 60 * 1000);
+    const today = kstTime.toISOString().split("T")[0];
+    console.log("📅 [API/attendance] 한국 시간 기준 오늘:", today);
 
     const { data, error } = await supabase
       .from("attendance")
@@ -55,10 +60,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "userId가 필요합니다" }, { status: 400 });
     }
 
+    // 한국 시간(KST) 기준으로 오늘 날짜 계산
+    const now = new Date();
+    const kstOffset = 9 * 60; // UTC+9
+    const kstTime = new Date(now.getTime() + (kstOffset + now.getTimezoneOffset()) * 60 * 1000);
+    const today = kstTime.toISOString().split("T")[0];
+    console.log("📅 [API/attendance] 출석 체크 날짜 (KST):", today);
+
     const { error } = await supabase
       .from("attendance")
       .insert({
         user_id: userId,
+        check_date: today,
         points_earned: 10,
       });
 
