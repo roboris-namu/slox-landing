@@ -269,10 +269,32 @@ export default function LoginPage() {
     }
   };
 
+  // 로그아웃 (광고 차단기 우회)
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error("로그아웃 에러:", error);
+    try {
+      // 1. localStorage에서 Supabase 세션 직접 삭제
+      const keys = Object.keys(localStorage);
+      keys.forEach((key) => {
+        if (key.startsWith("sb-") && key.endsWith("-auth-token")) {
+          localStorage.removeItem(key);
+        }
+      });
+
+      // 2. Supabase SDK signOut도 시도 (실패해도 괜찮음)
+      try {
+        await supabase.auth.signOut();
+      } catch {
+        console.log("signOut failed (blocked by ad-blocker), but localStorage cleared");
+      }
+
+      setUser(null);
+      setProfile(null);
+      window.location.href = "/"; // 홈으로 리다이렉트
+    } catch (err) {
+      console.error("로그아웃 에러:", err);
+      // 에러가 나도 강제로 localStorage 삭제 후 새로고침
+      localStorage.clear();
+      window.location.href = "/";
     }
   };
 
