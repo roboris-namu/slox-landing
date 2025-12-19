@@ -8,14 +8,14 @@ import GameNavBar from "@/components/GameNavBar";
 
 // 언어 선택기 옵션
 const languageOptions = [
-  { locale: "ko", flag: "🇰🇷", name: "한국어", path: "/iq" },
-  { locale: "en", flag: "🇺🇸", name: "English", path: "/en/iq" },
-  { locale: "ja", flag: "🇯🇵", name: "日本語", path: "/ja/iq" },
-  { locale: "zh", flag: "🇨🇳", name: "中文", path: "/zh/iq" },
-  { locale: "de", flag: "🇩🇪", name: "Deutsch", path: "/de/iq" },
-  { locale: "fr", flag: "🇫🇷", name: "Français", path: "/fr/iq" },
-  { locale: "es", flag: "🇪🇸", name: "Español", path: "/es/iq" },
-  { locale: "pt", flag: "🇧🇷", name: "Português", path: "/pt/iq" },
+  { locale: "ko" as const, flag: "🇰🇷", name: "한국어", path: "/iq" },
+  { locale: "en" as const, flag: "🇺🇸", name: "English", path: "/en/iq" },
+  { locale: "ja" as const, flag: "🇯🇵", name: "日本語", path: "/ja/iq" },
+  { locale: "zh" as const, flag: "🇨🇳", name: "中文", path: "/zh/iq" },
+  { locale: "de" as const, flag: "🇩🇪", name: "Deutsch", path: "/de/iq" },
+  { locale: "fr" as const, flag: "🇫🇷", name: "Français", path: "/fr/iq" },
+  { locale: "es" as const, flag: "🇪🇸", name: "Español", path: "/es/iq" },
+  { locale: "pt" as const, flag: "🇧🇷", name: "Português", path: "/pt/iq" },
 ];
 
 interface IQQuestion {
@@ -61,6 +61,8 @@ interface LeaderboardEntry {
   created_at: string;
   grade?: string;
   country?: string;
+  user_id?: string;
+  avatar_url?: string;
 }
 
 // 국가 옵션

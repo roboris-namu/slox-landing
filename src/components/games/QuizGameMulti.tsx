@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
 import { Locale } from "@/locales";
@@ -392,7 +391,21 @@ interface LeaderboardEntry {
   correct_count: number;
   created_at: string;
   country?: string;
+  user_id?: string;
+  avatar_url?: string;
 }
+
+// 언어 선택기 옵션
+const languageOptions = [
+  { locale: "ko" as const, flag: "🇰🇷", name: "한국어", path: "/quiz" },
+  { locale: "en" as const, flag: "🇺🇸", name: "English", path: "/en/quiz" },
+  { locale: "ja" as const, flag: "🇯🇵", name: "日本語", path: "/ja/quiz" },
+  { locale: "zh" as const, flag: "🇨🇳", name: "中文", path: "/zh/quiz" },
+  { locale: "de" as const, flag: "🇩🇪", name: "Deutsch", path: "/de/quiz" },
+  { locale: "fr" as const, flag: "🇫🇷", name: "Français", path: "/fr/quiz" },
+  { locale: "es" as const, flag: "🇪🇸", name: "Español", path: "/es/quiz" },
+  { locale: "pt" as const, flag: "🇧🇷", name: "Português", path: "/pt/quiz" },
+];
 
 interface Props {
   locale: Locale;
@@ -401,7 +414,6 @@ interface Props {
 export default function QuizGameMulti({ locale }: Props) {
   const t = translations[locale];
   const questions = questionsByLocale[locale];
-  const router = useRouter();
   
   const [gameState, setGameState] = useState<"ready" | "playing" | "result">("ready");
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -580,7 +592,7 @@ export default function QuizGameMulti({ locale }: Props) {
   return (
     <div className="min-h-screen bg-dark-950">
       {/* 네비게이션 바 - GameNavBar 사용 */}
-      <GameNavBar locale={locale} gamePath="/quiz" />
+      <GameNavBar locale={locale} backText={locale === "ko" ? "← 메인" : "← Main"} languageOptions={languageOptions} />
 
       <div className="pt-24 pb-16 px-4">
         <div className="max-w-4xl mx-auto">

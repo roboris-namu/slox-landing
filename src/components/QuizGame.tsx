@@ -8,14 +8,14 @@ import GameNavBar from "@/components/GameNavBar";
 
 // 언어 선택기 옵션
 const languageOptions = [
-  { locale: "ko", flag: "🇰🇷", name: "한국어", path: "/quiz" },
-  { locale: "en", flag: "🇺🇸", name: "English", path: "/en/quiz" },
-  { locale: "ja", flag: "🇯🇵", name: "日本語", path: "/ja/quiz" },
-  { locale: "zh", flag: "🇨🇳", name: "中文", path: "/zh/quiz" },
-  { locale: "de", flag: "🇩🇪", name: "Deutsch", path: "/de/quiz" },
-  { locale: "fr", flag: "🇫🇷", name: "Français", path: "/fr/quiz" },
-  { locale: "es", flag: "🇪🇸", name: "Español", path: "/es/quiz" },
-  { locale: "pt", flag: "🇧🇷", name: "Português", path: "/pt/quiz" },
+  { locale: "ko" as const, flag: "🇰🇷", name: "한국어", path: "/quiz" },
+  { locale: "en" as const, flag: "🇺🇸", name: "English", path: "/en/quiz" },
+  { locale: "ja" as const, flag: "🇯🇵", name: "日本語", path: "/ja/quiz" },
+  { locale: "zh" as const, flag: "🇨🇳", name: "中文", path: "/zh/quiz" },
+  { locale: "de" as const, flag: "🇩🇪", name: "Deutsch", path: "/de/quiz" },
+  { locale: "fr" as const, flag: "🇫🇷", name: "Français", path: "/fr/quiz" },
+  { locale: "es" as const, flag: "🇪🇸", name: "Español", path: "/es/quiz" },
+  { locale: "pt" as const, flag: "🇧🇷", name: "Português", path: "/pt/quiz" },
 ];
 
 // 다국어 번역
@@ -165,6 +165,7 @@ interface LeaderboardEntry {
   grade?: string;
   country?: string;
   user_id?: string | null;
+  avatar_url?: string;
 }
 
 // 국가 옵션

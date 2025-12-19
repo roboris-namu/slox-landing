@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
@@ -561,7 +560,17 @@ const translations: Record<Locale, {
   }
 };
 
-// 언어 선택기 옵션은 GameNavBar에서 처리
+// 언어 선택기 옵션
+const languageOptions = [
+  { locale: "ko" as const, flag: "🇰🇷", name: "한국어", path: "/card-match" },
+  { locale: "en" as const, flag: "🇺🇸", name: "English", path: "/en/card-match" },
+  { locale: "ja" as const, flag: "🇯🇵", name: "日本語", path: "/ja/card-match" },
+  { locale: "zh" as const, flag: "🇨🇳", name: "中文", path: "/zh/card-match" },
+  { locale: "de" as const, flag: "🇩🇪", name: "Deutsch", path: "/de/card-match" },
+  { locale: "fr" as const, flag: "🇫🇷", name: "Français", path: "/fr/card-match" },
+  { locale: "es" as const, flag: "🇪🇸", name: "Español", path: "/es/card-match" },
+  { locale: "pt" as const, flag: "🇧🇷", name: "Português", path: "/pt/card-match" },
+];
 
 interface CardMatchLeaderboardEntry {
   id: string;
@@ -575,6 +584,8 @@ interface CardMatchLeaderboardEntry {
   grade?: string;
   percentile?: number;
   score?: number;
+  user_id?: string;
+  avatar_url?: string;
 }
 
 type GameState = "waiting" | "memorize" | "countdown" | "playing" | "result";
@@ -601,7 +612,6 @@ interface Props {
 
 export default function CardMatchMulti({ locale }: Props) {
   const t = translations[locale];
-  const router = useRouter();
   
   const [state, setState] = useState<GameState>("waiting");
   const [cards, setCards] = useState<Card[]>([]);
@@ -922,10 +932,6 @@ export default function CardMatchMulti({ locale }: Props) {
     } catch { if (shareCardRef.current) shareCardRef.current.style.display = "none"; return null; }
   };
 
-  const getCardMatchPath = (targetLocale: Locale) => {
-    return targetLocale === "ko" ? "/card-match" : `/${targetLocale}/card-match`;
-  };
-
   const shareResult = async () => {
     const gradeInfo = getGrade();
     const baseUrl = locale === "ko" ? "https://www.slox.co.kr/card-match" : `https://www.slox.co.kr/${locale}/card-match`;
@@ -962,7 +968,7 @@ export default function CardMatchMulti({ locale }: Props) {
   return (
     <div className="min-h-screen bg-dark-950">
       {/* 네비게이션 - GameNavBar 사용 */}
-      <GameNavBar locale={locale} gamePath="/card-match" />
+      <GameNavBar locale={locale} backText={locale === "ko" ? "← 메인" : "← Main"} languageOptions={languageOptions} />
 
       <main className="pt-24 pb-16 px-4">
         <div className="max-w-4xl mx-auto">

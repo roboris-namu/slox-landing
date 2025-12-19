@@ -16,5 +16,6 @@ export interface LeaderboardEntry {
   created_at: string;
   country?: string;
   user_id?: string; // 👤 회원이면 user_id 있음
+  avatar_url?: string; // 👤 회원 프로필 사진
 }
 

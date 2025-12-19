@@ -17,6 +17,7 @@ interface TypingLeaderboardEntry {
   percentile?: number;
   country?: string;
   user_id?: string; // 👤 회원이면 user_id 있음
+  avatar_url?: string; // 👤 회원 프로필 사진
 }
 
 // 등급 번역 (영어→한국어)
@@ -27,6 +28,11 @@ const gradeTranslations: Record<string, string> = {
 const translateGrade = (grade: string): string => gradeTranslations[grade] || grade;
 
 // 국가 옵션
+// 언어 옵션
+const languageOptions = [
+  { locale: "ko" as const, flag: "🇰🇷", name: "한국어", path: "/typing" },
+];
+
 const COUNTRY_OPTIONS = [
   { code: "KR", flag: "🇰🇷", name: "한국" },
   { code: "US", flag: "🇺🇸", name: "미국" },
@@ -133,7 +139,6 @@ const getKeyStrokes = (text: string): number => {
 };
 
 export default function TypingTest() {
-  const router = useRouter();
   const [sentence, setSentence] = useState<string>("");
   const [input, setInput] = useState<string>("");
   const [isStarted, setIsStarted] = useState<boolean>(false);
@@ -505,7 +510,7 @@ export default function TypingTest() {
   return (
     <div className="min-h-screen bg-dark-950">
       {/* 네비게이션 - GameNavBar 사용 */}
-      <GameNavBar locale="ko" gamePath="/typing" />
+      <GameNavBar locale="ko" backText="← 메인으로" languageOptions={languageOptions} />
 
       {/* 메인 콘텐츠 */}
       <main className="pt-24 pb-16 px-4">

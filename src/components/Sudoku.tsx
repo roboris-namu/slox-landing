@@ -15,14 +15,14 @@ const PENALTY_SECONDS = 3; // 틀릴 때마다 +3초
 
 // 언어 선택기 옵션
 const languageOptions = [
-  { locale: "ko", flag: "🇰🇷", name: "한국어", path: "/sudoku" },
-  { locale: "en", flag: "🇺🇸", name: "English", path: "/en/sudoku" },
-  { locale: "ja", flag: "🇯🇵", name: "日本語", path: "/ja/sudoku" },
-  { locale: "zh", flag: "🇨🇳", name: "中文", path: "/zh/sudoku" },
-  { locale: "de", flag: "🇩🇪", name: "Deutsch", path: "/de/sudoku" },
-  { locale: "fr", flag: "🇫🇷", name: "Français", path: "/fr/sudoku" },
-  { locale: "es", flag: "🇪🇸", name: "Español", path: "/es/sudoku" },
-  { locale: "pt", flag: "🇧🇷", name: "Português", path: "/pt/sudoku" },
+  { locale: "ko" as const, flag: "🇰🇷", name: "한국어", path: "/sudoku" },
+  { locale: "en" as const, flag: "🇺🇸", name: "English", path: "/en/sudoku" },
+  { locale: "ja" as const, flag: "🇯🇵", name: "日本語", path: "/ja/sudoku" },
+  { locale: "zh" as const, flag: "🇨🇳", name: "中文", path: "/zh/sudoku" },
+  { locale: "de" as const, flag: "🇩🇪", name: "Deutsch", path: "/de/sudoku" },
+  { locale: "fr" as const, flag: "🇫🇷", name: "Français", path: "/fr/sudoku" },
+  { locale: "es" as const, flag: "🇪🇸", name: "Español", path: "/es/sudoku" },
+  { locale: "pt" as const, flag: "🇧🇷", name: "Português", path: "/pt/sudoku" },
 ];
 
 // 난이도별 설정
@@ -95,6 +95,8 @@ interface LeaderboardEntry {
   mistakes: number;
   created_at: string;
   country?: string;
+  user_id?: string;
+  avatar_url?: string;
 }
 
 // 국가 옵션

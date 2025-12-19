@@ -47,7 +47,21 @@ interface TypingLeaderboardEntry {
   created_at: string;
   grade?: string;
   percentile?: number;
+  user_id?: string;
+  avatar_url?: string;
 }
+
+// 언어 선택기 옵션
+const languageOptions = [
+  { locale: "ko" as const, flag: "🇰🇷", name: "한국어", path: "/typing" },
+  { locale: "en" as const, flag: "🇺🇸", name: "English", path: "/en/typing" },
+  { locale: "ja" as const, flag: "🇯🇵", name: "日本語", path: "/ja/typing" },
+  { locale: "zh" as const, flag: "🇨🇳", name: "中文", path: "/zh/typing" },
+  { locale: "de" as const, flag: "🇩🇪", name: "Deutsch", path: "/de/typing" },
+  { locale: "fr" as const, flag: "🇫🇷", name: "Français", path: "/fr/typing" },
+  { locale: "es" as const, flag: "🇪🇸", name: "Español", path: "/es/typing" },
+  { locale: "pt" as const, flag: "🇧🇷", name: "Português", path: "/pt/typing" },
+];
 
 interface TypingResult {
   wpm: number;
@@ -988,7 +1002,7 @@ export default function TypingMulti({ locale }: Props) {
   return (
     <div className="min-h-screen bg-dark-950">
       {/* 네비게이션 - GameNavBar 사용 */}
-      <GameNavBar locale={locale} gamePath="/typing" />
+      <GameNavBar locale={locale} backText={locale === "ko" ? "← 메인" : "← Main"} languageOptions={languageOptions} />
 
       {/* 메인 콘텐츠 */}
       <main className="pt-24 pb-16 px-4">
@@ -1362,7 +1376,7 @@ export default function TypingMulti({ locale }: Props) {
           {/* SLOX 홍보 */}
           <div className="mt-12 text-center">
             <p className="text-dark-500 text-sm mb-2">Powered by</p>
-            <Link href={mainPath} className="inline-flex items-center gap-2 text-dark-400 hover:text-white transition-colors">
+            <Link href={locale === "ko" ? "/" : `/${locale}`} className="inline-flex items-center gap-2 text-dark-400 hover:text-white transition-colors">
               <div className="w-6 h-6 bg-gradient-to-br from-accent-purple to-accent-cyan rounded flex items-center justify-center">
                 <span className="text-white font-bold text-xs">S</span>
               </div>

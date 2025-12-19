@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
@@ -617,7 +616,21 @@ interface LeaderboardEntry {
   time_seconds: number;
   created_at: string;
   grade?: string;
+  user_id?: string;
+  avatar_url?: string;
 }
+
+// 언어 선택기 옵션
+const languageOptions = [
+  { locale: "ko" as const, flag: "🇰🇷", name: "한국어", path: "/iq" },
+  { locale: "en" as const, flag: "🇺🇸", name: "English", path: "/en/iq" },
+  { locale: "ja" as const, flag: "🇯🇵", name: "日本語", path: "/ja/iq" },
+  { locale: "zh" as const, flag: "🇨🇳", name: "中文", path: "/zh/iq" },
+  { locale: "de" as const, flag: "🇩🇪", name: "Deutsch", path: "/de/iq" },
+  { locale: "fr" as const, flag: "🇫🇷", name: "Français", path: "/fr/iq" },
+  { locale: "es" as const, flag: "🇪🇸", name: "Español", path: "/es/iq" },
+  { locale: "pt" as const, flag: "🇧🇷", name: "Português", path: "/pt/iq" },
+];
 
 const QUESTION_TIME = 30;
 const QUESTIONS_PER_GAME = 12;
@@ -628,7 +641,6 @@ interface Props {
 
 export default function IQTestMulti({ locale }: Props) {
   const t = translations[locale];
-  const router = useRouter();
   
   const [gameState, setGameState] = useState<GameState>("ready");
   const [questions, setQuestions] = useState<IQQuestion[]>([]);
@@ -843,10 +855,6 @@ export default function IQTestMulti({ locale }: Props) {
     finally { setIsSubmitting(false); }
   };
 
-  const getIqPath = (targetLocale: Locale) => {
-    return targetLocale === "ko" ? "/iq" : `/${targetLocale}/iq`;
-  };
-
   const shareResult = async () => {
     const iqScore = calculateIQ();
     const gradeInfo = getIQGrade(iqScore);
@@ -906,7 +914,7 @@ export default function IQTestMulti({ locale }: Props) {
   return (
     <div className="min-h-screen bg-dark-950">
       {/* 네비게이션 - GameNavBar 사용 */}
-      <GameNavBar locale={locale} gamePath="/iq" />
+      <GameNavBar locale={locale} backText={locale === "ko" ? "← 메인" : "← Main"} languageOptions={languageOptions} />
 
       <main className="pt-24 pb-16 px-4">
         <div className="max-w-4xl mx-auto">

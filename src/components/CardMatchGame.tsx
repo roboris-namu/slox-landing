@@ -8,14 +8,14 @@ import GameNavBar from "@/components/GameNavBar";
 
 // 언어 선택기 옵션
 const languageOptions = [
-  { locale: "ko", flag: "🇰🇷", name: "한국어", path: "/card-match" },
-  { locale: "en", flag: "🇺🇸", name: "English", path: "/en/card-match" },
-  { locale: "ja", flag: "🇯🇵", name: "日本語", path: "/ja/card-match" },
-  { locale: "zh", flag: "🇨🇳", name: "中文", path: "/zh/card-match" },
-  { locale: "de", flag: "🇩🇪", name: "Deutsch", path: "/de/card-match" },
-  { locale: "fr", flag: "🇫🇷", name: "Français", path: "/fr/card-match" },
-  { locale: "es", flag: "🇪🇸", name: "Español", path: "/es/card-match" },
-  { locale: "pt", flag: "🇧🇷", name: "Português", path: "/pt/card-match" },
+  { locale: "ko" as const, flag: "🇰🇷", name: "한국어", path: "/card-match" },
+  { locale: "en" as const, flag: "🇺🇸", name: "English", path: "/en/card-match" },
+  { locale: "ja" as const, flag: "🇯🇵", name: "日本語", path: "/ja/card-match" },
+  { locale: "zh" as const, flag: "🇨🇳", name: "中文", path: "/zh/card-match" },
+  { locale: "de" as const, flag: "🇩🇪", name: "Deutsch", path: "/de/card-match" },
+  { locale: "fr" as const, flag: "🇫🇷", name: "Français", path: "/fr/card-match" },
+  { locale: "es" as const, flag: "🇪🇸", name: "Español", path: "/es/card-match" },
+  { locale: "pt" as const, flag: "🇧🇷", name: "Português", path: "/pt/card-match" },
 ];
 
 interface CardMatchLeaderboardEntry {
@@ -30,6 +30,8 @@ interface CardMatchLeaderboardEntry {
   percentile?: number;
   score?: number;
   country?: string;
+  user_id?: string;
+  avatar_url?: string;
 }
 
 // 등급 번역 (영어→한국어)

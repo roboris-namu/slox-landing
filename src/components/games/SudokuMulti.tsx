@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
 import { Locale } from "@/locales";
@@ -499,7 +498,21 @@ interface LeaderboardEntry {
   difficulty: string;
   mistakes: number;
   country?: string;
+  user_id?: string;
+  avatar_url?: string;
 }
+
+// 언어 선택기 옵션
+const languageOptions = [
+  { locale: "ko" as const, flag: "🇰🇷", name: "한국어", path: "/sudoku" },
+  { locale: "en" as const, flag: "🇺🇸", name: "English", path: "/en/sudoku" },
+  { locale: "ja" as const, flag: "🇯🇵", name: "日本語", path: "/ja/sudoku" },
+  { locale: "zh" as const, flag: "🇨🇳", name: "中文", path: "/zh/sudoku" },
+  { locale: "de" as const, flag: "🇩🇪", name: "Deutsch", path: "/de/sudoku" },
+  { locale: "fr" as const, flag: "🇫🇷", name: "Français", path: "/fr/sudoku" },
+  { locale: "es" as const, flag: "🇪🇸", name: "Español", path: "/es/sudoku" },
+  { locale: "pt" as const, flag: "🇧🇷", name: "Português", path: "/pt/sudoku" },
+];
 
 interface Props {
   locale: Locale;
@@ -710,7 +723,7 @@ export default function SudokuMulti({ locale }: Props) {
   return (
     <div className="min-h-screen bg-dark-950">
       {/* 네비게이션 - GameNavBar 사용 */}
-      <GameNavBar locale={locale} gamePath="/sudoku" />
+      <GameNavBar locale={locale} backText={locale === "ko" ? "← 메인" : "← Main"} languageOptions={languageOptions} />
 
       <div className="pt-24 pb-16 px-4">
         <div className="max-w-4xl mx-auto">

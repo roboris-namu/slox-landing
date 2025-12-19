@@ -17,6 +17,8 @@ interface AimLeaderboardEntry {
   grade?: string;
   percentile?: number;
   country?: string;
+  user_id?: string;
+  avatar_url?: string;
 }
 
 type GameState = "waiting" | "playing" | "result";
