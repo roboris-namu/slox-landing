@@ -41,16 +41,28 @@ export default function NavUserProfile({ locale = "ko" }: NavUserProfileProps) {
     
     const loadUser = async () => {
       try {
+        console.log("🔄 [NavUserProfile] 세션 확인 시작...");
+        
         // 현재 세션 확인 (SDK 필수)
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError) {
+          console.error("❌ [NavUserProfile] 세션 에러:", sessionError);
+          return;
+        }
+        
+        console.log("📊 [NavUserProfile] 세션:", session ? `있음 (${session.user.id})` : "없음");
         
         if (session?.user) {
           // 프로필 정보 가져오기 (API 프록시)
+          console.log("🔄 [NavUserProfile] 프로필 API 호출...");
           const profileRes = await fetch(`/api/profile?userId=${session.user.id}`);
           const profileData = await profileRes.json();
+          console.log("📊 [NavUserProfile] 프로필 응답:", profileData);
 
           if (profileData.profile) {
             setUser(profileData.profile);
+            console.log("✅ [NavUserProfile] 프로필 설정 완료:", profileData.profile.nickname);
 
             // 오늘 출석 체크 여부 (API 프록시)
             const attendanceRes = await fetch(`/api/attendance?userId=${session.user.id}`);
@@ -63,10 +75,12 @@ export default function NavUserProfile({ locale = "ko" }: NavUserProfileProps) {
             if (rankData.myRank) {
               setMyRank(rankData.myRank);
             }
+          } else {
+            console.warn("⚠️ [NavUserProfile] 프로필 없음:", profileData);
           }
         }
       } catch (error) {
-        console.error("Error loading user:", error);
+        console.error("❌ [NavUserProfile] 로드 에러:", error);
       } finally {
         setLoading(false);
       }
