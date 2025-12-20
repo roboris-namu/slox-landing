@@ -139,6 +139,89 @@ const getRankPoints = (rank: number): number => {
 };
 
 /**
+ * 🔄 해당 게임의 상위 회원들 순위를 전체 재계산
+ * - 새 점수 등록 시 호출되어 모든 회원의 game_scores를 실시간 동기화
+ */
+async function recalculateAllRanks(game: string, config: { table: string; scoreField: string; orderAsc: boolean }) {
+  try {
+    // 1. 해당 게임 리더보드 상위 15명 가져오기 (10위 밖 회원도 업데이트 위해 여유있게)
+    const { data: leaderboard } = await supabase
+      .from(config.table)
+      .select("user_id, " + config.scoreField)
+      .order(config.scoreField, { ascending: config.orderAsc })
+      .limit(15);
+    
+    if (!leaderboard) return;
+    
+    // 2. 회원인 엔트리만 필터링하고 순위 매기기
+    const memberEntries = leaderboard
+      .map((entry, index) => ({ userId: entry.user_id, rank: index + 1 }))
+      .filter((entry) => entry.userId);
+    
+    if (memberEntries.length === 0) return;
+    
+    // 3. 각 회원의 프로필 가져오기
+    const userIds = memberEntries.map((e) => e.userId);
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, total_score, game_scores")
+      .in("id", userIds);
+    
+    if (!profiles) return;
+    
+    // 4. 각 회원의 game_scores 업데이트
+    for (const profile of profiles) {
+      const memberEntry = memberEntries.find((e) => e.userId === profile.id);
+      if (!memberEntry) continue;
+      
+      const newRank = memberEntry.rank;
+      const gameScores = profile.game_scores || {};
+      const oldRank = gameScores[game]?.rank;
+      const oldPoints = gameScores[game]?.points || 0;
+      const newPoints = getRankPoints(newRank);
+      
+      // 순위가 변경되었거나, 10위 밖으로 밀려났으면 업데이트
+      if (oldRank !== newRank || (newRank > 10 && oldRank <= 10)) {
+        const pointsDiff = newPoints - oldPoints;
+        
+        if (newRank <= 10) {
+          // 10위 이내: 순위와 점수 업데이트
+          await supabase
+            .from("profiles")
+            .update({
+              total_score: Math.max(0, (profile.total_score || 0) + pointsDiff),
+              game_scores: { ...gameScores, [game]: { rank: newRank, points: newPoints } },
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", profile.id);
+          
+          console.log(`🔄 [recalculateAllRanks] ${game}: ${profile.id} 순위 ${oldRank || "없음"} → ${newRank} (${pointsDiff > 0 ? "+" : ""}${pointsDiff}점)`);
+        } else if (oldRank && oldRank <= 10) {
+          // 10위 밖으로 밀려남: 해당 게임 점수 제거
+          const updatedGameScores = { ...gameScores };
+          delete updatedGameScores[game];
+          
+          await supabase
+            .from("profiles")
+            .update({
+              total_score: Math.max(0, (profile.total_score || 0) - oldPoints),
+              game_scores: updatedGameScores,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", profile.id);
+          
+          console.log(`🔄 [recalculateAllRanks] ${game}: ${profile.id} 10위 밖으로 밀려남 (${oldRank} → ${newRank}, -${oldPoints}점)`);
+        }
+      }
+    }
+    
+    console.log(`✅ [recalculateAllRanks] ${game} 순위 재계산 완료`);
+  } catch (err) {
+    console.error(`❌ [recalculateAllRanks] ${game} 에러:`, err);
+  }
+}
+
+/**
  * 🏆 점수 제출 API (회원 점수 업데이트 포함)
  * POST /api/leaderboard
  * Body: { game, data: { nickname, score, ... }, userId? }
@@ -182,59 +265,22 @@ export async function POST(request: NextRequest) {
     let rank = null;
     let pointsEarned = 0;
     
+    // 🔄 새 점수 등록 후, 상위 10명 전체의 순위 재계산 (실시간 순위 동기화)
+    await recalculateAllRanks(game, config);
+    
     if (userId && data) {
       const scoreValue = data[config.scoreField];
       
       // 순위 계산: 나보다 좋은 점수를 가진 사람 수 + 1
-      const compareOperator = config.orderAsc ? "lt" : "gt"; // 낮을수록 좋으면 lt, 높을수록 좋으면 gt
+      const compareOperator = config.orderAsc ? "lt" : "gt";
       const { count } = await supabase
         .from(config.table)
         .select("*", { count: "exact", head: true })
         [compareOperator](config.scoreField, scoreValue);
       
       rank = (count || 0) + 1;
-      console.log(`📊 [API/leaderboard] ${game} 순위 계산: ${rank}등 (점수: ${scoreValue})`);
-      
-      // 10등 이내일 때만 회원 점수 업데이트
-      if (rank <= 10) {
-        const points = getRankPoints(rank);
-        
-        // 현재 프로필 가져오기
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("total_score, game_scores")
-          .eq("id", userId)
-          .single();
-        
-        if (profile) {
-          const gameScores = profile.game_scores || {};
-          const prevRank = gameScores[game]?.rank || Infinity;
-          
-          // 더 좋은 순위일 때만 업데이트
-          if (rank < prevRank) {
-            const previousPoints = gameScores[game]?.points || 0;
-            const pointsDiff = points - previousPoints;
-            
-            if (pointsDiff > 0) {
-              await supabase
-                .from("profiles")
-                .update({
-                  total_score: (profile.total_score || 0) + pointsDiff,
-                  game_scores: { ...gameScores, [game]: { rank, points } },
-                  updated_at: new Date().toISOString(),
-                })
-                .eq("id", userId);
-              
-              pointsEarned = pointsDiff;
-              console.log(`✅ [API/leaderboard] ${game} 회원 점수 업데이트: ${rank}등, +${pointsDiff}점`);
-            }
-          } else {
-            console.log(`ℹ️ [API/leaderboard] ${game} 이전 순위(${prevRank}등)보다 낮음, 업데이트 스킵`);
-          }
-        }
-      } else {
-        console.log(`ℹ️ [API/leaderboard] ${game} ${rank}등 - 10등 밖이므로 점수 없음`);
-      }
+      pointsEarned = rank <= 10 ? getRankPoints(rank) : 0;
+      console.log(`📊 [API/leaderboard] ${game} 순위 계산: ${rank}등, +${pointsEarned}점`);
     }
 
     return NextResponse.json({ 
