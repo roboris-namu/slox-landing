@@ -163,8 +163,10 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
   const duplicatedItems = [...tickerItems, ...tickerItems, ...tickerItems];
 
   return (
-    <div className="w-full bg-gradient-to-r from-dark-900/80 via-dark-800/80 to-dark-900/80 backdrop-blur-sm border-y border-dark-700/50 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 py-2">
+    <>
+      {/* 티커 고정 - 네비바 바로 아래 */}
+      <div className="fixed top-24 left-0 right-0 z-40 bg-gradient-to-r from-dark-900/95 via-dark-800/95 to-dark-900/95 backdrop-blur-md border-b border-dark-700/50 overflow-hidden shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 py-2">
         <div className="flex items-center gap-3">
           {/* 타이틀 */}
           <Link 
@@ -189,24 +191,27 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
         </div>
       </div>
       
-      {/* CSS 애니메이션 */}
-      <style jsx>{`
-        @keyframes ticker {
-          0% {
-            transform: translateX(0);
+        {/* CSS 애니메이션 */}
+        <style jsx>{`
+          @keyframes ticker {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-33.33%);
+            }
           }
-          100% {
-            transform: translateX(-33.33%);
+          .animate-ticker {
+            animation: ticker 30s linear infinite;
           }
-        }
-        .animate-ticker {
-          animation: ticker 30s linear infinite;
-        }
-        .animate-ticker:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
-    </div>
+          .animate-ticker:hover {
+            animation-play-state: paused;
+          }
+        `}</style>
+      </div>
+      {/* 티커 높이만큼 공간 확보 */}
+      <div className="h-10" />
+    </>
   );
 }
 
