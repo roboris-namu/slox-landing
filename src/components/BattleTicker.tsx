@@ -18,69 +18,73 @@ interface BattleTickerProps {
   lang?: "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
 }
 
-// 번역
+// 게임 이름 매핑
+const GAME_NAMES: Record<string, Record<string, string>> = {
+  ko: { reaction: "반응", cps: "클릭", memory: "기억력", color: "색상", aim: "조준", cardmatch: "카드", quiz: "퀴즈", iq: "IQ", sudoku: "스도쿠", typing: "타자" },
+  en: { reaction: "Reaction", cps: "CPS", memory: "Memory", color: "Color", aim: "Aim", cardmatch: "Cards", quiz: "Quiz", iq: "IQ", sudoku: "Sudoku", typing: "Typing" },
+  ja: { reaction: "反応", cps: "クリック", memory: "記憶", color: "色彩", aim: "エイム", cardmatch: "カード", quiz: "クイズ", iq: "IQ", sudoku: "数独", typing: "タイピング" },
+  zh: { reaction: "反应", cps: "点击", memory: "记忆", color: "颜色", aim: "瞄准", cardmatch: "卡牌", quiz: "问答", iq: "IQ", sudoku: "数独", typing: "打字" },
+  es: { reaction: "Reacción", cps: "CPS", memory: "Memoria", color: "Color", aim: "Puntería", cardmatch: "Cartas", quiz: "Quiz", iq: "IQ", sudoku: "Sudoku", typing: "Mecanografía" },
+  pt: { reaction: "Reação", cps: "CPS", memory: "Memória", color: "Cor", aim: "Mira", cardmatch: "Cartas", quiz: "Quiz", iq: "IQ", sudoku: "Sudoku", typing: "Digitação" },
+  de: { reaction: "Reaktion", cps: "CPS", memory: "Gedächtnis", color: "Farbe", aim: "Zielen", cardmatch: "Karten", quiz: "Quiz", iq: "IQ", sudoku: "Sudoku", typing: "Tippen" },
+  fr: { reaction: "Réaction", cps: "CPS", memory: "Mémoire", color: "Couleur", aim: "Visée", cardmatch: "Cartes", quiz: "Quiz", iq: "IQ", sudoku: "Sudoku", typing: "Frappe" },
+};
+
+// 번역 (자극적인 표현!)
 const translations = {
   ko: {
     title: "실시간 배틀",
-    win: "승리",
+    steal: "점 강탈!",
     draw: "무승부",
-    points: "점",
     noBattles: "아직 배틀이 없어요",
     tryBattle: "첫 번째 배틀에 도전하세요!",
   },
   en: {
     title: "Live Battles",
-    win: "won",
+    steal: "pts stolen!",
     draw: "Draw",
-    points: "pts",
     noBattles: "No battles yet",
     tryBattle: "Be the first to battle!",
   },
   ja: {
     title: "リアルタイムバトル",
-    win: "勝利",
+    steal: "点強奪!",
     draw: "引き分け",
-    points: "点",
     noBattles: "まだバトルがありません",
     tryBattle: "最初のバトルに挑戦!",
   },
   zh: {
     title: "实时对战",
-    win: "胜利",
+    steal: "分抢夺!",
     draw: "平局",
-    points: "分",
     noBattles: "还没有对战",
     tryBattle: "成为第一个挑战者!",
   },
   es: {
     title: "Batallas en vivo",
-    win: "ganó",
+    steal: "pts robados!",
     draw: "Empate",
-    points: "pts",
     noBattles: "Aún no hay batallas",
     tryBattle: "¡Sé el primero en batallar!",
   },
   pt: {
     title: "Batalhas ao vivo",
-    win: "venceu",
+    steal: "pts roubados!",
     draw: "Empate",
-    points: "pts",
     noBattles: "Ainda não há batalhas",
     tryBattle: "Seja o primeiro a batalhar!",
   },
   de: {
     title: "Live-Kämpfe",
-    win: "gewann",
+    steal: "Pkt gestohlen!",
     draw: "Unentschieden",
-    points: "Pkt",
     noBattles: "Noch keine Kämpfe",
     tryBattle: "Sei der Erste!",
   },
   fr: {
     title: "Batailles en direct",
-    win: "a gagné",
+    steal: "pts volés!",
     draw: "Égalité",
-    points: "pts",
     noBattles: "Pas encore de batailles",
     tryBattle: "Soyez le premier!",
   },
@@ -90,6 +94,7 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
   const [battles, setBattles] = useState<BattleRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const t = translations[lang] || translations.ko;
+  const gameNames = GAME_NAMES[lang] || GAME_NAMES.ko;
 
   // 배틀 기록 가져오기
   useEffect(() => {
@@ -119,42 +124,46 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
     return null;
   }
 
-  // 티커 아이템 생성 (구분자: 공백)
+  // 티커 아이템 생성 (게임 이름 + 자극적 표현)
   const tickerItems = battles.map((battle, index) => {
     const isLast = index === battles.length - 1;
+    const gameName = gameNames[battle.game] || battle.game;
     
     if (battle.isDraw) {
       return (
-        <span key={battle.id} className="inline-flex items-center gap-1">
-          <span>{battle.gameEmoji}</span>
+        <span key={battle.id} className="inline-flex items-center gap-1.5">
+          {/* 게임 이모지 + 이름 */}
+          <span className="text-cyan-400">{battle.gameEmoji}{gameName}</span>
           <span className="text-white font-medium">{battle.winnerName}</span>
           <span className="text-dark-400">vs</span>
           <span className="text-white font-medium">{battle.loserName}</span>
           <span className="text-yellow-400 font-bold">🤝 {t.draw}</span>
           {/* 아이템 간 구분: 공백 */}
-          <span className="inline-block w-10" />
+          <span className="inline-block w-12" />
           {/* 한 바퀴 끝: 큰 공백 */}
-          {isLast && <span className="inline-block w-32" />}
+          {isLast && <span className="inline-block w-40" />}
         </span>
       );
     }
     
     return (
-      <span key={battle.id} className="inline-flex items-center gap-1">
-        <span>{battle.gameEmoji}</span>
-        <span className="text-green-400 font-medium">{battle.winnerName}</span>
-        <span className="text-dark-400">→</span>
-        <span className="text-red-400 font-medium">{battle.loserName}</span>
-        <span className="text-white">{t.win}!</span>
+      <span key={battle.id} className="inline-flex items-center gap-1.5">
+        {/* 게임 이모지 + 이름 */}
+        <span className="text-cyan-400">{battle.gameEmoji}{gameName}</span>
+        {/* 승자 → 패자 */}
+        <span className="text-green-400 font-bold">{battle.winnerName}</span>
+        <span className="text-dark-500">▸</span>
+        <span className="text-red-400">{battle.loserName}</span>
+        {/* 점수 강탈 표시 */}
         {battle.pointsTransferred > 0 && (
-          <span className="text-yellow-400 font-bold">
-            (-{battle.pointsTransferred}{t.points})
+          <span className="text-yellow-400 font-bold animate-pulse">
+            🔥 {battle.pointsTransferred}{t.steal}
           </span>
         )}
         {/* 아이템 간 구분: 공백 */}
-        <span className="inline-block w-10" />
+        <span className="inline-block w-12" />
         {/* 한 바퀴 끝: 큰 공백 */}
-        {isLast && <span className="inline-block w-32" />}
+        {isLast && <span className="inline-block w-40" />}
       </span>
     );
   });
@@ -209,8 +218,8 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
           }
         `}</style>
       </div>
-      {/* 티커 높이만큼 공간 확보 */}
-      <div className="h-10" />
+      {/* 티커 높이 + 여백 확보 */}
+      <div className="h-16" />
     </>
   );
 }
