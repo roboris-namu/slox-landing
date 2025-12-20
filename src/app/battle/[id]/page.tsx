@@ -363,7 +363,7 @@ export default function BattlePage() {
             <button
               onClick={() => {
                 const url = window.location.href;
-                const text = `🥊 ${user.nickname}의 도전장!\n\n${gameConfig?.emoji} ${gameConfig?.name}: ${formatScore(challenge.game, challenge.challenger_score)}\n\n이 기록 이길 수 있어? 👉 ${url}`;
+                const text = `🥊 ${user.nickname}의 도전장!\n\n${gameConfig?.emoji} ${gameConfig?.name}: ${formatScore(challenge.game, challenge.challenger_score)}\n\n이 기록 이길 수 있어? 👉\n${url}`;
                 navigator.clipboard.writeText(text);
                 alert("복사되었습니다! 친구에게 공유하세요 🎮");
               }}

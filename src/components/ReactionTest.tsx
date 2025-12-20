@@ -1700,8 +1700,8 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
     if (!battleUrl) return;
     
     const text = lang === "ko"
-      ? `🥊 ${nickname}의 도전장!\n\n⚡ 반응속도: ${reactionTime}ms\n\n이 기록 이길 수 있어? 👉 ${battleUrl}`
-      : `🥊 ${nickname}'s Challenge!\n\n⚡ Reaction: ${reactionTime}ms\n\nCan you beat this? 👉 ${battleUrl}`;
+      ? `🥊 ${nickname}의 도전장!\n\n⚡ 반응속도: ${reactionTime}ms\n\n이 기록 이길 수 있어? 👉\n${battleUrl}`
+      : `🥊 ${nickname}'s Challenge!\n\n⚡ Reaction: ${reactionTime}ms\n\nCan you beat this? 👉\n${battleUrl}`;
     
     try {
       await navigator.clipboard.writeText(text);
