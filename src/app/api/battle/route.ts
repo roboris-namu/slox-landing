@@ -232,12 +232,24 @@ async function handleAccept(
     );
   }
 
+  // 🔄 프로필에서 최신 닉네임 가져오기 (클라이언트 닉네임 대신)
+  let finalOpponentNickname = opponentNickname;
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("nickname")
+    .eq("id", opponentId)
+    .maybeSingle();
+  
+  if (profile?.nickname) {
+    finalOpponentNickname = profile.nickname;
+  }
+
   // 수락 처리
   const { data, error } = await supabase
     .from("challenges")
     .update({
       opponent_id: opponentId,
-      opponent_nickname: opponentNickname,
+      opponent_nickname: finalOpponentNickname,
       status: "accepted",
       accepted_at: new Date().toISOString(),
     })
