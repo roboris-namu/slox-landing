@@ -321,6 +321,79 @@ export default function BattlePage() {
     );
   }
 
+  // 렌더링: 자기 자신의 도전장인 경우
+  if (stage === "info" && challenge && user && challenge.challenger_id === user.userId) {
+    const gameConfig = GAME_CONFIG[challenge.game];
+    
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950 flex items-center justify-center p-4">
+        <div className="glass-card p-8 rounded-2xl text-center max-w-lg w-full">
+          {/* 헤더 */}
+          <div className="text-6xl mb-4">📤</div>
+          <h1 className="text-2xl font-bold text-white mb-2">내가 만든 도전장!</h1>
+          <p className="text-dark-400 mb-8">
+            이 링크를 친구에게 공유하세요
+          </p>
+          
+          {/* 도전장 정보 */}
+          <div className="bg-dark-800/50 rounded-xl p-6 mb-6">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <span className="text-4xl">{gameConfig?.emoji}</span>
+              <span className="text-xl font-bold text-white">{gameConfig?.name}</span>
+            </div>
+            
+            <div className="text-4xl font-bold text-primary-400 mb-2">
+              {formatScore(challenge.game, challenge.challenger_score)}
+            </div>
+            <p className="text-dark-400">
+              내 기록
+            </p>
+          </div>
+          
+          {/* 공유 링크 */}
+          <div className="bg-dark-800/30 rounded-xl p-4 mb-6">
+            <p className="text-dark-400 text-sm mb-2">도전장 링크</p>
+            <p className="text-white text-xs break-all">
+              {typeof window !== "undefined" ? window.location.href : ""}
+            </p>
+          </div>
+          
+          {/* 버튼 */}
+          <div className="flex gap-4">
+            <button
+              onClick={() => {
+                const url = window.location.href;
+                const text = `🥊 ${user.nickname}의 도전장!\n\n${gameConfig?.emoji} ${gameConfig?.name}: ${formatScore(challenge.game, challenge.challenger_score)}\n\n이 기록 이길 수 있어? 👉 ${url}`;
+                navigator.clipboard.writeText(text);
+                alert("복사되었습니다! 친구에게 공유하세요 🎮");
+              }}
+              className="flex-1 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white py-4 rounded-xl font-bold transition-all"
+            >
+              📋 링크 복사
+            </button>
+            <Link 
+              href="/"
+              className="flex-1 bg-dark-700 hover:bg-dark-600 text-white py-4 rounded-xl font-bold transition-colors text-center flex items-center justify-center"
+            >
+              메인으로
+            </Link>
+          </div>
+          
+          {/* 상태 */}
+          <p className="text-dark-500 text-xs mt-4">
+            {challenge.status === "pending" 
+              ? "⏳ 아직 아무도 도전하지 않았어요"
+              : challenge.status === "accepted"
+              ? "🎮 누군가 도전 중!"
+              : challenge.status === "completed"
+              ? "✅ 배틀 완료!"
+              : ""}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   // 렌더링: 도전장 정보 (수락 전)
   if (stage === "info" && challenge && user) {
     const gameConfig = GAME_CONFIG[challenge.game];
