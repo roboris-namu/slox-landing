@@ -347,6 +347,7 @@ export default function LoginPageEN() {
             </div>
 
             <div className="bg-dark-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6 space-y-4">
+              {/* Google 로그인 */}
               <button
                 onClick={handleGoogleLogin}
                 className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-white rounded-xl text-gray-800 font-medium hover:bg-gray-100 transition-all"
@@ -358,16 +359,6 @@ export default function LoginPageEN() {
                   <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
                 </svg>
                 {t.login.googleLogin}
-              </button>
-
-              <button
-                onClick={handleKakaoLogin}
-                className="w-full flex items-center justify-center gap-3 px-6 py-3 bg-[#FEE500] rounded-xl text-[#191919] font-medium hover:bg-[#FDD800] transition-all"
-              >
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#191919">
-                  <path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.47 1.607 4.647 4.042 5.912l-.964 3.577c-.066.245.21.441.42.298l4.141-2.82c.773.11 1.564.133 2.361.133 5.523 0 10-3.477 10-7.5S17.523 3 12 3z"/>
-                </svg>
-                {t.login.kakaoLogin}
               </button>
             </div>
 
