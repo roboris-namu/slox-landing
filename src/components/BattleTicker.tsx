@@ -285,8 +285,8 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
                 className="whitespace-nowrap text-sm select-none"
                 style={{ willChange: "transform" }}
               >
-                {/* 초기 여백 - 중앙에서 시작하도록 */}
-                <span className="inline-block w-[50vw]" />
+                {/* 초기 여백 - 왼쪽에서 시작하도록 */}
+                <span className="inline-block w-[15vw]" />
                 {duplicatedBattles.map((battle, index) => renderBattleItem(battle, index))}
               </div>
             </div>
