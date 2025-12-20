@@ -151,14 +151,15 @@ async function recalculateAllRanks(game: string, config: { table: string; scoreF
     // 1. 해당 게임 리더보드 상위 15명 가져오기 (10위 밖 회원도 업데이트 위해 여유있게)
     const { data: leaderboard } = await supabase
       .from(config.table)
-      .select("user_id, " + config.scoreField)
+      .select("*")
       .order(config.scoreField, { ascending: config.orderAsc })
       .limit(15);
     
     if (!leaderboard) return;
     
     // 2. 회원인 엔트리만 필터링하고 순위 매기기
-    const memberEntries = leaderboard
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const memberEntries = (leaderboard as any[])
       .map((entry, index) => ({ userId: entry.user_id, rank: index + 1 }))
       .filter((entry) => entry.userId);
     
