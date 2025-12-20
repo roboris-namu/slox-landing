@@ -376,12 +376,16 @@ export default function BattlePage() {
             >
               📋 링크 복사
             </button>
-            <Link 
-              href="/"
+            <button 
+              onClick={() => {
+                localStorage.removeItem("pending_battle");
+                localStorage.removeItem("login_redirect");
+                window.location.href = "/";
+              }}
               className="flex-1 bg-dark-700 hover:bg-dark-600 text-white py-4 rounded-xl font-bold transition-colors text-center flex items-center justify-center"
             >
               메인으로
-            </Link>
+            </button>
           </div>
           
           {/* 상태 */}
@@ -659,12 +663,17 @@ export default function BattlePage() {
           
           {/* 버튼 */}
           <div className="flex gap-4">
-            <Link 
-              href="/"
+            <button 
+              onClick={() => {
+                // 🧹 localStorage 정리 후 메인으로 이동
+                localStorage.removeItem("pending_battle");
+                localStorage.removeItem("login_redirect");
+                window.location.href = "/";
+              }}
               className="flex-1 bg-dark-600 hover:bg-dark-500 border border-dark-500 text-white py-4 rounded-xl font-bold transition-colors text-center"
             >
               메인으로
-            </Link>
+            </button>
             <Link 
               href={`/${challenge.game}`}
               className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-4 rounded-xl font-bold transition-all text-center shadow-lg shadow-orange-500/20"
