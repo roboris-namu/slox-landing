@@ -42,24 +42,33 @@ export async function GET() {
           return { game: config.game, entries: [], error: error.message };
         }
 
-        // 🔄 회원 닉네임 + 아바타 동기화 (최신 프로필 정보 반영)
+        // 🔄 회원 닉네임 + 아바타 + 종합순위 동기화 (최신 프로필 정보 반영)
         if (data && data.length > 0) {
           const userIds = data.filter((d) => d.user_id).map((d) => d.user_id);
           if (userIds.length > 0) {
-            const { data: profiles } = await supabase
+            // 종합순위 계산을 위해 전체 프로필 가져오기
+            const { data: allProfiles } = await supabase
               .from("profiles")
-              .select("id, nickname, avatar_url")
-              .in("id", userIds);
+              .select("id, nickname, avatar_url, total_score")
+              .order("total_score", { ascending: false, nullsFirst: false });
 
-            if (profiles) {
-              const profileMap = new Map(
-                profiles.map((p) => [p.id, { nickname: p.nickname, avatar_url: p.avatar_url }])
-              );
+            if (allProfiles) {
+              // 종합순위 계산 (total_score 기준)
+              const profileMap = new Map<string, { nickname: string; avatar_url: string | null; overall_rank: number }>();
+              allProfiles.forEach((p, index) => {
+                profileMap.set(p.id, {
+                  nickname: p.nickname,
+                  avatar_url: p.avatar_url,
+                  overall_rank: index + 1, // 1등부터 시작
+                });
+              });
+
               data.forEach((entry) => {
                 if (entry.user_id && profileMap.has(entry.user_id)) {
                   const profile = profileMap.get(entry.user_id);
                   entry.nickname = profile?.nickname || entry.nickname;
                   entry.avatar_url = profile?.avatar_url;
+                  entry.overall_rank = profile?.overall_rank; // 종합순위 추가
                 }
               });
             }
