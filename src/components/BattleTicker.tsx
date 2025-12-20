@@ -8,7 +8,9 @@ interface BattleRecord {
   game: string;
   gameEmoji: string;
   winnerName: string;
+  winnerImage: string | null;
   loserName: string;
+  loserImage: string | null;
   isDraw: boolean;
   pointsTransferred: number;
   completedAt: string;
@@ -124,7 +126,18 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
     return null;
   }
 
-  // 티커 아이템 생성 (게임 이름 + 자극적 표현)
+  // 프로필 이미지 컴포넌트
+  const ProfileImg = ({ src, name, color }: { src: string | null; name: string; color: string }) => (
+    <span className={`inline-flex items-center justify-center w-5 h-5 rounded-full ${color} text-[10px] font-bold text-white overflow-hidden flex-shrink-0`}>
+      {src ? (
+        <img src={src} alt={name} className="w-full h-full object-cover" />
+      ) : (
+        name.charAt(0).toUpperCase()
+      )}
+    </span>
+  );
+
+  // 티커 아이템 생성 (프로필 이미지 + 게임 이름 + 자극적 표현)
   const tickerItems = battles.map((battle, index) => {
     const isLast = index === battles.length - 1;
     const gameName = gameNames[battle.game] || battle.game;
@@ -132,10 +145,15 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
     if (battle.isDraw) {
       return (
         <span key={battle.id} className="inline-flex items-center gap-1.5">
-          {/* 게임 이모지 + 이름 */}
-          <span className="text-cyan-400">{battle.gameEmoji}{gameName}</span>
+          {/* 게임 이모지 + 이름 (구분감) */}
+          <span className="text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded text-xs">{battle.gameEmoji} {gameName}</span>
+          <span className="inline-block w-1" />
+          {/* 유저1 */}
+          <ProfileImg src={battle.winnerImage} name={battle.winnerName} color="bg-dark-600" />
           <span className="text-white font-medium">{battle.winnerName}</span>
           <span className="text-dark-400">vs</span>
+          {/* 유저2 */}
+          <ProfileImg src={battle.loserImage} name={battle.loserName} color="bg-dark-600" />
           <span className="text-white font-medium">{battle.loserName}</span>
           <span className="text-yellow-400 font-bold">🤝 {t.draw}</span>
           {/* 아이템 간 구분: 공백 */}
@@ -148,14 +166,17 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
     
     return (
       <span key={battle.id} className="inline-flex items-center gap-1.5">
-        {/* 게임 이모지 + 이름 */}
-        <span className="text-cyan-400">{battle.gameEmoji}{gameName}</span>
-        {/* 승자 승리! */}
+        {/* 게임 이모지 + 이름 (구분감 있는 뱃지) */}
+        <span className="text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded text-xs">{battle.gameEmoji} {gameName}</span>
+        <span className="inline-block w-1" />
+        {/* 승자 (프로필 + 이름) */}
+        <ProfileImg src={battle.winnerImage} name={battle.winnerName} color="bg-green-600" />
         <span className="text-green-400 font-bold">{battle.winnerName}</span>
         <span className="text-white">{t.win}</span>
         {/* 점수 강탈 표시: 패자에서 N점 강탈! */}
         {battle.pointsTransferred > 0 && (
           <>
+            <ProfileImg src={battle.loserImage} name={battle.loserName} color="bg-red-600" />
             <span className="text-red-400">{battle.loserName}</span>
             <span className="text-dark-400">{t.from}</span>
             <span className="text-yellow-400 font-bold animate-pulse">

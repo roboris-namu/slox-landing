@@ -57,33 +57,50 @@ export async function GET() {
       if (b.opponent_id) userIds.add(b.opponent_id);
     });
 
-    // 프로필에서 최신 닉네임 가져오기
+    // 프로필에서 최신 닉네임 + 프로필 이미지 가져오기
     const { data: profiles } = await supabase
       .from("profiles")
-      .select("id, nickname")
+      .select("id, nickname, profile_image")
       .in("id", Array.from(userIds));
 
-    const nicknameMap = new Map<string, string>();
-    profiles?.forEach((p) => nicknameMap.set(p.id, p.nickname));
+    const profileMap = new Map<string, { nickname: string; image: string | null }>();
+    profiles?.forEach((p) => profileMap.set(p.id, { 
+      nickname: p.nickname, 
+      image: p.profile_image 
+    }));
 
     // 티커용 데이터 가공
     const tickerData = battles.map((battle) => {
-      const challengerName = nicknameMap.get(battle.challenger_id) || battle.challenger_nickname;
-      const opponentName = nicknameMap.get(battle.opponent_id) || battle.opponent_nickname;
+      const challengerProfile = profileMap.get(battle.challenger_id);
+      const opponentProfile = profileMap.get(battle.opponent_id);
+      
+      const challengerName = challengerProfile?.nickname || battle.challenger_nickname;
+      const challengerImage = challengerProfile?.image || null;
+      const opponentName = opponentProfile?.nickname || battle.opponent_nickname;
+      const opponentImage = opponentProfile?.image || null;
+      
       const gameEmoji = GAME_EMOJI[battle.game] || "🎮";
       
       let winnerName = "";
+      let winnerImage: string | null = null;
       let loserName = "";
+      let loserImage: string | null = null;
       
       if (battle.is_draw) {
         winnerName = challengerName;
+        winnerImage = challengerImage;
         loserName = opponentName;
+        loserImage = opponentImage;
       } else if (battle.winner_id === battle.challenger_id) {
         winnerName = challengerName;
+        winnerImage = challengerImage;
         loserName = opponentName;
+        loserImage = opponentImage;
       } else {
         winnerName = opponentName;
+        winnerImage = opponentImage;
         loserName = challengerName;
+        loserImage = challengerImage;
       }
 
       return {
@@ -91,7 +108,9 @@ export async function GET() {
         game: battle.game,
         gameEmoji,
         winnerName,
+        winnerImage,
         loserName,
+        loserImage,
         isDraw: battle.is_draw,
         pointsTransferred: battle.points_transferred,
         completedAt: battle.completed_at,
