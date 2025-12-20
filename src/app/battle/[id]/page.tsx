@@ -166,6 +166,9 @@ export default function BattlePage() {
       // 상태에 따른 처리
       if (challengeData.status === "completed" || challengeData.status === "forfeited") {
         setStage("result");
+        // 🧹 배틀 완료 시 localStorage 정리 (리다이렉트 방지)
+        localStorage.removeItem("pending_battle");
+        localStorage.removeItem("login_redirect");
       } else if (challengeData.status === "expired") {
         setError("만료된 도전장입니다");
       } else if (challengeData.status === "accepted" && challengeData.opponent_id === session.userId) {
