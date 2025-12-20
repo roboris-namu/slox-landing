@@ -57,16 +57,16 @@ export async function GET() {
       if (b.opponent_id) userIds.add(b.opponent_id);
     });
 
-    // 프로필에서 최신 닉네임 + 프로필 이미지 가져오기
+    // 프로필에서 최신 닉네임 + 아바타 이미지 가져오기
     const { data: profiles } = await supabase
       .from("profiles")
-      .select("id, nickname, profile_image")
+      .select("id, nickname, avatar_url")
       .in("id", Array.from(userIds));
 
     const profileMap = new Map<string, { nickname: string; image: string | null }>();
     profiles?.forEach((p) => profileMap.set(p.id, { 
       nickname: p.nickname, 
-      image: p.profile_image 
+      image: p.avatar_url 
     }));
 
     // 티커용 데이터 가공
