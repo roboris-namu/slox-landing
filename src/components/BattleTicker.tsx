@@ -147,7 +147,6 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
         <span key={battle.id} className="inline-flex items-center gap-1.5">
           {/* 게임 이모지 + 이름 (구분감) */}
           <span className="text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded text-xs font-medium">{battle.gameEmoji} {gameName}</span>
-          <span className="inline-block w-4" />
           {/* 유저1 */}
           <ProfileImg src={battle.winnerImage} name={battle.winnerName} color="bg-dark-600" />
           <span className="text-white font-medium">{battle.winnerName}</span>
@@ -168,7 +167,6 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
       <span key={battle.id} className="inline-flex items-center gap-1.5">
         {/* 게임 이모지 + 이름 (구분감 있는 뱃지) */}
         <span className="text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded text-xs font-medium">{battle.gameEmoji} {gameName}</span>
-        <span className="inline-block w-4" />
         {/* 승자 (프로필 + 이름 + 승) */}
         <ProfileImg src={battle.winnerImage} name={battle.winnerName} color="bg-green-600" />
         <span className="text-green-400 font-bold">{battle.winnerName}</span>
