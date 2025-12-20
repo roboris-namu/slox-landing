@@ -4,6 +4,7 @@ import MainBanner from "@/components/MainBanner";
 import HallOfFameCarousel from "@/components/HallOfFameCarousel";
 import LanguageSelector from "@/components/LanguageSelector";
 import LiveRanking from "@/components/LiveRanking";
+import BattleTicker from "@/components/BattleTicker";
 import DesktopToolsDropdown from "@/components/DesktopToolsDropdown";
 import NavUserProfile, { NavUserProfileMobile } from "@/components/NavUserProfile";
 
@@ -24,6 +25,7 @@ export default function EnglishHome() {
     <main className="relative overflow-hidden">
       <Navigation />
       <LiveRanking locale="en" />
+      <BattleTicker lang="en" />
       <MainBanner locale="en" />
       <HallOfFameCarousel locale="en" />
       <FreeToolsSection />

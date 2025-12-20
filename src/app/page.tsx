@@ -5,6 +5,7 @@ import MainBanner from "@/components/MainBanner";
 import CategoryQuickLinks from "@/components/CategoryQuickLinks";
 import TemplateService from "@/components/TemplateService";
 import LiveRanking from "@/components/LiveRanking";
+import BattleTicker from "@/components/BattleTicker";
 // import Portfolio from "@/components/Portfolio"; // 임시 숨김
 import Contact from "@/components/Contact";
 import MobileToolsButton from "@/components/MobileToolsButton";
@@ -24,6 +25,7 @@ export default function Home() {
     <main className="relative overflow-hidden">
       <Navigation />
       <LiveRanking />
+      <BattleTicker lang="ko" />
       <MainBanner />
       <CategoryQuickLinks />
       <HallOfFameCarousel />
