@@ -270,6 +270,8 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
                 className="whitespace-nowrap text-sm select-none"
                 style={{ willChange: "transform" }}
               >
+                {/* 초기 여백 - 화면 오른쪽에서 시작하도록 */}
+                <span className="inline-block w-[100vw]" />
                 {duplicatedBattles.map((battle, index) => renderBattleItem(battle, index))}
               </div>
             </div>
