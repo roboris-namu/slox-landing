@@ -679,6 +679,7 @@ export default function TypingMulti({ locale, battleMode = false, onBattleComple
   
   // 👤 사용자 인증 상태 (초기 로드용, submitScore에서는 실시간 확인)
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_currentUserNickname, setCurrentUserNickname] = useState<string>("");
   
   // 🥊 배틀 관련 상태
