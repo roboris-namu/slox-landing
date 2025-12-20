@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { supabase } from "@/lib/supabase";
 import {
   LineChart,
   Line,
@@ -77,129 +76,21 @@ export default function AdminDashboard() {
     }
   };
 
-  // 데이터 로드
+  // 데이터 로드 (API 호출 - 광고차단기 우회)
   const fetchAllData = useCallback(async () => {
     setLoading(true);
     try {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const todayISO = today.toISOString();
+      const response = await fetch("/api/admin/dashboard");
+      if (!response.ok) throw new Error("API 에러");
       
-      const weekAgo = new Date();
-      weekAgo.setDate(weekAgo.getDate() - 7);
-      weekAgo.setHours(0, 0, 0, 0);
-      const weekAgoISO = weekAgo.toISOString();
-
-      let total = 0;
-      let todayTotal = 0;
-      let weekTotal = 0;
-      const gameStatsTemp: GameStat[] = [];
-      const allEntries: { date: string; game: string }[] = [];
-      const recentTemp: RecentEntry[] = [];
-
-      // 각 게임별 데이터 수집
-      for (const game of GAMES) {
-        // 총 참여자 수
-        const { count } = await supabase
-          .from(game.table)
-          .select("*", { count: "exact", head: true });
-        
-        const gameCount = count || 0;
-        total += gameCount;
-
-        // 오늘 신규
-        const { count: todayCount } = await supabase
-          .from(game.table)
-          .select("*", { count: "exact", head: true })
-          .gte("created_at", todayISO);
-        
-        todayTotal += todayCount || 0;
-
-        // 이번 주 신규
-        const { count: weekCount } = await supabase
-          .from(game.table)
-          .select("*", { count: "exact", head: true })
-          .gte("created_at", weekAgoISO);
-        
-        weekTotal += weekCount || 0;
-
-        gameStatsTemp.push({
-          name: game.name,
-          emoji: game.emoji,
-          count: gameCount,
-          color: game.color,
-          todayCount: todayCount || 0,
-        });
-
-        // 일별 데이터 (최근 30일)
-        const { data: entries } = await supabase
-          .from(game.table)
-          .select("created_at")
-          .order("created_at", { ascending: true });
-
-        if (entries) {
-          entries.forEach((e) => {
-            const date = new Date(e.created_at).toISOString().split("T")[0];
-            allEntries.push({ date, game: game.name });
-          });
-        }
-
-        // 최근 등록 (각 게임에서 최근 2개씩)
-        const { data: recent } = await supabase
-          .from(game.table)
-          .select("nickname, created_at")
-          .order("created_at", { ascending: false })
-          .limit(2);
-
-        if (recent) {
-          recent.forEach((r) => {
-            recentTemp.push({
-              nickname: r.nickname,
-              game: game.name,
-              emoji: game.emoji,
-              created_at: r.created_at,
-            });
-          });
-        }
-      }
-
-      setTotalParticipants(total);
-      setTodayNew(todayTotal);
-      setWeekNew(weekTotal);
-      setGameStats(gameStatsTemp.sort((a, b) => b.count - a.count));
-
-      // 일별 누적 데이터 계산
-      const dateCountMap: Record<string, number> = {};
-      allEntries.forEach((e) => {
-        dateCountMap[e.date] = (dateCountMap[e.date] || 0) + 1;
-      });
-
-      const sortedDates = Object.keys(dateCountMap).sort();
-      let cumulative = 0;
-      const dailyDataTemp: DailyData[] = [];
+      const data = await response.json();
       
-      // 최근 30일만
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().split("T")[0];
-
-      sortedDates.forEach((date) => {
-        cumulative += dateCountMap[date];
-        if (date >= thirtyDaysAgoStr) {
-          dailyDataTemp.push({
-            date: date.slice(5), // MM-DD 형식
-            count: dateCountMap[date],
-            cumulative,
-          });
-        }
-      });
-
-      setDailyData(dailyDataTemp);
-
-      // 최근 등록 정렬
-      recentTemp.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-      setRecentEntries(recentTemp.slice(0, 10));
-
+      setTotalParticipants(data.totalParticipants);
+      setTodayNew(data.todayNew);
+      setWeekNew(data.weekNew);
+      setGameStats(data.gameStats);
+      setDailyData(data.dailyData);
+      setRecentEntries(data.recentEntries);
       setLastUpdated(new Date());
     } catch (error) {
       console.error("Failed to fetch data:", error);
