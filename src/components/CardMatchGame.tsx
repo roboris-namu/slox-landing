@@ -169,7 +169,7 @@ export default function CardMatchGame() {
       } catch { /* 무시 */ }
       if (!userId) {
         try {
-          const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
           if (session?.user?.id) userId = session.user.id;
         } catch { /* 차단됨 */ }
       }
@@ -247,15 +247,15 @@ export default function CardMatchGame() {
         body: JSON.stringify({
           game: "cardmatch",
           data: {
-            nickname: finalNickname.slice(0, 20), 
-            time_seconds: timer, 
-            moves, 
-            pairs: totalPairs, 
-            device_type: isMobile ? "mobile" : "pc",
-            score: currentScore,
-            grade: gradeInfo.grade,
-            percentile: percentile,
-            country: selectedCountry,
+        nickname: finalNickname.slice(0, 20), 
+        time_seconds: timer, 
+        moves, 
+        pairs: totalPairs, 
+        device_type: isMobile ? "mobile" : "pc",
+        score: currentScore,
+        grade: gradeInfo.grade,
+        percentile: percentile,
+        country: selectedCountry,
           },
           userId: finalUserId,
         }),
@@ -285,8 +285,8 @@ export default function CardMatchGame() {
         })
         .catch(err => console.error("순위 계산 실패:", err));
       if (!hasSubmittedScore) {
-        const timerRef = setTimeout(() => { setShowRankingPrompt(true); }, 800);
-        return () => clearTimeout(timerRef);
+      const timerRef = setTimeout(() => { setShowRankingPrompt(true); }, 800);
+      return () => clearTimeout(timerRef);
       }
     }
   }, [state, hasSubmittedScore, matchedPairs]);

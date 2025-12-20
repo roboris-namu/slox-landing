@@ -696,7 +696,7 @@ export default function IQTestMulti({ locale }: Props) {
       } catch { /* 무시 */ }
       if (!userId) {
         try {
-          const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
           if (user?.id) userId = user.id;
         } catch { /* 차단됨 */ }
       }
@@ -886,13 +886,13 @@ export default function IQTestMulti({ locale }: Props) {
         body: JSON.stringify({
           game: "iq",
           data: {
-            nickname: finalNickname,
-            score,
-            iq_score: iqScore,
-            correct_count: correctCount,
-            time_seconds: totalTime,
-            grade: gradeInfo.grade,
-            country: selectedCountry,
+        nickname: finalNickname,
+        score,
+        iq_score: iqScore,
+        correct_count: correctCount,
+        time_seconds: totalTime,
+        grade: gradeInfo.grade,
+        country: selectedCountry,
           },
           userId: finalUserId,
         }),

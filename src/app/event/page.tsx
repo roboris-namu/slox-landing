@@ -466,15 +466,15 @@ export default function EventPage() {
         if (response.ok && data) {
           if (data.config) {
             setEventConfig(data.config);
-          }
+        }
 
           if (data.currentLeader) {
-            setCurrentLeader({
+          setCurrentLeader({
               nickname: data.currentLeader.nickname,
               score: data.currentLeader.score,
               email: data.currentLeader.email,
-            });
-          }
+          });
+        }
 
           if (data.winners) {
             setWinners(data.winners);

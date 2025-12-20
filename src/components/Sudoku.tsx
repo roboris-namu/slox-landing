@@ -183,7 +183,7 @@ export default function Sudoku() {
       } catch { /* 무시 */ }
       if (!userId) {
         try {
-          const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
           if (session?.user?.id) userId = session.user.id;
         } catch { /* 차단됨 */ }
       }
@@ -382,12 +382,12 @@ export default function Sudoku() {
         body: JSON.stringify({
           game: "sudoku",
           data: {
-            nickname: finalNickname.slice(0, 20),
-            difficulty: "standard",
-            time_seconds: time,
-            mistakes,
-            grade: gradeInfo.grade,
-            country: selectedCountry,
+        nickname: finalNickname.slice(0, 20),
+        difficulty: "standard",
+        time_seconds: time,
+        mistakes,
+        grade: gradeInfo.grade,
+        country: selectedCountry,
           },
           userId: finalUserId,
         }),
@@ -796,8 +796,8 @@ export default function Sudoku() {
             {leaderboard.length > 0 ? (
               <div className="space-y-2">
                 {leaderboard.map((entry, index) => {
-                  const entryGrade = getGradeByTime(entry.time_seconds);
-                  return (
+                    const entryGrade = getGradeByTime(entry.time_seconds);
+                    return (
                     <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${index === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : index === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : index === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
                       {/* 순위 */}
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${index === 0 ? "bg-yellow-500 text-black" : index === 1 ? "bg-gray-300 text-black" : index === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{index + 1}</div>
@@ -844,7 +844,7 @@ export default function Sudoku() {
                         <div className="text-xs text-dark-500">{index + 1}위 / {totalCount}명</div>
                       </div>
                     </div>
-                  );
+                    );
                 })}
               </div>
             ) : (

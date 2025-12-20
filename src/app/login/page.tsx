@@ -82,7 +82,7 @@ function LoginContent() {
   // 신규 가입 닉네임 설정
   const [needsNicknameSetup, setNeedsNicknameSetup] = useState(false);
   const [setupNickname, setSetupNickname] = useState("");
-  
+
   // 🔄 리다이렉트 처리 함수
   const handleRedirectAfterLogin = useCallback(() => {
     // 1. URL의 redirect 파라미터 우선
@@ -138,6 +138,21 @@ function LoginContent() {
         console.log("✅ [Profile] 로드 성공:", data.profile.nickname);
         setProfile(data.profile);
         setNeedsNicknameSetup(false);
+        
+        // 🔄 기존 회원 로그인 시 redirect 처리
+        // redirect 파라미터가 있으면 해당 URL로 이동
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get("redirect");
+        const pendingBattle = localStorage.getItem("pending_battle");
+        
+        if (redirect) {
+          console.log("🔄 [Profile] redirect로 이동:", redirect);
+          window.location.href = redirect;
+        } else if (pendingBattle) {
+          console.log("🔄 [Profile] pending_battle로 이동:", pendingBattle);
+          localStorage.removeItem("pending_battle");
+          window.location.href = `/battle/${pendingBattle}`;
+        }
       }
     } catch (err) {
       console.error("❌ [Profile] 가져오기 실패:", err);
@@ -226,8 +241,8 @@ function LoginContent() {
           try {
             // Supabase가 code를 자동으로 처리하도록 대기
             const { data, error } = await supabase.auth.exchangeCodeForSession(authCode);
-            
-            if (error) {
+        
+        if (error) {
               console.error("❌ [Login] PKCE 세션 교환 실패:", error);
             } else if (data.session) {
               console.log("✅ [Login] PKCE 세션 교환 성공:", data.session.user.id);
@@ -251,9 +266,9 @@ function LoginContent() {
               
               await fetchProfile(data.session.user.id, data.session.user.email, userName);
               await checkTodayAttendance(data.session.user.id);
-              setLoading(false);
-              return;
-            }
+          setLoading(false);
+          return;
+        }
           } catch (e) {
             console.error("❌ [Login] PKCE 처리 에러:", e);
           }
@@ -531,10 +546,10 @@ function LoginContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: user.id,
-          nickname: setupNickname.trim(),
-          email: user.email,
-          avatar_url: user.user_metadata?.avatar_url || null,
+        id: user.id,
+        nickname: setupNickname.trim(),
+        email: user.email,
+        avatar_url: user.user_metadata?.avatar_url || null,
         }),
       });
 
@@ -656,7 +671,7 @@ function LoginContent() {
       formData.append("userId", user.id);
       if (profile?.avatar_url) {
         formData.append("oldAvatarUrl", profile.avatar_url);
-      }
+        }
 
       const response = await fetch("/api/avatar", {
         method: "POST",
@@ -664,7 +679,7 @@ function LoginContent() {
       });
 
       const data = await response.json();
-
+      
       if (!response.ok) {
         throw new Error(data.error || "업로드 실패");
       }
@@ -746,9 +761,9 @@ function LoginContent() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              id: data.user.id,
-              nickname: data.user.user_metadata?.nickname || data.user.user_metadata?.full_name || "User",
-              email: data.user.email,
+            id: data.user.id,
+            nickname: data.user.user_metadata?.nickname || data.user.user_metadata?.full_name || "User",
+            email: data.user.email,
             }),
           });
         }

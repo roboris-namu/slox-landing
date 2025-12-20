@@ -572,7 +572,7 @@ export default function ColorTest({ locale }: ColorTestProps) {
       } catch { /* 무시 */ }
       if (!userId) {
         try {
-          const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
           if (session?.user?.id) userId = session.user.id;
         } catch { /* 차단됨 */ }
       }
@@ -649,13 +649,13 @@ export default function ColorTest({ locale }: ColorTestProps) {
         body: JSON.stringify({
           game: "color",
           data: {
-            nickname: finalNickname.slice(0, 20), 
-            score, 
-            level, 
-            device_type: isMobile ? "mobile" : "pc",
-            grade: gradeInfo.grade,
-            percentile: percentile,
-            country: selectedCountry,
+        nickname: finalNickname.slice(0, 20), 
+        score, 
+        level, 
+        device_type: isMobile ? "mobile" : "pc",
+        grade: gradeInfo.grade,
+        percentile: percentile,
+        country: selectedCountry,
           },
           userId: finalUserId,
         }),
@@ -685,8 +685,8 @@ export default function ColorTest({ locale }: ColorTestProps) {
         })
         .catch(err => console.error("순위 계산 실패:", err));
       if (!hasSubmittedScore) {
-        const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
-        return () => clearTimeout(timer);
+      const timer = setTimeout(() => { setShowRankingPrompt(true); }, 800);
+      return () => clearTimeout(timer);
       }
     }
   }, [state, hasSubmittedScore, score]);

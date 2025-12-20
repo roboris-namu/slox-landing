@@ -1145,7 +1145,7 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
       // 2. Supabase SDK fallback
       if (!userId) {
         try {
-          const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
           if (session?.user?.id) userId = session.user.id;
         } catch { /* 차단됨 */ }
       }
@@ -1157,9 +1157,9 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
           const response = await fetch(`/api/profile?userId=${userId}`);
           const { profile } = await response.json();
           if (profile?.nickname) {
-            setCurrentUserNickname(profile.nickname);
+          setCurrentUserNickname(profile.nickname);
             setNickname(profile.nickname);
-          }
+        }
         } catch { /* 무시 */ }
       }
     };
@@ -1318,12 +1318,12 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
         body: JSON.stringify({
           game: "reaction",
           data: {
-            nickname: finalNickname.slice(0, 20),
-            score: reactionTime,
-            grade: gradeInfo.grade,
-            percentile: percentile,
-            device_type: isMobile ? "mobile" : "pc",
-            country: selectedCountry,
+          nickname: finalNickname.slice(0, 20),
+          score: reactionTime,
+          grade: gradeInfo.grade,
+          percentile: percentile,
+          device_type: isMobile ? "mobile" : "pc",
+          country: selectedCountry,
           },
           userId: finalUserId, // 실시간 확인된 userId 사용
         }),
@@ -1423,10 +1423,10 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
       
       // 팝업 표시
       if (!hasSubmittedScore) {
-        const timer = setTimeout(() => {
-          setShowRankingPrompt(true);
-        }, 800);
-        return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        setShowRankingPrompt(true);
+      }, 800);
+      return () => clearTimeout(timer);
       }
     }
   }, [state, hasSubmittedScore, reactionTime]);

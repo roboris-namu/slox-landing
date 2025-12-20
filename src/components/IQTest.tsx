@@ -153,7 +153,7 @@ export default function IQTest() {
       } catch { /* 무시 */ }
       if (!userId) {
         try {
-          const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
           if (session?.user?.id) userId = session.user.id;
         } catch { /* 차단됨 */ }
       }
@@ -339,13 +339,13 @@ export default function IQTest() {
         body: JSON.stringify({
           game: "iq",
           data: {
-            nickname: finalNickname.slice(0, 20),
-            score,
-            iq_score: iqScore,
-            correct_count: correctCount,
-            time_seconds: totalTime,
-            grade: gradeInfo.grade,
-            country: selectedCountry,
+        nickname: finalNickname.slice(0, 20),
+        score,
+        iq_score: iqScore,
+        correct_count: correctCount,
+        time_seconds: totalTime,
+        grade: gradeInfo.grade,
+        country: selectedCountry,
           },
           userId: finalUserId,
         }),

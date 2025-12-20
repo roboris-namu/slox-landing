@@ -60,14 +60,14 @@ export default function NoticePage() {
       try {
         const response = await fetch("/api/notices");
         const result = await response.json();
-        
+
         if (result.data) {
           setNotices(result.data);
-        }
+      }
       } catch (err) {
         console.error("공지사항 로드 실패:", err);
       } finally {
-        setLoading(false);
+      setLoading(false);
       }
     };
 

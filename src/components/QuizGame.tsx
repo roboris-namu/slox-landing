@@ -271,7 +271,7 @@ export default function QuizGame() {
       } catch { /* 무시 */ }
       if (!userId) {
         try {
-          const { data: { session } } = await supabase.auth.getSession();
+      const { data: { session } } = await supabase.auth.getSession();
           if (session?.user?.id) userId = session.user.id;
         } catch { /* 차단됨 */ }
       }
@@ -281,9 +281,9 @@ export default function QuizGame() {
           const response = await fetch(`/api/profile?userId=${userId}`);
           const { profile } = await response.json();
           if (profile?.nickname) {
-            setCurrentUserNickname(profile.nickname);
-            setNickname(profile.nickname);
-          }
+          setCurrentUserNickname(profile.nickname);
+          setNickname(profile.nickname);
+        }
         } catch { /* 무시 */ }
       }
     };
@@ -451,12 +451,12 @@ export default function QuizGame() {
         body: JSON.stringify({
           game: "quiz",
           data: {
-            nickname: finalNickname.slice(0, 20),
-            score: finalScore,
-            correct_count: correctCount,
-            time_seconds: totalTime,
-            grade: gradeInfo.grade,
-            country: selectedCountry,
+        nickname: finalNickname.slice(0, 20),
+        score: finalScore,
+        correct_count: correctCount,
+        time_seconds: totalTime,
+        grade: gradeInfo.grade,
+        country: selectedCountry,
           },
           userId: finalUserId,
         }),

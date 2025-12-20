@@ -705,7 +705,7 @@ export default function TypingMulti({ locale }: Props) {
       } catch { /* 무시 */ }
       if (!userId) {
         try {
-          const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
           if (user?.id) userId = user.id;
         } catch { /* 차단됨 */ }
       }
@@ -865,13 +865,13 @@ export default function TypingMulti({ locale }: Props) {
         body: JSON.stringify({
           game: "typing",
           data: {
-            nickname: finalNickname, 
-            wpm: result.cpm,
-            accuracy: result.accuracy, 
-            device_type: isMobile ? "mobile" : "pc",
-            grade: gradeInfo.grade,
-            percentile: percentile,
-            country: selectedCountry,
+        nickname: finalNickname, 
+        wpm: result.cpm,
+        accuracy: result.accuracy, 
+        device_type: isMobile ? "mobile" : "pc",
+        grade: gradeInfo.grade,
+        percentile: percentile,
+        country: selectedCountry,
           },
           userId: finalUserId,
         }),

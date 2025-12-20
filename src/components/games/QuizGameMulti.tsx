@@ -597,23 +597,23 @@ export default function QuizGameMulti({ locale }: Props) {
         body: JSON.stringify({
           game: "quiz",
           data: {
-            nickname: finalNickname,
-            score,
-            correct_count: correctCount,
-            time_seconds: 150 - timeLeft,
-            country: selectedCountry,
+      nickname: finalNickname,
+      score,
+      correct_count: correctCount,
+      time_seconds: 150 - timeLeft,
+      country: selectedCountry,
           },
           userId: finalUserId,
         }),
-      });
+    });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error);
       
       // 👤 회원 점수 업데이트는 API에서 자동 처리됨
-      
-      setHasSubmitted(true);
-      setShowNicknameModal(false);
-      fetchLeaderboard();
+    
+    setHasSubmitted(true);
+    setShowNicknameModal(false);
+    fetchLeaderboard();
     } catch (err) { console.error("Submit failed:", err); }
   };
 
@@ -665,8 +665,8 @@ export default function QuizGameMulti({ locale }: Props) {
                 ) : (
                   <div className="space-y-2">
                     {leaderboard.map((entry, idx) => {
-                      const entryGrade = getGradeByScore(entry.score);
-                      return (
+                        const entryGrade = getGradeByScore(entry.score);
+                        return (
                         <div key={entry.id} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${idx === 0 ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30" : idx === 1 ? "bg-gradient-to-r from-gray-400/20 to-gray-300/20 border border-gray-400/30" : idx === 2 ? "bg-gradient-to-r from-orange-600/20 to-orange-500/20 border border-orange-500/30" : "bg-dark-800/50"}`}>
                           {/* 순위 */}
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${idx === 0 ? "bg-yellow-500 text-black" : idx === 1 ? "bg-gray-300 text-black" : idx === 2 ? "bg-orange-500 text-black" : "bg-dark-700 text-dark-300"}`}>{idx + 1}</div>

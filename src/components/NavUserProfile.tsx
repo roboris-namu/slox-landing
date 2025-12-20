@@ -107,7 +107,7 @@ export default function NavUserProfile({ locale = "ko" }: NavUserProfileProps) {
         }
         
         console.log("📊 [NavUserProfile] userId 확인:", userId);
-        
+
         // 프로필 정보 가져오기 (API 프록시)
         console.log("🔄 [NavUserProfile] 프로필 API 호출...");
         const profileRes = await fetch(`/api/profile?userId=${userId}`);

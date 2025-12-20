@@ -485,35 +485,35 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
       const results = gameConfigs.map((config) => {
         const apiData = apiResults.find((r: { game: string }) => r.game === config.game);
         const entries = apiData?.entries || [];
-        
-        return {
-          game: config.game,
-          gameName: config.gameName,
-          emoji: config.emoji,
-          href: config.href,
-          unit: config.unit,
-          color: config.color,
-          bgColor: config.bgColor,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+          return {
+            game: config.game,
+            gameName: config.gameName,
+            emoji: config.emoji,
+            href: config.href,
+            unit: config.unit,
+            color: config.color,
+            bgColor: config.bgColor,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
           entries: entries.map((entry: any) => {
             const scoreField = apiData?.scoreField || config.scoreField;
             const score = parseFloat(entry[scoreField]) || 0;
-            // 스도쿠는 시간 기준으로 등급 재계산
-            const grade = config.game === "sudoku" 
-              ? getSudokuGrade(score) 
-              : (entry.grade as string || "");
-            return {
-              nickname: entry.nickname as string,
-              score,
-              grade,
-              percentile: entry.percentile as number || 0,
-              device_type: entry.device_type as string || "",
-              country: entry.country as string || "",
-              user_id: entry.user_id as string || null, // 👤 회원 ID
+              // 스도쿠는 시간 기준으로 등급 재계산
+              const grade = config.game === "sudoku" 
+                ? getSudokuGrade(score) 
+                : (entry.grade as string || "");
+              return {
+                nickname: entry.nickname as string,
+                score,
+                grade,
+                percentile: entry.percentile as number || 0,
+                device_type: entry.device_type as string || "",
+                country: entry.country as string || "",
+                user_id: entry.user_id as string || null, // 👤 회원 ID
               overall_rank: entry.overall_rank as number || null, // 🏆 종합순위
-            };
-          }),
-        };
+              };
+            }),
+          };
       });
 
       setLeaderboards(results);
