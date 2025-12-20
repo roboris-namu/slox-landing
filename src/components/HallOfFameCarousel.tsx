@@ -19,6 +19,7 @@ const translations: Record<string, {
   winnerLikely: string;
   loading: string;
   overallRank: string; // 종합순위
+  member: string; // 회원
   games: Record<string, { name: string; unit: string }>;
 }> = {
   ko: {
@@ -36,6 +37,7 @@ const translations: Record<string, {
     winnerLikely: "💎 당첨 유력!",
     loading: "랭킹 불러오는 중...",
     overallRank: "종합",
+    member: "회원",
     games: {
       reaction: { name: "반응속도", unit: "ms" },
       quiz: { name: "상식퀴즈", unit: "점" },
@@ -64,6 +66,7 @@ const translations: Record<string, {
     winnerLikely: "💎 Likely Winner!",
     loading: "Loading rankings...",
     overallRank: "Overall",
+    member: "Member",
     games: {
       reaction: { name: "Reaction", unit: "ms" },
       quiz: { name: "Trivia", unit: "pts" },
@@ -92,6 +95,7 @@ const translations: Record<string, {
     winnerLikely: "💎 当選有力！",
     loading: "ランキング読み込み中...",
     overallRank: "総合",
+    member: "会員",
     games: {
       reaction: { name: "反応速度", unit: "ms" },
       quiz: { name: "クイズ", unit: "点" },
@@ -120,6 +124,7 @@ const translations: Record<string, {
     winnerLikely: "💎 有望获奖！",
     loading: "加载排名中...",
     overallRank: "综合",
+    member: "会员",
     games: {
       reaction: { name: "反应速度", unit: "ms" },
       quiz: { name: "问答", unit: "分" },
@@ -148,6 +153,7 @@ const translations: Record<string, {
     winnerLikely: "💎 Favorit!",
     loading: "Lade Rangliste...",
     overallRank: "Gesamt",
+    member: "Mitglied",
     games: {
       reaction: { name: "Reaktion", unit: "ms" },
       quiz: { name: "Quiz", unit: "Pkt" },
@@ -176,6 +182,7 @@ const translations: Record<string, {
     winnerLikely: "💎 Favori!",
     loading: "Chargement...",
     overallRank: "Global",
+    member: "Membre",
     games: {
       reaction: { name: "Réaction", unit: "ms" },
       quiz: { name: "Quiz", unit: "pts" },
@@ -204,6 +211,7 @@ const translations: Record<string, {
     winnerLikely: "💎 ¡Favorito!",
     loading: "Cargando...",
     overallRank: "General",
+    member: "Miembro",
     games: {
       reaction: { name: "Reacción", unit: "ms" },
       quiz: { name: "Trivia", unit: "pts" },
@@ -232,6 +240,7 @@ const translations: Record<string, {
     winnerLikely: "💎 Favorito!",
     loading: "Carregando...",
     overallRank: "Geral",
+    member: "Membro",
     games: {
       reaction: { name: "Reação", unit: "ms" },
       quiz: { name: "Quiz", unit: "pts" },
@@ -831,26 +840,29 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
 
                         {/* 닉네임 & 등급 */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 flex-wrap">
-                            <p className="text-white font-bold truncate max-w-[80px]">
+                          <div className="flex items-center gap-1">
+                            <p className="text-white font-bold truncate max-w-[70px]">
                               {entry.nickname}
                             </p>
                             {/* 👤 회원 마크 */}
                             {entry.user_id && (
-                              <span className="text-[10px] px-1 py-0.5 rounded bg-accent-500/20 text-accent-400 border border-accent-500/30 font-medium flex-shrink-0">
-                                ✓
-                              </span>
-                            )}
-                            {/* 🏆 종합순위 배너 */}
-                            {entry.user_id && entry.overall_rank && entry.overall_rank <= 10 && (
-                              <span className="text-[9px] px-1.5 py-0.5 rounded bg-gradient-to-r from-yellow-500/30 to-orange-500/30 text-yellow-300 border border-yellow-500/40 font-bold flex-shrink-0 whitespace-nowrap">
-                                🏆 {t.overallRank} #{entry.overall_rank}
+                              <span className="text-[9px] px-1 py-0.5 rounded bg-accent-500/20 text-accent-400 border border-accent-500/30 font-medium flex-shrink-0">
+                                {t.member}
                               </span>
                             )}
                           </div>
-                          <p className={`text-xs font-medium ${gradeColors[entry.grade] || "text-dark-400"}`}>
-                            {gradeTranslations[locale]?.[entry.grade] || entry.grade || "-"}
-                          </p>
+                          {/* 🏆 종합순위 배너 (별도 줄) */}
+                          {entry.user_id && entry.overall_rank && entry.overall_rank <= 10 ? (
+                            <div className="flex items-center gap-1 mt-0.5">
+                              <span className="text-[9px] px-1.5 py-0.5 rounded bg-gradient-to-r from-yellow-500/30 to-orange-500/30 text-yellow-300 border border-yellow-500/40 font-bold whitespace-nowrap">
+                                🏆 {t.overallRank} #{entry.overall_rank}
+                              </span>
+                            </div>
+                          ) : (
+                            <p className={`text-xs font-medium ${gradeColors[entry.grade] || "text-dark-400"}`}>
+                              {gradeTranslations[locale]?.[entry.grade] || entry.grade || "-"}
+                            </p>
+                          )}
                         </div>
 
                         {/* 점수 */}
