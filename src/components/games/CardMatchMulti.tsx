@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
+import AdBanner from "@/components/AdBanner";
 import { Locale } from "@/locales";
 
 // 다국어 타입은 @/locales에서 import
@@ -1218,6 +1219,9 @@ export default function CardMatchMulti({ locale }: Props) {
               </div>
             )}
           </div>
+
+          {/* 📊 광고 배너 */}
+          <AdBanner className="mb-8" />
 
           {/* 명예의전당 */}
           <div className="glass-card p-6 rounded-2xl mb-8">

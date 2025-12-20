@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
+import AdBanner from "@/components/AdBanner";
 import { Locale } from "@/locales";
 
 // 다국어 타입은 @/locales에서 import
@@ -1155,6 +1156,9 @@ export default function IQTestMulti({ locale }: Props) {
               <div style={{ color: "#6b7280", fontSize: "11px", marginTop: "6px" }}>{t.correct} {correctCount}/{QUESTIONS_PER_GAME} • {totalTime}{t.seconds}</div>
             </div>
           </div>
+
+          {/* 📊 광고 배너 */}
+          <AdBanner className="mb-8" />
 
           {/* 명예의전당 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">

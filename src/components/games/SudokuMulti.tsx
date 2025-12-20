@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
+import AdBanner from "@/components/AdBanner";
 import { Locale } from "@/locales";
 
 // 다국어 타입은 @/locales에서 import
@@ -819,8 +820,13 @@ export default function SudokuMulti({ locale }: Props) {
                 {difficulty === "hard" ? t.rankingChallenge : t.practiceStart}
               </button>
 
+              {/* 📊 광고 배너 */}
+              <div className="mt-8">
+                <AdBanner />
+              </div>
+
               {/* 명예의전당 */}
-              <div className="mt-12 bg-dark-900/50 rounded-2xl p-6 border border-dark-800">
+              <div className="mt-8 bg-dark-900/50 rounded-2xl p-6 border border-dark-800">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-bold text-white flex items-center gap-2">
                     <span>🏆</span> {t.hallOfFame}

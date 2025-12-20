@@ -5,6 +5,7 @@ import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
+import AdBanner from "@/components/AdBanner";
 
 interface AimLeaderboardEntry {
   id: string;
@@ -1389,6 +1390,9 @@ export default function AimTest({ locale }: AimTestProps) {
               )}
             </div>
           )}
+
+          {/* 📊 광고 배너 */}
+          <AdBanner className="mb-8" />
 
           {/* 🏆 명예의전당 */}
           <div className="glass-card p-6 rounded-2xl mb-8">

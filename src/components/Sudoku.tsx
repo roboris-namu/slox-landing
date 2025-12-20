@@ -5,6 +5,7 @@ import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
+import AdBanner from "@/components/AdBanner";
 
 type Board = (number | null)[][];
 type GameState = "ready" | "playing" | "complete" | "gameover";
@@ -780,6 +781,9 @@ export default function Sudoku() {
               <span style={{ color: "#6366f1" }}>slox.co.kr/sudoku</span>
             </div>
           </div>
+
+          {/* 📊 광고 배너 */}
+          <AdBanner className="mb-8" />
 
           {/* 명예의전당 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">

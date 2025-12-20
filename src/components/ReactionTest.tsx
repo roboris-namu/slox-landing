@@ -6,6 +6,7 @@ import html2canvas from "html2canvas";
 import confetti from "canvas-confetti";
 import { supabase, LeaderboardEntry } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
+import AdBanner from "@/components/AdBanner";
 
 type GameState = "waiting" | "ready" | "click" | "result" | "tooEarly";
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
@@ -2005,6 +2006,9 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
               )}
             </div>
           )}
+
+          {/* 📊 광고 배너 */}
+          <AdBanner className="mb-8" />
 
           {/* 🏆 명예의전당 */}
           <div className="glass-card p-6 rounded-2xl mb-8">

@@ -5,6 +5,7 @@ import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
+import AdBanner from "@/components/AdBanner";
 
 // 언어 선택기 옵션
 const languageOptions = [
@@ -764,6 +765,9 @@ export default function QuizGame() {
               <span style={{ color: "#818cf8" }}>slox.co.kr/quiz</span>
             </div>
           </div>
+
+          {/* 📊 광고 배너 */}
+          <AdBanner className="mb-8" />
 
           {/* 명예의전당 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
