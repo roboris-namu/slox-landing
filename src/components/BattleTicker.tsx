@@ -88,7 +88,7 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer || battles.length === 0) return;
 
-    const speed = 1; // 픽셀/프레임
+    const speed = 0.5; // 픽셀/프레임 (명예의전당과 동일)
 
     const animate = () => {
       if (!isPaused && !isDragging && scrollContainer) {
