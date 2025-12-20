@@ -277,7 +277,7 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
         </div>
       </div>
       {/* 티커 높이 + 여백 확보 */}
-      <div className="h-16" />
+      <div className="h-20" />
     </>
   );
 }
