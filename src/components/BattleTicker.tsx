@@ -119,7 +119,7 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
     return null;
   }
 
-  // 티커 아이템 생성 (구분자 포함)
+  // 티커 아이템 생성 (구분자: 공백)
   const tickerItems = battles.map((battle, index) => {
     const isLast = index === battles.length - 1;
     
@@ -131,9 +131,10 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
           <span className="text-dark-400">vs</span>
           <span className="text-white font-medium">{battle.loserName}</span>
           <span className="text-yellow-400 font-bold">🤝 {t.draw}</span>
-          {/* 구분자 */}
-          <span className="mx-4 text-dark-500">│</span>
-          {isLast && <span className="mx-6 text-dark-600">•••</span>}
+          {/* 아이템 간 구분: 공백 */}
+          <span className="inline-block w-10" />
+          {/* 한 바퀴 끝: 큰 공백 */}
+          {isLast && <span className="inline-block w-32" />}
         </span>
       );
     }
@@ -150,9 +151,10 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
             (-{battle.pointsTransferred}{t.points})
           </span>
         )}
-        {/* 구분자 */}
-        <span className="mx-4 text-dark-500">│</span>
-        {isLast && <span className="mx-6 text-dark-600">• • •</span>}
+        {/* 아이템 간 구분: 공백 */}
+        <span className="inline-block w-10" />
+        {/* 한 바퀴 끝: 큰 공백 */}
+        {isLast && <span className="inline-block w-32" />}
       </span>
     );
   });
