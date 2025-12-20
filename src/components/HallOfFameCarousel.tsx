@@ -840,20 +840,20 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
 
                         {/* 닉네임 & 등급 */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1 flex-wrap">
+                          <div className="flex items-center gap-1.5 flex-wrap">
                             <p className="text-white font-bold truncate max-w-[70px]">
                               {entry.nickname}
                             </p>
                             {/* 👤 회원 배지 */}
                             {entry.user_id && (
-                              <span className="text-[8px] px-1 py-0.5 rounded bg-accent-500/20 text-accent-300 border border-accent-500/30 font-medium flex-shrink-0">
+                              <span className="text-[10px] px-1.5 py-1 rounded bg-accent-500/20 text-accent-300 border border-accent-500/30 font-semibold flex-shrink-0">
                                 {t.member}
                               </span>
                             )}
                             {/* 🏆 종합순위 배지 */}
                             {entry.user_id && entry.overall_rank && entry.overall_rank <= 10 && (
-                              <span className="text-[8px] px-1 py-0.5 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 font-medium flex-shrink-0">
-                                {t.overallRank}#{entry.overall_rank}
+                              <span className="text-[10px] px-1.5 py-1 rounded bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 font-semibold flex-shrink-0">
+                                🏆 {t.overallRank}#{entry.overall_rank}
                               </span>
                             )}
                           </div>
