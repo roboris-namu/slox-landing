@@ -32,61 +32,61 @@ const GAME_NAMES: Record<string, Record<string, string>> = {
   fr: { reaction: "Réaction", cps: "CPS", memory: "Mémoire", color: "Couleur", aim: "Visée", cardmatch: "Cartes", quiz: "Quiz", iq: "IQ", sudoku: "Sudoku", typing: "Frappe" },
 };
 
-// 번역 (자극적인 표현!)
+// 번역 (간결한 표현!)
 const translations = {
   ko: {
     title: "실시간 배틀",
-    win: "승리!",
-    from: "에서",
+    win: "(승)",
+    lose: "(패)",
     steal: "점 강탈!",
     draw: "무승부",
   },
   en: {
     title: "Live Battles",
-    win: "wins!",
-    from: "from",
+    win: "(W)",
+    lose: "(L)",
     steal: "pts stolen!",
     draw: "Draw",
   },
   ja: {
     title: "リアルタイムバトル",
-    win: "勝利!",
-    from: "から",
+    win: "(勝)",
+    lose: "(敗)",
     steal: "点強奪!",
     draw: "引き分け",
   },
   zh: {
     title: "实时对战",
-    win: "胜利!",
-    from: "从",
+    win: "(胜)",
+    lose: "(败)",
     steal: "分抢夺!",
     draw: "平局",
   },
   es: {
     title: "Batallas en vivo",
-    win: "¡gana!",
-    from: "de",
+    win: "(G)",
+    lose: "(P)",
     steal: "pts robados!",
     draw: "Empate",
   },
   pt: {
     title: "Batalhas ao vivo",
-    win: "vence!",
-    from: "de",
+    win: "(V)",
+    lose: "(D)",
     steal: "pts roubados!",
     draw: "Empate",
   },
   de: {
     title: "Live-Kämpfe",
-    win: "gewinnt!",
-    from: "von",
+    win: "(S)",
+    lose: "(N)",
     steal: "Pkt gestohlen!",
     draw: "Unentschieden",
   },
   fr: {
     title: "Batailles en direct",
-    win: "gagne!",
-    from: "de",
+    win: "(V)",
+    lose: "(D)",
     steal: "pts volés!",
     draw: "Égalité",
   },
@@ -168,21 +168,22 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
       <span key={battle.id} className="inline-flex items-center gap-1.5">
         {/* 게임 이모지 + 이름 (구분감 있는 뱃지) */}
         <span className="text-cyan-400 bg-cyan-500/10 px-1.5 py-0.5 rounded text-xs">{battle.gameEmoji} {gameName}</span>
-        <span className="inline-block w-1" />
-        {/* 승자 (프로필 + 이름) */}
+        <span className="inline-block w-2" />
+        {/* 승자 (프로필 + 이름 + 승) */}
         <ProfileImg src={battle.winnerImage} name={battle.winnerName} color="bg-green-600" />
         <span className="text-green-400 font-bold">{battle.winnerName}</span>
-        <span className="text-white">{t.win}</span>
-        {/* 점수 강탈 표시: 패자에서 N점 강탈! */}
+        <span className="text-green-300 text-xs">{t.win}</span>
+        {/* 화살표 */}
+        <span className="text-dark-500">▸</span>
+        {/* 패자 (프로필 + 이름 + 패) */}
+        <ProfileImg src={battle.loserImage} name={battle.loserName} color="bg-red-600" />
+        <span className="text-red-400">{battle.loserName}</span>
+        <span className="text-red-300 text-xs">{t.lose}</span>
+        {/* 점수 강탈 표시 */}
         {battle.pointsTransferred > 0 && (
-          <>
-            <ProfileImg src={battle.loserImage} name={battle.loserName} color="bg-red-600" />
-            <span className="text-red-400">{battle.loserName}</span>
-            <span className="text-dark-400">{t.from}</span>
-            <span className="text-yellow-400 font-bold animate-pulse">
-              🔥 {battle.pointsTransferred}{t.steal}
-            </span>
-          </>
+          <span className="text-yellow-400 font-bold animate-pulse">
+            🔥 {battle.pointsTransferred}{t.steal}
+          </span>
         )}
         {/* 아이템 간 구분: 공백 */}
         <span className="inline-block w-12" />
