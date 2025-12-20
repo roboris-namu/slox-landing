@@ -65,21 +65,23 @@ export async function GET(request: NextRequest) {
       challenge.status = "expired";
     }
 
-    // 🔄 최신 닉네임 동기화 (프로필에서 가져오기)
+    // 🔄 최신 닉네임 + 아바타 동기화 (프로필에서 가져오기)
     const userIds = [challenge.challenger_id, challenge.opponent_id].filter(Boolean);
     if (userIds.length > 0) {
       const { data: profiles } = await supabase
         .from("profiles")
-        .select("id, nickname")
+        .select("id, nickname, avatar_url")
         .in("id", userIds);
       
       if (profiles) {
         for (const profile of profiles) {
           if (profile.id === challenge.challenger_id) {
             challenge.challenger_nickname = profile.nickname;
+            challenge.challenger_avatar = profile.avatar_url;
           }
           if (profile.id === challenge.opponent_id) {
             challenge.opponent_nickname = profile.nickname;
+            challenge.opponent_avatar = profile.avatar_url;
           }
         }
       }

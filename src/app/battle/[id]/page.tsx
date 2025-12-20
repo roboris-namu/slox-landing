@@ -20,9 +20,11 @@ interface Challenge {
   id: string;
   challenger_id: string;
   challenger_nickname: string;
+  challenger_avatar?: string | null;
   challenger_score: number;
   opponent_id: string | null;
   opponent_nickname: string | null;
+  opponent_avatar?: string | null;
   opponent_score: number | null;
   game: string;
   status: "pending" | "accepted" | "completed" | "forfeited" | "expired";
@@ -448,13 +450,13 @@ export default function BattlePage() {
           <div className="flex gap-4">
             <button
               onClick={() => router.push("/")}
-              className="flex-1 bg-dark-700 hover:bg-dark-600 text-white py-4 rounded-xl font-bold transition-colors"
+              className="flex-1 bg-dark-600 hover:bg-dark-500 border border-dark-500 text-white py-4 rounded-xl font-bold transition-colors"
             >
               거절하기
             </button>
             <button
               onClick={handleAccept}
-              className="flex-1 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white py-4 rounded-xl font-bold transition-all"
+              className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-green-500/20"
             >
               ✅ 수락하고 시작!
             </button>
@@ -593,8 +595,18 @@ export default function BattlePage() {
               {/* 도전자 */}
               <div className={`p-4 rounded-xl ${challenge.winner_id === challenge.challenger_id ? "bg-green-900/30 border border-green-500/30" : "bg-dark-700/50"}`}>
                 <p className="text-dark-400 text-sm mb-1">도전자</p>
-                <p className="text-white font-bold truncate">{challenge.challenger_nickname}</p>
-                <p className="text-2xl font-bold text-primary-400 mt-2">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  {/* 프로필 이미지 */}
+                  <span className="w-8 h-8 rounded-full bg-dark-600 overflow-hidden flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    {challenge.challenger_avatar ? (
+                      <img src={challenge.challenger_avatar} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      challenge.challenger_nickname?.charAt(0).toUpperCase()
+                    )}
+                  </span>
+                  <p className="text-white font-bold truncate">{challenge.challenger_nickname}</p>
+                </div>
+                <p className="text-2xl font-bold text-primary-400">
                   {formatScore(challenge.game, challenge.challenger_score)}
                 </p>
                 {challenge.winner_id === challenge.challenger_id && (
@@ -608,8 +620,18 @@ export default function BattlePage() {
               {/* 상대방 */}
               <div className={`p-4 rounded-xl ${challenge.winner_id === challenge.opponent_id ? "bg-green-900/30 border border-green-500/30" : "bg-dark-700/50"}`}>
                 <p className="text-dark-400 text-sm mb-1">상대방</p>
-                <p className="text-white font-bold truncate">{challenge.opponent_nickname}</p>
-                <p className="text-2xl font-bold text-primary-400 mt-2">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  {/* 프로필 이미지 */}
+                  <span className="w-8 h-8 rounded-full bg-dark-600 overflow-hidden flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    {challenge.opponent_avatar ? (
+                      <img src={challenge.opponent_avatar} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      challenge.opponent_nickname?.charAt(0).toUpperCase()
+                    )}
+                  </span>
+                  <p className="text-white font-bold truncate">{challenge.opponent_nickname}</p>
+                </div>
+                <p className="text-2xl font-bold text-primary-400">
                   {challenge.opponent_score !== null 
                     ? formatScore(challenge.game, challenge.opponent_score)
                     : "-"
@@ -636,13 +658,13 @@ export default function BattlePage() {
           <div className="flex gap-4">
             <Link 
               href="/"
-              className="flex-1 bg-dark-700 hover:bg-dark-600 text-white py-4 rounded-xl font-bold transition-colors text-center"
+              className="flex-1 bg-dark-600 hover:bg-dark-500 border border-dark-500 text-white py-4 rounded-xl font-bold transition-colors text-center"
             >
               메인으로
             </Link>
             <Link 
               href={`/${challenge.game}`}
-              className="flex-1 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white py-4 rounded-xl font-bold transition-all text-center"
+              className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-4 rounded-xl font-bold transition-all text-center shadow-lg shadow-orange-500/20"
             >
               🔄 복수전 준비
             </Link>
