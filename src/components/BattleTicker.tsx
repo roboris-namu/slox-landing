@@ -44,6 +44,20 @@ const translations = {
   fr: { title: "Batailles en direct", win: "(V)", lose: "(D)", steal: "pts volés!", draw: "Égalité" },
 };
 
+// 게임별 파스텔톤 배지 색상
+const GAME_BADGE_COLORS: Record<string, { text: string; bg: string }> = {
+  reaction: { text: "text-rose-300", bg: "bg-rose-500/15" },
+  cps: { text: "text-amber-300", bg: "bg-amber-500/15" },
+  memory: { text: "text-violet-300", bg: "bg-violet-500/15" },
+  color: { text: "text-emerald-300", bg: "bg-emerald-500/15" },
+  aim: { text: "text-sky-300", bg: "bg-sky-500/15" },
+  cardmatch: { text: "text-pink-300", bg: "bg-pink-500/15" },
+  quiz: { text: "text-indigo-300", bg: "bg-indigo-500/15" },
+  iq: { text: "text-purple-300", bg: "bg-purple-500/15" },
+  sudoku: { text: "text-teal-300", bg: "bg-teal-500/15" },
+  typing: { text: "text-orange-300", bg: "bg-orange-500/15" },
+};
+
 export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
   const [battles, setBattles] = useState<BattleRecord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -198,11 +212,12 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
   // 티커 아이템 생성
   const renderBattleItem = (battle: BattleRecord, index: number) => {
     const gameName = gameNames[battle.game] || battle.game;
+    const badgeColor = GAME_BADGE_COLORS[battle.game] || { text: "text-cyan-300", bg: "bg-cyan-500/15" };
 
     if (battle.isDraw) {
       return (
         <span key={`${battle.id}-${index}`} className="inline-flex items-center gap-1.5 mr-12">
-          <span className="text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded text-xs font-medium">{battle.gameEmoji} {gameName}</span>
+          <span className={`${badgeColor.text} ${badgeColor.bg} px-2 py-0.5 rounded text-xs font-medium`}>{battle.gameEmoji} {gameName}</span>
           <ProfileImg src={battle.winnerImage} name={battle.winnerName} color="bg-dark-600" />
           <span className="text-white font-medium">{battle.winnerName}</span>
           <span className="text-dark-400">vs</span>
@@ -215,7 +230,7 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
 
     return (
       <span key={`${battle.id}-${index}`} className="inline-flex items-center gap-1.5 mr-12">
-        <span className="text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded text-xs font-medium">{battle.gameEmoji} {gameName}</span>
+        <span className={`${badgeColor.text} ${badgeColor.bg} px-2 py-0.5 rounded text-xs font-medium`}>{battle.gameEmoji} {gameName}</span>
         <ProfileImg src={battle.winnerImage} name={battle.winnerName} color="bg-green-600" />
         <span className="text-green-400 font-bold">{battle.winnerName}</span>
         <span className="text-green-300 text-xs">{t.win}</span>
@@ -270,8 +285,8 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
                 className="whitespace-nowrap text-sm select-none"
                 style={{ willChange: "transform" }}
               >
-                {/* 초기 여백 - 화면 오른쪽에서 시작하도록 */}
-                <span className="inline-block w-[100vw]" />
+                {/* 초기 여백 - 중앙에서 시작하도록 */}
+                <span className="inline-block w-[50vw]" />
                 {duplicatedBattles.map((battle, index) => renderBattleItem(battle, index))}
               </div>
             </div>
