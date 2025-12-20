@@ -157,7 +157,6 @@ export default function LoginPagePT() {
   };
 
   const handleGoogleLogin = async () => { await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: `${window.location.origin}/${locale}/login` } }); };
-  const handleKakaoLogin = async () => { await supabase.auth.signInWithOAuth({ provider: "kakao", options: { redirectTo: `${window.location.origin}/${locale}/login` } }); };
   const handleLogout = async () => { await supabase.auth.signOut(); window.location.reload(); };
 
   const handleSaveNickname = async () => {

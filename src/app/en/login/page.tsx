@@ -209,14 +209,6 @@ export default function LoginPageEN() {
     });
   };
 
-  // Kakao 로그인
-  const handleKakaoLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "kakao",
-      options: { redirectTo: `${window.location.origin}/en/login` },
-    });
-  };
-
   // 로그아웃
   const handleLogout = async () => {
     await supabase.auth.signOut();
