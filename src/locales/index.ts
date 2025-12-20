@@ -1199,6 +1199,7 @@ export const liveRankingTranslations: Record<Locale, {
   firstPlace: string;
   champion: string;
   prizeInfo: string;
+  battleInfo: string;
   prizeWinner: string;
   attendance: string;
   days: string;
@@ -1221,6 +1222,7 @@ export const liveRankingTranslations: Record<Locale, {
     firstPlace: '1등',
     champion: 'CHAMPION',
     prizeInfo: '매달 종합 1위에게 문화상품권 5,000원 메일 발송!',
+    battleInfo: '친구와 배틀! 이기면 상대 점수 5% 강탈!',
     prizeWinner: '상품권 유력',
     attendance: '출석',
     days: '일',
@@ -1243,6 +1245,7 @@ export const liveRankingTranslations: Record<Locale, {
     firstPlace: '#1',
     champion: 'CHAMPION',
     prizeInfo: '$5 gift card for monthly #1!',
+    battleInfo: 'Battle friends! Winner steals 5% score!',
     prizeWinner: 'Prize Likely',
     attendance: 'Attendance',
     days: 'days',
@@ -1265,6 +1268,7 @@ export const liveRankingTranslations: Record<Locale, {
     firstPlace: '1位',
     champion: 'チャンピオン',
     prizeInfo: '毎月1位に5,000円ギフト券プレゼント!',
+    battleInfo: '友達とバトル!勝てば相手の5%を獲得!',
     prizeWinner: '賞品有力',
     attendance: '出席',
     days: '日',
@@ -1287,6 +1291,7 @@ export const liveRankingTranslations: Record<Locale, {
     firstPlace: '第1名',
     champion: '冠军',
     prizeInfo: '每月第一名获赠5美元礼品卡!',
+    battleInfo: '和朋友对战!赢家抢夺5%积分!',
     prizeWinner: '奖品有力',
     attendance: '出勤',
     days: '天',
@@ -1309,6 +1314,7 @@ export const liveRankingTranslations: Record<Locale, {
     firstPlace: '#1',
     champion: 'CHAMPION',
     prizeInfo: '5€ Gutschein für monatlichen #1!',
+    battleInfo: 'Kämpfe mit Freunden! Gewinner stiehlt 5%!',
     prizeWinner: 'Preis möglich',
     attendance: 'Anwesenheit',
     days: 'Tage',
@@ -1331,6 +1337,7 @@ export const liveRankingTranslations: Record<Locale, {
     firstPlace: '#1',
     champion: 'CHAMPION',
     prizeInfo: 'Carte cadeau de 5€ pour le #1 mensuel!',
+    battleInfo: 'Défiez vos amis! Le gagnant vole 5%!',
     prizeWinner: 'Prix probable',
     attendance: 'Présence',
     days: 'jours',
@@ -1353,6 +1360,7 @@ export const liveRankingTranslations: Record<Locale, {
     firstPlace: '#1',
     champion: 'CAMPEÓN',
     prizeInfo: '¡Tarjeta regalo de 5€ para el #1 mensual!',
+    battleInfo: '¡Batalla con amigos! ¡El ganador roba 5%!',
     prizeWinner: 'Premio probable',
     attendance: 'Asistencia',
     days: 'días',
@@ -1375,6 +1383,7 @@ export const liveRankingTranslations: Record<Locale, {
     firstPlace: '#1',
     champion: 'CAMPEÃO',
     prizeInfo: 'Vale-presente de R$25 para o #1 mensal!',
+    battleInfo: 'Batalhe com amigos! Vencedor rouba 5%!',
     prizeWinner: 'Prêmio provável',
     attendance: 'Presença',
     days: 'dias',

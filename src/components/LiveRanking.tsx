@@ -253,9 +253,15 @@ export default function LiveRanking({ locale = "ko" }: LiveRankingProps) {
             </span>
           </div>
           {/* 상품 안내 배너 */}
-          <div className="mt-3 inline-flex flex-col sm:flex-row items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-yellow-500/10 via-amber-500/15 to-yellow-500/10 border border-yellow-500/30 rounded-xl">
-            <span className="text-lg">🎁</span>
-            <span className="text-yellow-400 text-sm font-medium">{t.prizeInfo}</span>
+          <div className="mt-3 inline-flex flex-col items-center gap-2">
+            <div className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-yellow-500/10 via-amber-500/15 to-yellow-500/10 border border-yellow-500/30 rounded-xl">
+              <span className="text-lg">🎁</span>
+              <span className="text-yellow-400 text-sm font-medium">{t.prizeInfo}</span>
+            </div>
+            <div className="inline-flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-red-500/10 via-orange-500/15 to-red-500/10 border border-red-500/30 rounded-xl">
+              <span className="text-lg">🥊</span>
+              <span className="text-orange-400 text-sm font-medium">{t.battleInfo}</span>
+            </div>
           </div>
         </div>
 
