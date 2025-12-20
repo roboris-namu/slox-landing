@@ -501,8 +501,67 @@ export default function BattlePage() {
   // 렌더링: 결과
   if (stage === "result" && challenge) {
     const gameConfig = GAME_CONFIG[challenge.game];
-    const isWinner = battleResult?.winnerId === user?.userId;
+    const isParticipant = user?.userId === challenge.challenger_id || user?.userId === challenge.opponent_id;
+    const isWinner = battleResult?.winnerId === user?.userId || challenge.winner_id === user?.userId;
     const isDraw = battleResult?.isDraw || challenge.is_draw;
+    
+    // 관련 없는 유저가 종료된 배틀에 접속한 경우
+    if (!isParticipant) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950 flex items-center justify-center p-4">
+          <div className="glass-card p-8 rounded-2xl text-center max-w-lg w-full">
+            <div className="text-6xl mb-4">🏁</div>
+            <h1 className="text-2xl font-bold text-white mb-2">종료된 배틀입니다</h1>
+            <p className="text-dark-400 mb-6">
+              이 배틀은 이미 완료되었어요
+            </p>
+            
+            {/* 결과 요약 */}
+            <div className="bg-dark-800/50 rounded-xl p-6 mb-6">
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <span className="text-3xl">{gameConfig?.emoji}</span>
+                <span className="text-lg font-bold text-white">{gameConfig?.name}</span>
+              </div>
+              
+              <div className="grid grid-cols-3 gap-2 items-center text-sm">
+                <div className="text-center">
+                  <p className="text-white font-bold">{challenge.challenger_nickname}</p>
+                  <p className="text-primary-400">{formatScore(challenge.game, challenge.challenger_score)}</p>
+                </div>
+                <div className="text-dark-500">VS</div>
+                <div className="text-center">
+                  <p className="text-white font-bold">{challenge.opponent_nickname || "?"}</p>
+                  <p className="text-primary-400">
+                    {challenge.opponent_score !== null 
+                      ? formatScore(challenge.game, challenge.opponent_score)
+                      : "-"
+                    }
+                  </p>
+                </div>
+              </div>
+              
+              {challenge.winner_id && (
+                <p className="text-green-400 mt-4">
+                  🏆 {challenge.winner_id === challenge.challenger_id 
+                    ? challenge.challenger_nickname 
+                    : challenge.opponent_nickname} 승리!
+                </p>
+              )}
+              {challenge.is_draw && (
+                <p className="text-yellow-400 mt-4">🤝 무승부!</p>
+              )}
+            </div>
+            
+            <Link 
+              href="/"
+              className="inline-block bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white px-8 py-3 rounded-xl font-bold transition-all"
+            >
+              나도 배틀하러 가기! 🥊
+            </Link>
+          </div>
+        </div>
+      );
+    }
     
     return (
       <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950 flex items-center justify-center p-4">
