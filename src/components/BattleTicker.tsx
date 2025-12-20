@@ -233,9 +233,9 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
               transform: translateX(-33.33%);
             }
           }
-          .animate-ticker {
-            animation: ticker 30s linear infinite;
-          }
+        .animate-ticker {
+          animation: ticker 15s linear infinite;
+        }
           .animate-ticker:hover {
             animation-play-state: paused;
           }
