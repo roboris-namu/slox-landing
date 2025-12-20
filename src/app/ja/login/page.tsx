@@ -92,15 +92,16 @@ export default function LoginPageJA() {
   const fetchProfile = useCallback(async (userId: string, userName?: string) => {
     setProfileLoading(true);
     try {
-      const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single();
-      if (error && error.code === "PGRST116") {
+      const response = await fetch(`/api/profile?userId=${userId}`);
+      const data = await response.json();
+      if (data.notFound) {
         setSetupNickname(userName || "");
         setNeedsNicknameSetup(true);
         setProfileLoading(false);
         return;
       }
-      if (data) {
-        setProfile(data);
+      if (data.profile) {
+        setProfile(data.profile);
         setNeedsNicknameSetup(false);
       }
     } finally {
@@ -109,9 +110,11 @@ export default function LoginPageJA() {
   }, []);
 
   const checkTodayAttendance = useCallback(async (userId: string) => {
-    const today = new Date().toISOString().split("T")[0];
-    const { data } = await supabase.from("attendance").select("id").eq("user_id", userId).eq("check_date", today).maybeSingle();
-    setCheckedInToday(!!data);
+    try {
+      const response = await fetch(`/api/attendance?userId=${userId}`);
+      const data = await response.json();
+      setCheckedInToday(data.checkedInToday || false);
+    } catch { setCheckedInToday(false); }
   }, []);
 
   useEffect(() => {
