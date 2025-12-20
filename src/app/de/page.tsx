@@ -19,8 +19,8 @@ export default function GermanHome() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
-      <LiveRanking locale="de" />
       <BattleTicker lang="de" />
+      <LiveRanking locale="de" />
       <MainBanner locale="de" />
       <HallOfFameCarousel locale="de" />
       <FreeToolsSection />

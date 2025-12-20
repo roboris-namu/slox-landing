@@ -23,8 +23,8 @@ export default function JapaneseHome() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
-      <LiveRanking locale="ja" />
       <BattleTicker lang="ja" />
+      <LiveRanking locale="ja" />
       <MainBanner locale="ja" />
       <HallOfFameCarousel locale="ja" />
       <FreeToolsSection />

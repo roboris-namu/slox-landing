@@ -119,22 +119,27 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
     return null;
   }
 
-  // 티커 아이템 생성
-  const tickerItems = battles.map((battle) => {
+  // 티커 아이템 생성 (구분자 포함)
+  const tickerItems = battles.map((battle, index) => {
+    const isLast = index === battles.length - 1;
+    
     if (battle.isDraw) {
       return (
-        <span key={battle.id} className="inline-flex items-center gap-1 mx-4">
+        <span key={battle.id} className="inline-flex items-center gap-1">
           <span>{battle.gameEmoji}</span>
           <span className="text-white font-medium">{battle.winnerName}</span>
           <span className="text-dark-400">vs</span>
           <span className="text-white font-medium">{battle.loserName}</span>
           <span className="text-yellow-400 font-bold">🤝 {t.draw}</span>
+          {/* 구분자 */}
+          <span className="mx-4 text-dark-500">│</span>
+          {isLast && <span className="mx-6 text-dark-600">•••</span>}
         </span>
       );
     }
     
     return (
-      <span key={battle.id} className="inline-flex items-center gap-1 mx-4">
+      <span key={battle.id} className="inline-flex items-center gap-1">
         <span>{battle.gameEmoji}</span>
         <span className="text-green-400 font-medium">{battle.winnerName}</span>
         <span className="text-dark-400">→</span>
@@ -142,14 +147,17 @@ export default function BattleTicker({ lang = "ko" }: BattleTickerProps) {
         <span className="text-white">{t.win}!</span>
         {battle.pointsTransferred > 0 && (
           <span className="text-yellow-400 font-bold">
-            ({battle.pointsTransferred > 0 ? `-${battle.pointsTransferred}` : battle.pointsTransferred}{t.points})
+            (-{battle.pointsTransferred}{t.points})
           </span>
         )}
+        {/* 구분자 */}
+        <span className="mx-4 text-dark-500">│</span>
+        {isLast && <span className="mx-6 text-dark-600">• • •</span>}
       </span>
     );
   });
 
-  // 충분히 많은 아이템으로 무한 스크롤
+  // 충분히 많은 아이템으로 무한 스크롤 (한 바퀴 뒤 쉼표)
   const duplicatedItems = [...tickerItems, ...tickerItems, ...tickerItems];
 
   return (

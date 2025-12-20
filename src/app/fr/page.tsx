@@ -19,8 +19,8 @@ export default function FrenchHome() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
-      <LiveRanking locale="fr" />
       <BattleTicker lang="fr" />
+      <LiveRanking locale="fr" />
       <MainBanner locale="fr" />
       <HallOfFameCarousel locale="fr" />
       <FreeToolsSection />

@@ -19,8 +19,8 @@ export default function ChineseHome() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
-      <LiveRanking locale="zh" />
       <BattleTicker lang="zh" />
+      <LiveRanking locale="zh" />
       <MainBanner locale="zh" />
       <HallOfFameCarousel locale="zh" />
       <FreeToolsSection />

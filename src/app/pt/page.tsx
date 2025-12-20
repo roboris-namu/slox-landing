@@ -19,8 +19,8 @@ export default function PortugueseHome() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
-      <LiveRanking locale="pt" />
       <BattleTicker lang="pt" />
+      <LiveRanking locale="pt" />
       <MainBanner locale="pt" />
       <HallOfFameCarousel locale="pt" />
       <FreeToolsSection />

@@ -19,8 +19,8 @@ export default function SpanishHome() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
-      <LiveRanking locale="es" />
       <BattleTicker lang="es" />
+      <LiveRanking locale="es" />
       <MainBanner locale="es" />
       <HallOfFameCarousel locale="es" />
       <FreeToolsSection />

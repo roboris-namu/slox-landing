@@ -24,8 +24,8 @@ export default function EnglishHome() {
   return (
     <main className="relative overflow-hidden">
       <Navigation />
-      <LiveRanking locale="en" />
       <BattleTicker lang="en" />
+      <LiveRanking locale="en" />
       <MainBanner locale="en" />
       <HallOfFameCarousel locale="en" />
       <FreeToolsSection />
