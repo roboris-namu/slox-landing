@@ -840,29 +840,21 @@ export default function HallOfFameCarousel({ locale = "ko" }: { locale?: string 
 
                         {/* 닉네임 & 등급 */}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1">
-                            <p className="text-white font-bold truncate max-w-[70px]">
+                          <div className="flex items-center gap-1 flex-wrap">
+                            <p className="text-white font-bold truncate max-w-[80px]">
                               {entry.nickname}
                             </p>
-                            {/* 👤 회원 마크 */}
+                            {/* 👤 회원 + 종합순위 배지 (한 줄로) */}
                             {entry.user_id && (
-                              <span className="text-[9px] px-1 py-0.5 rounded bg-accent-500/20 text-accent-400 border border-accent-500/30 font-medium flex-shrink-0">
-                                {t.member}
+                              <span className="text-[8px] px-1 py-0.5 rounded bg-gradient-to-r from-accent-500/20 to-yellow-500/20 text-accent-300 border border-accent-500/30 font-medium flex-shrink-0 whitespace-nowrap">
+                                {t.member}{entry.overall_rank && entry.overall_rank <= 10 ? ` ${t.overallRank}#${entry.overall_rank}` : ""}
                               </span>
                             )}
                           </div>
-                          {/* 🏆 종합순위 배너 (별도 줄) */}
-                          {entry.user_id && entry.overall_rank && entry.overall_rank <= 10 ? (
-                            <div className="flex items-center gap-1 mt-0.5">
-                              <span className="text-[9px] px-1.5 py-0.5 rounded bg-gradient-to-r from-yellow-500/30 to-orange-500/30 text-yellow-300 border border-yellow-500/40 font-bold whitespace-nowrap">
-                                🏆 {t.overallRank} #{entry.overall_rank}
-                              </span>
-                            </div>
-                          ) : (
-                            <p className={`text-xs font-medium ${gradeColors[entry.grade] || "text-dark-400"}`}>
-                              {gradeTranslations[locale]?.[entry.grade] || entry.grade || "-"}
-                            </p>
-                          )}
+                          {/* 계급 (항상 표시) */}
+                          <p className={`text-xs font-medium ${gradeColors[entry.grade] || "text-dark-400"}`}>
+                            {gradeTranslations[locale]?.[entry.grade] || entry.grade || "-"}
+                          </p>
                         </div>
 
                         {/* 점수 */}
