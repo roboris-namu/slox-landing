@@ -100,7 +100,14 @@ const GAME_SETTINGS = {
   timeLimit: 60,
 };
 
-export default function CardMatchGame() {
+interface CardMatchGameProps {
+  locale?: string;
+  battleMode?: boolean; // 🥊 배틀 모드
+  onBattleComplete?: (score: number) => void; // 🥊 배틀 완료 콜백
+}
+
+export default function CardMatchGame({ locale = "ko", battleMode = false, onBattleComplete }: CardMatchGameProps) {
+  const lang = locale;
   const [state, setState] = useState<GameState>("waiting");
   const [cards, setCards] = useState<Card[]>([]);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
@@ -139,6 +146,12 @@ export default function CardMatchGame() {
   // 👤 로그인 유저 상태
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [currentUserNickname, setCurrentUserNickname] = useState<string | null>(null);
+  
+  // 🥊 배틀 관련 상태
+  const [isCreatingBattle, setIsCreatingBattle] = useState(false);
+  const [battleUrl, setBattleUrl] = useState<string | null>(null);
+  const [showBattleModal, setShowBattleModal] = useState(false);
+  const [battleCompleted, setBattleCompleted] = useState(false);
 
   const totalPairs = (GAME_SETTINGS.cols * GAME_SETTINGS.rows) / 2; // 8쌍
 
@@ -302,8 +315,15 @@ export default function CardMatchGame() {
       if (bestScore === null || finalScore > bestScore) {
         setBestScore(finalScore);
       }
+      
+      // 🥊 배틀 모드: 게임 완료 시 점수 전달 (완료 시간을 점수로)
+      if (battleMode && onBattleComplete && !battleCompleted) {
+        setBattleCompleted(true);
+        // 카드매칭은 남은 시간이 많을수록 좋음 (timer 값 전달)
+        onBattleComplete(timer);
+      }
     }
-  }, [state, matchedPairs, totalPairs, score, timer, mistakes, bestScore]);
+  }, [state, matchedPairs, totalPairs, score, timer, mistakes, bestScore, battleMode, onBattleComplete, battleCompleted]);
 
   // 🔊 오디오 컨텍스트
   const getAudioContext = useCallback(() => {
@@ -460,6 +480,60 @@ export default function CardMatchGame() {
       isMatched: false,
     }));
   }, []);
+
+  // 🥊 도전장 만들기 함수
+  const createBattle = async () => {
+    if (!currentUserId || !nickname) {
+      alert(lang === "ko" ? "로그인이 필요합니다." : "Login required.");
+      return;
+    }
+
+    setIsCreatingBattle(true);
+    try {
+      const response = await fetch("/api/battle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "create",
+          challengerId: currentUserId,
+          challengerNickname: nickname,
+          challengerScore: timer, // 남은 시간으로 경쟁
+          game: "cardmatch",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "도전장 생성 실패");
+      }
+
+      const fullUrl = `https://www.slox.co.kr${data.battleUrl}`;
+      setBattleUrl(fullUrl);
+      setShowBattleModal(true);
+    } catch (error) {
+      console.error("도전장 생성 에러:", error);
+      alert(lang === "ko" ? "도전장 생성에 실패했습니다." : "Failed to create challenge.");
+    } finally {
+      setIsCreatingBattle(false);
+    }
+  };
+
+  // 🥊 도전장 링크 복사
+  const copyBattleUrl = async () => {
+    if (!battleUrl) return;
+    
+    const text = lang === "ko"
+      ? `🥊 ${nickname}의 도전장!\n\n🃏 카드매칭: ${timer}초 남김\n\n이 기록 이길 수 있어? 👉\n${battleUrl}`
+      : `🥊 ${nickname}'s Challenge!\n\n🃏 Card Match: ${timer}s left\n\nCan you beat this? 👉\n${battleUrl}`;
+    
+    try {
+      await navigator.clipboard.writeText(text);
+      alert(lang === "ko" ? "복사되었습니다! 친구에게 공유하세요 🎮" : "Copied! Share with friends 🎮");
+    } catch {
+      prompt(lang === "ko" ? "텍스트를 복사하세요:" : "Copy this text:", text);
+    }
+  };
 
   // 🎮 게임 시작
   const startGame = useCallback(() => {
@@ -1081,6 +1155,20 @@ export default function CardMatchGame() {
                 {!hasSubmittedScore && getFinalScore() > 0 && matchedPairs === totalPairs && (
                   <button onClick={() => setShowNicknameModal(true)} className="w-full max-w-sm mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl">🏆 랭킹 등록!</button>
                 )}
+                
+                {/* 🥊 도전장 만들기 버튼 (회원만, 배틀모드 아닐 때, 완료 시) */}
+                {currentUserId && !battleMode && matchedPairs === totalPairs && (
+                  <button
+                    onClick={createBattle}
+                    disabled={isCreatingBattle}
+                    className="w-full max-w-sm mt-2 py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-medium rounded-xl transition-all disabled:opacity-50"
+                  >
+                    <span className="flex items-center justify-center gap-2">
+                      <span>🥊</span>
+                      {isCreatingBattle ? "생성 중..." : "친구에게 도전장 보내기!"}
+                    </span>
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -1230,6 +1318,21 @@ export default function CardMatchGame() {
                       랭킹 등록하기!
                     </span>
                   </button>
+                  {/* 🥊 도전장 보내기 버튼 (회원만, 배틀모드 아닐 때) */}
+                  {currentUserId && !battleMode && getFinalScore() > 0 && (
+                    <button
+                      onClick={createBattle}
+                      disabled={isCreatingBattle}
+                      className="w-full mt-2 py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all disabled:opacity-50"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        <span>🥊</span>
+                        {isCreatingBattle 
+                          ? (locale === "ko" ? "생성 중..." : "Creating...")
+                          : (locale === "ko" ? "친구에게 도전장 보내기!" : "Send Challenge!")}
+                      </span>
+                    </button>
+                  )}
                   <button onClick={shareResult} className="w-full mt-2 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all border border-dark-600">
                     <span className="flex items-center justify-center gap-2">
                       <span>📤</span>
@@ -1267,6 +1370,39 @@ export default function CardMatchGame() {
                 <div className="flex gap-3">
                   <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 text-white rounded-xl">취소</button>
                   <button onClick={submitScore} disabled={!nickname.trim() || isSubmitting} className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl disabled:opacity-50">{isSubmitting ? "..." : "등록!"}</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 🥊 도전장 링크 모달 */}
+          {showBattleModal && battleUrl && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full animate-scale-in">
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">🥊</div>
+                  <h3 className="text-white text-xl font-bold mb-2">도전장 생성 완료!</h3>
+                  <p className="text-dark-400 text-sm">링크를 친구에게 공유하세요!</p>
+                </div>
+
+                <div className="bg-dark-800 rounded-xl p-4 mb-4">
+                  <p className="text-white text-center font-bold mb-2">🃏 {timer}초 남김</p>
+                  <p className="text-dark-400 text-xs text-center break-all">{battleUrl}</p>
+                </div>
+
+                <div className="space-y-3">
+                  <button
+                    onClick={copyBattleUrl}
+                    className="w-full py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all"
+                  >
+                    📋 링크 복사하기
+                  </button>
+                  <button
+                    onClick={() => setShowBattleModal(false)}
+                    className="w-full py-2 text-dark-400 hover:text-white transition-colors"
+                  >
+                    닫기
+                  </button>
                 </div>
               </div>
             </div>

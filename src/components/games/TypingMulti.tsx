@@ -645,9 +645,11 @@ const getRandomSentence = (locale: Locale): string => {
 
 interface Props {
   locale: Locale;
+  battleMode?: boolean; // 🥊 배틀 모드
+  onBattleComplete?: (score: number) => void; // 🥊 배틀 완료 콜백
 }
 
-export default function TypingMulti({ locale }: Props) {
+export default function TypingMulti({ locale, battleMode = false, onBattleComplete }: Props) {
   const t = translations[locale];
   
   const [sentence, setSentence] = useState<string>("");
@@ -676,9 +678,14 @@ export default function TypingMulti({ locale }: Props) {
   const [isMobile, setIsMobile] = useState<boolean>(false);
   
   // 👤 사용자 인증 상태 (초기 로드용, submitScore에서는 실시간 확인)
-  const [_currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const [_currentUserNickname, setCurrentUserNickname] = useState<string>("");
-  void _currentUserId; void _currentUserNickname; // ESLint 경고 방지
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserNickname, setCurrentUserNickname] = useState<string>("");
+  
+  // 🥊 배틀 관련 상태
+  const [isCreatingBattle, setIsCreatingBattle] = useState(false);
+  const [battleUrl, setBattleUrl] = useState<string | null>(null);
+  const [showBattleModal, setShowBattleModal] = useState(false);
+  const [battleCompleted, setBattleCompleted] = useState(false);
 
   // 👤 사용자 인증 체크 (광고 차단기 우회)
   useEffect(() => {
@@ -893,13 +900,20 @@ export default function TypingMulti({ locale }: Props) {
     }
   };
 
-  // 게임 끝나면 자동 랭킹 등록 팝업
+  // 게임 끝나면 자동 랭킹 등록 팝업 + 배틀 처리
   useEffect(() => {
     if (isFinished && !hasSubmittedScore && result && result.cpm > 0) {
       const timer = setTimeout(() => setShowRankingPrompt(true), 800);
+      
+      // 🥊 배틀 모드: 게임 완료 시 점수 전달 (WPM)
+      if (battleMode && onBattleComplete && !battleCompleted) {
+        setBattleCompleted(true);
+        onBattleComplete(result.wpm);
+      }
+      
       return () => clearTimeout(timer);
     }
-  }, [isFinished, hasSubmittedScore, result]);
+  }, [isFinished, hasSubmittedScore, result, battleMode, onBattleComplete, battleCompleted]);
 
   // 이미지 생성
   const generateImage = async (): Promise<Blob | null> => {
@@ -969,6 +983,62 @@ export default function TypingMulti({ locale }: Props) {
     if (value.length >= sentence.length) {
       setIsFinished(true);
       setResult(calculateResult());
+    }
+  };
+
+  // 🥊 도전장 만들기 함수
+  const createBattle = async () => {
+    if (!currentUserId || !nickname) {
+      alert(locale === "ko" ? "로그인이 필요합니다." : "Login required.");
+      return;
+    }
+
+    if (!result) return;
+
+    setIsCreatingBattle(true);
+    try {
+      const response = await fetch("/api/battle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "create",
+          challengerId: currentUserId,
+          challengerNickname: nickname,
+          challengerScore: result.wpm,
+          game: "typing",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "도전장 생성 실패");
+      }
+
+      const fullUrl = `https://www.slox.co.kr${data.battleUrl}`;
+      setBattleUrl(fullUrl);
+      setShowBattleModal(true);
+    } catch (error) {
+      console.error("도전장 생성 에러:", error);
+      alert(locale === "ko" ? "도전장 생성에 실패했습니다." : "Failed to create challenge.");
+    } finally {
+      setIsCreatingBattle(false);
+    }
+  };
+
+  // 🥊 도전장 링크 복사
+  const copyBattleUrl = async () => {
+    if (!battleUrl || !result) return;
+    
+    const text = locale === "ko"
+      ? `🥊 ${nickname}의 도전장!\n\n⌨️ 타자연습: ${result.wpm} WPM\n\n이 기록 이길 수 있어? 👉\n${battleUrl}`
+      : `🥊 ${nickname}'s Challenge!\n\n⌨️ Typing: ${result.wpm} WPM\n\nCan you beat this? 👉\n${battleUrl}`;
+    
+    try {
+      await navigator.clipboard.writeText(text);
+      alert(locale === "ko" ? "복사되었습니다! 친구에게 공유하세요 🎮" : "Copied! Share with friends 🎮");
+    } catch {
+      prompt(locale === "ko" ? "텍스트를 복사하세요:" : "Copy this text:", text);
     }
   };
 
@@ -1146,6 +1216,22 @@ export default function TypingMulti({ locale }: Props) {
                   {!hasSubmittedScore && result && (
                     <button onClick={() => setShowNicknameModal(true)} className="w-full max-w-sm mx-auto mt-4 px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl">{t.rankRegister}</button>
                   )}
+                  
+                  {/* 🥊 도전장 만들기 버튼 (회원만, 배틀모드 아닐 때) */}
+                  {currentUserId && !battleMode && result && (
+                    <button
+                      onClick={createBattle}
+                      disabled={isCreatingBattle}
+                      className="w-full max-w-sm mx-auto mt-2 px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-medium rounded-xl transition-all disabled:opacity-50"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        <span>🥊</span>
+                        {isCreatingBattle 
+                          ? (locale === "ko" ? "생성 중..." : "Creating...")
+                          : (locale === "ko" ? "친구에게 도전장 보내기!" : "Send Challenge!")}
+                      </span>
+                    </button>
+                  )}
                 </div>
               )
             )}
@@ -1294,6 +1380,21 @@ export default function TypingMulti({ locale }: Props) {
                       {t.registerRanking}
                     </span>
                   </button>
+                  {/* 🥊 도전장 보내기 버튼 (회원만, 배틀모드 아닐 때) */}
+                  {currentUserId && !battleMode && result && result.wpm > 0 && (
+                    <button
+                      onClick={createBattle}
+                      disabled={isCreatingBattle}
+                      className="w-full mt-2 py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all disabled:opacity-50"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        <span>🥊</span>
+                        {isCreatingBattle 
+                          ? (locale === "ko" ? "생성 중..." : "Creating...")
+                          : (locale === "ko" ? "친구에게 도전장 보내기!" : "Send Challenge!")}
+                      </span>
+                    </button>
+                  )}
                   <button onClick={() => setShowRankingPrompt(false)} className="w-full mt-3 py-2 text-dark-500 hover:text-dark-300 text-sm transition-colors">{t.later}</button>
                 </div>
               </div>
@@ -1338,6 +1439,43 @@ export default function TypingMulti({ locale }: Props) {
                 <div className="flex gap-3">
                   <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 text-white rounded-xl">{t.cancel}</button>
                   <button onClick={submitScore} disabled={!nickname.trim() || isSubmitting} className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl disabled:opacity-50">{isSubmitting ? "..." : t.register}</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 🥊 도전장 링크 모달 */}
+          {showBattleModal && battleUrl && result && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full animate-scale-in">
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">🥊</div>
+                  <h3 className="text-white text-xl font-bold mb-2">
+                    {locale === "ko" ? "도전장 생성 완료!" : "Challenge Created!"}
+                  </h3>
+                  <p className="text-dark-400 text-sm">
+                    {locale === "ko" ? "링크를 친구에게 공유하세요!" : "Share this link with your friend!"}
+                  </p>
+                </div>
+
+                <div className="bg-dark-800 rounded-xl p-4 mb-4">
+                  <p className="text-white text-center font-bold mb-2">⌨️ {result.wpm} WPM</p>
+                  <p className="text-dark-400 text-xs text-center break-all">{battleUrl}</p>
+                </div>
+
+                <div className="space-y-3">
+                  <button
+                    onClick={copyBattleUrl}
+                    className="w-full py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all"
+                  >
+                    📋 {locale === "ko" ? "링크 복사하기" : "Copy Link"}
+                  </button>
+                  <button
+                    onClick={() => setShowBattleModal(false)}
+                    className="w-full py-2 text-dark-400 hover:text-white transition-colors"
+                  >
+                    {locale === "ko" ? "닫기" : "Close"}
+                  </button>
                 </div>
               </div>
             </div>

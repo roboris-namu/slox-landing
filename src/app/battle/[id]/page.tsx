@@ -14,6 +14,7 @@ import CardMatchGame from "@/components/CardMatchGame";
 import QuizGame from "@/components/QuizGame";
 import IQTest from "@/components/IQTest";
 import Sudoku from "@/components/Sudoku";
+import TypingMulti from "@/components/games/TypingMulti";
 
 // 타입 정의
 interface Challenge {
@@ -702,7 +703,7 @@ function getGameComponent(game: string) {
     quiz: QuizGame,
     iq: IQTest,
     sudoku: Sudoku,
-    // typing은 별도 처리 필요
+    typing: TypingMulti,
   };
   
   return components[game] || ReactionTest;

@@ -547,9 +547,11 @@ const getCountryFlag = (countryCode: string | null | undefined): string => {
 
 interface CpsTestProps {
   locale: Locale;
+  battleMode?: boolean; // 🥊 배틀 모드
+  onBattleComplete?: (score: number) => void; // 🥊 배틀 완료 콜백
 }
 
-export default function CpsTest({ locale }: CpsTestProps) {
+export default function CpsTest({ locale, battleMode = false, onBattleComplete }: CpsTestProps) {
   const lang = locale;
   const [state, setState] = useState<GameState>("waiting");
   const [clicks, setClicks] = useState(0);
@@ -574,6 +576,12 @@ export default function CpsTest({ locale }: CpsTestProps) {
   // 👤 로그인 유저 상태
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [currentUserNickname, setCurrentUserNickname] = useState<string | null>(null);
+  
+  // 🥊 배틀 관련 상태
+  const [isCreatingBattle, setIsCreatingBattle] = useState(false);
+  const [battleUrl, setBattleUrl] = useState<string | null>(null);
+  const [showBattleModal, setShowBattleModal] = useState(false);
+  const [battleCompleted, setBattleCompleted] = useState(false);
   
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
@@ -856,8 +864,70 @@ export default function CpsTest({ locale }: CpsTestProps) {
       if (calculatedCps > bestCps) {
         setBestCps(calculatedCps);
       }
+      
+      // 🥊 배틀 모드: 결과로 즉시 완료 처리
+      if (battleMode && onBattleComplete && !battleCompleted) {
+        setBattleCompleted(true);
+        // CPS 점수를 소수점 1자리로 전달 (예: 8.5)
+        const scoreForBattle = Math.round(calculatedCps * 10) / 10;
+        onBattleComplete(scoreForBattle);
+      }
     }
-  }, [state, clicks, duration, bestCps]);
+  }, [state, clicks, duration, bestCps, battleMode, onBattleComplete, battleCompleted]);
+
+  // 🥊 도전장 만들기 함수
+  const createBattle = async () => {
+    if (!currentUserId || !nickname) {
+      alert(lang === "ko" ? "로그인이 필요합니다." : "Login required.");
+      return;
+    }
+
+    setIsCreatingBattle(true);
+    try {
+      const response = await fetch("/api/battle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "create",
+          challengerId: currentUserId,
+          challengerNickname: nickname,
+          challengerScore: Math.round(cps * 10) / 10, // CPS 소수점 1자리
+          game: "cps",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "도전장 생성 실패");
+      }
+
+      const fullUrl = `https://www.slox.co.kr${data.battleUrl}`;
+      setBattleUrl(fullUrl);
+      setShowBattleModal(true);
+    } catch (error) {
+      console.error("도전장 생성 에러:", error);
+      alert(lang === "ko" ? "도전장 생성에 실패했습니다." : "Failed to create challenge.");
+    } finally {
+      setIsCreatingBattle(false);
+    }
+  };
+
+  // 🥊 도전장 링크 복사
+  const copyBattleUrl = async () => {
+    if (!battleUrl) return;
+    
+    const text = lang === "ko"
+      ? `🥊 ${nickname}의 도전장!\n\n🖱️ CPS: ${cps.toFixed(1)}\n\n이 기록 이길 수 있어? 👉\n${battleUrl}`
+      : `🥊 ${nickname}'s Challenge!\n\n🖱️ CPS: ${cps.toFixed(1)}\n\nCan you beat this? 👉\n${battleUrl}`;
+    
+    try {
+      await navigator.clipboard.writeText(text);
+      alert(lang === "ko" ? "복사되었습니다! 친구에게 공유하세요 🎮" : "Copied! Share with friends 🎮");
+    } catch {
+      prompt(lang === "ko" ? "텍스트를 복사하세요:" : "Copy this text:", text);
+    }
+  };
 
   // 리셋
   const resetGame = () => {
@@ -1143,6 +1213,22 @@ export default function CpsTest({ locale }: CpsTestProps) {
                   🏆 {lang === "ko" ? "랭킹 등록하기!" : "Register Ranking!"}
                 </button>
               )}
+              
+              {/* 🥊 도전장 만들기 버튼 (회원만, 배틀모드 아닐 때) */}
+              {currentUserId && !battleMode && cps > 0 && (
+                <button
+                  onClick={createBattle}
+                  disabled={isCreatingBattle}
+                  className="w-full mt-2 py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-medium rounded-xl transition-all disabled:opacity-50"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    <span>🥊</span>
+                    {isCreatingBattle 
+                      ? (lang === "ko" ? "생성 중..." : "Creating...")
+                      : (lang === "ko" ? "친구에게 도전장 보내기!" : "Send Challenge!")}
+                  </span>
+                </button>
+              )}
               </div>
           )}
 
@@ -1320,6 +1406,21 @@ export default function CpsTest({ locale }: CpsTestProps) {
                       {lang === "ko" ? "랭킹 등록하기!" : "Register Ranking!"}
                     </span>
                   </button>
+                  {/* 🥊 도전장 보내기 버튼 (회원만, 배틀모드 아닐 때) */}
+                  {currentUserId && !battleMode && cps > 0 && (
+                    <button
+                      onClick={createBattle}
+                      disabled={isCreatingBattle}
+                      className="w-full mt-2 py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all disabled:opacity-50"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        <span>🥊</span>
+                        {isCreatingBattle 
+                          ? (lang === "ko" ? "생성 중..." : "Creating...")
+                          : (lang === "ko" ? "친구에게 도전장 보내기!" : "Send Challenge!")}
+                      </span>
+                    </button>
+                  )}
                   <button onClick={shareResult} className="w-full mt-2 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-all border border-dark-600">
                     <span className="flex items-center justify-center gap-2">
                       <span>📤</span>
@@ -1367,6 +1468,43 @@ export default function CpsTest({ locale }: CpsTestProps) {
                 <div className="flex gap-3">
                   <button onClick={() => setShowNicknameModal(false)} className="flex-1 px-4 py-3 bg-dark-800 hover:bg-dark-700 text-white rounded-xl">{lang === "ko" ? "취소" : "Cancel"}</button>
                   <button onClick={submitScore} disabled={!nickname.trim() || isSubmitting} className="flex-1 px-4 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold rounded-xl disabled:opacity-50">{isSubmitting ? "..." : lang === "ko" ? "등록!" : "Submit!"}</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 🥊 도전장 링크 모달 */}
+          {showBattleModal && battleUrl && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full animate-scale-in">
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">🥊</div>
+                  <h3 className="text-white text-xl font-bold mb-2">
+                    {lang === "ko" ? "도전장 생성 완료!" : "Challenge Created!"}
+                  </h3>
+                  <p className="text-dark-400 text-sm">
+                    {lang === "ko" ? "링크를 친구에게 공유하세요!" : "Share this link with your friend!"}
+                  </p>
+                </div>
+
+                <div className="bg-dark-800 rounded-xl p-4 mb-4">
+                  <p className="text-white text-center font-bold mb-2">🖱️ {cps.toFixed(1)} CPS</p>
+                  <p className="text-dark-400 text-xs text-center break-all">{battleUrl}</p>
+                </div>
+
+                <div className="space-y-3">
+                  <button
+                    onClick={copyBattleUrl}
+                    className="w-full py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all"
+                  >
+                    📋 {lang === "ko" ? "링크 복사하기" : "Copy Link"}
+                  </button>
+                  <button
+                    onClick={() => setShowBattleModal(false)}
+                    className="w-full py-2 text-dark-400 hover:text-white transition-colors"
+                  >
+                    {lang === "ko" ? "닫기" : "Close"}
+                  </button>
                 </div>
               </div>
             </div>
