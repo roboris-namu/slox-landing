@@ -140,14 +140,21 @@ function LoginContent() {
         setNeedsNicknameSetup(false);
         
         // 🔄 기존 회원 로그인 시 redirect 처리
-        // redirect 파라미터가 있으면 해당 URL로 이동
+        // 1. URL 파라미터 확인
         const urlParams = new URLSearchParams(window.location.search);
         const redirect = urlParams.get("redirect");
+        // 2. localStorage 확인 (OAuth 후 URL 파라미터 유실 대비)
+        const loginRedirect = localStorage.getItem("login_redirect");
+        // 3. pending_battle 확인
         const pendingBattle = localStorage.getItem("pending_battle");
         
         if (redirect) {
-          console.log("🔄 [Profile] redirect로 이동:", redirect);
+          console.log("🔄 [Profile] URL redirect로 이동:", redirect);
           window.location.href = redirect;
+        } else if (loginRedirect) {
+          console.log("🔄 [Profile] localStorage redirect로 이동:", loginRedirect);
+          localStorage.removeItem("login_redirect");
+          window.location.href = loginRedirect;
         } else if (pendingBattle) {
           console.log("🔄 [Profile] pending_battle로 이동:", pendingBattle);
           localStorage.removeItem("pending_battle");
@@ -473,15 +480,16 @@ function LoginContent() {
   }, [fetchProfile, checkTodayAttendance]);
 
   const handleGoogleLogin = async () => {
-    // redirect 파라미터가 있으면 유지
-    const loginRedirect = redirectUrl 
-      ? `${window.location.origin}/login?redirect=${encodeURIComponent(redirectUrl)}`
-      : `${window.location.origin}/login`;
+    // 🔄 redirect 파라미터를 localStorage에 저장 (OAuth 후 URL 파라미터 유실 방지)
+    if (redirectUrl) {
+      localStorage.setItem("login_redirect", redirectUrl);
+      console.log("💾 [Login] redirect URL 저장:", redirectUrl);
+    }
     
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: loginRedirect,
+        redirectTo: `${window.location.origin}/login`,
       },
     });
 
