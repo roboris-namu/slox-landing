@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 
@@ -42,7 +43,11 @@ const COUNTRY_OPTIONS = [
   { code: "OTHER", flag: "🌍", name: "기타" },
 ];
 
-export default function LoginPage() {
+// 메인 로그인 컴포넌트
+function LoginContent() {
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect"); // 배틀 등에서 리다이렉트
+  
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -77,6 +82,28 @@ export default function LoginPage() {
   // 신규 가입 닉네임 설정
   const [needsNicknameSetup, setNeedsNicknameSetup] = useState(false);
   const [setupNickname, setSetupNickname] = useState("");
+  
+  // 🔄 리다이렉트 처리 함수
+  const handleRedirectAfterLogin = useCallback(() => {
+    // 1. URL의 redirect 파라미터 우선
+    if (redirectUrl) {
+      console.log("🔄 [Login] redirect 파라미터로 이동:", redirectUrl);
+      window.location.href = redirectUrl;
+      return;
+    }
+    
+    // 2. localStorage의 pending_battle 확인
+    const pendingBattle = localStorage.getItem("pending_battle");
+    if (pendingBattle) {
+      console.log("🔄 [Login] pending_battle로 이동:", pendingBattle);
+      localStorage.removeItem("pending_battle");
+      window.location.href = `/battle/${pendingBattle}`;
+      return;
+    }
+    
+    // 3. 기본: 메인 페이지로 이동하지 않고 로그인 페이지에 머무름
+    console.log("✅ [Login] 로그인 완료, 현재 페이지 유지");
+  }, [redirectUrl]);
 
   // 프로필 가져오기 (API 프록시 사용 - 광고 차단기 우회)
   const fetchProfile = useCallback(async (userId: string, userEmail?: string, userName?: string) => {
@@ -431,10 +458,15 @@ export default function LoginPage() {
   }, [fetchProfile, checkTodayAttendance]);
 
   const handleGoogleLogin = async () => {
+    // redirect 파라미터가 있으면 유지
+    const loginRedirect = redirectUrl 
+      ? `${window.location.origin}/login?redirect=${encodeURIComponent(redirectUrl)}`
+      : `${window.location.origin}/login`;
+    
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/login`,
+        redirectTo: loginRedirect,
       },
     });
 
@@ -515,6 +547,9 @@ export default function LoginPage() {
       // 프로필 다시 가져오기
       await fetchProfile(user.id);
       setNeedsNicknameSetup(false);
+      
+      // 🔄 리다이렉트 처리 (배틀 등에서 온 경우)
+      handleRedirectAfterLogin();
     } catch (error) {
       console.error("닉네임 설정 에러:", error);
       setNicknameError(error instanceof Error ? error.message : "닉네임 설정 실패");
@@ -1260,5 +1295,18 @@ export default function LoginPage() {
         }
       `}</style>
     </div>
+  );
+}
+
+// Suspense로 감싸서 export (useSearchParams 사용을 위해 필요)
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-dark-900 flex items-center justify-center">
+        <div className="text-white text-xl">로딩 중...</div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

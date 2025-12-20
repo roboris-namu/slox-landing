@@ -835,6 +835,8 @@ const getCountryFlag = (countryCode: string | null | undefined): string => {
 
 interface ReactionTestProps {
   locale: Locale;
+  battleMode?: boolean; // 배틀 모드
+  onBattleComplete?: (score: number) => void; // 배틀 완료 콜백
 }
 
 // 🎁 이벤트 배너 컴포넌트 (실시간 카운트다운 + 현재 1등)
@@ -951,12 +953,13 @@ function EventBanner({ lang, leader }: { lang: Language; leader?: { nickname: st
   );
 }
 
-export default function ReactionTest({ locale }: ReactionTestProps) {
+export default function ReactionTest({ locale, battleMode = false, onBattleComplete }: ReactionTestProps) {
   const [state, setState] = useState<GameState>("waiting");
   const [reactionTime, setReactionTime] = useState<number>(0);
   const [attempts, setAttempts] = useState<number[]>([]);
   const [startTime, setStartTime] = useState<number>(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [battleCompleted, setBattleCompleted] = useState(false); // 배틀 완료 여부
   const lang = locale;
   const [particles, setParticles] = useState<Particle[]>([]);
   const [showExplosion, setShowExplosion] = useState(false);
@@ -1504,11 +1507,21 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
       setTimeout(() => {
         playSound("success");
         setState("result");
+        
+        // 🥊 배틀 모드: 첫 번째 결과로 즉시 완료 처리
+        if (battleMode && onBattleComplete && !battleCompleted) {
+          setBattleCompleted(true);
+          onBattleComplete(reaction);
+        }
       }, 150);
     } else if (state === "result" || state === "tooEarly") {
+      // 🥊 배틀 모드에서는 재시도 불가
+      if (battleMode && battleCompleted) {
+        return;
+      }
       startGame();
     }
-  }, [state, startTime, startGame, playSound, triggerExplosion]);
+  }, [state, startTime, startGame, playSound, triggerExplosion, battleMode, onBattleComplete, battleCompleted]);
 
   // 리셋
   const resetGame = () => {
@@ -1637,6 +1650,65 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
   const isKakaoInApp = () => {
     const ua = navigator.userAgent.toLowerCase();
     return ua.includes("kakaotalk");
+  };
+
+  // 🥊 도전장 만들기 상태
+  const [isCreatingBattle, setIsCreatingBattle] = useState(false);
+  const [battleUrl, setBattleUrl] = useState<string | null>(null);
+  const [showBattleModal, setShowBattleModal] = useState(false);
+
+  // 🥊 도전장 만들기 함수
+  const createBattle = async () => {
+    if (!currentUserId || !nickname) {
+      alert(lang === "ko" ? "로그인이 필요합니다." : "Login required.");
+      return;
+    }
+
+    setIsCreatingBattle(true);
+    try {
+      const response = await fetch("/api/battle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "create",
+          challengerId: currentUserId,
+          challengerNickname: nickname,
+          challengerScore: reactionTime,
+          game: "reaction",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "도전장 생성 실패");
+      }
+
+      const fullUrl = `https://www.slox.co.kr${data.battleUrl}`;
+      setBattleUrl(fullUrl);
+      setShowBattleModal(true);
+    } catch (error) {
+      console.error("도전장 생성 에러:", error);
+      alert(lang === "ko" ? "도전장 생성에 실패했습니다." : "Failed to create challenge.");
+    } finally {
+      setIsCreatingBattle(false);
+    }
+  };
+
+  // 🥊 도전장 링크 복사
+  const copyBattleUrl = async () => {
+    if (!battleUrl) return;
+    
+    const text = lang === "ko"
+      ? `🥊 ${nickname}의 도전장!\n\n⚡ 반응속도: ${reactionTime}ms\n\n이 기록 이길 수 있어? 👉 ${battleUrl}`
+      : `🥊 ${nickname}'s Challenge!\n\n⚡ Reaction: ${reactionTime}ms\n\nCan you beat this? 👉 ${battleUrl}`;
+    
+    try {
+      await navigator.clipboard.writeText(text);
+      alert(lang === "ko" ? "복사되었습니다! 친구에게 공유하세요 🎮" : "Copied! Share with friends 🎮");
+    } catch {
+      prompt(lang === "ko" ? "텍스트를 복사하세요:" : "Copy this text:", text);
+    }
   };
 
   // 공유하기 (이미지로)
@@ -2239,6 +2311,22 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                     </span>
                   </button>
                   
+                  {/* 🥊 도전장 만들기 버튼 (회원만) */}
+                  {currentUserId && !battleMode && (
+                    <button
+                      onClick={createBattle}
+                      disabled={isCreatingBattle}
+                      className="w-full mt-2 py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-medium rounded-xl transition-all disabled:opacity-50"
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        <span>🥊</span>
+                        {isCreatingBattle 
+                          ? (lang === "ko" ? "생성 중..." : "Creating...")
+                          : (lang === "ko" ? "친구에게 도전장 보내기!" : "Send challenge to friend!")}
+                      </span>
+                    </button>
+                  )}
+                  
                   {/* 이벤트 안내 */}
                   <div className="mt-3 p-2 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
                     <p className="text-yellow-400 text-xs text-center flex items-center justify-center gap-1">
@@ -2418,6 +2506,43 @@ export default function ReactionTest({ locale }: ReactionTestProps) {
                     {isSubmitting ? "..." : leaderboard.length === 0 || reactionTime < leaderboard[0].score 
                       ? t.registerFirstBtn 
                       : t.submit}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 🥊 도전장 링크 모달 */}
+          {showBattleModal && battleUrl && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+              <div className="bg-dark-900 border border-dark-700 rounded-2xl p-6 mx-4 max-w-md w-full animate-scale-in">
+                <div className="text-center mb-6">
+                  <div className="text-6xl mb-4">🥊</div>
+                  <h3 className="text-white text-xl font-bold mb-2">
+                    {lang === "ko" ? "도전장 생성 완료!" : "Challenge Created!"}
+                  </h3>
+                  <p className="text-dark-400 text-sm">
+                    {lang === "ko" ? "링크를 친구에게 공유하세요!" : "Share this link with your friend!"}
+                  </p>
+                </div>
+
+                <div className="bg-dark-800 rounded-xl p-4 mb-4">
+                  <p className="text-white text-center font-bold mb-2">⚡ {reactionTime}ms</p>
+                  <p className="text-dark-400 text-xs text-center break-all">{battleUrl}</p>
+                </div>
+
+                <div className="space-y-3">
+                  <button
+                    onClick={copyBattleUrl}
+                    className="w-full py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-xl transition-all"
+                  >
+                    📋 {lang === "ko" ? "링크 복사하기" : "Copy Link"}
+                  </button>
+                  <button
+                    onClick={() => setShowBattleModal(false)}
+                    className="w-full py-2 text-dark-400 hover:text-white transition-colors"
+                  >
+                    {lang === "ko" ? "닫기" : "Close"}
                   </button>
                 </div>
               </div>
