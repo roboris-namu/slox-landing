@@ -103,6 +103,7 @@ interface IQTestProps {
   onBattleComplete?: (score: number) => void; // 🥊 배틀 완료 콜백
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function IQTest({ locale = "ko", battleMode = false, onBattleComplete }: IQTestProps = {}) {
   const [gameState, setGameState] = useState<GameState>("ready");
   const [questions, setQuestions] = useState<IQQuestion[]>([]);
@@ -859,8 +860,8 @@ export default function IQTest({ locale = "ko", battleMode = false, onBattleComp
                       <span className="flex items-center justify-center gap-2">
                         <span>🥊</span>
                         {isCreatingBattle 
-                          ? (lang === "ko" ? "생성 중..." : "Creating...")
-                          : (lang === "ko" ? "친구에게 도전장 보내기!" : "Send Challenge!")}
+                          ? (locale === "ko" ? "생성 중..." : "Creating...")
+                          : (locale === "ko" ? "친구에게 도전장 보내기!" : "Send Challenge!")}
                       </span>
                     </button>
                   )}

@@ -206,7 +206,8 @@ interface QuizGameProps {
   onBattleComplete?: (score: number) => void; // 🥊 배틀 완료 콜백
 }
 
-export default function QuizGame({ locale: propLocale, battleMode = false, onBattleComplete }: QuizGameProps = {}) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export default function QuizGame({ locale: _propLocale, battleMode = false, onBattleComplete }: QuizGameProps = {}) {
   const [gameState, setGameState] = useState<GameState>("ready");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -975,8 +976,8 @@ export default function QuizGame({ locale: propLocale, battleMode = false, onBat
                       <span className="flex items-center justify-center gap-2">
                         <span>🥊</span>
                         {isCreatingBattle 
-                          ? (lang === "ko" ? "생성 중..." : "Creating...")
-                          : (lang === "ko" ? "친구에게 도전장 보내기!" : "Send Challenge!")}
+                          ? (locale === "ko" ? "생성 중..." : "Creating...")
+                          : (locale === "ko" ? "친구에게 도전장 보내기!" : "Send Challenge!")}
                       </span>
                     </button>
                   )}
