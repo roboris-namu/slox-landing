@@ -450,19 +450,23 @@ export default function TemplateService() {
                 <div className="relative h-48 bg-gradient-to-br from-slate-700 to-slate-800 overflow-hidden">
                   {template.available ? (
                     <>
+                      {/* fallback: iframe 로딩 전 또는 광고차단시 표시 (가장 뒤에) */}
+                      <div className="absolute inset-0 z-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-600/50 to-slate-700/50">
+                        <span className="text-4xl opacity-50">{template.preview}</span>
+                      </div>
                       {/* iframe 미리보기 (iOS Safari 최적화 적용) */}
                       <div 
-                        className="absolute inset-0 origin-top-left scale-[0.25] w-[400%] h-[400%] pointer-events-none select-none"
+                        className="absolute inset-0 z-10 w-[400%] h-[400%] pointer-events-none select-none"
                         style={{ 
                           touchAction: 'none',
-                          WebkitOverflowScrolling: 'auto',
-                          transform: 'scale(0.25) translateZ(0)', // GPU 가속
+                          transform: 'scale(0.25) translateZ(0)',
                           transformOrigin: 'top left',
+                          WebkitTransform: 'scale(0.25) translateZ(0)',
                         }}
                       >
                         <iframe 
                           src={template.demoUrl}
-                          className="w-full h-full border-0"
+                          className="w-full h-full border-0 bg-white"
                           loading="lazy"
                           title={`${template.name} 미리보기`}
                           scrolling="no"
@@ -472,12 +476,8 @@ export default function TemplateService() {
                           }}
                         />
                       </div>
-                      {/* fallback: iframe 로딩 전 또는 광고차단시 표시 */}
-                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-600/30 to-slate-700/30 -z-10">
-                        <span className="text-4xl opacity-50">{template.preview}</span>
-                      </div>
                       {/* 호버 오버레이 */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
+                      <div className="absolute inset-0 z-20 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
                         <span className="px-4 py-2 bg-white text-slate-900 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">
                           미리보기 →
                         </span>
