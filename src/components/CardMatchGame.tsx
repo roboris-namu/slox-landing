@@ -523,9 +523,10 @@ export default function CardMatchGame({ locale = "ko", battleMode = false, onBat
   const copyBattleUrl = async () => {
     if (!battleUrl) return;
     
+    const finalScore = getFinalScore();
     const text = lang === "ko"
-      ? `🥊 ${nickname}의 도전장!\n\n🃏 카드매칭: ${timer}초 남김\n\n이 기록 이길 수 있어? 👉\n${battleUrl}`
-      : `🥊 ${nickname}'s Challenge!\n\n🃏 Card Match: ${timer}s left\n\nCan you beat this? 👉\n${battleUrl}`;
+      ? `🥊 ${nickname}의 도전장!\n\n🃏 카드매칭: ${finalScore}점\n\n이 기록 이길 수 있어? 👉\n${battleUrl}`
+      : `🥊 ${nickname}'s Challenge!\n\n🃏 Card Match: ${finalScore}pts\n\nCan you beat this? 👉\n${battleUrl}`;
     
     try {
       await navigator.clipboard.writeText(text);
