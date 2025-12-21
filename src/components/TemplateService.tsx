@@ -2,6 +2,23 @@
 
 import { useState, useEffect, useRef } from "react";
 
+// iOS 기기 감지 (Safari 뿐만 아니라 iOS 전체)
+const useIsIOS = () => {
+  const [isIOS, setIsIOS] = useState(false);
+  
+  useEffect(() => {
+    const checkIOS = () => {
+      const ua = window.navigator.userAgent;
+      const isIOSDevice = /iPad|iPhone|iPod/.test(ua) || 
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      setIsIOS(isIOSDevice);
+    };
+    checkIOS();
+  }, []);
+  
+  return isIOS;
+};
+
 // 카테고리 정의
 const categories = [
   { id: "personal", name: "개인", emoji: "🧑", color: "from-blue-500 to-indigo-600" },
@@ -331,6 +348,7 @@ export default function TemplateService() {
   const [activeCategory, setActiveCategory] = useState("personal");
   const [activeSubCategory, setActiveSubCategory] = useState("minimal");
   const sectionRef = useRef<HTMLDivElement>(null);
+  const isIOS = useIsIOS(); // iOS 기기 감지
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -446,36 +464,44 @@ export default function TemplateService() {
             >
               {/* 카드 배경 */}
               <div className={`relative bg-slate-800/70 border border-white/10 ${template.available ? "group-hover:border-white/20" : ""} rounded-2xl overflow-hidden`}>
-                {/* 미리보기 영역 - iframe 실시간 프리뷰 */}
+                {/* 미리보기 영역 */}
                 <div className="relative h-48 bg-gradient-to-br from-slate-700 to-slate-800 overflow-hidden">
                   {template.available ? (
                     <>
-                      {/* fallback: iframe 로딩 전 또는 광고차단시 표시 (가장 뒤에) */}
-                      <div className="absolute inset-0 z-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-600/50 to-slate-700/50">
-                        <span className="text-4xl opacity-50">{template.preview}</span>
-                      </div>
-                      {/* iframe 미리보기 (iOS Safari 최적화 적용) */}
-                      <div 
-                        className="absolute inset-0 z-10 w-[400%] h-[400%] pointer-events-none select-none"
-                        style={{ 
-                          touchAction: 'none',
-                          transform: 'scale(0.25) translateZ(0)',
-                          transformOrigin: 'top left',
-                          WebkitTransform: 'scale(0.25) translateZ(0)',
-                        }}
-                      >
-                        <iframe 
-                          src={template.demoUrl}
-                          className="w-full h-full border-0 bg-white"
-                          loading="lazy"
-                          title={`${template.name} 미리보기`}
-                          scrolling="no"
-                          style={{
-                            pointerEvents: 'none',
-                            touchAction: 'none',
-                          }}
-                        />
-                      </div>
+                      {/* iOS: 정적 미리보기 (스크롤 문제 방지) */}
+                      {/* 기타: iframe 미리보기 */}
+                      {isIOS ? (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-600 to-slate-700">
+                          <div className="w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center mb-3 shadow-lg">
+                            <span className="text-4xl">{template.preview}</span>
+                          </div>
+                          <span className="text-white font-bold text-sm">{template.name}</span>
+                          <span className="text-white/50 text-xs mt-1">탭하여 미리보기</span>
+                        </div>
+                      ) : (
+                        <>
+                          {/* fallback 배경 */}
+                          <div className="absolute inset-0 z-0 flex items-center justify-center bg-gradient-to-br from-slate-600/50 to-slate-700/50">
+                            <span className="text-4xl opacity-30">{template.preview}</span>
+                          </div>
+                          {/* iframe 미리보기 */}
+                          <div 
+                            className="absolute inset-0 z-10 w-[400%] h-[400%] pointer-events-none select-none"
+                            style={{ 
+                              transform: 'scale(0.25) translateZ(0)',
+                              transformOrigin: 'top left',
+                            }}
+                          >
+                            <iframe 
+                              src={template.demoUrl}
+                              className="w-full h-full border-0 bg-white"
+                              loading="lazy"
+                              title={`${template.name} 미리보기`}
+                              scrolling="no"
+                            />
+                          </div>
+                        </>
+                      )}
                       {/* 호버 오버레이 */}
                       <div className="absolute inset-0 z-20 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
                         <span className="px-4 py-2 bg-white text-slate-900 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">
