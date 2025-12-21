@@ -309,19 +309,20 @@ export default function CardMatchGame({ locale = "ko", battleMode = false, onBat
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state, hasSubmittedScore, matchedPairs, score, timer, mistakes]);
 
-  // 🏆 최고 점수 갱신 (getFinalScore 대신 직접 계산)
+  // 🏆 최고 점수 갱신 + 배틀 완료 처리 (성공/시간초과 모두)
   useEffect(() => {
-    if (state === "result" && matchedPairs === totalPairs) {
+    if (state === "result") {
       // 최종 점수 계산: 누적점수 + 시간보너스 + 퍼펙트보너스
       const timeBonus = timer * 10;
-      const perfectBonus = mistakes === 0 ? 500 : 0;
+      const perfectBonus = (mistakes === 0 && matchedPairs === totalPairs) ? 500 : 0;
       const finalScore = score + timeBonus + perfectBonus;
       
+      // 완료 시에만 최고 점수 갱신 (시간 초과 시에도 점수 있음)
       if (bestScore === null || finalScore > bestScore) {
         setBestScore(finalScore);
       }
       
-      // 🥊 배틀 모드: 게임 완료 시 최종 점수 전달
+      // 🥊 배틀 모드: 게임 완료 시 최종 점수 전달 (성공/시간초과 모두)
       if (battleMode && onBattleComplete && !battleCompleted) {
         setBattleCompleted(true);
         // 최종 점수 전달 (누적점수 + 시간보너스 + 퍼펙트보너스)
