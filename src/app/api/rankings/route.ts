@@ -22,10 +22,11 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const userId = searchParams.get("userId");
 
-    // 전체 랭킹 조회
+    // 전체 랭킹 조회 (인증된 사용자만)
     const { data, error } = await supabase
       .from("profiles")
       .select("id, nickname, total_score, attendance_count, avatar_url, country, game_scores")
+      .eq("is_verified", true) // 🔐 이메일 인증 완료된 사용자만
       .order("total_score", { ascending: false })
       .limit(100);
 
@@ -48,10 +49,11 @@ export async function GET(request: NextRequest) {
         .single();
 
       if (myProfile) {
-        // 나보다 점수 높은 사람 수 + 1 = 내 순위
+        // 나보다 점수 높은 사람 수 + 1 = 내 순위 (인증된 사용자 중에서만)
         const { count } = await supabase
           .from("profiles")
           .select("*", { count: "exact", head: true })
+          .eq("is_verified", true) // 🔐 인증된 사용자만
           .gt("total_score", myProfile.total_score);
 
         myRank = (count || 0) + 1;

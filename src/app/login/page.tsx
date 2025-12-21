@@ -746,15 +746,19 @@ function LoginContent() {
         throw new Error("닉네임은 2~20자로 입력해주세요.");
       }
 
-      // 🔍 이메일 중복 체크 (profiles 테이블에서 확인)
+      // 🔍 이메일 중복 체크 (profiles 테이블에서 확인 + 인증 상태)
       const { data: existingProfile } = await supabase
         .from("profiles")
-        .select("id, email")
+        .select("id, email, is_verified")
         .eq("email", email.toLowerCase())
         .maybeSingle();
 
       if (existingProfile) {
-        throw new Error("이미 가입된 이메일입니다. 로그인해주세요.");
+        if (existingProfile.is_verified) {
+          throw new Error("이미 가입된 이메일입니다. 로그인해주세요.");
+        } else {
+          throw new Error("인증 진행 중인 이메일입니다. 메일함을 확인해주세요.");
+        }
       }
 
       // 회원가입
