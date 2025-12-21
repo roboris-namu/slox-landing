@@ -979,7 +979,7 @@ export default function Sudoku({ locale = "ko", battleMode = false, onBattleComp
                             {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${calculatedRank}위!`}
                           </h3>
                           <p className={`text-3xl font-black ${gradeInfo.color}`}>{formatTime(time)}</p>
-                          <p className="text-dark-400 text-sm">{gradeInfo.grade} (실수 {mistakes}회)</p>
+                          <p className="text-dark-400 text-sm">{gradeInfo.grade}</p>
                         </>
                       );
                     })()}
@@ -1044,7 +1044,7 @@ export default function Sudoku({ locale = "ko", battleMode = false, onBattleComp
                 <div className="text-center mb-6">
                   <div className="text-5xl mb-3">{gradeInfo.emoji}</div>
                   <h3 className="text-white text-xl font-bold">🏆 랭킹 등록</h3>
-                  <p className="text-dark-400 text-sm">{formatTime(time)} (실수 {mistakes}회)</p>
+                  <p className="text-dark-400 text-sm">{formatTime(time)}</p>
                 </div>
                 {currentUserId && currentUserNickname ? (
                   <div className="relative mb-4"><input type="text" value={currentUserNickname} disabled className="w-full px-4 py-3 bg-dark-900 border border-accent-500/50 rounded-xl text-white cursor-not-allowed opacity-80" /><div className="absolute right-3 top-1/2 -translate-y-1/2"><span className="text-xs px-2 py-1 rounded bg-accent-500/20 text-accent-400 border border-accent-500/30 font-medium">✓ 회원</span></div></div>

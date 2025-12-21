@@ -1368,7 +1368,7 @@ export default function TypingMulti({ locale, battleMode = false, onBattleComple
                           <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : calculatedRank <= 3 ? "text-yellow-400" : "text-white"}`}>
                             {isFirstPlace ? t.newFirst : `${t.currentRank} #${myRank}!`}
                           </h3>
-                          <p className="text-dark-400 text-sm">{result.cpm} {t.speed} ({t.accuracy} {result.accuracy}%)</p>
+                          <p className="text-dark-400 text-sm">{result.cpm} {t.speed}</p>
                         </>
                       );
                     })()}
@@ -1430,7 +1430,7 @@ export default function TypingMulti({ locale, battleMode = false, onBattleComple
                 <div className="text-center mb-6">
                   <div className="text-5xl mb-3">{getGrade(result.cpm).emoji}</div>
                   <h3 className="text-white text-xl font-bold">🏆 {t.hallOfFame}</h3>
-                  <p className="text-dark-400 text-sm">{result.cpm} {t.speed} ({t.accuracy} {result.accuracy}%)</p>
+                  <p className="text-dark-400 text-sm">{result.cpm} {t.speed}</p>
                 </div>
                 <input
                   type="text"

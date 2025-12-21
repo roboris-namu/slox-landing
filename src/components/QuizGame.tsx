@@ -958,7 +958,7 @@ export default function QuizGame({ locale: _propLocale, battleMode = false, onBa
                             {isFirstPlace ? "🔥 새로운 1등!" : `현재 ${calculatedRank}위!`}
                           </h3>
                           <p className={`text-3xl font-black ${gradeInfo.color}`}>{getFinalScore().toLocaleString()}점</p>
-                          <p className="text-dark-400 text-sm">{gradeInfo.grade} ({correctCount}/10)</p>
+                          <p className="text-dark-400 text-sm">{gradeInfo.grade}</p>
                         </>
                       );
                     })()}
@@ -1023,7 +1023,7 @@ export default function QuizGame({ locale: _propLocale, battleMode = false, onBa
                 <div className="text-center mb-6">
                   <div className="text-5xl mb-3">{gradeInfo.emoji}</div>
                   <h3 className="text-white text-xl font-bold">🏆 랭킹 등록</h3>
-                  <p className="text-dark-400 text-sm">{getFinalScore().toLocaleString()}점 ({correctCount}/10)</p>
+                  <p className="text-dark-400 text-sm">{getFinalScore().toLocaleString()}점</p>
                 </div>
                 {/* 👤 회원 로그인 시 닉네임 고정 */}
                 {currentUserId && currentUserNickname ? (

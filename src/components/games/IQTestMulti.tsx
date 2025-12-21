@@ -1317,7 +1317,7 @@ export default function IQTestMulti({ locale }: Props) {
                         {isFirstPlace ? t.newFirst : `${t.currentRank} ${myRank}!`}
                       </h3>
                       <p className={`text-3xl font-black ${iqGrade.color}`}>IQ {iqScore}</p>
-                      <p className="text-dark-400 text-sm">{iqGrade.grade} ({correctCount}/12)</p>
+                      <p className="text-dark-400 text-sm">{iqGrade.grade}</p>
                     </>
                   );
                 })()}
@@ -1360,7 +1360,7 @@ export default function IQTestMulti({ locale }: Props) {
             <div className="text-center mb-6">
               <div className="text-5xl mb-3">{iqGrade.emoji}</div>
               <h3 className="text-white text-xl font-bold">{t.rankingRegister}</h3>
-              <p className="text-dark-400 text-sm">IQ {iqScore} ({correctCount}/12)</p>
+              <p className="text-dark-400 text-sm">IQ {iqScore}</p>
             </div>
             <input type="text" value={nickname} onChange={(e) => setNickname(e.target.value.slice(0, 20))} placeholder={t.nickname} className="w-full px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white mb-3" autoFocus onKeyDown={(e) => e.key === "Enter" && submitScore()} />
             {/* 🔐 로그인 유도 - 새 탭으로 열어서 게임 상태 유지 */}

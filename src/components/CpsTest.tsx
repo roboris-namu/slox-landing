@@ -1482,7 +1482,7 @@ export default function CpsTest({ locale, battleMode = false, onBattleComplete }
                 <div className="text-center mb-6">
                   <div className="text-5xl mb-3">{getGrade(cps).emoji}</div>
                   <h3 className="text-white text-xl font-bold mb-2">🏆 {lang === "ko" ? "랭킹 등록" : "Register Ranking"}</h3>
-                  <p className="text-dark-400 text-sm">{cps.toFixed(1)} CPS ({duration}{lang === "ko" ? "초" : "s"})</p>
+                  <p className="text-dark-400 text-sm">{cps.toFixed(1)} CPS</p>
                 </div>
                 <div className="mb-4">
                   {currentUserId && currentUserNickname ? (
