@@ -289,7 +289,11 @@ export default function CardMatchGame({ locale = "ko", battleMode = false, onBat
   // 🚀 게임 완료/시간초과 시 정확한 순위 계산 + 0.8초 후 팝업
   useEffect(() => {
     if (state === "result" && matchedPairs > 0) {
-      fetch(`/api/leaderboard?game=cardmatch&limit=10&myScore=${matchedPairs}`)
+      // 실제 최종 점수로 순위 계산 (누적점수 + 시간보너스 + 퍼펙트보너스)
+      const timeBonus = timer * 10;
+      const perfectBonus = mistakes === 0 ? 500 : 0;
+      const finalScoreForRank = score + timeBonus + perfectBonus;
+      fetch(`/api/leaderboard?game=cardmatch&limit=10&myScore=${finalScoreForRank}`)
         .then(res => res.json())
         .then(result => {
           if (result.myRank) setMyRank(result.myRank);
@@ -302,7 +306,8 @@ export default function CardMatchGame({ locale = "ko", battleMode = false, onBat
       return () => clearTimeout(timerRef);
       }
     }
-  }, [state, hasSubmittedScore, matchedPairs]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, hasSubmittedScore, matchedPairs, score, timer, mistakes]);
 
   // 🏆 최고 점수 갱신 (getFinalScore 대신 직접 계산)
   useEffect(() => {

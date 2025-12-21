@@ -747,7 +747,15 @@ export default function AimTest({ locale, battleMode = false, onBattleComplete }
   // 🚀 게임 오버 시 정확한 순위 계산 + 0.8초 후 팝업
   useEffect(() => {
     if (state === "result" && hits > 0) {
-      fetch(`/api/leaderboard?game=aim&limit=10&myScore=${hits}`)
+      // 실제 점수 계산 (getScore 함수와 동일 로직)
+      const accuracy = hits / (hits + misses);
+      const avgTime = reactionTimes.length > 0 
+        ? reactionTimes.reduce((a, b) => a + b, 0) / reactionTimes.length 
+        : 1000;
+      const speedMultiplier = Math.max(0.5, Math.min(1.5, (800 - avgTime) / 400 + 1));
+      const actualScore = Math.round(hits * 100 * accuracy * speedMultiplier);
+      
+      fetch(`/api/leaderboard?game=aim&limit=10&myScore=${actualScore}`)
         .then(res => res.json())
         .then(result => {
           if (result.myRank) setMyRank(result.myRank);
@@ -760,7 +768,8 @@ export default function AimTest({ locale, battleMode = false, onBattleComplete }
       return () => clearTimeout(timer);
       }
     }
-  }, [state, hasSubmittedScore, hits]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, hasSubmittedScore, hits, misses, reactionTimes]);
 
   // 🔊 오디오 컨텍스트 초기화
   const getAudioContext = useCallback(() => {
