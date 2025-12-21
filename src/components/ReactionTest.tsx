@@ -1171,7 +1171,7 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
             if (data.game === "reaction" && Date.now() - data.timestamp < 30 * 60 * 1000) {
               console.log("🎮 [ReactionTest] 저장된 점수 발견:", data.score);
               setReactionTime(data.score);
-              setGameState("result");
+              setState("result");
               // 약간의 딜레이 후 닉네임 모달 표시
               setTimeout(() => {
                 setShowNicknameModal(true);
