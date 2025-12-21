@@ -303,6 +303,7 @@ export default function IQTest({ locale = "ko", battleMode = false, onBattleComp
       if (timerRef.current) clearInterval(timerRef.current);
       if (totalTimerRef.current) clearInterval(totalTimerRef.current);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState, currentIndex, showResult]);
 
   const handleTimeout = () => {

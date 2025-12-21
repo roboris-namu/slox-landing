@@ -815,7 +815,6 @@ export default function ColorTest({ locale, battleMode = false, onBattleComplete
       }, 300);
     } else {
       // 오답 - 게임 오버
-      const finalScore = score > bestScore ? score : bestScore;
       if (score > bestScore) {
         setBestScore(score);
       }
