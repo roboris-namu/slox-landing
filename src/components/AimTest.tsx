@@ -650,6 +650,22 @@ export default function AimTest({ locale, battleMode = false, onBattleComplete }
           const { profile } = await response.json();
           if (profile?.nickname) { setCurrentUserNickname(profile.nickname); setNickname(profile.nickname); }
         } catch { /* 무시 */ }
+        
+        // 🎮 pending_game_score 확인
+        try {
+          const pendingScore = localStorage.getItem("pending_game_score");
+          if (pendingScore) {
+            const data = JSON.parse(pendingScore);
+            if (data.game === "aim" && Date.now() - data.timestamp < 30 * 60 * 1000) {
+              setHits(data.hits || 0);
+              setMisses(data.misses || 0);
+              setReactionTimes(data.reactionTimes || []);
+              setState("result");
+              setTimeout(() => { setShowNicknameModal(true); }, 500);
+            }
+            localStorage.removeItem("pending_game_score");
+          }
+        } catch { /* 무시 */ }
       }
     };
     checkUser();
@@ -1620,6 +1636,13 @@ export default function AimTest({ locale, battleMode = false, onBattleComplete }
                           <p className="text-purple-400 font-bold">{getScore()}점</p>
                         </div>
                       </div>
+                    </div>
+                  )}
+                  {/* 🔐 비회원 로그인 유도 */}
+                  {!currentUserId && (
+                    <div className="mb-3 p-3 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
+                      <p className="text-sm text-white font-medium mb-1 text-center">🎮 회원으로 등록하면 점수가 누적돼요!</p>
+                      <button onClick={() => { localStorage.setItem("pending_game_score", JSON.stringify({ game: "aim", hits, misses, reactionTimes, timestamp: Date.now() })); window.location.href = "/login?redirect=/aim"; }} className="block w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold text-sm rounded-lg text-center transition-all">로그인하고 이 점수로 등록! →</button>
                     </div>
                   )}
                   <button onClick={() => { setShowRankingPrompt(false); setShowNicknameModal(true); }} className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-black text-lg rounded-xl transition-all shadow-lg shadow-yellow-500/30 animate-pulse hover:animate-none hover:scale-[1.02]">

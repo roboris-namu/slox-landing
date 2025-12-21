@@ -649,6 +649,23 @@ export default function CpsTest({ locale, battleMode = false, onBattleComplete }
             setNickname(profile.nickname);
           }
         } catch { /* 무시 */ }
+        
+        // 🎮 pending_game_score 확인 (비회원 → 로그인 후 점수 자동 등록)
+        try {
+          const pendingScore = localStorage.getItem("pending_game_score");
+          if (pendingScore) {
+            const data = JSON.parse(pendingScore);
+            if (data.game === "cps" && Date.now() - data.timestamp < 30 * 60 * 1000) {
+              console.log("🎮 [CpsTest] 저장된 점수 발견:", data.score);
+              setCps(data.score);
+              setState("result");
+              setTimeout(() => {
+                setShowNicknameModal(true);
+              }, 500);
+            }
+            localStorage.removeItem("pending_game_score");
+          }
+        } catch { /* 무시 */ }
       }
     };
     checkUser();
@@ -1398,6 +1415,27 @@ export default function CpsTest({ locale, battleMode = false, onBattleComplete }
                           <p className="text-purple-400 font-bold">{cps.toFixed(1)} CPS</p>
                         </div>
                       </div>
+                    </div>
+                  )}
+                  {/* 🔐 비회원 로그인 유도 - 점수 저장 후 리다이렉트 */}
+                  {!currentUserId && (
+                    <div className="mb-3 p-3 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
+                      <p className="text-sm text-white font-medium mb-1 text-center">
+                        {lang === "ko" ? "🎮 회원으로 등록하면 점수가 누적돼요!" : "🎮 Login to save scores to your profile!"}
+                      </p>
+                      <button 
+                        onClick={() => {
+                          localStorage.setItem("pending_game_score", JSON.stringify({
+                            game: "cps",
+                            score: cps,
+                            timestamp: Date.now()
+                          }));
+                          window.location.href = lang === "ko" ? "/login?redirect=/cps" : `/${lang}/login?redirect=/${lang}/cps`;
+                        }}
+                        className="block w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold text-sm rounded-lg text-center transition-all"
+                      >
+                        {lang === "ko" ? "로그인하고 이 점수로 등록! →" : "Login & register this score! →"}
+                      </button>
                     </div>
                   )}
                   <button onClick={() => { setShowRankingPrompt(false); setShowNicknameModal(true); }} className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-black text-lg rounded-xl transition-all shadow-lg shadow-yellow-500/30 animate-pulse hover:animate-none hover:scale-[1.02]">
