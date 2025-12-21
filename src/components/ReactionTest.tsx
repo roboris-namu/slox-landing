@@ -1161,6 +1161,26 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
             setNickname(profile.nickname);
         }
         } catch { /* 무시 */ }
+        
+        // 🎮 pending_game_score 확인 (비회원 → 로그인 후 점수 자동 등록)
+        try {
+          const pendingScore = localStorage.getItem("pending_game_score");
+          if (pendingScore) {
+            const data = JSON.parse(pendingScore);
+            // 30분 이내 + reaction 게임인 경우만 처리
+            if (data.game === "reaction" && Date.now() - data.timestamp < 30 * 60 * 1000) {
+              console.log("🎮 [ReactionTest] 저장된 점수 발견:", data.score);
+              setReactionTime(data.score);
+              setGameState("result");
+              // 약간의 딜레이 후 닉네임 모달 표시
+              setTimeout(() => {
+                setShowNicknameModal(true);
+              }, 500);
+            }
+            // 처리 완료 후 삭제
+            localStorage.removeItem("pending_game_score");
+          }
+        } catch { /* 무시 */ }
       }
     };
     checkUser();
@@ -2286,18 +2306,27 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
                     </div>
                   )}
                   
-                  {/* 🔐 비회원 로그인 유도 */}
+                  {/* 🔐 비회원 로그인 유도 - 점수 저장 후 리다이렉트 */}
                   {!currentUserId && (
                     <div className="mb-3 p-3 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
                       <p className="text-sm text-white font-medium mb-1 text-center">
                         {lang === "ko" ? "🎮 회원으로 등록하면 점수가 누적돼요!" : "🎮 Login to save scores to your profile!"}
                       </p>
-                      <a 
-                        href={lang === "ko" ? "/login" : `/${lang}/login`}
+                      <button 
+                        onClick={() => {
+                          // 점수를 localStorage에 저장
+                          localStorage.setItem("pending_game_score", JSON.stringify({
+                            game: "reaction",
+                            score: reactionTime,
+                            timestamp: Date.now()
+                          }));
+                          // 로그인 페이지로 이동 (리다이렉트 포함)
+                          window.location.href = lang === "ko" ? "/login?redirect=/reaction" : `/${lang}/login?redirect=/${lang}/reaction`;
+                        }}
                         className="block w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold text-sm rounded-lg text-center transition-all"
                       >
-                        {lang === "ko" ? "로그인 / 회원가입 →" : "Login / Sign up →"}
-                      </a>
+                        {lang === "ko" ? "로그인하고 이 점수로 등록! →" : "Login & register this score! →"}
+                      </button>
                     </div>
                   )}
                   
