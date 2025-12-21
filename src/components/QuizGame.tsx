@@ -417,6 +417,7 @@ export default function QuizGame({ locale: _propLocale, battleMode = false, onBa
       if (timerRef.current) clearInterval(timerRef.current);
       if (totalTimerRef.current) clearInterval(totalTimerRef.current);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState, currentIndex, showResult]);
 
   const handleTimeout = () => {

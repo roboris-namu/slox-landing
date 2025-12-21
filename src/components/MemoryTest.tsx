@@ -780,7 +780,6 @@ export default function MemoryTest({ locale, battleMode = false, onBattleComplet
       }
     } else {
       setState("wrong");
-      const finalLevel = level > bestLevel ? level : bestLevel;
       if (level > bestLevel) {
         setBestLevel(level);
       }
