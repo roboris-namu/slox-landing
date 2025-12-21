@@ -16,6 +16,18 @@ interface Profile {
   country?: string;
 }
 
+// 인앱 브라우저 감지 (Google OAuth 차단되는 환경)
+const isInAppBrowser = (): boolean => {
+  if (typeof window === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  // 카카오톡, 라인, 인스타그램, 페이스북, 네이버, 트위터 등
+  return /FBAN|FBAV|Instagram|Line|KakaoTalk|KAKAOTALK|NAVER|Twitter|Snapchat|Discord/i.test(ua) ||
+    // Android WebView
+    (ua.includes("wv") && ua.includes("Android")) ||
+    // Samsung Browser 인앱
+    (ua.includes("SamsungBrowser") && ua.includes("Mobile"));
+};
+
 // 국가 옵션
 const COUNTRY_OPTIONS = [
   { code: "KR", flag: "🇰🇷", name: "한국" },
@@ -480,6 +492,26 @@ function LoginContent() {
   }, [fetchProfile, checkTodayAttendance]);
 
   const handleGoogleLogin = async () => {
+    // 🚫 인앱 브라우저 감지 시 외부 브라우저 안내
+    if (isInAppBrowser()) {
+      const currentUrl = window.location.href;
+      alert(
+        "⚠️ 인앱 브라우저에서는 Google 로그인이 제한됩니다.\n\n" +
+        "아래 방법으로 외부 브라우저에서 열어주세요:\n\n" +
+        "📱 Android: 우측 상단 ⋮ → '기본 브라우저로 열기'\n" +
+        "🍎 iOS: 우측 하단 Safari 아이콘\n\n" +
+        "또는 이메일로 로그인해주세요."
+      );
+      // 클립보드에 URL 복사 시도
+      try {
+        await navigator.clipboard.writeText(currentUrl);
+        alert("📋 URL이 복사되었습니다. 브라우저에 붙여넣기 해주세요!");
+      } catch {
+        console.log("클립보드 복사 실패");
+      }
+      return;
+    }
+    
     // 🔄 redirect 파라미터를 localStorage에 저장 (OAuth 후 URL 파라미터 유실 방지)
     if (redirectUrl) {
       localStorage.setItem("login_redirect", redirectUrl);
