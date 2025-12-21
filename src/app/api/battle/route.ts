@@ -235,6 +235,7 @@ async function handleAccept(
   }
 
   // 🔄 프로필에서 최신 닉네임 가져오기 (클라이언트 닉네임 대신)
+  // 프로필이 없으면 자동 생성 (foreign key constraint 방지)
   let finalOpponentNickname = opponentNickname;
   const { data: profile } = await supabase
     .from("profiles")
@@ -244,6 +245,18 @@ async function handleAccept(
   
   if (profile?.nickname) {
     finalOpponentNickname = profile.nickname;
+  } else {
+    // 프로필이 없으면 생성 (foreign key constraint 방지)
+    console.log(`📝 [API/battle] 프로필 생성: ${opponentId}`);
+    await supabase
+      .from("profiles")
+      .upsert({
+        id: opponentId,
+        nickname: opponentNickname,
+        total_score: 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }, { onConflict: "id" });
   }
 
   // 수락 처리
