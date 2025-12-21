@@ -475,17 +475,23 @@ export default function TemplateService() {
                           <span className="text-xs text-white/60 font-medium">{template.code}</span>
                         </div>
                       ) : (
-                        // 기타 브라우저: iframe 미리보기
-                        <div className="absolute inset-0 origin-top-left scale-[0.25] w-[400%] h-[400%] pointer-events-none select-none touch-none">
-                          <iframe 
-                            src={template.demoUrl}
-                            className="w-full h-full border-0"
-                            loading="lazy"
-                            title={`${template.name} 미리보기`}
-                            scrolling="no"
-                            sandbox="allow-same-origin"
-                          />
-                        </div>
+                        // 기타 브라우저: iframe 미리보기 + fallback
+                        <>
+                          {/* iframe 미리보기 */}
+                          <div className="absolute inset-0 origin-top-left scale-[0.25] w-[400%] h-[400%] pointer-events-none select-none touch-none">
+                            <iframe 
+                              src={template.demoUrl}
+                              className="w-full h-full border-0"
+                              loading="lazy"
+                              title={`${template.name} 미리보기`}
+                              scrolling="no"
+                            />
+                          </div>
+                          {/* fallback: iframe 로딩 전 또는 광고차단시 표시 */}
+                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-600/30 to-slate-700/30 -z-10">
+                            <span className="text-4xl opacity-50">{template.preview}</span>
+                          </div>
+                        </>
                       )}
                       {/* 호버 오버레이 */}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
