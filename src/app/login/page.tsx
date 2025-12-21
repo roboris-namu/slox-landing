@@ -812,19 +812,31 @@ function LoginContent() {
       
       console.log("로그인 성공:", data);
       
-      // 프로필이 없으면 생성 (API 프록시 사용)
+      // 프로필이 없으면 생성, 있으면 인증 완료 상태로 업데이트 (API 프록시 사용)
       if (data.user) {
         const profileResponse = await fetch(`/api/profile?userId=${data.user.id}`);
         const profileData = await profileResponse.json();
           
         if (profileData.notFound) {
+          // 프로필 생성 (인증 완료 상태로)
           await fetch("/api/profile", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-            id: data.user.id,
-            nickname: data.user.user_metadata?.nickname || data.user.user_metadata?.full_name || "User",
-            email: data.user.email,
+              id: data.user.id,
+              nickname: data.user.user_metadata?.nickname || data.user.user_metadata?.full_name || "User",
+              email: data.user.email,
+              is_verified: true, // 🔐 이메일 인증 완료
+            }),
+          });
+        } else if (!profileData.profile?.is_verified) {
+          // 기존 프로필이 있는데 인증 안됨 → 인증 완료로 업데이트
+          await fetch("/api/profile", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId: data.user.id,
+              is_verified: true,
             }),
           });
         }

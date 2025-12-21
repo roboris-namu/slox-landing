@@ -108,9 +108,9 @@ export async function POST(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
-    const { userId, nickname, country, avatar_url, total_score, game_scores } = body;
+    const { userId, nickname, country, avatar_url, total_score, game_scores, is_verified } = body;
 
-    console.log("🔄 [API/profile] PATCH 요청:", { userId, nickname, country, total_score, game_scores });
+    console.log("🔄 [API/profile] PATCH 요청:", { userId, nickname, country, total_score, game_scores, is_verified });
 
     if (!userId) {
       return NextResponse.json({ error: "userId가 필요합니다" }, { status: 400 });
@@ -139,6 +139,7 @@ export async function PATCH(request: NextRequest) {
     if (avatar_url !== undefined) updates.avatar_url = avatar_url;
     if (total_score !== undefined) updates.total_score = total_score;
     if (game_scores !== undefined) updates.game_scores = game_scores;
+    if (is_verified !== undefined) updates.is_verified = is_verified;
 
     console.log("🔄 [API/profile] 업데이트 시도:", { userId, updates });
 
