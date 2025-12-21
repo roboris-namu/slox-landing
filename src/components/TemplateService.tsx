@@ -1,6 +1,15 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
+
+// iOS Safari 감지 함수
+const isIOSSafari = (): boolean => {
+  if (typeof window === "undefined") return false;
+  const ua = window.navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  return isIOS && isSafari;
+};
 
 // 카테고리 정의
 const categories = [
@@ -331,6 +340,14 @@ export default function TemplateService() {
   const [activeCategory, setActiveCategory] = useState("personal");
   const [activeSubCategory, setActiveSubCategory] = useState("minimal");
   const sectionRef = useRef<HTMLDivElement>(null);
+  
+  // iOS Safari 여부 (클라이언트에서만 체크)
+  const [isIOS, setIsIOS] = useState(false);
+  
+  useEffect(() => {
+    // 클라이언트에서 iOS Safari 감지
+    setIsIOS(isIOSSafari());
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -446,19 +463,30 @@ export default function TemplateService() {
             >
               {/* 카드 배경 */}
               <div className={`relative bg-slate-800/70 border border-white/10 ${template.available ? "group-hover:border-white/20" : ""} rounded-2xl overflow-hidden`}>
-                {/* 미리보기 영역 - iframe 실시간 프리뷰 */}
+                {/* 미리보기 영역 - iframe 실시간 프리뷰 (iOS Safari에서는 정적 미리보기) */}
                 <div className="relative h-48 bg-gradient-to-br from-slate-700 to-slate-800 overflow-hidden">
                   {template.available ? (
                     <>
-                      {/* 실제 페이지 축소 미리보기 */}
-                      <div className="absolute inset-0 origin-top-left scale-[0.25] w-[400%] h-[400%] pointer-events-none">
-                        <iframe 
-                          src={template.demoUrl}
-                          className="w-full h-full border-0"
-                          loading="lazy"
-                          title={`${template.name} 미리보기`}
-                        />
-                      </div>
+                      {/* iOS Safari에서는 정적 미리보기, 그 외에는 iframe */}
+                      {isIOS ? (
+                        // iOS Safari: 정적 미리보기 (무한 로딩 방지)
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-slate-600/50 to-slate-700/50">
+                          <span className="text-5xl mb-2">{template.preview}</span>
+                          <span className="text-xs text-white/60 font-medium">{template.code}</span>
+                        </div>
+                      ) : (
+                        // 기타 브라우저: iframe 미리보기
+                        <div className="absolute inset-0 origin-top-left scale-[0.25] w-[400%] h-[400%] pointer-events-none select-none touch-none">
+                          <iframe 
+                            src={template.demoUrl}
+                            className="w-full h-full border-0"
+                            loading="lazy"
+                            title={`${template.name} 미리보기`}
+                            scrolling="no"
+                            sandbox="allow-same-origin"
+                          />
+                        </div>
+                      )}
                       {/* 호버 오버레이 */}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
                         <span className="px-4 py-2 bg-white text-slate-900 rounded-full text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">

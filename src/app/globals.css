@@ -24,6 +24,16 @@
 
 html {
   scroll-behavior: smooth;
+  /* iOS Safari 스크롤 최적화 */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* iOS Safari에서 스크롤 중 iframe 터치 이벤트 방지 */
+.touch-none {
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 body {
