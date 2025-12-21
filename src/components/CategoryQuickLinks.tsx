@@ -23,7 +23,7 @@ const categories: Category[] = [
     items: [
       { title: "반응속도", href: "/reaction", emoji: "⚡" },
       { title: "색깔찾기", href: "/color", emoji: "🎨" },
-      { title: "카드맞추기", href: "/memory", emoji: "🃏" },
+      { title: "카드맞추기", href: "/card-match", emoji: "🃏" },
       { title: "CPS테스트", href: "/cps", emoji: "🖱️" },
       { title: "상식퀴즈", href: "/quiz", emoji: "📚" },
       { title: "IQ테스트", href: "/iq", emoji: "🧩" },
