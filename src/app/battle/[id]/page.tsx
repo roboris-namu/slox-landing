@@ -152,19 +152,7 @@ export default function BattlePage() {
       
       setChallenge(challengeData);
       
-      // 로그인 안 됨 → 로그인 페이지로
-      if (!session) {
-        // localStorage에 pending_battle 저장
-        localStorage.setItem("pending_battle", challengeId);
-        router.push(`/login?redirect=/battle/${challengeId}`);
-        return;
-      }
-      
-      // 내 점수 가져오기
-      const myScore = await fetchMyScore(session.userId);
-      setUser({ ...session, totalScore: myScore });
-      
-      // 상태에 따른 처리
+      // 상태에 따른 처리 (로그인 여부와 관계없이)
       if (challengeData.status === "completed" || challengeData.status === "forfeited") {
         setStage("result");
         // 🧹 배틀 완료 시 localStorage 정리 (리다이렉트 방지)
@@ -172,11 +160,20 @@ export default function BattlePage() {
         localStorage.removeItem("login_redirect");
       } else if (challengeData.status === "expired") {
         setError("만료된 도전장입니다");
-      } else if (challengeData.status === "accepted" && challengeData.opponent_id === session.userId) {
-        // 이미 수락한 상태 → 게임 진행 중
-        setStage("playing");
-        isPlayingRef.current = true;
+      } else if (session) {
+        // 로그인 됨 → 기존 로직
+        const myScore = await fetchMyScore(session.userId);
+        setUser({ ...session, totalScore: myScore });
+        
+        if (challengeData.status === "accepted" && challengeData.opponent_id === session.userId) {
+          // 이미 수락한 상태 → 게임 진행 중
+          setStage("playing");
+          isPlayingRef.current = true;
+        } else {
+          setStage("info");
+        }
       } else {
+        // 비로그인 → 도전장 정보는 보여주되 로그인 유도
         setStage("info");
       }
       
@@ -405,10 +402,16 @@ export default function BattlePage() {
     );
   }
 
-  // 렌더링: 도전장 정보 (수락 전)
-  if (stage === "info" && challenge && user) {
+  // 렌더링: 도전장 정보 (수락 전) - 비로그인도 표시
+  if (stage === "info" && challenge) {
     const gameConfig = GAME_CONFIG[challenge.game];
-    const potentialLoss = calculatePotentialLoss();
+    const potentialLoss = user ? calculatePotentialLoss() : 5;
+    
+    // 로그인 페이지로 이동 (redirect 포함)
+    const handleLoginRedirect = () => {
+      localStorage.setItem("pending_battle", challengeId);
+      router.push(`/login?redirect=/battle/${challengeId}`);
+    };
     
     return (
       <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950 flex items-center justify-center p-4">
@@ -443,17 +446,25 @@ export default function BattlePage() {
             </p>
           </div>
           
-          {/* 점수 정보 */}
-          <div className="bg-dark-800/30 rounded-xl p-4 mb-6">
-            <div className="flex justify-between items-center text-sm">
-              <span className="text-dark-400">내 현재 점수</span>
-              <span className="text-white font-bold">{user.totalScore}점</span>
+          {/* 점수 정보 - 로그인 시에만 표시 */}
+          {user ? (
+            <div className="bg-dark-800/30 rounded-xl p-4 mb-6">
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-dark-400">내 현재 점수</span>
+                <span className="text-white font-bold">{user.totalScore}점</span>
+              </div>
+              <div className="flex justify-between items-center text-sm mt-2">
+                <span className="text-dark-400">패배 시 손실</span>
+                <span className="text-red-400 font-bold">-{potentialLoss}점</span>
+              </div>
             </div>
-            <div className="flex justify-between items-center text-sm mt-2">
-              <span className="text-dark-400">패배 시 손실</span>
-              <span className="text-red-400 font-bold">-{potentialLoss}점</span>
+          ) : (
+            <div className="bg-primary-900/20 border border-primary-500/30 rounded-xl p-4 mb-6">
+              <p className="text-primary-400 text-sm">
+                🔐 로그인하면 게임에 참여할 수 있습니다
+              </p>
             </div>
-          </div>
+          )}
           
           {/* 버튼 */}
           <div className="flex gap-4">
@@ -461,14 +472,23 @@ export default function BattlePage() {
               onClick={() => router.push("/")}
               className="flex-1 bg-dark-600 hover:bg-dark-500 border border-dark-500 text-white py-4 rounded-xl font-bold transition-colors"
             >
-              거절하기
+              {user ? "거절하기" : "메인으로"}
             </button>
-            <button
-              onClick={handleAccept}
-              className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-green-500/20"
-            >
-              ✅ 수락하고 시작!
-            </button>
+            {user ? (
+              <button
+                onClick={handleAccept}
+                className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-green-500/20"
+              >
+                ✅ 수락하고 시작!
+              </button>
+            ) : (
+              <button
+                onClick={handleLoginRedirect}
+                className="flex-1 bg-gradient-to-r from-primary-500 to-accent-purple hover:from-primary-600 hover:to-accent-purple/90 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-primary-500/20"
+              >
+                🔐 로그인하고 참여!
+              </button>
+            )}
           </div>
           
           {/* 만료 시간 */}
