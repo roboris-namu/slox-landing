@@ -775,6 +775,7 @@ export default function IQTestMulti({ locale }: Props) {
       if (timerRef.current) clearInterval(timerRef.current);
       if (totalTimerRef.current) clearInterval(totalTimerRef.current);
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameState, currentIndex, showResult]);
 
   const handleTimeout = () => {
