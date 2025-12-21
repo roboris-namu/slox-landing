@@ -656,8 +656,9 @@ export default function CpsTest({ locale, battleMode = false, onBattleComplete }
           if (pendingScore) {
             const data = JSON.parse(pendingScore);
             if (data.game === "cps" && Date.now() - data.timestamp < 30 * 60 * 1000) {
-              console.log("🎮 [CpsTest] 저장된 점수 발견:", data.score);
-              setCps(data.score);
+              console.log("🎮 [CpsTest] 저장된 점수 발견:", data.score, "clicks:", data.clicks);
+              // clicks를 먼저 설정해야 useEffect에서 CPS가 올바르게 계산됨
+              setClicks(data.clicks || 0);
               setState("result");
               setTimeout(() => {
                 setShowNicknameModal(true);
@@ -1428,6 +1429,7 @@ export default function CpsTest({ locale, battleMode = false, onBattleComplete }
                           localStorage.setItem("pending_game_score", JSON.stringify({
                             game: "cps",
                             score: cps,
+                            clicks: clicks,
                             timestamp: Date.now()
                           }));
                           window.location.href = lang === "ko" ? "/login?redirect=/cps" : `/${lang}/login?redirect=/${lang}/cps`;
