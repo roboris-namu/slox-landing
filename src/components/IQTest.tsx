@@ -184,7 +184,8 @@ export default function IQTest({ locale = "ko", battleMode = false, onBattleComp
           if (pendingScore) {
             const data = JSON.parse(pendingScore);
             if (data.game === "iq" && Date.now() - data.timestamp < 30 * 60 * 1000) {
-              setIqScore(data.iqScore || 0);
+              setCorrectCount(data.correctCount || 0);
+              setScore(data.score || 0);
               setGameState("result");
               setTimeout(() => { setShowNicknameModal(true); }, 500);
             }
@@ -866,7 +867,7 @@ export default function IQTest({ locale = "ko", battleMode = false, onBattleComp
                   {!currentUserId && (
                     <div className="mb-3 p-3 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
                       <p className="text-sm text-white font-medium mb-1 text-center">🎮 회원으로 등록하면 점수가 누적돼요!</p>
-                      <button onClick={() => { localStorage.setItem("pending_game_score", JSON.stringify({ game: "iq", iqScore, timestamp: Date.now() })); window.location.href = "/login?redirect=/iq"; }} className="block w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold text-sm rounded-lg text-center transition-all">로그인하고 이 점수로 등록! →</button>
+                      <button onClick={() => { localStorage.setItem("pending_game_score", JSON.stringify({ game: "iq", correctCount, score, timestamp: Date.now() })); window.location.href = "/login?redirect=/iq"; }} className="block w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold text-sm rounded-lg text-center transition-all">로그인하고 이 점수로 등록! →</button>
                     </div>
                   )}
                   <button onClick={() => { setShowRankingPrompt(false); setShowNicknameModal(true); }} className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-black text-lg rounded-xl transition-all shadow-lg shadow-yellow-500/30">
