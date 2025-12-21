@@ -746,6 +746,12 @@ function LoginContent() {
         throw new Error("닉네임은 2~20자로 입력해주세요.");
       }
 
+      // 🔍 이메일 유효성 검사
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      if (!emailRegex.test(email)) {
+        throw new Error("올바른 이메일 형식을 입력해주세요. (예: example@gmail.com)");
+      }
+
       // 🔍 이메일 중복 체크
       const { data: existingProfile } = await supabase
         .from("profiles")
@@ -789,7 +795,7 @@ function LoginContent() {
       }
 
       if (data.user) {
-        alert("회원가입 완료! 로그인해주세요.");
+        alert("회원가입 완료!");
         setIsSignUp(false);
         setEmail("");
         setPassword("");
