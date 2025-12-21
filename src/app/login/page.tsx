@@ -761,6 +761,21 @@ function LoginContent() {
         }
       }
 
+      // 🔍 닉네임 중복 체크 (인증 진행 중인 사용자 포함)
+      const { data: existingNickname } = await supabase
+        .from("profiles")
+        .select("id, nickname, is_verified")
+        .eq("nickname", nickname.trim())
+        .maybeSingle();
+
+      if (existingNickname) {
+        if (existingNickname.is_verified) {
+          throw new Error("이미 사용 중인 닉네임입니다.");
+        } else {
+          throw new Error("다른 사용자가 해당 닉네임으로 가입 진행 중입니다. 다른 닉네임을 사용해주세요.");
+        }
+      }
+
       // 회원가입
       const { data, error } = await supabase.auth.signUp({
         email,
