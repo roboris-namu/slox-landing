@@ -61,6 +61,24 @@ const GAME_CONFIG: Record<string, {
   typing: { name: "타자연습", emoji: "⌨️", unit: "WPM", lowerIsBetter: false },
 };
 
+// 게임 URL 매핑 (게임 이름 → URL 경로)
+const GAME_URL_MAP: Record<string, string> = {
+  reaction: "/reaction",
+  cps: "/cps",
+  memory: "/memory",
+  color: "/color",
+  aim: "/aim",
+  cardmatch: "/card-match",
+  quiz: "/quiz",
+  iq: "/iq",
+  sudoku: "/sudoku",
+  typing: "/typing",
+};
+
+function getGameUrl(game: string): string {
+  return GAME_URL_MAP[game] || `/${game}`;
+}
+
 export default function BattlePage() {
   const params = useParams();
   const router = useRouter();
@@ -623,7 +641,6 @@ export default function BattlePage() {
             <div className="grid grid-cols-3 gap-4 items-center">
               {/* 도전자 */}
               <div className={`p-4 rounded-xl ${challenge.winner_id === challenge.challenger_id ? "bg-green-900/30 border border-green-500/30" : "bg-dark-700/50"}`}>
-                <p className="text-dark-400 text-sm mb-1">도전자</p>
                 <div className="flex items-center justify-center gap-2 mb-2">
                   {/* 프로필 이미지 */}
                   <span className="w-8 h-8 rounded-full bg-dark-600 overflow-hidden flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
@@ -633,7 +650,7 @@ export default function BattlePage() {
                       challenge.challenger_nickname?.charAt(0).toUpperCase()
                     )}
                   </span>
-                  <p className="text-white font-bold truncate">{challenge.challenger_nickname}</p>
+                  <p className="text-white font-bold text-sm">{challenge.challenger_nickname}</p>
                 </div>
                 <p className="text-2xl font-bold text-primary-400">
                   {formatScore(challenge.game, challenge.challenger_score)}
@@ -648,7 +665,6 @@ export default function BattlePage() {
               
               {/* 상대방 */}
               <div className={`p-4 rounded-xl ${challenge.winner_id === challenge.opponent_id ? "bg-green-900/30 border border-green-500/30" : "bg-dark-700/50"}`}>
-                <p className="text-dark-400 text-sm mb-1">상대방</p>
                 <div className="flex items-center justify-center gap-2 mb-2">
                   {/* 프로필 이미지 */}
                   <span className="w-8 h-8 rounded-full bg-dark-600 overflow-hidden flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
@@ -658,7 +674,7 @@ export default function BattlePage() {
                       challenge.opponent_nickname?.charAt(0).toUpperCase()
                     )}
                   </span>
-                  <p className="text-white font-bold truncate">{challenge.opponent_nickname}</p>
+                  <p className="text-white font-bold text-sm">{challenge.opponent_nickname}</p>
                 </div>
                 <p className="text-2xl font-bold text-primary-400">
                   {challenge.opponent_score !== null 
@@ -697,7 +713,7 @@ export default function BattlePage() {
               메인으로
             </button>
             <Link 
-              href={`/${challenge.game}`}
+              href={getGameUrl(challenge.game)}
               className="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white py-4 rounded-xl font-bold transition-all text-center shadow-lg shadow-orange-500/20"
             >
               🔄 복수전 준비
