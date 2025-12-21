@@ -54,7 +54,7 @@ const GAME_CONFIG: Record<string, {
   memory: { name: "순간기억력", emoji: "🧠", unit: "점", lowerIsBetter: false },
   color: { name: "색상구별", emoji: "🎨", unit: "점", lowerIsBetter: false },
   aim: { name: "에임훈련", emoji: "🎯", unit: "점", lowerIsBetter: false },
-  cardmatch: { name: "카드매칭", emoji: "🃏", unit: "ms", lowerIsBetter: true },
+  cardmatch: { name: "카드매칭", emoji: "🃏", unit: "점", lowerIsBetter: false },
   quiz: { name: "상식퀴즈", emoji: "❓", unit: "점", lowerIsBetter: false },
   iq: { name: "IQ 테스트", emoji: "🧩", unit: "IQ", lowerIsBetter: false },
   sudoku: { name: "스도쿠", emoji: "🔢", unit: "초", lowerIsBetter: true },
@@ -286,7 +286,8 @@ export default function BattlePage() {
     const config = GAME_CONFIG[game];
     if (!config) return score.toString();
     
-    if (game === "reaction" || game === "sudoku" || game === "cardmatch") {
+    // 시간 기반 게임 (reaction, sudoku)
+    if (game === "reaction" || game === "sudoku") {
       return `${(score / 1000).toFixed(2)}${config.unit === "ms" ? "s" : config.unit}`;
     }
     return `${score}${config.unit}`;
