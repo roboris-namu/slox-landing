@@ -484,7 +484,7 @@ export default function BattlePage() {
             ) : (
               <button
                 onClick={handleLoginRedirect}
-                className="flex-1 bg-gradient-to-r from-primary-500 to-accent-purple hover:from-primary-600 hover:to-accent-purple/90 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-primary-500/20"
+                className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-500/30"
               >
                 🔐 로그인하고 참여!
               </button>
