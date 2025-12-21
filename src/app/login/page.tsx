@@ -746,34 +746,26 @@ function LoginContent() {
         throw new Error("닉네임은 2~20자로 입력해주세요.");
       }
 
-      // 🔍 이메일 중복 체크 (profiles 테이블에서 확인 + 인증 상태)
+      // 🔍 이메일 중복 체크
       const { data: existingProfile } = await supabase
         .from("profiles")
-        .select("id, email, is_verified")
+        .select("id, email")
         .eq("email", email.toLowerCase())
         .maybeSingle();
 
       if (existingProfile) {
-        if (existingProfile.is_verified) {
-          throw new Error("이미 가입된 이메일입니다. 로그인해주세요.");
-        } else {
-          throw new Error("인증 진행 중인 이메일입니다. 메일함을 확인해주세요.");
-        }
+        throw new Error("이미 가입된 이메일입니다. 로그인해주세요.");
       }
 
-      // 🔍 닉네임 중복 체크 (인증 진행 중인 사용자 포함)
+      // 🔍 닉네임 중복 체크
       const { data: existingNickname } = await supabase
         .from("profiles")
-        .select("id, nickname, is_verified")
+        .select("id, nickname")
         .eq("nickname", nickname.trim())
         .maybeSingle();
 
       if (existingNickname) {
-        if (existingNickname.is_verified) {
-          throw new Error("이미 사용 중인 닉네임입니다.");
-        } else {
-          throw new Error("다른 사용자가 해당 닉네임으로 가입 진행 중입니다. 다른 닉네임을 사용해주세요.");
-        }
+        throw new Error("이미 사용 중인 닉네임입니다.");
       }
 
       // 회원가입
@@ -797,7 +789,7 @@ function LoginContent() {
       }
 
       if (data.user) {
-        alert("회원가입 완료! 이메일 인증 후 로그인해주세요.");
+        alert("회원가입 완료! 로그인해주세요.");
         setIsSignUp(false);
         setEmail("");
         setPassword("");
@@ -827,13 +819,13 @@ function LoginContent() {
       
       console.log("로그인 성공:", data);
       
-      // 프로필이 없으면 생성, 있으면 인증 완료 상태로 업데이트 (API 프록시 사용)
+      // 프로필이 없으면 생성 (API 프록시 사용)
       if (data.user) {
         const profileResponse = await fetch(`/api/profile?userId=${data.user.id}`);
         const profileData = await profileResponse.json();
           
         if (profileData.notFound) {
-          // 프로필 생성 (인증 완료 상태로)
+          // 프로필 생성
           await fetch("/api/profile", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -841,17 +833,6 @@ function LoginContent() {
               id: data.user.id,
               nickname: data.user.user_metadata?.nickname || data.user.user_metadata?.full_name || "User",
               email: data.user.email,
-              is_verified: true, // 🔐 이메일 인증 완료
-            }),
-          });
-        } else if (!profileData.profile?.is_verified) {
-          // 기존 프로필이 있는데 인증 안됨 → 인증 완료로 업데이트
-          await fetch("/api/profile", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              userId: data.user.id,
-              is_verified: true,
             }),
           });
         }
