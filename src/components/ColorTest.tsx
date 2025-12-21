@@ -821,10 +821,10 @@ export default function ColorTest({ locale, battleMode = false, onBattleComplete
       }
       setState("result");
       
-      // 🥊 배틀 모드: 게임 오버 시 점수 전달
+      // 🥊 배틀 모드: 게임 오버 시 현재 게임 점수 전달
       if (battleMode && onBattleComplete && !battleCompleted) {
         setBattleCompleted(true);
-        onBattleComplete(finalScore);
+        onBattleComplete(score); // 현재 게임 점수 (bestScore 아님)
       }
     }
   }, [state, differentIndex, score, level, bestScore, generateRound, battleMode, onBattleComplete, battleCompleted]);

@@ -785,10 +785,10 @@ export default function MemoryTest({ locale, battleMode = false, onBattleComplet
         setBestLevel(level);
       }
       
-      // 🥊 배틀 모드: 틀리면 게임 종료 → 최고 레벨로 점수 전달
+      // 🥊 배틀 모드: 틀리면 게임 종료 → 현재 게임 레벨 전달
       if (battleMode && onBattleComplete && !battleCompleted) {
         setBattleCompleted(true);
-        onBattleComplete(finalLevel);
+        onBattleComplete(level); // 현재 게임 레벨 (bestLevel 아님)
       }
     }
   }, [userInput, numbers, level, bestLevel, battleMode, onBattleComplete, battleCompleted]);
