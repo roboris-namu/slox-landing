@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
@@ -45,8 +46,13 @@ const COUNTRY_OPTIONS = [
 ];
 
 const t = authTranslations.en;
+const locale = "en";
 
-export default function LoginPageEN() {
+function LoginContentEN() {
+  const searchParams = useSearchParams();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _redirectUrl = searchParams.get("redirect");
+  
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -98,6 +104,30 @@ export default function LoginPageEN() {
       if (data.profile) {
         setProfile(data.profile);
         setNeedsNicknameSetup(false);
+        
+        // 🔄 로그인 후 redirect 처리
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get("redirect");
+        const loginRedirect = localStorage.getItem("login_redirect");
+        const pendingBattle = localStorage.getItem("pending_battle");
+        const pendingScore = localStorage.getItem("pending_game_score");
+        
+        if (redirect) {
+          console.log("🔄 [Profile] Redirecting to:", redirect);
+          window.location.href = redirect;
+        } else if (loginRedirect) {
+          console.log("🔄 [Profile] Redirecting from localStorage:", loginRedirect);
+          localStorage.removeItem("login_redirect");
+          window.location.href = loginRedirect;
+        } else if (pendingBattle) {
+          console.log("🔄 [Profile] Redirecting to battle:", pendingBattle);
+          localStorage.removeItem("pending_battle");
+          window.location.href = `/battle/${pendingBattle}`;
+        } else if (pendingScore) {
+          const scoreData = JSON.parse(pendingScore);
+          console.log("🔄 [Profile] Pending score found, redirecting to game:", scoreData.game);
+          window.location.href = `/${locale}/${scoreData.game}`;
+        }
       }
     } catch (err) {
       console.error("Failed to load profile:", err);
@@ -672,3 +702,15 @@ export default function LoginPageEN() {
   );
 }
 
+// Suspense wrapper for useSearchParams
+export default function LoginPageEN() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-dark-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-accent-500" />
+      </div>
+    }>
+      <LoginContentEN />
+    </Suspense>
+  );
+}

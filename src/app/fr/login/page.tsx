@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import Link from "next/link";
@@ -45,7 +46,11 @@ const COUNTRY_OPTIONS = [
 const locale = "fr";
 const t = authTranslations[locale];
 
-export default function LoginPageFR() {
+function LoginContentFR() {
+  const searchParams = useSearchParams();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _redirectUrl = searchParams.get("redirect");
+  
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -109,7 +114,19 @@ export default function LoginPageFR() {
       const response = await fetch(`/api/profile?userId=${userId}`);
       const data = await response.json();
       if (data.notFound) { setSetupNickname(userName || ""); setNeedsNicknameSetup(true); setProfileLoading(false); return; }
-      if (data.profile) { setProfile(data.profile); setNeedsNicknameSetup(false); }
+      if (data.profile) {
+        setProfile(data.profile);
+        setNeedsNicknameSetup(false);
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get("redirect");
+        const loginRedirect = localStorage.getItem("login_redirect");
+        const pendingBattle = localStorage.getItem("pending_battle");
+        const pendingScore = localStorage.getItem("pending_game_score");
+        if (redirect) { window.location.href = redirect; }
+        else if (loginRedirect) { localStorage.removeItem("login_redirect"); window.location.href = loginRedirect; }
+        else if (pendingBattle) { localStorage.removeItem("pending_battle"); window.location.href = `/battle/${pendingBattle}`; }
+        else if (pendingScore) { const scoreData = JSON.parse(pendingScore); window.location.href = `/${locale}/${scoreData.game}`; }
+      }
     } finally { setProfileLoading(false); }
   }, []);
 
@@ -246,3 +263,10 @@ export default function LoginPageFR() {
   );
 }
 
+export default function LoginPageFR() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-dark-950 flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-accent-500" /></div>}>
+      <LoginContentFR />
+    </Suspense>
+  );
+}
