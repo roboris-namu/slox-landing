@@ -502,7 +502,7 @@ export default function CardMatchGame({ locale = "ko", battleMode = false, onBat
           action: "create",
           challengerId: currentUserId,
           challengerNickname: nickname,
-          challengerScore: timer, // 남은 시간으로 경쟁
+          challengerScore: getFinalScore(), // 최종 점수로 경쟁
           game: "cardmatch",
         }),
       });

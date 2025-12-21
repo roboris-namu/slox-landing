@@ -234,21 +234,35 @@ async function handleAccept(
     );
   }
 
+  // 🔐 opponentId 유효성 검증 (UUID 형식 체크)
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  if (!uuidRegex.test(opponentId)) {
+    console.error(`❌ [API/battle] 잘못된 opponentId 형식: ${opponentId}`);
+    return NextResponse.json(
+      { error: "유효하지 않은 사용자 ID입니다. 다시 로그인해주세요." },
+      { status: 400 }
+    );
+  }
+
   // 🔄 프로필에서 최신 닉네임 가져오기 (클라이언트 닉네임 대신)
   // 프로필이 없으면 자동 생성 (foreign key constraint 방지)
   let finalOpponentNickname = opponentNickname;
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from("profiles")
     .select("nickname")
     .eq("id", opponentId)
     .maybeSingle();
+  
+  if (profileError) {
+    console.error(`❌ [API/battle] 프로필 조회 에러:`, profileError);
+  }
   
   if (profile?.nickname) {
     finalOpponentNickname = profile.nickname;
   } else {
     // 프로필이 없으면 생성 (foreign key constraint 방지)
     console.log(`📝 [API/battle] 프로필 생성: ${opponentId}`);
-    await supabase
+    const { error: upsertError } = await supabase
       .from("profiles")
       .upsert({
         id: opponentId,
@@ -257,6 +271,14 @@ async function handleAccept(
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       }, { onConflict: "id" });
+    
+    if (upsertError) {
+      console.error(`❌ [API/battle] 프로필 생성 에러:`, upsertError);
+      return NextResponse.json(
+        { error: "사용자 프로필 생성에 실패했습니다. 다시 시도해주세요." },
+        { status: 500 }
+      );
+    }
   }
 
   // 수락 처리
