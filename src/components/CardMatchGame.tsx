@@ -316,11 +316,11 @@ export default function CardMatchGame({ locale = "ko", battleMode = false, onBat
         setBestScore(finalScore);
       }
       
-      // 🥊 배틀 모드: 게임 완료 시 점수 전달 (완료 시간을 점수로)
+      // 🥊 배틀 모드: 게임 완료 시 최종 점수 전달
       if (battleMode && onBattleComplete && !battleCompleted) {
         setBattleCompleted(true);
-        // 카드매칭은 남은 시간이 많을수록 좋음 (timer 값 전달)
-        onBattleComplete(timer);
+        // 최종 점수 전달 (누적점수 + 시간보너스 + 퍼펙트보너스)
+        onBattleComplete(finalScore);
       }
     }
   }, [state, matchedPairs, totalPairs, score, timer, mistakes, bestScore, battleMode, onBattleComplete, battleCompleted]);
