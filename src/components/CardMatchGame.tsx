@@ -1392,7 +1392,7 @@ export default function CardMatchGame({ locale = "ko", battleMode = false, onBat
                 </div>
 
                 <div className="bg-dark-800 rounded-xl p-4 mb-4">
-                  <p className="text-white text-center font-bold mb-2">🃏 {timer}초 남김</p>
+                  <p className="text-white text-center font-bold mb-2">🃏 {getFinalScore()}점</p>
                   <p className="text-dark-400 text-xs text-center break-all">{battleUrl}</p>
                 </div>
 
