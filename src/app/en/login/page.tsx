@@ -75,6 +75,13 @@ function LoginContentEN() {
   // 프로필 사진 수정
   const [avatarUploading, setAvatarUploading] = useState(false);
   
+  // 비밀번호 변경
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  
   // 신규 가입 닉네임 설정
   const [needsNicknameSetup, setNeedsNicknameSetup] = useState(false);
   const [setupNickname, setSetupNickname] = useState("");
@@ -372,6 +379,22 @@ function LoginContentEN() {
     } finally {
       setCountrySaving(false);
     }
+  };
+
+  // 비밀번호 변경
+  const handlePasswordChange = async () => {
+    if (!user) return;
+    setPasswordError("");
+    if (newPassword.length < 6) { setPasswordError("Password must be at least 6 characters"); return; }
+    if (newPassword !== confirmPassword) { setPasswordError("Passwords do not match"); return; }
+    setPasswordSaving(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) throw new Error(error.message);
+      alert("Password changed successfully!");
+      setIsEditingPassword(false); setNewPassword(""); setConfirmPassword("");
+    } catch (err) { setPasswordError(err instanceof Error ? err.message : "Password change failed"); }
+    finally { setPasswordSaving(false); }
   };
 
   // 프로필 사진 업로드
@@ -687,6 +710,24 @@ function LoginContentEN() {
             >
               {checkingIn ? "..." : checkedInToday ? `✅ ${t.attendance.checkInComplete}` : `📅 ${t.attendance.checkIn} (+10${t.profile.points})`}
             </button>
+          </div>
+
+          {/* 비밀번호 변경 */}
+          <div className="bg-dark-700/50 rounded-xl p-4">
+            {isEditingPassword ? (
+              <div className="space-y-3">
+                <h3 className="text-white font-semibold text-center mb-3">🔐 Change Password</h3>
+                <input type="password" placeholder="New password (6+ chars)" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-3 py-2 bg-dark-600 border border-dark-500 rounded-lg text-white text-sm" />
+                <input type="password" placeholder="Confirm new password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-3 py-2 bg-dark-600 border border-dark-500 rounded-lg text-white text-sm" />
+                {passwordError && <p className="text-red-400 text-xs text-center">{passwordError}</p>}
+                <div className="flex gap-2">
+                  <button onClick={handlePasswordChange} disabled={passwordSaving || !newPassword || !confirmPassword} className="flex-1 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-lg disabled:opacity-50">{passwordSaving ? "Changing..." : "Change"}</button>
+                  <button onClick={() => { setIsEditingPassword(false); setNewPassword(""); setConfirmPassword(""); setPasswordError(""); }} className="flex-1 py-2 bg-dark-600 hover:bg-dark-500 text-gray-300 text-sm rounded-lg">Cancel</button>
+                </div>
+              </div>
+            ) : (
+              <button onClick={() => setIsEditingPassword(true)} className="w-full text-center text-gray-400 hover:text-white text-sm transition-colors">🔐 Change Password</button>
+            )}
           </div>
 
           {/* 로그아웃 */}

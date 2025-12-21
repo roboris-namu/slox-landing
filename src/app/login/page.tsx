@@ -79,6 +79,13 @@ function LoginContent() {
   // 프로필 사진 수정
   const [avatarUploading, setAvatarUploading] = useState(false);
   
+  // 비밀번호 변경
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  
   // 신규 가입 닉네임 설정
   const [needsNicknameSetup, setNeedsNicknameSetup] = useState(false);
   const [setupNickname, setSetupNickname] = useState("");
@@ -635,6 +642,47 @@ function LoginContent() {
     }
   };
 
+  // 비밀번호 변경
+  const handlePasswordChange = async () => {
+    if (!user) return;
+    
+    setPasswordError("");
+    
+    // 유효성 검사
+    if (newPassword.length < 6) {
+      setPasswordError("새 비밀번호는 6자 이상이어야 합니다.");
+      return;
+    }
+    
+    if (newPassword !== confirmPassword) {
+      setPasswordError("새 비밀번호가 일치하지 않습니다.");
+      return;
+    }
+    
+    setPasswordSaving(true);
+    
+    try {
+      // Supabase 비밀번호 업데이트
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      });
+      
+      if (error) {
+        throw new Error(error.message);
+      }
+      
+      alert("비밀번호가 변경되었습니다!");
+      setIsEditingPassword(false);
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      console.error("비밀번호 변경 에러:", err);
+      setPasswordError(err instanceof Error ? err.message : "비밀번호 변경 실패");
+    } finally {
+      setPasswordSaving(false);
+    }
+  };
+
   // 프로필 사진 업로드 (API 프록시 사용)
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1151,6 +1199,59 @@ function LoginContent() {
                 <br />
                 게임 1등도 점수에 반영돼요!
               </p>
+            </div>
+
+            {/* 비밀번호 변경 */}
+            <div className="bg-dark-700/50 rounded-xl p-4">
+              {isEditingPassword ? (
+                <div className="space-y-3">
+                  <h3 className="text-white font-semibold text-center mb-3">🔐 비밀번호 변경</h3>
+                  <input
+                    type="password"
+                    placeholder="새 비밀번호 (6자 이상)"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full px-3 py-2 bg-dark-600 border border-dark-500 rounded-lg text-white text-sm focus:outline-none focus:border-primary-500"
+                  />
+                  <input
+                    type="password"
+                    placeholder="새 비밀번호 확인"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full px-3 py-2 bg-dark-600 border border-dark-500 rounded-lg text-white text-sm focus:outline-none focus:border-primary-500"
+                  />
+                  {passwordError && (
+                    <p className="text-red-400 text-xs text-center">{passwordError}</p>
+                  )}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={handlePasswordChange}
+                      disabled={passwordSaving || !newPassword || !confirmPassword}
+                      className="flex-1 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-lg disabled:opacity-50"
+                    >
+                      {passwordSaving ? "변경 중..." : "변경하기"}
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsEditingPassword(false);
+                        setNewPassword("");
+                        setConfirmPassword("");
+                        setPasswordError("");
+                      }}
+                      className="flex-1 py-2 bg-dark-600 hover:bg-dark-500 text-gray-300 text-sm rounded-lg"
+                    >
+                      취소
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setIsEditingPassword(true)}
+                  className="w-full text-center text-gray-400 hover:text-white text-sm transition-colors"
+                >
+                  🔐 비밀번호 변경
+                </button>
+              )}
             </div>
 
             {/* 로그아웃 버튼 */}

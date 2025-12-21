@@ -70,6 +70,13 @@ function LoginContentJA() {
   const [countrySaving, setCountrySaving] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
   
+  // パスワード変更
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  
   // メール認証
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -77,6 +84,22 @@ function LoginContentJA() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [authError, setAuthError] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
+
+  // パスワード変更
+  const handlePasswordChange = async () => {
+    if (!user) return;
+    setPasswordError("");
+    if (newPassword.length < 6) { setPasswordError("パスワードは6文字以上必要です"); return; }
+    if (newPassword !== confirmPassword) { setPasswordError("パスワードが一致しません"); return; }
+    setPasswordSaving(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) throw new Error(error.message);
+      alert("パスワードが変更されました！");
+      setIsEditingPassword(false); setNewPassword(""); setConfirmPassword("");
+    } catch (err) { setPasswordError(err instanceof Error ? err.message : "パスワード変更失敗"); }
+    finally { setPasswordSaving(false); }
+  };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -361,6 +384,23 @@ function LoginContentJA() {
             </div>
             <div className="grid grid-cols-2 gap-4 mb-6"><div className="bg-dark-700/50 rounded-xl p-4 text-center"><p className="text-2xl font-bold text-white">{profile?.total_score.toLocaleString()}</p><p className="text-dark-400 text-sm">{t.profile.totalScore}</p></div><div className="bg-dark-700/50 rounded-xl p-4 text-center"><p className="text-2xl font-bold text-white">{profile?.attendance_count}</p><p className="text-dark-400 text-sm">{t.profile.attendance}</p></div></div>
             <button onClick={handleCheckIn} disabled={checkedInToday || checkingIn} className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${checkedInToday ? "bg-green-500/20 text-green-400 cursor-default" : "bg-gradient-to-r from-indigo-500 to-cyan-500 text-white hover:shadow-glow-md"}`}>{checkingIn ? "..." : checkedInToday ? `✅ ${t.attendance.checkInComplete}` : `📅 ${t.attendance.checkIn} (+10${t.profile.points})`}</button>
+          </div>
+          {/* パスワード変更 */}
+          <div className="bg-dark-700/50 rounded-xl p-4">
+            {isEditingPassword ? (
+              <div className="space-y-3">
+                <h3 className="text-white font-semibold text-center mb-3">🔐 パスワード変更</h3>
+                <input type="password" placeholder="新しいパスワード (6文字以上)" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-3 py-2 bg-dark-600 border border-dark-500 rounded-lg text-white text-sm" />
+                <input type="password" placeholder="新しいパスワード確認" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-3 py-2 bg-dark-600 border border-dark-500 rounded-lg text-white text-sm" />
+                {passwordError && <p className="text-red-400 text-xs text-center">{passwordError}</p>}
+                <div className="flex gap-2">
+                  <button onClick={handlePasswordChange} disabled={passwordSaving || !newPassword || !confirmPassword} className="flex-1 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-lg disabled:opacity-50">{passwordSaving ? "変更中..." : "変更"}</button>
+                  <button onClick={() => { setIsEditingPassword(false); setNewPassword(""); setConfirmPassword(""); setPasswordError(""); }} className="flex-1 py-2 bg-dark-600 hover:bg-dark-500 text-gray-300 text-sm rounded-lg">キャンセル</button>
+                </div>
+              </div>
+            ) : (
+              <button onClick={() => setIsEditingPassword(true)} className="w-full text-center text-gray-400 hover:text-white text-sm transition-colors">🔐 パスワード変更</button>
+            )}
           </div>
           <button onClick={handleLogout} className="w-full py-3 bg-dark-800/50 border border-white/10 rounded-xl text-red-400 font-medium hover:bg-red-500/10 transition-all">🚪 {t.profile.logout}</button>
         </div>

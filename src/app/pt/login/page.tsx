@@ -68,12 +68,36 @@ function LoginContentPT() {
   const [newCountry, setNewCountry] = useState("BR");
   const [countrySaving, setCountrySaving] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
+  
+  // Alteração de senha
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nickname, setNickname] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
   const [authError, setAuthError] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
+
+  // Alteração de senha
+  const handlePasswordChange = async () => {
+    if (!user) return;
+    setPasswordError("");
+    if (newPassword.length < 6) { setPasswordError("A senha deve ter pelo menos 6 caracteres"); return; }
+    if (newPassword !== confirmPassword) { setPasswordError("As senhas não correspondem"); return; }
+    setPasswordSaving(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: newPassword });
+      if (error) throw new Error(error.message);
+      alert("Senha alterada!");
+      setIsEditingPassword(false); setNewPassword(""); setConfirmPassword("");
+    } catch (err) { setPasswordError(err instanceof Error ? err.message : "Falha ao alterar senha"); }
+    finally { setPasswordSaving(false); }
+  };
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -255,6 +279,23 @@ function LoginContentPT() {
             <div className="flex items-center gap-4 mb-6"><label className="relative cursor-pointer group"><input type="file" accept="image/*" onChange={handleAvatarUpload} disabled={avatarUploading} className="hidden" /><div className="w-16 h-16 rounded-full overflow-hidden ring-2 ring-accent-500 group-hover:opacity-70 transition-opacity">{profile?.avatar_url ? <img src={profile.avatar_url} alt={profile.nickname} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-gradient-to-br from-accent-500 to-cyan-500 flex items-center justify-center text-white text-2xl font-bold">{profile?.nickname?.charAt(0).toUpperCase()}</div>}</div><div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><span className="text-white text-xl drop-shadow-lg">📷</span></div>{avatarUploading && <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full"><div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div></div>}</label><div>{isEditingNickname ? <div className="flex items-center gap-2"><input type="text" value={newNickname} onChange={(e) => setNewNickname(e.target.value)} className="px-3 py-1 bg-dark-700 border border-dark-600 rounded-lg text-white text-sm" maxLength={20} /><button onClick={handleSaveNickname} disabled={nicknameSaving} className="px-3 py-1 bg-accent-500 text-white rounded-lg text-sm">{nicknameSaving ? "..." : t.profile.save}</button><button onClick={() => setIsEditingNickname(false)} className="px-3 py-1 bg-dark-700 text-white rounded-lg text-sm">✕</button></div> : <div className="flex items-center gap-2"><h2 className="text-xl font-bold text-white">{profile?.nickname}</h2><button onClick={() => { setNewNickname(profile?.nickname || ""); setIsEditingNickname(true); }} className="text-dark-500 hover:text-white text-sm">✏️</button></div>}{nicknameError && <p className="text-red-400 text-xs mt-1">{nicknameError}</p>}<p className="text-dark-400 text-sm">{profile?.email}</p><div className="flex items-center gap-2 mt-2">{isEditingCountry ? <div className="flex items-center gap-2"><select value={newCountry} onChange={(e) => setNewCountry(e.target.value)} className="px-2 py-1 bg-dark-700 border border-dark-600 rounded text-white text-sm">{COUNTRY_OPTIONS.map((c) => <option key={c.code} value={c.code}>{c.flag} {c.name}</option>)}</select><button onClick={() => handleCountryChange(newCountry)} disabled={countrySaving} className="px-2 py-1 bg-accent-500 text-white text-xs rounded">{countrySaving ? "..." : "Salvar"}</button><button onClick={() => setIsEditingCountry(false)} className="px-2 py-1 bg-dark-600 text-gray-300 text-xs rounded">✕</button></div> : <button onClick={() => { setNewCountry(profile?.country || "BR"); setIsEditingCountry(true); }} className="flex items-center gap-1.5 px-2 py-1 bg-dark-700 hover:bg-dark-600 rounded text-sm"><span className="text-lg">{COUNTRY_OPTIONS.find(c => c.code === (profile?.country || "BR"))?.flag || "🌍"}</span><span className="text-dark-400">{COUNTRY_OPTIONS.find(c => c.code === (profile?.country || "BR"))?.name || "Outro"}</span><span className="text-gray-500 text-xs">✏️</span></button>}</div></div></div>
             <div className="grid grid-cols-2 gap-4 mb-6"><div className="bg-dark-700/50 rounded-xl p-4 text-center"><p className="text-2xl font-bold text-white">{profile?.total_score.toLocaleString()}</p><p className="text-dark-400 text-sm">{t.profile.totalScore}</p></div><div className="bg-dark-700/50 rounded-xl p-4 text-center"><p className="text-2xl font-bold text-white">{profile?.attendance_count}</p><p className="text-dark-400 text-sm">{t.profile.attendance}</p></div></div>
             <button onClick={handleCheckIn} disabled={checkedInToday || checkingIn} className={`w-full py-4 rounded-xl font-bold text-lg transition-all ${checkedInToday ? "bg-green-500/20 text-green-400" : "bg-gradient-to-r from-indigo-500 to-cyan-500 text-white hover:shadow-glow-md"}`}>{checkingIn ? "..." : checkedInToday ? `✅ ${t.attendance.checkInComplete}` : `📅 ${t.attendance.checkIn} (+10${t.profile.points})`}</button>
+          </div>
+          {/* Alteração de senha */}
+          <div className="bg-dark-700/50 rounded-xl p-4">
+            {isEditingPassword ? (
+              <div className="space-y-3">
+                <h3 className="text-white font-semibold text-center mb-3">🔐 Alterar Senha</h3>
+                <input type="password" placeholder="Nova senha (mín. 6 caracteres)" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className="w-full px-3 py-2 bg-dark-600 border border-dark-500 rounded-lg text-white text-sm" />
+                <input type="password" placeholder="Confirmar nova senha" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-3 py-2 bg-dark-600 border border-dark-500 rounded-lg text-white text-sm" />
+                {passwordError && <p className="text-red-400 text-xs text-center">{passwordError}</p>}
+                <div className="flex gap-2">
+                  <button onClick={handlePasswordChange} disabled={passwordSaving || !newPassword || !confirmPassword} className="flex-1 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-lg disabled:opacity-50">{passwordSaving ? "Alterando..." : "Alterar"}</button>
+                  <button onClick={() => { setIsEditingPassword(false); setNewPassword(""); setConfirmPassword(""); setPasswordError(""); }} className="flex-1 py-2 bg-dark-600 hover:bg-dark-500 text-gray-300 text-sm rounded-lg">Cancelar</button>
+                </div>
+              </div>
+            ) : (
+              <button onClick={() => setIsEditingPassword(true)} className="w-full text-center text-gray-400 hover:text-white text-sm transition-colors">🔐 Alterar Senha</button>
+            )}
           </div>
           <button onClick={handleLogout} className="w-full py-3 bg-dark-800/50 border border-white/10 rounded-xl text-red-400 font-medium hover:bg-red-500/10">🚪 {t.profile.logout}</button>
         </div>
