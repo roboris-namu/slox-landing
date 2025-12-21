@@ -2286,6 +2286,21 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
                     </div>
                   )}
                   
+                  {/* 🔐 비회원 로그인 유도 */}
+                  {!currentUserId && (
+                    <div className="mb-3 p-3 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-500/20">
+                      <p className="text-sm text-white font-medium mb-1 text-center">
+                        {lang === "ko" ? "🎮 회원으로 등록하면 점수가 누적돼요!" : "🎮 Login to save scores to your profile!"}
+                      </p>
+                      <a 
+                        href={lang === "ko" ? "/login" : `/${lang}/login`}
+                        className="block w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold text-sm rounded-lg text-center transition-all"
+                      >
+                        {lang === "ko" ? "로그인 / 회원가입 →" : "Login / Sign up →"}
+                      </a>
+                    </div>
+                  )}
+                  
                   {/* 랭킹 등록 버튼 - 깜빡이는 효과 */}
                   <button
                     onClick={() => {
