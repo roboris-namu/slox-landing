@@ -1366,7 +1366,7 @@ export default function TypingMulti({ locale, battleMode = false, onBattleComple
                             {isFirstPlace ? "👑" : calculatedRank <= 3 ? "🏆" : calculatedRank <= 10 ? "🔥" : "📊"}
                           </div>
                           <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : calculatedRank <= 3 ? "text-yellow-400" : "text-white"}`}>
-                            {isFirstPlace ? t.newFirst : `${t.currentRank} #${myRank}!`}
+                            {isFirstPlace ? t.newFirst : `${t.currentRank} #${calculatedRank}!`}
                           </h3>
                           <p className="text-dark-400 text-sm">{result.cpm} {t.speed}</p>
                         </>
