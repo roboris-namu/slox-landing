@@ -170,11 +170,8 @@ export default function GameNavBar({
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* 로고 */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-accent-purple to-accent-cyan rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">S</span>
-            </div>
-            <span className="text-white font-semibold">SLOX</span>
+          <Link href="/" className="font-black text-xl text-white tracking-tight hover:opacity-80 transition-opacity">
+            SLOX
           </Link>
 
           {/* 오른쪽 메뉴 */}

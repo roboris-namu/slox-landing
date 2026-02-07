@@ -46,13 +46,12 @@ export default function AdBanner({
   }, []);
 
   return (
-    <div className={`ad-container my-6 ${className}`} ref={adRef}>
+    <div className={`ad-container ${className}`} ref={adRef}>
       {/* SLOX-game-banner 광고 단위 */}
       <ins
         className="adsbygoogle"
         style={{
           display: "block",
-          minHeight: "90px",
           width: "100%",
         }}
         data-ad-client="ca-pub-4738855756690019"

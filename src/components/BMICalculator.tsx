@@ -342,11 +342,8 @@ export default function BMICalculator({ lang = "ko" }: BMICalculatorProps) {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-900/80 backdrop-blur-xl border-b border-dark-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href={mainPath} className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-accent-purple to-accent-cyan rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">S</span>
-              </div>
-              <span className="text-white font-semibold">SLOX</span>
+            <Link href={mainPath} className="font-black text-xl text-white tracking-tight hover:opacity-80 transition-opacity">
+              SLOX
             </Link>
             <div className="flex items-center gap-4">
               {/* 언어 선택 드롭다운 */}

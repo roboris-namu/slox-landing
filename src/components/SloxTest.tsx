@@ -522,11 +522,8 @@ ${charT.description}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-dark-900/80 backdrop-blur-xl border-b border-dark-800">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-accent-purple to-accent-cyan rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">S</span>
-              </div>
-              <span className="text-white font-semibold">SLOX</span>
+            <Link href="/" className="font-black text-xl text-white tracking-tight hover:opacity-80 transition-opacity">
+              SLOX
             </Link>
             <Link href="/" className="text-dark-300 hover:text-white transition-colors text-sm">
               {t.backToMain}
@@ -737,11 +734,8 @@ ${charT.description}
           {/* SLOX 홍보 */}
           <div className="mt-12 text-center">
             <p className="text-dark-500 text-sm mb-2">{t.poweredBy}</p>
-            <Link href="/" className="inline-flex items-center gap-2 text-dark-400 hover:text-white transition-colors">
-              <div className="w-6 h-6 bg-gradient-to-br from-accent-purple to-accent-cyan rounded flex items-center justify-center">
-                <span className="text-white font-bold text-xs">S</span>
-              </div>
-              <span className="font-medium">SLOX</span>
+            <Link href="/" className="font-black text-sm text-white tracking-tight hover:opacity-80 transition-opacity">
+              SLOX
             </Link>
             <p className="text-dark-500 text-xs mt-2">{t.services}</p>
           </div>

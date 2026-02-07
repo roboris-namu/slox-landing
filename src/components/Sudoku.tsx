@@ -5,7 +5,7 @@ import Link from "next/link";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
-import AdBanner from "@/components/AdBanner";
+
 
 type Board = (number | null)[][];
 type GameState = "ready" | "playing" | "complete" | "gameover";
@@ -884,9 +884,6 @@ export default function Sudoku({ locale = "ko", battleMode = false, onBattleComp
             </div>
           </div>
 
-          {/* 📊 광고 배너 */}
-          <AdBanner className="mb-8" />
-
           {/* 명예의전당 */}
           <div className="mb-8 p-5 bg-dark-900/50 border border-dark-800 rounded-xl">
             <div className="flex items-center justify-between mb-4">
@@ -1181,11 +1178,8 @@ export default function Sudoku({ locale = "ko", battleMode = false, onBattleComp
           {/* SLOX 홍보 */}
           <div className="mt-12 text-center">
             <p className="text-dark-500 text-sm mb-2">Powered by</p>
-            <Link href="/" className="inline-flex items-center gap-2 text-dark-400 hover:text-white transition-colors">
-              <div className="w-6 h-6 bg-gradient-to-br from-accent-purple to-accent-cyan rounded flex items-center justify-center">
-                <span className="text-white font-bold text-xs">S</span>
-              </div>
-              <span className="font-medium">SLOX</span>
+            <Link href="/" className="font-black text-sm text-white tracking-tight hover:opacity-80 transition-opacity">
+              SLOX
             </Link>
             <p className="text-dark-500 text-xs mt-2">홈페이지 · 앱 제작 · AI 챗봇 구축</p>
           </div>
