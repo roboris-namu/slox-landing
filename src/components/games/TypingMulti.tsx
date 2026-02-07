@@ -787,6 +787,7 @@ export default function TypingMulti({ locale, battleMode = false, onBattleComple
       const result = await response.json();
       if (result.error) throw new Error(result.error);
       if (result.data) setLeaderboard(result.data);
+      if (result.totalCount !== undefined) setTotalCount(result.totalCount);
     } catch (err) {
       console.error("Failed to load leaderboard:", err);
     }
@@ -918,6 +919,16 @@ export default function TypingMulti({ locale, battleMode = false, onBattleComple
   // 게임 끝나면 자동 랭킹 등록 팝업 + 배틀 처리
   useEffect(() => {
     if (isFinished && !hasSubmittedScore && result && result.cpm > 0) {
+      // 🏆 정확한 순위 계산을 위해 API에서 myRank 가져오기
+      fetch(`/api/leaderboard?game=typing&limit=10&myScore=${result.cpm}`)
+        .then(res => res.json())
+        .then(apiResult => {
+          if (apiResult.myRank) setMyRank(apiResult.myRank);
+          if (apiResult.data) setLeaderboard(apiResult.data);
+          if (apiResult.totalCount !== undefined) setTotalCount(apiResult.totalCount);
+        })
+        .catch(err => console.error("Failed to calculate rank:", err));
+
       const timer = setTimeout(() => setShowRankingPrompt(true), 800);
       
       // 🥊 배틀 모드: 게임 완료 시 점수 전달 (WPM)

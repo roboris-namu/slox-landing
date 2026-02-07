@@ -62,14 +62,16 @@ export async function GET(request: NextRequest) {
     let myRank = null;
     if (myScore) {
       const scoreValue = parseFloat(myScore);
-      // 나보다 좋은 점수를 가진 사람 수 + 1 = 내 순위
-      const compareOperator = config.orderAsc ? "lt" : "gt"; // 낮을수록 좋으면 lt, 높을수록 좋으면 gt
-      const { count: betterCount } = await supabase
-        .from(config.table)
-        .select("*", { count: "exact", head: true })
-        [compareOperator](config.scoreField, scoreValue);
-      
-      myRank = (betterCount || 0) + 1;
+      if (!isNaN(scoreValue)) {
+        // 나보다 좋은 점수를 가진 사람 수 + 1 = 내 순위
+        const compareOperator = config.orderAsc ? "lt" : "gt"; // 낮을수록 좋으면 lt, 높을수록 좋으면 gt
+        const { count: betterCount } = await supabase
+          .from(config.table)
+          .select("*", { count: "exact", head: true })
+          [compareOperator](config.scoreField, scoreValue);
+        
+        myRank = (betterCount || 0) + 1;
+      }
     }
 
     if (error) {
@@ -148,12 +150,12 @@ const getRankPoints = (rank: number): number => {
  */
 async function recalculateAllRanks(game: string, config: { table: string; scoreField: string; orderAsc: boolean }) {
   try {
-    // 1. 해당 게임 리더보드 상위 15명 가져오기 (10위 밖 회원도 업데이트 위해 여유있게)
+    // 1. 해당 게임 리더보드 상위 20명 가져오기 (10위 밖 회원도 업데이트 위해 여유있게)
     const { data: leaderboard } = await supabase
       .from(config.table)
       .select("*")
       .order(config.scoreField, { ascending: config.orderAsc })
-      .limit(15);
+      .limit(20);
     
     if (!leaderboard) return;
     
@@ -248,22 +250,93 @@ export async function POST(request: NextRequest) {
     }
 
     const config = GAME_CONFIG[game];
+    const newScoreValue = scoreData[config.scoreField];
+
+    // 점수 값 유효성 검사
+    if (newScoreValue === undefined || newScoreValue === null || isNaN(Number(newScoreValue))) {
+      return NextResponse.json({ error: "유효한 점수가 필요합니다" }, { status: 400 });
+    }
 
     // userId가 있으면 추가
     if (userId) {
       scoreData.user_id = userId;
     }
 
-    // 점수 제출
-    const { data, error } = await supabase
-      .from(config.table)
-      .insert(scoreData)
-      .select()
-      .single();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let data: any = null;
+    let isUpdate = false;
 
-    if (error) {
-      console.error(`❌ [API/leaderboard] ${game} 제출 에러:`, error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+    // 👤 로그인 유저: 기존 점수가 있으면 더 좋은 점수일 때만 업데이트 (UPSERT)
+    if (userId) {
+      const { data: existing } = await supabase
+        .from(config.table)
+        .select("*")
+        .eq("user_id", userId)
+        .order(config.scoreField, { ascending: config.orderAsc })
+        .limit(1)
+        .maybeSingle();
+
+      if (existing) {
+        const existingScore = existing[config.scoreField];
+        const isBetter = config.orderAsc 
+          ? Number(newScoreValue) < Number(existingScore)  // 낮을수록 좋은 게임 (반응속도, 스도쿠)
+          : Number(newScoreValue) > Number(existingScore); // 높을수록 좋은 게임
+
+        if (isBetter) {
+          // 기존 기록보다 좋으면 업데이트
+          const { data: updated, error: updateError } = await supabase
+            .from(config.table)
+            .update(scoreData)
+            .eq("id", existing.id)
+            .select()
+            .single();
+
+          if (updateError) {
+            console.error(`❌ [API/leaderboard] ${game} 업데이트 에러:`, updateError);
+            return NextResponse.json({ error: updateError.message }, { status: 500 });
+          }
+          data = updated;
+          isUpdate = true;
+          console.log(`🔄 [API/leaderboard] ${game} 기존 기록 업데이트: ${existingScore} → ${newScoreValue}`);
+        } else {
+          // 기존 기록이 더 좋으면 새로 등록하지 않고 기존 데이터 반환
+          console.log(`ℹ️ [API/leaderboard] ${game} 기존 기록(${existingScore})이 더 좋음. 새 점수(${newScoreValue}) 무시`);
+          
+          // 순위 계산만 해서 반환
+          const compareOperator = config.orderAsc ? "lt" : "gt";
+          const { count } = await supabase
+            .from(config.table)
+            .select("*", { count: "exact", head: true })
+            [compareOperator](config.scoreField, existingScore);
+          
+          return NextResponse.json({ 
+            success: true, 
+            data: existing,
+            rank: (count || 0) + 1,
+            pointsEarned: 0,
+            existingBetter: true,
+          }, { status: 200 });
+        }
+      }
+    }
+
+    // 새 기록 삽입 (비로그인 유저 또는 첫 기록인 로그인 유저)
+    if (!data) {
+      const { data: inserted, error } = await supabase
+        .from(config.table)
+        .insert(scoreData)
+        .select()
+        .single();
+
+      if (error) {
+        console.error(`❌ [API/leaderboard] ${game} 제출 에러:`, error);
+        // 중복 키 에러인 경우 더 친절한 메시지
+        if (error.code === "23505") {
+          return NextResponse.json({ error: "이미 등록된 점수가 있습니다. 더 높은 점수로 다시 도전해보세요!" }, { status: 409 });
+        }
+        return NextResponse.json({ error: error.message }, { status: 500 });
+      }
+      data = inserted;
     }
 
     // 👤 회원이면 순위 계산 후 점수 업데이트
@@ -273,7 +346,7 @@ export async function POST(request: NextRequest) {
     // 🔄 새 점수 등록 후, 상위 10명 전체의 순위 재계산 (실시간 순위 동기화)
     await recalculateAllRanks(game, config);
     
-    if (userId && data) {
+    if (data) {
       const scoreValue = data[config.scoreField];
       
       // 순위 계산: 나보다 좋은 점수를 가진 사람 수 + 1
@@ -284,8 +357,8 @@ export async function POST(request: NextRequest) {
         [compareOperator](config.scoreField, scoreValue);
       
       rank = (count || 0) + 1;
-      pointsEarned = rank <= 10 ? getRankPoints(rank) : 0;
-      console.log(`📊 [API/leaderboard] ${game} 순위 계산: ${rank}등, +${pointsEarned}점`);
+      pointsEarned = userId && rank <= 10 ? getRankPoints(rank) : 0;
+      console.log(`📊 [API/leaderboard] ${game} 순위 계산: ${rank}등, +${pointsEarned}점 (${isUpdate ? "업데이트" : "신규"})`);
     }
 
     return NextResponse.json({ 

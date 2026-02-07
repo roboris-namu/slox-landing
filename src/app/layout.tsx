@@ -2,25 +2,23 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 /**
- * SEO 메타데이터 설정
+ * SEO 메타데이터 - 글로벌 대응
  */
 export const metadata: Metadata = {
-  title: "SLOX",
+  title: "SLOX - Play, Compete, Rank",
   description:
-    "SLOX - 홈페이지·앱·AI 챗봇 전문 개발사. 반응속도 테스트, CPS 테스트, 타자연습 등 무료 도구 21종 제공. 합리적 비용으로 고품질 개발 서비스.",
+    "Free online games & tools — Reaction Test, CPS Test, Typing Test, IQ Test, Sudoku, calculators and more. Compete with players worldwide.",
   keywords: [
-    "슬록스",
     "SLOX",
-    "반응속도 테스트",
-    "CPS 테스트",
-    "타자연습",
-    "홈페이지 제작",
-    "앱 개발",
-    "AI 챗봇",
-    "웹사이트 개발",
-    "Flutter 앱",
-    "개발 스튜디오",
-    "무료 도구",
+    "reaction test",
+    "CPS test",
+    "typing test",
+    "IQ test",
+    "sudoku",
+    "free online games",
+    "free tools",
+    "calculator",
+    "QR generator",
   ],
   authors: [{ name: "SLOX" }],
   creator: "SLOX",
@@ -31,26 +29,27 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "ko_KR",
+    locale: "en_US",
+    alternateLocale: ["ko_KR", "ja_JP", "zh_CN", "de_DE", "fr_FR", "es_ES", "pt_BR"],
     url: "https://www.slox.co.kr",
     siteName: "SLOX",
-    title: "SLOX - 홈페이지 · 앱 제작 · 무료 도구 21종",
+    title: "SLOX - Play, Compete, Rank",
     description:
-      "SLOX - 반응속도 테스트, CPS 테스트 등 무료 도구 21종과 홈페이지·앱·AI 챗봇 개발 서비스.",
+      "Free online games & tools. Reaction Test, CPS, Typing, IQ and more. Compete globally.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "SLOX - 홈페이지 · 앱 제작 · AI 챗봇 구축",
+        alt: "SLOX - Play, Compete, Rank",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "SLOX - 홈페이지 · 앱 제작 · 무료 도구 21종",
+    title: "SLOX - Play, Compete, Rank",
     description:
-      "SLOX - 반응속도 테스트, CPS 테스트 등 무료 도구 21종과 홈페이지·앱·AI 챗봇 개발 서비스.",
+      "Free online games & tools. Compete with players worldwide.",
     images: ["/og-image.png"],
   },
   icons: {
@@ -65,8 +64,7 @@ export const metadata: Metadata = {
 };
 
 /**
- * 루트 레이아웃 컴포넌트
- * - 프리미엄 다크 테마 적용
+ * 루트 레이아웃 - 미니멀 다크 테마
  */
 export default function RootLayout({
   children,
@@ -74,7 +72,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="scroll-smooth dark">
+    <html lang="en" className="scroll-smooth dark">
       <head>
         <meta name="naver-site-verification" content="c674c400fde18181c55d1613538d9c5308b707cf" />
         <meta name="google-site-verification" content="RLeEptoySR_WdUTzUnkHQtAFjmHZvdFB4mEfEQPAdtA" />
@@ -98,11 +96,9 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased min-h-screen bg-dark-950 text-white overflow-x-hidden">
-        {/* 프리미엄 배경 레이어 */}
+        {/* 미니멀 배경 */}
         <div className="premium-bg" />
-        <div className="grid-pattern" />
-        <div className="noise-overlay" />
-        
+
         {/* 메인 콘텐츠 */}
         {children}
       </body>

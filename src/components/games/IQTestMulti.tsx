@@ -732,8 +732,12 @@ export default function IQTestMulti({ locale }: Props) {
   // 🚀 게임 결과 시 정확한 순위 계산
   useEffect(() => {
     if (gameState === "result" && score > 0) {
-      const calculatedIQ = 70 + Math.round(score * 3);
-      fetch(`/api/leaderboard?game=iq&limit=10&myScore=${calculatedIQ}`)
+      // calculateIQ()와 동일한 공식 사용 (API scoreField: iq_score)
+      const baseIQ = 70;
+      const correctBonus = Math.round(correctCount * 6.7);
+      const scoreBonus = Math.min(10, Math.floor(score / 150));
+      const myIQ = Math.min(160, Math.max(70, baseIQ + correctBonus + scoreBonus));
+      fetch(`/api/leaderboard?game=iq&limit=10&myScore=${myIQ}`)
         .then(res => res.json())
         .then(result => {
           if (result.myRank) setMyRank(result.myRank);
@@ -742,7 +746,7 @@ export default function IQTestMulti({ locale }: Props) {
         })
         .catch(err => console.error("순위 계산 실패:", err));
     }
-  }, [gameState, score]);
+  }, [gameState, score, correctCount]);
 
   const startGame = () => {
     const easy = iqQuestions.filter(q => q.difficulty <= 2).sort(() => Math.random() - 0.5).slice(0, 4);
@@ -1314,7 +1318,7 @@ export default function IQTestMulti({ locale }: Props) {
                         {isFirstPlace ? "👑" : calculatedRank <= 3 ? "🏆" : "🧠"}
                       </div>
                       <h3 className={`text-2xl font-black mb-1 ${isFirstPlace ? "text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-400" : calculatedRank <= 3 ? "text-yellow-400" : "text-white"}`}>
-                        {isFirstPlace ? t.newFirst : `${t.currentRank} ${myRank}!`}
+                        {isFirstPlace ? t.newFirst : `${t.currentRank} ${calculatedRank}!`}
                       </h3>
                       <p className={`text-3xl font-black ${iqGrade.color}`}>IQ {iqScore}</p>
                       <p className="text-dark-400 text-sm">{iqGrade.grade}</p>

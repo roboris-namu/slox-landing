@@ -471,7 +471,7 @@ export default function Sudoku({ locale = "ko", battleMode = false, onBattleComp
           game: "sudoku",
           data: {
         nickname: finalNickname.slice(0, 20),
-        difficulty: "standard",
+        difficulty: difficulty,
         time_seconds: time,
         mistakes,
         grade: gradeInfo.grade,

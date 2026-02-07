@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import html2canvas from "html2canvas";
-import confetti from "canvas-confetti";
+
 import { supabase, LeaderboardEntry } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
 import AdBanner from "@/components/AdBanner";
@@ -88,9 +88,6 @@ const translations = {
     inGamesDesc: "FPS, 격투 게임에서 승패를 좌우",
     inDaily: "일상에서",
     inDailyDesc: "운전, 스포츠 등 순간 판단력",
-    eventOngoing: "진행중",
-    eventPrize: "1등에게 문화상품권 5천원!",
-    eventDeadline: "마감까지",
     days: "일",
     hours: "시간", 
     minutes: "분",
@@ -102,7 +99,6 @@ const translations = {
     registerFirstNote: "등록하면 바로 1등이에요",
     currentFirst: "현재 1위",
     myRecord: "내 기록",
-    prizeEvent: "🎁 1등은 매달 문화상품권 이벤트 참여 가능!",
     registerFirstBtn: "🔥 1등 등록!",
     submit: "등록하기!",
     noRecords: "아직 기록이 없습니다. 첫 번째 도전자가 되어보세요!",
@@ -176,9 +172,6 @@ const translations = {
     inGamesDesc: "Determines victory in FPS and fighting games",
     inDaily: "In Daily Life",
     inDailyDesc: "Quick judgment in driving, sports, etc.",
-    eventOngoing: "LIVE",
-    eventPrize: "#1 wins $5 Gift Card!",
-    eventDeadline: "Ends in",
     days: "D",
     hours: "H",
     minutes: "M",
@@ -190,7 +183,6 @@ const translations = {
     registerFirstNote: "Register to claim #1!",
     currentFirst: "Current #1",
     myRecord: "My Record",
-    prizeEvent: "🎁 #1 wins monthly gift card event!",
     registerFirstBtn: "🔥 Register #1!",
     submit: "Submit!",
     noRecords: "No records yet. Be the first challenger!",
@@ -264,9 +256,6 @@ const translations = {
     inGamesDesc: "FPS、格闘ゲームで勝敗を左右",
     inDaily: "日常で",
     inDailyDesc: "運転、スポーツなどの瞬間判断",
-    eventOngoing: "開催中",
-    eventPrize: "1位に500円ギフトカード!",
-    eventDeadline: "締切まで",
     days: "日",
     hours: "時",
     minutes: "分",
@@ -278,7 +267,6 @@ const translations = {
     registerFirstNote: "登録すれば1位になります!",
     currentFirst: "現在1位",
     myRecord: "私の記録",
-    prizeEvent: "🎁 1位は毎月ギフトカードイベントに参加可能!",
     registerFirstBtn: "🔥 1位登録!",
     submit: "登録!",
     noRecords: "まだ記録がありません。最初の挑戦者になってください!",
@@ -352,9 +340,6 @@ const translations = {
     inGamesDesc: "决定FPS和格斗游戏的胜负",
     inDaily: "在日常生活中",
     inDailyDesc: "驾驶、运动等需要快速判断",
-    eventOngoing: "进行中",
-    eventPrize: "第1名获$5礼品卡!",
-    eventDeadline: "截止",
     days: "天",
     hours: "时",
     minutes: "分",
@@ -366,7 +351,6 @@ const translations = {
     registerFirstNote: "注册就能成为第1名!",
     currentFirst: "当前第1名",
     myRecord: "我的记录",
-    prizeEvent: "🎁 第1名可参加每月礼品卡活动!",
     registerFirstBtn: "🔥 注册第1名!",
     submit: "提交!",
     noRecords: "暂无记录。成为第一个挑战者吧!",
@@ -440,9 +424,6 @@ const translations = {
     inGamesDesc: "Determina la victoria en FPS y juegos de lucha",
     inDaily: "En la vida diaria",
     inDailyDesc: "Juicio rápido al conducir, deportes, etc.",
-    eventOngoing: "EN VIVO",
-    eventPrize: "¡#1 gana $5 Tarjeta Regalo!",
-    eventDeadline: "Termina en",
     days: "D",
     hours: "H",
     minutes: "M",
@@ -454,7 +435,6 @@ const translations = {
     registerFirstNote: "¡Regístrate para ser #1!",
     currentFirst: "Actual #1",
     myRecord: "Mi Registro",
-    prizeEvent: "🎁 ¡#1 participa en evento mensual de tarjeta regalo!",
     registerFirstBtn: "🔥 ¡Registrar #1!",
     submit: "¡Enviar!",
     noRecords: "Aún no hay registros. ¡Sé el primer retador!",
@@ -528,9 +508,6 @@ const translations = {
     inGamesDesc: "Determina a vitória em FPS e jogos de luta",
     inDaily: "No dia a dia",
     inDailyDesc: "Julgamento rápido ao dirigir, esportes, etc.",
-    eventOngoing: "AO VIVO",
-    eventPrize: "#1 ganha R$25 Vale-Presente!",
-    eventDeadline: "Termina em",
     days: "D",
     hours: "H",
     minutes: "M",
@@ -542,7 +519,6 @@ const translations = {
     registerFirstNote: "Registre-se para ser #1!",
     currentFirst: "Atual #1",
     myRecord: "Meu Registro",
-    prizeEvent: "🎁 #1 participa do evento mensal de vale-presente!",
     registerFirstBtn: "🔥 Registrar #1!",
     submit: "Enviar!",
     noRecords: "Ainda sem registros. Seja o primeiro desafiante!",
@@ -616,9 +592,6 @@ const translations = {
     inGamesDesc: "Entscheidet über Sieg in FPS und Kampfspielen",
     inDaily: "Im Alltag",
     inDailyDesc: "Schnelle Entscheidungen beim Fahren, Sport usw.",
-    eventOngoing: "LIVE",
-    eventPrize: "#1 gewinnt 5€ Gutschein!",
-    eventDeadline: "Endet in",
     days: "T",
     hours: "Std",
     minutes: "Min",
@@ -630,7 +603,6 @@ const translations = {
     registerFirstNote: "Registriere dich um #1 zu werden!",
     currentFirst: "Aktueller #1",
     myRecord: "Mein Rekord",
-    prizeEvent: "🎁 #1 nimmt am monatlichen Gutschein-Event teil!",
     registerFirstBtn: "🔥 #1 Registrieren!",
     submit: "Absenden!",
     noRecords: "Noch keine Rekorde. Sei der erste Herausforderer!",
@@ -704,9 +676,6 @@ const translations = {
     inGamesDesc: "Détermine la victoire dans les FPS et jeux de combat",
     inDaily: "Au quotidien",
     inDailyDesc: "Jugement rapide en conduite, sports, etc.",
-    eventOngoing: "EN DIRECT",
-    eventPrize: "#1 gagne 5€ Carte Cadeau!",
-    eventDeadline: "Fin dans",
     days: "J",
     hours: "H",
     minutes: "M",
@@ -718,7 +687,6 @@ const translations = {
     registerFirstNote: "Inscrivez-vous pour être #1!",
     currentFirst: "Actuel #1",
     myRecord: "Mon Record",
-    prizeEvent: "🎁 #1 participe à l'événement mensuel carte cadeau!",
     registerFirstBtn: "🔥 Inscrire #1!",
     submit: "Envoyer!",
     noRecords: "Aucun record. Soyez le premier challenger!",
@@ -839,120 +807,6 @@ interface ReactionTestProps {
   onBattleComplete?: (score: number) => void; // 배틀 완료 콜백
 }
 
-// 🎁 이벤트 배너 컴포넌트 (실시간 카운트다운 + 현재 1등)
-function EventBanner({ lang, leader }: { lang: Language; leader?: { nickname: string; score: number } | null }) {
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const t = translations[lang];
-
-  useEffect(() => {
-    const calculateTimeLeft = () => {
-      const now = new Date();
-      let nextDraw = new Date(now.getFullYear(), now.getMonth() + 1, 1, 10, 0, 0);
-      if (now.getDate() === 1 && now.getHours() < 10) {
-        nextDraw = new Date(now.getFullYear(), now.getMonth(), 1, 10, 0, 0);
-      }
-      const diff = nextDraw.getTime() - now.getTime();
-      if (diff < 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-      return {
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((diff / 1000 / 60) % 60),
-        seconds: Math.floor((diff / 1000) % 60),
-      };
-    };
-    setTimeLeft(calculateTimeLeft());
-    const timer = setInterval(() => setTimeLeft(calculateTimeLeft()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <Link 
-      href="/event"
-      className="block mb-6 p-4 bg-gradient-to-r from-yellow-500/20 via-orange-500/20 to-red-500/20 border border-yellow-500/40 rounded-2xl hover:border-yellow-400/60 transition-all group relative overflow-hidden"
-    >
-      {/* 반짝이 효과 */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-      
-      <div className="relative">
-        {/* 상단: EVENT + 마감까지 */}
-        <div className="flex items-center justify-between gap-4 mb-3">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <span className="text-3xl animate-bounce">🎁</span>
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping" />
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-yellow-400 font-black text-lg">EVENT</span>
-                <span className="px-2 py-0.5 bg-red-500 text-white text-[10px] font-bold rounded animate-pulse">{t.eventOngoing}</span>
-              </div>
-              <p className="text-dark-300 text-sm">
-                <span className="text-yellow-400 font-bold">{t.eventPrize}</span>
-              </p>
-            </div>
-          </div>
-          
-          {/* 자세히 보기 - PC만 */}
-          <div className="hidden sm:flex items-center gap-2 text-yellow-400/80 group-hover:text-yellow-300 transition-colors">
-            <span className="text-sm font-medium">{lang === "ko" ? "자세히 보기" : "Learn more"}</span>
-            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-        </div>
-        
-        {/* 실시간 카운트다운 */}
-        <div className="flex items-center justify-center gap-1 sm:gap-2 bg-black/30 rounded-xl p-2 sm:p-3">
-          <span className="text-dark-400 text-xs sm:text-sm">⏰ {t.eventDeadline}</span>
-          <div className="flex items-center gap-1">
-            <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
-              <span className="text-yellow-400 font-black text-lg sm:text-xl">{timeLeft.days}</span>
-              <span className="text-dark-500 text-[10px] block -mt-1">{t.days}</span>
-            </div>
-            <span className="text-dark-500 font-bold">:</span>
-            <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
-              <span className="text-yellow-400 font-black text-lg sm:text-xl">{String(timeLeft.hours).padStart(2, '0')}</span>
-              <span className="text-dark-500 text-[10px] block -mt-1">{t.hours}</span>
-            </div>
-            <span className="text-dark-500 font-bold">:</span>
-            <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
-              <span className="text-yellow-400 font-black text-lg sm:text-xl">{String(timeLeft.minutes).padStart(2, '0')}</span>
-              <span className="text-dark-500 text-[10px] block -mt-1">{t.minutes}</span>
-            </div>
-            <span className="text-dark-500 font-bold">:</span>
-            <div className="bg-dark-800 px-2 py-1 rounded-lg min-w-[40px] text-center">
-              <span className="text-cyan-400 font-black text-lg sm:text-xl animate-pulse">{String(timeLeft.seconds).padStart(2, '0')}</span>
-              <span className="text-dark-500 text-[10px] block -mt-1">{t.seconds}</span>
-            </div>
-          </div>
-        </div>
-        
-        {/* 현재 1등 정보 + 도전 문구 */}
-        <div className="flex items-center justify-center gap-3 mt-3">
-          {leader ? (
-            <div className="flex items-center gap-2 bg-black/40 rounded-full px-4 py-1.5 border border-yellow-500/20">
-              <span className="text-yellow-400">👑</span>
-              <span className="text-dark-300 text-sm">
-                {lang === "ko" ? "현재 1등" : "Current #1"}:
-              </span>
-              <span className="text-white font-bold text-sm">{leader.nickname}</span>
-              <span className="text-cyan-400 font-black text-sm">{leader.score}ms</span>
-            </div>
-          ) : (
-            <div className="text-dark-400 text-sm">
-              🏆 {lang === "ko" ? "아직 1등이 없어요! 첫 1등에 도전하세요!" : "No #1 yet! Be the first!"}
-            </div>
-          )}
-        </div>
-        <p className="text-center text-yellow-400/80 text-xs mt-2 font-medium animate-pulse">
-          🔥 {lang === "ko" ? "지금 도전해서 1등을 뺏어보세요!" : "Challenge now and take the crown!"}
-        </p>
-      </div>
-    </Link>
-  );
-}
-
 export default function ReactionTest({ locale, battleMode = false, onBattleComplete }: ReactionTestProps) {
   const [state, setState] = useState<GameState>("waiting");
   const [reactionTime, setReactionTime] = useState<number>(0);
@@ -978,12 +832,6 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [currentUserNickname, setCurrentUserNickname] = useState<string | null>(null);
   
-  // 🎉 1등 이벤트 관련 상태
-  const [showFirstPlaceModal, setShowFirstPlaceModal] = useState(false);
-  const [email, setEmail] = useState("");
-  const [isEmailSubmitting, setIsEmailSubmitting] = useState(false);
-  const [emailSubmitted, setEmailSubmitted] = useState(false);
-  const [myEntryId, setMyEntryId] = useState<string | null>(null);
   
   // 🚀 자동 랭킹 등록 팝업 상태
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
@@ -1234,43 +1082,6 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
     }
   }, []);
 
-  // 🎆 폭죽 효과 발사
-  const fireConfetti = useCallback(() => {
-    const duration = 3000;
-    const end = Date.now() + duration;
-
-    const frame = () => {
-      confetti({
-        particleCount: 3,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0, y: 0.7 },
-        colors: ["#FFD700", "#FFA500", "#FF6347", "#FFE4B5"],
-      });
-      confetti({
-        particleCount: 3,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1, y: 0.7 },
-        colors: ["#FFD700", "#FFA500", "#FF6347", "#FFE4B5"],
-      });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    };
-    frame();
-    
-    // 중앙 폭죽도 추가
-    setTimeout(() => {
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { x: 0.5, y: 0.5 },
-        colors: ["#FFD700", "#FFA500", "#FF6347", "#FFE4B5", "#00CED1"],
-      });
-    }, 500);
-  }, []);
 
   // 👤 회원 점수 업데이트는 API에서 자동 처리됨
 
@@ -1323,9 +1134,6 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
     
     if (!finalNickname || isSubmitting) return;
     
-    // 등록 전에 1등 될지 미리 체크 (현재 리더보드 기준)
-    const willBeFirstPlace = leaderboard.length === 0 || reactionTime < leaderboard[0].score;
-    
     setIsSubmitting(true);
     try {
       const gradeInfo = getGrade(reactionTime);
@@ -1359,17 +1167,6 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
       setShowNicknameModal(false);
       setNickname("");
       
-      // 등록된 엔트리 ID 저장
-      if (result.data) {
-        setMyEntryId(result.data.id);
-      }
-      
-      // 1등이면 축하 팝업!
-      if (willBeFirstPlace) {
-        setShowFirstPlaceModal(true);
-        fireConfetti();
-      }
-      
       fetchLeaderboard();
     } catch (err) {
       console.error("점수 등록 실패:", err);
@@ -1379,43 +1176,6 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
     }
   };
   
-  // 📧 이메일 등록 (1등 전용) - API 프록시 사용
-  const submitEmail = async () => {
-    if (!email.trim() || !myEntryId || isEmailSubmitting) return;
-    
-    // 이메일 유효성 검사
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email.trim())) {
-      alert(lang === "ko" ? "올바른 이메일 형식을 입력해주세요." : "Please enter a valid email.");
-      return;
-    }
-    
-    setIsEmailSubmitting(true);
-    try {
-      const response = await fetch("/api/leaderboard", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          game: "reaction",
-          id: myEntryId,
-          updates: { email: email.trim() },
-        }),
-      });
-      
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error);
-      
-      setEmailSubmitted(true);
-      setTimeout(() => {
-        setShowFirstPlaceModal(false);
-      }, 2000);
-    } catch (err) {
-      console.error("이메일 등록 실패:", err);
-      alert(lang === "ko" ? "이메일 등록 실패! 다시 시도해주세요." : "Failed to submit email.");
-    } finally {
-      setIsEmailSubmitting(false);
-    }
-  };
 
   // 페이지 로드시 리더보드 가져오기
   useEffect(() => {
@@ -1610,24 +1370,10 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
       ? totalCount + 1 
       : leaderboard.findIndex(e => reactionTime < e.score) + 1));
     
-    // 이벤트 마감일 계산 (2025년 12월 31일)
-    const eventEnd = new Date("2025-12-31T23:59:59");
-    const now = new Date();
-    const msLeft = eventEnd.getTime() - now.getTime();
-    const daysLeft = Math.floor(msLeft / (1000 * 60 * 60 * 24));
-    const hoursLeft = Math.floor((msLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    
-    // 남은 시간 표시 (7일 이하면 시간도 표시)
-    const timeLeftText = daysLeft <= 0 
-      ? `${hoursLeft}시간` 
-      : daysLeft <= 7 
-        ? `${daysLeft}일 ${hoursLeft}시간` 
-        : `${daysLeft}일`;
-    
-    // 공유 텍스트 (풍부한 정보)
+    // 공유 텍스트
     const text = lang === "ko"
-      ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 새로운 1등 달성!" : `📊 현재 ${calculatedRank}위`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlace.score}ms)\n\n` : ""}🎁 EVENT! 1등에게 문화상품권 5천원!\n⏰ 마감까지 ${timeLeftText} 남음!\n\n🎮 나도 도전하기 👉 ${shareUrl}`
-      : `⚡ Reaction Speed Test!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 New #1!" : `📊 Rank #${calculatedRank}`}\n\n🎁 EVENT! Win a $5 gift card!\n⏰ ${timeLeftText} left!\n\n🎮 Try it 👉 ${shareUrl}`;
+      ? `⚡ 반응속도 테스트 결과!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 새로운 1등 달성!" : `📊 현재 ${calculatedRank}위`}\n\n${firstPlace ? `👑 현재 1등: ${firstPlace.nickname} (${firstPlace.score}ms)\n\n` : ""}🎮 나도 도전하기 👉 ${shareUrl}`
+      : `⚡ Reaction Speed Test!\n\n${grade.emoji} ${grade.grade} - ${reactionTime}ms\n${isNewFirst ? "🔥 New #1!" : `📊 Rank #${calculatedRank}`}\n\n🎮 Try it 👉 ${shareUrl}`;
     
     // 카카오톡 인앱 브라우저면 바로 클립보드 복사 (Web Share API 미지원)
     const isKakao = navigator.userAgent.toLowerCase().includes("kakaotalk");
@@ -1836,11 +1582,8 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
             </p>
           </div>
 
-          {/* 🎁 이벤트 배너 - 실시간 카운트다운 + 현재 1등 */}
-          <EventBanner lang={lang} leader={leaderboard.length > 0 ? { nickname: leaderboard[0].nickname, score: leaderboard[0].score } : null} />
-
           {/* 💡 반응속도 향상 팁 */}
-          <div className="mb-8 p-4 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 rounded-xl">
+          <div className="mb-5 p-4 bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 rounded-xl">
             <div className="flex items-start gap-3">
               <span className="text-2xl">💡</span>
               <div>
@@ -1854,7 +1597,7 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
           <div 
             ref={gameAreaRef}
             onClick={handleClick}
-            className={`${getBgColor()} rounded-2xl cursor-pointer transition-colors duration-100 select-none mb-8 relative overflow-hidden`}
+            className={`${getBgColor()} rounded-2xl cursor-pointer transition-colors duration-100 select-none mb-5 relative overflow-hidden`}
             style={{ minHeight: "300px" }}
           >
             {/* 파티클 효과 */}
@@ -2100,7 +1843,7 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
           )}
 
           {/* 📊 광고 배너 */}
-          <AdBanner className="mb-8" />
+          <AdBanner className="mb-5" />
 
           {/* 🏆 명예의전당 */}
           <div className="glass-card p-6 rounded-2xl mb-8">
@@ -2121,9 +1864,9 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
             <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 mb-4">
               <p className="text-blue-400 text-xs leading-relaxed">
                 {lang === "ko" 
-                  ? "⚡ 100ms 미만의 기록은 예측 샷 또는 버그로 간주되어 등록이 제한됩니다. 공정한 이벤트를 위해 순수 반응속도만 측정합니다."
+                  ? "⚡ 100ms 미만의 기록은 예측 샷 또는 버그로 간주되어 등록이 제한됩니다. 공정한 랭킹을 위해 순수 반응속도만 측정합니다."
                   : lang === "ja"
-                  ? "⚡ 100ms未満の記録は予測ショットまたはバグとみなされ、登録が制限されます。公正なイベントのため。"
+                  ? "⚡ 100ms未満の記録は予測ショットまたはバグとみなされ、登録が制限されます。"
                   : lang === "zh"
                   ? "⚡ 100ms以下的记录被视为预测或bug，将被限制注册。为了公平竞争，仅测量纯反应速度。"
                   : lang === "es"
@@ -2371,14 +2114,6 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
                     </button>
                   )}
                   
-                  {/* 이벤트 안내 */}
-                  <div className="mt-3 p-2 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
-                    <p className="text-yellow-400 text-xs text-center flex items-center justify-center gap-1">
-                      <span>🎁</span>
-                      <span>{lang === "ko" ? "1등은 매달 문화상품권 5천원 이벤트!" : "Monthly prize for #1!"}</span>
-                    </p>
-                  </div>
-                  
                   {/* 나중에 버튼 */}
                   <button
                     onClick={() => setShowRankingPrompt(false)}
@@ -2522,15 +2257,6 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
                   </div>
                 </div>
                 
-                {/* 이벤트 안내 */}
-                {(leaderboard.length === 0 || reactionTime < leaderboard[0].score) && (
-                  <div className="mb-4 p-2 bg-yellow-500/10 rounded-lg">
-                    <p className="text-yellow-400 text-xs text-center">
-                      {t.prizeEvent}
-                    </p>
-                  </div>
-                )}
-                
                 <div className="flex gap-3">
                   <button
                     onClick={() => setShowNicknameModal(false)}
@@ -2588,94 +2314,6 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
                   >
                     {lang === "ko" ? "닫기" : "Close"}
                   </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* 🎉 1등 축하 모달 */}
-          {showFirstPlaceModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-              <div className="bg-gradient-to-b from-yellow-900/40 via-dark-900 to-dark-900 border border-yellow-500/30 rounded-3xl p-8 max-w-md w-full relative overflow-hidden animate-scale-in">
-                {/* 상단 글로우 */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-gradient-to-b from-yellow-500/30 to-transparent blur-2xl" />
-                
-                {/* 닫기 버튼 */}
-                <button
-                  onClick={() => setShowFirstPlaceModal(false)}
-                  className="absolute top-4 right-4 text-dark-400 hover:text-white transition-colors z-10"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-                
-                <div className="relative z-10 text-center">
-                  {/* 왕관 */}
-                  <div className="relative inline-block mb-4">
-                    <div className="text-7xl animate-bounce">👑</div>
-                    <div className="absolute inset-0 text-7xl blur-md opacity-50">👑</div>
-                  </div>
-                  
-                  <h3 className="text-3xl font-black mb-2">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-400 to-orange-400">
-                      {lang === "ko" ? "축하합니다!" : "Congratulations!"}
-                    </span>
-                  </h3>
-                  <p className="text-xl text-yellow-400 font-bold mb-4">
-                    🏆 {lang === "ko" ? "1등입니다!" : "You are #1!"}
-                  </p>
-                  
-                  <div className="mb-6">
-                    <span className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-yellow-300 to-yellow-500">
-                      {reactionTime}
-                    </span>
-                    <span className="text-dark-400 text-xl ml-1">ms</span>
-                  </div>
-                  
-                  {!emailSubmitted ? (
-                    <div className="bg-dark-900/60 backdrop-blur-sm rounded-xl p-5 border border-white/5">
-                      <p className="text-dark-300 mb-4 flex items-center justify-center gap-2">
-                        <span className="text-xl">🎁</span>
-                        <span>{lang === "ko" ? "상품 수령을 위해 이메일을 등록하세요!" : "Enter your email to receive the prize!"}</span>
-                      </p>
-                      
-                      <div className="flex gap-2">
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="your@email.com"
-                          className="flex-1 px-4 py-3 bg-dark-800 border border-dark-700 rounded-xl text-white placeholder-dark-500 focus:outline-none focus:border-yellow-500 transition-colors"
-                          onKeyDown={(e) => e.key === "Enter" && submitEmail()}
-                        />
-                        <button
-                          onClick={submitEmail}
-                          disabled={!email.trim() || isEmailSubmitting}
-                          className="px-6 py-3 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-black font-bold rounded-xl transition-all disabled:opacity-50 shadow-lg shadow-yellow-500/20"
-                        >
-                          {isEmailSubmitting ? "..." : lang === "ko" ? "등록" : "Submit"}
-                        </button>
-                      </div>
-                      
-                      <p className="text-xs text-dark-500 mt-3">
-                        💡 {lang === "ko" ? "매달 1일 오전 10시 기준 1등에게 문화상품권 발송!" : "Prize sent to #1 on the 1st of each month!"}
-                      </p>
-                      <p className="text-xs text-red-400/70 mt-1">
-                        📬 {lang === "ko" ? "메일이 안 보이면 스팸함을 확인하세요!" : "Check spam folder if you don't see the email!"}
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="bg-green-500/20 border border-green-500/30 rounded-xl p-5">
-                      <div className="text-4xl mb-3">✅</div>
-                      <p className="text-green-400 font-bold">
-                        {lang === "ko" ? "이메일 등록 완료!" : "Email registered!"}
-                      </p>
-                      <p className="text-dark-400 text-sm mt-2">
-                        {lang === "ko" ? "1등 유지 시 매달 1일 상품 발송!" : "Prize sent on the 1st if you stay #1!"}
-                      </p>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
@@ -2820,50 +2458,6 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
                 </div>
                 <div style={{ color: "#9ca3af", fontSize: "10px" }}>{reactionTime}ms</div>
               </div>
-            </div>
-
-            {/* 🎁 이벤트 안내 + 카운트다운 */}
-            <div style={{ 
-              background: "linear-gradient(180deg, rgba(234, 179, 8, 0.15), rgba(239, 68, 68, 0.1))",
-              borderRadius: "10px",
-              padding: "10px 12px",
-              marginBottom: "8px",
-              textAlign: "center",
-              border: "1px solid rgba(234, 179, 8, 0.3)"
-            }}>
-              <div style={{ color: "#fbbf24", fontSize: "11px", fontWeight: "bold", marginBottom: "6px" }}>🎁 EVENT! 1등에게 문화상품권 5천원!</div>
-              
-              {/* 남은 시간 카운트다운 */}
-              {(() => {
-                const now = new Date();
-                const nextDraw = new Date(now.getFullYear(), now.getMonth() + 1, 1, 10, 0, 0);
-                const diff = nextDraw.getTime() - now.getTime();
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                
-                return (
-                  <div style={{ 
-                    display: "flex", 
-                    justifyContent: "center", 
-                    alignItems: "center", 
-                    gap: "4px",
-                    marginBottom: "6px"
-                  }}>
-                    <span style={{ color: "#9ca3af", fontSize: "9px" }}>⏰ 마감까지</span>
-                    <span style={{ 
-                      color: "#22d3ee", 
-                      fontSize: "12px", 
-                      fontWeight: "bold",
-                      fontFamily: "monospace"
-                    }}>
-                      {days}일 {hours}시간
-                    </span>
-                    <span style={{ color: "#9ca3af", fontSize: "9px" }}>남음!</span>
-                  </div>
-                );
-              })()}
-              
-              <div style={{ color: "#d1d5db", fontSize: "9px" }}>너도 도전해서 1등 뺏어봐! 👊</div>
             </div>
 
             {/* 하단 */}

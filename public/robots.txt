@@ -1,13 +1,5 @@
+# https://www.slox.co.kr robots.txt
 User-agent: *
 Allow: /
 
 Sitemap: https://www.slox.co.kr/sitemap.xml
-
-
-
-
-
-
-
-
-

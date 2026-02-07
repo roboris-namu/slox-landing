@@ -422,6 +422,10 @@ export default function QuizGameMulti({ locale }: Props) {
   const [answers, setAnswers] = useState<number[]>([]);
   const [timeLeft, setTimeLeft] = useState(15);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [totalCount, setTotalCount] = useState(0);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [myRank, setMyRank] = useState<number | null>(null);
   const [showRankingPrompt, setShowRankingPrompt] = useState(false);
   const [showNicknameModal, setShowNicknameModal] = useState(false);
   const [nickname, setNickname] = useState("");
@@ -504,12 +508,28 @@ export default function QuizGameMulti({ locale }: Props) {
       const result = await response.json();
       if (result.error) throw new Error(result.error);
       if (result.data) setLeaderboard(result.data);
+      if (result.totalCount !== undefined) setTotalCount(result.totalCount);
     } catch (err) { console.error("Failed to load leaderboard:", err); }
   }, []);
 
   useEffect(() => {
     fetchLeaderboard();
   }, [fetchLeaderboard]);
+
+  // 🚀 게임 결과 시 정확한 순위 계산
+  useEffect(() => {
+    if (gameState === "result" && correctCount > 0) {
+      // score = correctCount * 1000 + timeBonus와 일치 (API scoreField: score)
+      fetch(`/api/leaderboard?game=quiz&limit=10&myScore=${score}`)
+        .then(res => res.json())
+        .then(result => {
+          if (result.myRank) setMyRank(result.myRank);
+          if (result.data) setLeaderboard(result.data);
+          if (result.totalCount !== undefined) setTotalCount(result.totalCount);
+        })
+        .catch(err => console.error("순위 계산 실패:", err));
+    }
+  }, [gameState, correctCount, score]);
 
   // Timer
   useEffect(() => {

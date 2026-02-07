@@ -334,7 +334,9 @@ export default function QuizGame({ locale: _propLocale, battleMode = false, onBa
   // 🚀 게임 결과 시 정확한 순위 계산
   useEffect(() => {
     if (gameState === "result" && correctCount > 0) {
-      fetch(`/api/leaderboard?game=quiz&limit=10&myScore=${correctCount}`)
+      // score = correctCount * 1000 + timeBonus (API scoreField와 일치)
+      const myFinalScore = correctCount * 1000 + timeBonus;
+      fetch(`/api/leaderboard?game=quiz&limit=10&myScore=${myFinalScore}`)
         .then(res => res.json())
         .then(result => {
           if (result.myRank) setMyRank(result.myRank);
@@ -349,7 +351,7 @@ export default function QuizGame({ locale: _propLocale, battleMode = false, onBa
         onBattleComplete(correctCount);
       }
     }
-  }, [gameState, correctCount, battleMode, onBattleComplete, battleCompleted]);
+  }, [gameState, correctCount, timeBonus, battleMode, onBattleComplete, battleCompleted]);
 
   // 🥊 도전장 만들기 함수
   const createBattle = async () => {
