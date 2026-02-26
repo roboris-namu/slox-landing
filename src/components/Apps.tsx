@@ -128,9 +128,9 @@ export default function Apps({ locale = "ko" }: { locale?: string }) {
   }, []);
 
   return (
-    <section ref={sectionRef} id="apps" className="py-16 md:py-24 relative">
+    <section ref={sectionRef} id="apps" className="pb-16 md:pb-24 relative">
       <div className="max-w-5xl mx-auto px-6">
-        <div className="w-12 h-px bg-white/[0.08] mx-auto mb-16" />
+        <div className="w-12 h-px bg-white/[0.08] mx-auto mb-10" />
 
         <div className="text-center mb-10">
           <h2 className="animate-on-scroll text-2xl md:text-3xl font-bold text-white mb-2">
