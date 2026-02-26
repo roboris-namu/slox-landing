@@ -6,6 +6,7 @@ import Apps from "./Apps";
 import Contact from "./Contact";
 import LanguageSelector from "./LanguageSelector";
 import NavUserProfile, { NavUserProfileMobile } from "./NavUserProfile";
+import type { Locale } from "@/locales";
 
 type NavLabels = { games: string; tools: string; apps: string; contact: string };
 type FooterLabels = { about: string; privacy: string; notice: string };
@@ -32,7 +33,7 @@ const footerLabels: Record<string, FooterLabels> = {
   pt: { about: "Sobre", privacy: "Privacidade", notice: "Avisos" },
 };
 
-export default function HomeContent({ locale = "ko" }: { locale?: string }) {
+export default function HomeContent({ locale = "ko" }: { locale?: Locale }) {
   const nav = navLabels[locale] || navLabels.en;
   const footer = footerLabels[locale] || footerLabels.en;
   const homeHref = locale === "ko" ? "/" : `/${locale}`;
@@ -49,7 +50,7 @@ export default function HomeContent({ locale = "ko" }: { locale?: string }) {
   );
 }
 
-function Navigation({ nav, locale, homeHref }: { nav: NavLabels; locale: string; homeHref: string }) {
+function Navigation({ nav, locale, homeHref }: { nav: NavLabels; locale: Locale; homeHref: string }) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50">
       <div className="mx-4 mt-4">
