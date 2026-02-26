@@ -46,9 +46,9 @@ export default function Contact() {
       <div className="max-w-lg mx-auto px-6">
         {/* 헤더 */}
         <div className="text-center mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">Get in Touch</h2>
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">문의하기</h2>
           <p className="text-sm text-white/30">
-            Questions, feedback, or partnership inquiries
+            질문, 피드백, 제휴 문의를 남겨주세요
           </p>
         </div>
 
@@ -56,7 +56,7 @@ export default function Contact() {
         <div className="bg-white/[0.02] border border-white/[0.06] rounded-2xl p-6 md:p-8">
           {isSubmitted && (
             <div className="mb-5 p-3 bg-green-500/10 border border-green-500/20 rounded-xl text-green-400 text-sm text-center">
-              Message sent successfully!
+              메시지가 전송되었습니다!
             </div>
           )}
 
@@ -67,7 +67,7 @@ export default function Contact() {
               value={formData.name}
               onChange={handleChange}
               required
-              placeholder="Name"
+              placeholder="이름"
               className="w-full px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-white placeholder:text-white/20 focus:outline-none focus:border-white/15 transition-colors text-sm"
             />
             <input
@@ -76,7 +76,7 @@ export default function Contact() {
               value={formData.email}
               onChange={handleChange}
               required
-              placeholder="Email"
+              placeholder="이메일"
               className="w-full px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-white placeholder:text-white/20 focus:outline-none focus:border-white/15 transition-colors text-sm"
             />
             <textarea
@@ -85,7 +85,7 @@ export default function Contact() {
               onChange={handleChange}
               required
               rows={4}
-              placeholder="Message"
+              placeholder="메시지"
               className="w-full px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-white placeholder:text-white/20 focus:outline-none focus:border-white/15 transition-colors resize-none text-sm"
             />
             <button
@@ -93,7 +93,7 @@ export default function Contact() {
               disabled={isSubmitting}
               className="w-full py-3 bg-white text-dark-950 font-semibold rounded-xl hover:bg-white/90 transition-all disabled:opacity-50 text-sm"
             >
-              {isSubmitting ? "Sending..." : "Send Message"}
+              {isSubmitting ? "전송 중..." : "메시지 보내기"}
             </button>
           </form>
         </div>

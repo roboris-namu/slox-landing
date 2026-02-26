@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
 import FreeTools from "@/components/FreeTools";
+import Apps from "@/components/Apps";
 import Contact from "@/components/Contact";
 import LanguageSelector from "@/components/LanguageSelector";
 import NavUserProfile, { NavUserProfileMobile } from "@/components/NavUserProfile";
@@ -14,6 +15,7 @@ export default function Home() {
       <Navigation />
       <Hero />
       <FreeTools />
+      <Apps />
       <Contact />
       <Footer />
     </main>
@@ -37,13 +39,16 @@ function Navigation() {
             {/* 데스크탑 메뉴 */}
             <div className="hidden md:flex items-center gap-1">
               <a href="#games" className="px-4 py-2 text-sm text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all">
-                Games
+                게임
               </a>
               <a href="#tools" className="px-4 py-2 text-sm text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all">
-                Tools
+                도구
+              </a>
+              <a href="#apps" className="px-4 py-2 text-sm text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all">
+                앱
               </a>
               <a href="#contact" className="px-4 py-2 text-sm text-dark-300 hover:text-white rounded-xl hover:bg-white/[0.05] transition-all">
-                Contact
+                문의
               </a>
               <div className="w-px h-5 bg-white/[0.08] mx-1" />
               <LanguageSelector />
@@ -78,9 +83,9 @@ function Footer() {
 
           {/* 링크 */}
           <div className="flex items-center gap-5 text-xs text-dark-400">
-            <a href="/about" className="hover:text-white transition-colors">About</a>
-            <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
-            <a href="/notice" className="hover:text-white transition-colors">Notice</a>
+            <a href="/about" className="hover:text-white transition-colors">소개</a>
+            <a href="/privacy" className="hover:text-white transition-colors">개인정보처리방침</a>
+            <a href="/notice" className="hover:text-white transition-colors">공지사항</a>
           </div>
         </div>
       </div>

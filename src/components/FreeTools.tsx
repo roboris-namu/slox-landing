@@ -8,33 +8,33 @@ import Link from "next/link";
  */
 
 const games = [
-  { href: "/reaction", emoji: "⚡", title: "Reaction Test", desc: "How fast are you?", accent: "amber" },
-  { href: "/cps", emoji: "🖱️", title: "CPS Test", desc: "Clicks per second", accent: "blue" },
-  { href: "/typing", emoji: "⌨️", title: "Typing Test", desc: "Words per minute", accent: "purple" },
-  { href: "/quiz", emoji: "📚", title: "Trivia Quiz", desc: "Test your knowledge", accent: "green" },
-  { href: "/iq", emoji: "🧩", title: "IQ Test", desc: "Pattern analysis", accent: "pink" },
-  { href: "/sudoku", emoji: "🔢", title: "Sudoku", desc: "Number puzzle", accent: "cyan" },
-  { href: "/color", emoji: "🎨", title: "Color Finder", desc: "Find the odd one", accent: "violet" },
-  { href: "/card-match", emoji: "🃏", title: "Card Match", desc: "Memory game", accent: "rose" },
-  { href: "/aim", emoji: "🎯", title: "Aim Trainer", desc: "Precision training", accent: "red" },
-  { href: "/memory", emoji: "🧠", title: "Memory Test", desc: "Number memory", accent: "indigo" },
+  { href: "/reaction", emoji: "⚡", title: "반응속도 테스트", desc: "당신의 반응속도는?", accent: "amber" },
+  { href: "/cps", emoji: "🖱️", title: "CPS 테스트", desc: "초당 클릭 수", accent: "blue" },
+  { href: "/typing", emoji: "⌨️", title: "타이핑 테스트", desc: "분당 타자 수", accent: "purple" },
+  { href: "/quiz", emoji: "📚", title: "상식 퀴즈", desc: "당신의 상식은?", accent: "green" },
+  { href: "/iq", emoji: "🧩", title: "IQ 테스트", desc: "패턴 분석 능력", accent: "pink" },
+  { href: "/sudoku", emoji: "🔢", title: "스도쿠", desc: "숫자 퍼즐", accent: "cyan" },
+  { href: "/color", emoji: "🎨", title: "색깔 찾기", desc: "다른 색을 찾아라", accent: "violet" },
+  { href: "/card-match", emoji: "🃏", title: "카드 맞추기", desc: "카드 기억력 게임", accent: "rose" },
+  { href: "/aim", emoji: "🎯", title: "에임 트레이너", desc: "정확도 훈련", accent: "red" },
+  { href: "/memory", emoji: "🧠", title: "기억력 테스트", desc: "숫자 기억력", accent: "indigo" },
 ];
 
 const tools = [
-  { href: "/salary", emoji: "💰", title: "Salary Calculator" },
-  { href: "/bmi", emoji: "⚖️", title: "BMI Calculator" },
-  { href: "/qr", emoji: "📱", title: "QR Generator" },
-  { href: "/password", emoji: "🔐", title: "Password Gen" },
-  { href: "/random", emoji: "🎲", title: "Random Picker" },
-  { href: "/fortune", emoji: "🔮", title: "Daily Fortune" },
-  { href: "/dday", emoji: "📅", title: "D-Day Calculator" },
-  { href: "/character-count", emoji: "✍️", title: "Char Counter" },
-  { href: "/age", emoji: "🎂", title: "Age Calculator" },
-  { href: "/percent", emoji: "📊", title: "Percent Calc" },
-  { href: "/lotto", emoji: "🎰", title: "Lotto Generator" },
-  { href: "/quote", emoji: "💬", title: "Daily Quote" },
-  { href: "/severance", emoji: "💼", title: "Severance Calc" },
-  { href: "/savings", emoji: "🏧", title: "Savings Calc" },
+  { href: "/salary", emoji: "💰", title: "연봉 계산기" },
+  { href: "/bmi", emoji: "⚖️", title: "BMI 계산기" },
+  { href: "/qr", emoji: "📱", title: "QR 생성기" },
+  { href: "/password", emoji: "🔐", title: "비밀번호 생성" },
+  { href: "/random", emoji: "🎲", title: "랜덤 뽑기" },
+  { href: "/fortune", emoji: "🔮", title: "오늘의 운세" },
+  { href: "/dday", emoji: "📅", title: "디데이 계산기" },
+  { href: "/character-count", emoji: "✍️", title: "글자수 세기" },
+  { href: "/age", emoji: "🎂", title: "나이 계산기" },
+  { href: "/percent", emoji: "📊", title: "퍼센트 계산" },
+  { href: "/lotto", emoji: "🎰", title: "로또 번호 생성" },
+  { href: "/quote", emoji: "💬", title: "오늘의 명언" },
+  { href: "/severance", emoji: "💼", title: "퇴직금 계산" },
+  { href: "/savings", emoji: "🏧", title: "적금 계산기" },
 ];
 
 // 게임별 그라데이션 색상 매핑
@@ -80,10 +80,10 @@ export default function FreeTools() {
         <div id="games" className="mb-20 scroll-mt-24">
           <div className="text-center mb-10">
             <h2 className="animate-on-scroll text-3xl md:text-4xl font-bold text-white mb-2">
-              Games
+              게임
             </h2>
             <p className="animate-on-scroll text-sm text-white/30" style={{ animationDelay: "0.05s" }}>
-              Compete with players worldwide. Climb the leaderboard.
+              전 세계 유저와 경쟁하고 랭킹에 도전하세요.
             </p>
           </div>
 
@@ -107,10 +107,10 @@ export default function FreeTools() {
         <div id="tools" className="scroll-mt-24">
           <div className="text-center mb-8">
             <h2 className="animate-on-scroll text-2xl md:text-3xl font-bold text-white mb-2">
-              Tools
+              도구
             </h2>
             <p className="animate-on-scroll text-sm text-white/30" style={{ animationDelay: "0.05s" }}>
-              Calculators, generators & more — all free.
+              계산기, 생성기 등 — 모두 무료
             </p>
           </div>
 

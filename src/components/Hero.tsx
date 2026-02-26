@@ -56,7 +56,7 @@ export default function Hero() {
           {/* 서브 카피 */}
           <div className="animate-on-scroll mb-14" style={{ animationDelay: "0.15s" }}>
             <p className="text-sm md:text-base text-white/25 max-w-sm">
-              Free games & tools for everyone, everywhere.
+              누구나 무료로 즐기는 게임과 도구
             </p>
           </div>
 
@@ -66,7 +66,7 @@ export default function Hero() {
               href="#games"
               className="inline-flex items-center gap-2 px-8 py-4 bg-white text-dark-950 font-bold text-sm rounded-2xl hover:bg-white/90 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgba(255,255,255,0.1)]"
             >
-              Start Playing
+              지금 시작하기
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
@@ -77,9 +77,9 @@ export default function Hero() {
           <div className="animate-on-scroll mt-20" style={{ animationDelay: "0.35s" }}>
             <div className="flex items-center gap-10 md:gap-16">
               {[
-                { value: "24+", label: "Free Tools" },
-                { value: "8", label: "Languages" },
-                { value: "Live", label: "Global Ranking" },
+                { value: "24+", label: "무료 도구" },
+                { value: "8", label: "지원 언어" },
+                { value: "Live", label: "글로벌 랭킹" },
               ].map((stat, i) => (
                 <div key={i} className="text-center">
                   <p className="text-2xl md:text-3xl font-bold text-white tracking-tight">
