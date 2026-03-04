@@ -16,8 +16,8 @@ const appsData = [
   { emoji: "🔍", ios: "https://apps.apple.com/us/app/magnifier-slox/id6757490033", android: null },
   { emoji: "🔦", ios: "https://apps.apple.com/us/app/flashlight-slox/id6757238605", android: null },
   { emoji: "🧭", ios: "https://apps.apple.com/us/app/compass-slox/id6757491317", android: "https://play.google.com/store/apps/details?id=com.slox.slox_compass" },
-  { emoji: "🧮", ios: "https://apps.apple.com/us/app/calculator-slox/id6757248766", android: null },
-  { emoji: "🫁", ios: "https://apps.apple.com/us/app/breathing-slox/id6757317781", android: null },
+  { emoji: "🧮", ios: "https://apps.apple.com/us/app/calculator-slox/id6757248766", android: "https://play.google.com/store/apps/details?id=com.slox.slox_calculator" },
+  { emoji: "🫁", ios: "https://apps.apple.com/us/app/breathing-slox/id6757317781", android: "https://play.google.com/store/apps/details?id=com.slox.slox_breathing" },
 ];
 
 type AppText = { name: string; desc: string };
