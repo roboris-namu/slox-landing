@@ -54,10 +54,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.svg?v=3", type: "image/svg+xml" },
+      { url: "/favicon.ico?v=4", sizes: "48x48" },
+      { url: "/favicon-32x32.png?v=4", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-16x16.png?v=4", type: "image/png", sizes: "16x16" },
+      { url: "/favicon.svg?v=4", type: "image/svg+xml" },
     ],
-    shortcut: "/favicon.svg?v=3",
-    apple: "/icons/icon.svg?v=3",
+    shortcut: "/favicon.ico?v=4",
+    apple: "/apple-touch-icon.png?v=4",
   },
 };
 
