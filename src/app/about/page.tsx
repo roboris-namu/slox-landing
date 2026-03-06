@@ -32,11 +32,8 @@ export default function AboutPage() {
         <div className="mx-4 mt-4">
           <div className="max-w-4xl mx-auto bg-dark-900/60 backdrop-blur-2xl rounded-2xl border border-white/[0.08] shadow-glass">
             <div className="flex items-center justify-between h-16 px-6">
-              <Link href="/" className="flex items-center gap-3 group">
-                <div className="relative w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 via-accent-500 to-cyan-500 flex items-center justify-center shadow-glow-sm group-hover:shadow-glow-md transition-shadow duration-300">
-                  <span className="text-white font-bold text-sm">S</span>
-                </div>
-                <span className="font-bold text-lg text-white tracking-tight">SLOX</span>
+              <Link href="/" className="font-black text-xl text-white tracking-tight hover:opacity-80 transition-opacity">
+                SLOX
               </Link>
               <Link 
                 href="/" 
@@ -333,9 +330,7 @@ export default function AboutPage() {
       <footer className="py-8 px-4 border-t border-white/[0.05]">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 via-accent-500 to-cyan-500 flex items-center justify-center">
-              <span className="text-white font-bold text-xs">S</span>
-            </div>
+            <span className="font-black text-lg text-white tracking-tight">SLOX</span>
             <span className="text-dark-400 text-sm">© 2025 SLOX. All rights reserved.</span>
           </div>
           <div className="flex items-center gap-4">

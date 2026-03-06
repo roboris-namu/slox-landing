@@ -462,12 +462,7 @@ function LoginContentEN() {
         
         <nav className="fixed top-0 left-0 right-0 z-50 p-4">
           <div className="max-w-6xl mx-auto flex justify-between items-center">
-            <Link href="/en" className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">S</span>
-              </div>
-              <span className="font-bold text-lg text-white">SLOX</span>
-            </Link>
+            <Link href="/en" className="font-black text-xl text-white tracking-tight hover:opacity-80 transition-opacity">SLOX</Link>
           </div>
         </nav>
 
@@ -591,12 +586,7 @@ function LoginContentEN() {
       
       <nav className="fixed top-0 left-0 right-0 z-50 p-4">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <Link href="/en" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center">
-              <span className="text-white font-bold text-sm">S</span>
-            </div>
-            <span className="font-bold text-lg text-white">SLOX</span>
-          </Link>
+          <Link href="/en" className="font-black text-xl text-white tracking-tight hover:opacity-80 transition-opacity">SLOX</Link>
         </div>
       </nav>
 

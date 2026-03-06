@@ -246,7 +246,7 @@ function LoginContentFR() {
   if (!user) {
     return (
       <main className="min-h-screen bg-dark-950 relative overflow-hidden"><div className="premium-bg" />
-        <nav className="fixed top-0 left-0 right-0 z-50 p-4"><div className="max-w-6xl mx-auto flex justify-between"><Link href={`/${locale}`} className="flex items-center gap-3"><div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center"><span className="text-white font-bold text-sm">S</span></div><span className="font-bold text-lg text-white">SLOX</span></Link></div></nav>
+        <nav className="fixed top-0 left-0 right-0 z-50 p-4"><div className="max-w-6xl mx-auto flex justify-between"><Link href={`/${locale}`} className="font-black text-xl text-white tracking-tight hover:opacity-80 transition-opacity">SLOX</Link></div></nav>
         <div className="relative z-10 min-h-screen flex items-center justify-center px-4 pt-20">
           <div className="max-w-md w-full">
             <div className="text-center mb-8"><h1 className="text-3xl font-black text-white mb-3">{t.login.title}</h1><p className="text-dark-400">{t.login.subtitle}</p></div>
@@ -272,7 +272,7 @@ function LoginContentFR() {
 
   return (
     <main className="min-h-screen bg-dark-950 relative overflow-hidden"><div className="premium-bg" />{showConfetti && <div className="confetti" />}
-      <nav className="fixed top-0 left-0 right-0 z-50 p-4"><div className="max-w-6xl mx-auto flex justify-between"><Link href={`/${locale}`} className="flex items-center gap-3"><div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center"><span className="text-white font-bold text-sm">S</span></div><span className="font-bold text-lg text-white">SLOX</span></Link></div></nav>
+      <nav className="fixed top-0 left-0 right-0 z-50 p-4"><div className="max-w-6xl mx-auto flex justify-between"><Link href={`/${locale}`} className="font-black text-xl text-white tracking-tight hover:opacity-80 transition-opacity">SLOX</Link></div></nav>
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 pt-20 pb-10">
         <div className="max-w-md w-full space-y-6">
           <div className="bg-dark-800/50 backdrop-blur-xl rounded-2xl border border-white/10 p-6">
