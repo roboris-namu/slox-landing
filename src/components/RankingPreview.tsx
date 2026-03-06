@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
-import Link from "next/link";
 
 interface LeaderboardEntry {
   id: string;
@@ -56,15 +55,17 @@ const tabLabels: Record<string, Record<GameTab, string>> = {
   zh: { overall: "综合", reaction: "反应", cps: "CPS", typing: "打字", memory: "记忆", aim: "瞄准", color: "颜色", quiz: "问答", iq: "IQ", cardmatch: "卡牌", sudoku: "数独" },
 };
 
-const sectionT: Record<string, { title: string; desc: string; viewAll: string; pts: string; noData: string; member: string }> = {
-  ko: { title: "랭킹", desc: "전 세계 유저와 경쟁하세요", viewAll: "전체 랭킹 보기", pts: "점", noData: "아직 기록이 없습니다", member: "회원" },
-  en: { title: "Ranking", desc: "Compete with players worldwide", viewAll: "View full ranking", pts: "pts", noData: "No records yet", member: "Member" },
-  ja: { title: "ランキング", desc: "世界中のプレイヤーと競争しよう", viewAll: "全ランキングを見る", pts: "点", noData: "まだ記録がありません", member: "会員" },
-  zh: { title: "排行榜", desc: "与全球玩家一决高下", viewAll: "查看完整排行", pts: "分", noData: "暂无记录", member: "会员" },
-  de: { title: "Rangliste", desc: "Tritt gegen Spieler weltweit an", viewAll: "Gesamte Rangliste", pts: "Pkt", noData: "Noch keine Daten", member: "Mitglied" },
-  fr: { title: "Classement", desc: "Affrontez des joueurs du monde entier", viewAll: "Voir le classement", pts: "pts", noData: "Pas encore de données", member: "Membre" },
-  es: { title: "Ranking", desc: "Compite con jugadores de todo el mundo", viewAll: "Ver ranking completo", pts: "pts", noData: "Sin datos aún", member: "Miembro" },
-  pt: { title: "Ranking", desc: "Compita com jogadores do mundo todo", viewAll: "Ver ranking completo", pts: "pts", noData: "Sem dados ainda", member: "Membro" },
+const MAX_COUNT = 100;
+
+const sectionT: Record<string, { title: string; desc: string; more: string; less: string; pts: string; noData: string }> = {
+  ko: { title: "랭킹", desc: "전 세계 유저와 경쟁하세요", more: "더보기", less: "접기", pts: "점", noData: "아직 기록이 없습니다" },
+  en: { title: "Ranking", desc: "Compete with players worldwide", more: "Show more", less: "Show less", pts: "pts", noData: "No records yet" },
+  ja: { title: "ランキング", desc: "世界中のプレイヤーと競争しよう", more: "もっと見る", less: "閉じる", pts: "点", noData: "まだ記録がありません" },
+  zh: { title: "排行榜", desc: "与全球玩家一决高下", more: "查看更多", less: "收起", pts: "分", noData: "暂无记录" },
+  de: { title: "Rangliste", desc: "Tritt gegen Spieler weltweit an", more: "Mehr anzeigen", less: "Weniger", pts: "Pkt", noData: "Noch keine Daten" },
+  fr: { title: "Classement", desc: "Affrontez des joueurs du monde entier", more: "Voir plus", less: "Réduire", pts: "pts", noData: "Pas encore de données" },
+  es: { title: "Ranking", desc: "Compite con jugadores de todo el mundo", more: "Ver más", less: "Ver menos", pts: "pts", noData: "Sin datos aún" },
+  pt: { title: "Ranking", desc: "Compita com jogadores do mundo todo", more: "Ver mais", less: "Ver menos", pts: "pts", noData: "Sem dados ainda" },
 };
 
 const PREVIEW_COUNT = 5;
@@ -94,24 +95,24 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const sec = sectionT[locale] || sectionT.en;
   const labels = tabLabels[locale] || tabLabels.en;
-  const prefix = locale === "ko" ? "" : `/${locale}`;
 
   const [activeTab, setActiveTab] = useState<GameTab>("overall");
   const [overallData, setOverallData] = useState<OverallEntry[]>([]);
   const [gameData, setGameData] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   const fetchOverall = useCallback(async () => {
     try {
       const res = await fetch("/api/rankings");
       const json = await res.json();
-      if (Array.isArray(json.data)) setOverallData(json.data.slice(0, PREVIEW_COUNT));
+      if (Array.isArray(json.data)) setOverallData(json.data.slice(0, MAX_COUNT));
     } catch {}
   }, []);
 
   const fetchGame = useCallback(async (game: string) => {
     try {
-      const res = await fetch(`/api/leaderboard?game=${game}&limit=${PREVIEW_COUNT}`);
+      const res = await fetch(`/api/leaderboard?game=${game}&limit=${MAX_COUNT}`);
       const json = await res.json();
       if (Array.isArray(json.data)) setGameData(json.data);
     } catch {}
@@ -119,6 +120,7 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
 
   useEffect(() => {
     setLoading(true);
+    setExpanded(false);
     if (activeTab === "overall") {
       fetchOverall().finally(() => setLoading(false));
     } else {
@@ -245,7 +247,7 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
               </div>
             ) : (
               <div className="space-y-2">
-                {overallData.map((user, i) =>
+                {(expanded ? overallData : overallData.slice(0, PREVIEW_COUNT)).map((user, i) =>
                   renderRow(i + 1, user.nickname, String(user.total_score), sec.pts, user.avatar_url, user.country, true, i)
                 )}
               </div>
@@ -257,7 +259,7 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
               </div>
             ) : (
               <div className="space-y-2">
-                {gameData.map((entry, i) =>
+                {(expanded ? gameData : gameData.slice(0, PREVIEW_COUNT)).map((entry, i) =>
                   renderRow(
                     i + 1,
                     entry.nickname,
@@ -273,20 +275,27 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
             )
           )}
 
-          <div className="animate-on-scroll flex justify-center mt-6" style={{ animationDelay: "0.35s" }}>
-            <Link
-              href={`${prefix}/ranking`}
-              className="group flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12] transition-all duration-300 text-xs text-white/40 hover:text-white/70"
-            >
-              {sec.viewAll}
-              <svg
-                className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5"
-                fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </div>
+          {(() => {
+            const totalCount = activeTab === "overall" ? overallData.length : gameData.length;
+            if (totalCount <= PREVIEW_COUNT) return null;
+            const hiddenCount = totalCount - PREVIEW_COUNT;
+            return (
+              <div className="flex justify-center mt-6">
+                <button
+                  onClick={() => setExpanded(!expanded)}
+                  className="group flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12] transition-all duration-300 text-xs text-white/40 hover:text-white/70"
+                >
+                  {expanded ? sec.less : `${sec.more} (+${hiddenCount})`}
+                  <svg
+                    className={`w-3 h-3 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+                    fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+              </div>
+            );
+          })()}
         </div>
       </div>
     </section>
