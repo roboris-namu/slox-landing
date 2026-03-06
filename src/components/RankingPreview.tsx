@@ -100,7 +100,7 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
   const [overallData, setOverallData] = useState<OverallEntry[]>([]);
   const [gameData, setGameData] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState(false);
+  const [expandedTabs, setExpandedTabs] = useState<Record<string, boolean>>({});
 
   const fetchOverall = useCallback(async () => {
     try {
@@ -120,7 +120,6 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
 
   useEffect(() => {
     setLoading(true);
-    setExpanded(false);
     if (activeTab === "overall") {
       fetchOverall().finally(() => setLoading(false));
     } else {
@@ -140,7 +139,7 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
     const els = sectionRef.current?.querySelectorAll(".animate-on-scroll");
     els?.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, [loading, overallData, gameData]);
+  }, [loading, overallData, gameData, expandedTabs]);
 
   const tabConfig = GAME_TABS.find((t) => t.key === activeTab)!;
 
@@ -247,7 +246,7 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
               </div>
             ) : (
               <div className="space-y-2">
-                {(expanded ? overallData : overallData.slice(0, PREVIEW_COUNT)).map((user, i) =>
+                {(expandedTabs[activeTab] ? overallData : overallData.slice(0, PREVIEW_COUNT)).map((user, i) =>
                   renderRow(i + 1, user.nickname, String(user.total_score), sec.pts, user.avatar_url, user.country, true, i)
                 )}
               </div>
@@ -259,7 +258,7 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
               </div>
             ) : (
               <div className="space-y-2">
-                {(expanded ? gameData : gameData.slice(0, PREVIEW_COUNT)).map((entry, i) =>
+                {(expandedTabs[activeTab] ? gameData : gameData.slice(0, PREVIEW_COUNT)).map((entry, i) =>
                   renderRow(
                     i + 1,
                     entry.nickname,
@@ -282,12 +281,12 @@ export default function RankingPreview({ locale = "ko" }: { locale?: string }) {
             return (
               <div className="flex justify-center mt-6">
                 <button
-                  onClick={() => setExpanded(!expanded)}
+                  onClick={() => setExpandedTabs((prev) => ({ ...prev, [activeTab]: !prev[activeTab] }))}
                   className="group flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12] transition-all duration-300 text-xs text-white/40 hover:text-white/70"
                 >
-                  {expanded ? sec.less : `${sec.more} (+${hiddenCount})`}
+                  {expandedTabs[activeTab] ? sec.less : `${sec.more} (+${hiddenCount})`}
                   <svg
-                    className={`w-3 h-3 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+                    className={`w-3 h-3 transition-transform duration-300 ${expandedTabs[activeTab] ? "rotate-180" : ""}`}
                     fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
