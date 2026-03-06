@@ -3,6 +3,7 @@
 import Hero from "./Hero";
 import FreeTools from "./FreeTools";
 import Apps from "./Apps";
+import RankingPreview from "./RankingPreview";
 import Contact from "./Contact";
 import LanguageSelector from "./LanguageSelector";
 import NavUserProfile, { NavUserProfileMobile } from "./NavUserProfile";
@@ -44,6 +45,7 @@ export default function HomeContent({ locale = "ko" }: { locale?: Locale }) {
       <Hero locale={locale} />
       <FreeTools locale={locale} />
       <Apps locale={locale} />
+      <RankingPreview locale={locale} />
       <Contact locale={locale} />
       <Footer footer={footer} />
     </main>

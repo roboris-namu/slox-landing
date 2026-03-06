@@ -1,23 +1,26 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+type Category = "all" | "utility" | "health" | "media";
 
 const appsData = [
-  { emoji: "🔊", ios: "https://apps.apple.com/us/app/sound-meter-decibel-db/id6756865763", android: "https://play.google.com/store/apps/details?id=com.slox.soundmeter" },
-  { emoji: "🌊", ios: "https://apps.apple.com/us/app/white-noise-slox/id6757315077", android: null },
-  { emoji: "🎙️", ios: "https://apps.apple.com/us/app/voice-recorder-slox/id6756888591", android: null },
-  { emoji: "📐", ios: "https://apps.apple.com/us/app/unit-converter-slox/id6756968552", android: "https://play.google.com/store/apps/details?id=com.slox.slox_unit_converter" },
-  { emoji: "💵", ios: "https://apps.apple.com/us/app/tip-calculator-slox/id6757491942", android: null },
-  { emoji: "⏱️", ios: "https://apps.apple.com/us/app/stopwatch-timer-slox/id6757244071", android: null },
-  { emoji: "📷", ios: "https://apps.apple.com/us/app/qr-scanner-slox/id6756880687", android: null },
-  { emoji: "📄", ios: "https://apps.apple.com/us/app/pdf-scanner-slox/id6756884443", android: null },
-  { emoji: "🪞", ios: "https://apps.apple.com/us/app/mirror-slox/id6757230732", android: null },
-  { emoji: "🎵", ios: "https://apps.apple.com/us/app/metronome-slox/id6757317325", android: null },
-  { emoji: "🔍", ios: "https://apps.apple.com/us/app/magnifier-slox/id6757490033", android: null },
-  { emoji: "🔦", ios: "https://apps.apple.com/us/app/flashlight-slox/id6757238605", android: null },
-  { emoji: "🧭", ios: "https://apps.apple.com/us/app/compass-slox/id6757491317", android: "https://play.google.com/store/apps/details?id=com.slox.slox_compass" },
-  { emoji: "🧮", ios: "https://apps.apple.com/us/app/calculator-slox/id6757248766", android: "https://play.google.com/store/apps/details?id=com.slox.slox_calculator" },
-  { emoji: "🫁", ios: "https://apps.apple.com/us/app/breathing-slox/id6757317781", android: "https://play.google.com/store/apps/details?id=com.slox.slox_breathing" },
+  { emoji: "🔊", cat: "media" as Category, ios: "https://apps.apple.com/us/app/sound-meter-decibel-db/id6756865763", android: "https://play.google.com/store/apps/details?id=com.slox.soundmeter" },
+  { emoji: "🌊", cat: "health" as Category, ios: "https://apps.apple.com/us/app/white-noise-slox/id6757315077", android: null },
+  { emoji: "🎙️", cat: "media" as Category, ios: "https://apps.apple.com/us/app/voice-recorder-slox/id6756888591", android: null },
+  { emoji: "📐", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/unit-converter-slox/id6756968552", android: "https://play.google.com/store/apps/details?id=com.slox.slox_unit_converter" },
+  { emoji: "💵", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/tip-calculator-slox/id6757491942", android: null },
+  { emoji: "⏱️", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/stopwatch-timer-slox/id6757244071", android: null },
+  { emoji: "📷", cat: "media" as Category, ios: "https://apps.apple.com/us/app/qr-scanner-slox/id6756880687", android: null },
+  { emoji: "📄", cat: "media" as Category, ios: "https://apps.apple.com/us/app/pdf-scanner-slox/id6756884443", android: null },
+  { emoji: "🪞", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/mirror-slox/id6757230732", android: null },
+  { emoji: "🎵", cat: "media" as Category, ios: "https://apps.apple.com/us/app/metronome-slox/id6757317325", android: null },
+  { emoji: "🔍", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/magnifier-slox/id6757490033", android: null },
+  { emoji: "🔦", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/flashlight-slox/id6757238605", android: null },
+  { emoji: "🧭", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/compass-slox/id6757491317", android: "https://play.google.com/store/apps/details?id=com.slox.slox_compass" },
+  { emoji: "🧮", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/calculator-slox/id6757248766", android: "https://play.google.com/store/apps/details?id=com.slox.slox_calculator" },
+  { emoji: "🫁", cat: "health" as Category, ios: "https://apps.apple.com/us/app/breathing-slox/id6757317781", android: "https://play.google.com/store/apps/details?id=com.slox.slox_breathing" },
+  { emoji: "😴", cat: "health" as Category, ios: null, android: null },
 ];
 
 type AppText = { name: string; desc: string };
@@ -39,6 +42,7 @@ const appTexts: Record<string, AppText[]> = {
     { name: "나침반", desc: "방향 탐색" },
     { name: "계산기", desc: "간편 계산기" },
     { name: "호흡", desc: "호흡 훈련" },
+    { name: "수면 트래커", desc: "수면 기록·통계" },
   ],
   en: [
     { name: "Sound Meter", desc: "Decibel meter" },
@@ -56,6 +60,7 @@ const appTexts: Record<string, AppText[]> = {
     { name: "Compass", desc: "Direction finder" },
     { name: "Calculator", desc: "Simple calculator" },
     { name: "Breathing", desc: "Breathing exercise" },
+    { name: "Sleep Tracker", desc: "Sleep log & stats" },
   ],
   ja: [
     { name: "騒音計", desc: "デシベル測定" },
@@ -73,6 +78,7 @@ const appTexts: Record<string, AppText[]> = {
     { name: "コンパス", desc: "方角ナビ" },
     { name: "電卓", desc: "シンプル電卓" },
     { name: "呼吸", desc: "呼吸トレーニング" },
+    { name: "睡眠トラッカー", desc: "睡眠記録・統計" },
   ],
   zh: [
     { name: "噪音计", desc: "分贝测量" },
@@ -90,24 +96,59 @@ const appTexts: Record<string, AppText[]> = {
     { name: "指南针", desc: "方向导航" },
     { name: "计算器", desc: "简易计算器" },
     { name: "呼吸", desc: "呼吸训练" },
+    { name: "睡眠追踪器", desc: "睡眠记录·统计" },
   ],
 };
 
-const sectionT: Record<string, { title: string; desc: string; upcoming: string }> = {
-  ko: { title: "앱", desc: "App Store와 Google Play에서 만나보세요", upcoming: "출시 예정" },
-  en: { title: "Apps", desc: "Available on App Store and Google Play", upcoming: "Coming soon" },
-  ja: { title: "アプリ", desc: "App StoreとGoogle Playで配信中", upcoming: "近日公開" },
-  zh: { title: "应用", desc: "在App Store和Google Play上下载", upcoming: "即将推出" },
-  de: { title: "Apps", desc: "Im App Store und bei Google Play verfügbar", upcoming: "Demnächst" },
-  fr: { title: "Apps", desc: "Disponible sur l'App Store et Google Play", upcoming: "Bientôt" },
-  es: { title: "Apps", desc: "Disponible en App Store y Google Play", upcoming: "Próximamente" },
-  pt: { title: "Apps", desc: "Disponível na App Store e Google Play", upcoming: "Em breve" },
+const categoryLabels: Record<string, Record<Category, string>> = {
+  ko: { all: "전체", utility: "유틸리티", health: "건강", media: "미디어" },
+  en: { all: "All", utility: "Utility", health: "Health", media: "Media" },
+  ja: { all: "すべて", utility: "ユーティリティ", health: "健康", media: "メディア" },
+  zh: { all: "全部", utility: "工具", health: "健康", media: "媒体" },
+  de: { all: "Alle", utility: "Werkzeuge", health: "Gesundheit", media: "Medien" },
+  fr: { all: "Tout", utility: "Utilitaire", health: "Santé", media: "Médias" },
+  es: { all: "Todo", utility: "Utilidad", health: "Salud", media: "Medios" },
+  pt: { all: "Todos", utility: "Utilidade", health: "Saúde", media: "Mídia" },
+};
+
+const categoryCounts: Record<Category, number> = {
+  all: appsData.length,
+  utility: appsData.filter((a) => a.cat === "utility").length,
+  health: appsData.filter((a) => a.cat === "health").length,
+  media: appsData.filter((a) => a.cat === "media").length,
+};
+
+const DESKTOP_COLS = 5;
+const MAX_ROWS = 3;
+const DEFAULT_VISIBLE = DESKTOP_COLS * MAX_ROWS;
+
+const sectionT: Record<string, { title: string; desc: string; upcoming: string; more: string; less: string }> = {
+  ko: { title: "앱", desc: "App Store와 Google Play에서 만나보세요", upcoming: "출시 예정", more: "더보기", less: "접기" },
+  en: { title: "Apps", desc: "Available on App Store and Google Play", upcoming: "Coming soon", more: "Show more", less: "Show less" },
+  ja: { title: "アプリ", desc: "App StoreとGoogle Playで配信中", upcoming: "近日公開", more: "もっと見る", less: "閉じる" },
+  zh: { title: "应用", desc: "在App Store和Google Play上下载", upcoming: "即将推出", more: "查看更多", less: "收起" },
+  de: { title: "Apps", desc: "Im App Store und bei Google Play verfügbar", upcoming: "Demnächst", more: "Mehr anzeigen", less: "Weniger" },
+  fr: { title: "Apps", desc: "Disponible sur l'App Store et Google Play", upcoming: "Bientôt", more: "Voir plus", less: "Réduire" },
+  es: { title: "Apps", desc: "Disponible en App Store y Google Play", upcoming: "Próximamente", more: "Ver más", less: "Ver menos" },
+  pt: { title: "Apps", desc: "Disponível na App Store e Google Play", upcoming: "Em breve", more: "Ver mais", less: "Ver menos" },
 };
 
 export default function Apps({ locale = "ko" }: { locale?: string }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const sec = sectionT[locale] || sectionT.en;
   const texts = appTexts[locale] || appTexts.en;
+  const catLabels = categoryLabels[locale] || categoryLabels.en;
+  const [activeCat, setActiveCat] = useState<Category>("all");
+  const [expanded, setExpanded] = useState(false);
+
+  const filteredIndices = appsData
+    .map((app, i) => ({ app, i }))
+    .filter(({ app }) => activeCat === "all" || app.cat === activeCat)
+    .map(({ i }) => i);
+
+  const needsTruncation = filteredIndices.length > DEFAULT_VISIBLE;
+  const visibleIndices = expanded ? filteredIndices : filteredIndices.slice(0, DEFAULT_VISIBLE);
+  const hiddenCount = filteredIndices.length - DEFAULT_VISIBLE;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -132,7 +173,7 @@ export default function Apps({ locale = "ko" }: { locale?: string }) {
       <div className="max-w-5xl mx-auto px-6">
         <div className="w-12 h-px bg-white/[0.08] mx-auto mb-10" />
 
-        <div className="text-center mb-10">
+        <div className="text-center mb-8">
           <h2 className="animate-on-scroll text-2xl md:text-3xl font-bold text-white mb-2">
             {sec.title}
           </h2>
@@ -141,47 +182,98 @@ export default function Apps({ locale = "ko" }: { locale?: string }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          {appsData.map((app, i) => (
-            <div
-              key={texts[i].name}
-              className="animate-on-scroll group relative rounded-2xl p-4 border border-white/[0.06] bg-white/[0.02] transition-all duration-300 hover:-translate-y-1 hover:border-white/[0.12] hover:bg-white/[0.04]"
-              style={{ animationDelay: `${0.03 * i}s` }}
+        <div className="flex items-center justify-center gap-1.5 mb-8">
+          {(["all", "utility", "health", "media"] as Category[]).map((cat) => (
+            <button
+              key={cat}
+              onClick={() => { setActiveCat(cat); setExpanded(false); }}
+              className={`
+                px-3.5 py-1.5 rounded-full text-xs font-medium transition-all duration-300
+                ${activeCat === cat
+                  ? "bg-white/[0.12] text-white border border-white/[0.15]"
+                  : "bg-transparent text-white/30 border border-transparent hover:text-white/50 hover:bg-white/[0.04]"
+                }
+              `}
             >
-              <span className="text-2xl block mb-2">{app.emoji}</span>
-              <h3 className="font-semibold text-white text-sm mb-0.5">{texts[i].name}</h3>
-              <p className="text-[11px] text-white/30 mb-3">{texts[i].desc}</p>
-
-              <div className="flex items-center gap-1.5">
-                <a
-                  href={app.ios}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] transition-colors text-[10px] text-white/50 hover:text-white/80"
-                >
-                  <AppleIcon />
-                  iOS
-                </a>
-                {app.android ? (
-                  <a
-                    href={app.android}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] transition-colors text-[10px] text-white/50 hover:text-white/80"
-                  >
-                    <PlayIcon />
-                    Android
-                  </a>
-                ) : (
-                  <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.03] text-[10px] text-white/15 cursor-default">
-                    <PlayIcon />
-                    {sec.upcoming}
-                  </span>
-                )}
-              </div>
-            </div>
+              {catLabels[cat]}
+              <span className={`ml-1.5 ${activeCat === cat ? "text-white/50" : "text-white/15"}`}>
+                {categoryCounts[cat]}
+              </span>
+            </button>
           ))}
         </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+          {visibleIndices.map((i, idx) => {
+            const app = appsData[i];
+            return (
+              <div
+                key={texts[i].name}
+                className="animate-on-scroll visible group relative rounded-2xl p-4 border border-white/[0.06] bg-white/[0.02] transition-all duration-300 hover:-translate-y-1 hover:border-white/[0.12] hover:bg-white/[0.04]"
+                style={{ animationDelay: `${0.03 * idx}s` }}
+              >
+                <span className="text-2xl block mb-2">{app.emoji}</span>
+                <h3 className="font-semibold text-white text-sm mb-0.5">{texts[i].name}</h3>
+                <p className="text-[11px] text-white/30 mb-3">{texts[i].desc}</p>
+
+                <div className="flex items-center gap-1.5">
+                  {app.ios ? (
+                    <a
+                      href={app.ios}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] transition-colors text-[10px] text-white/50 hover:text-white/80"
+                    >
+                      <AppleIcon />
+                      iOS
+                    </a>
+                  ) : (
+                    <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.03] text-[10px] text-white/15 cursor-default">
+                      <AppleIcon />
+                      {sec.upcoming}
+                    </span>
+                  )}
+                  {app.android ? (
+                    <a
+                      href={app.android}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] transition-colors text-[10px] text-white/50 hover:text-white/80"
+                    >
+                      <PlayIcon />
+                      Android
+                    </a>
+                  ) : (
+                    <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.03] text-[10px] text-white/15 cursor-default">
+                      <PlayIcon />
+                      {sec.upcoming}
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {needsTruncation && (
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="group flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12] transition-all duration-300 text-xs text-white/40 hover:text-white/70"
+            >
+              {expanded ? sec.less : `${sec.more} (+${hiddenCount})`}
+              <svg
+                className={`w-3 h-3 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
