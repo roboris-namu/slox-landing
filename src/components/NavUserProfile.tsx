@@ -284,13 +284,13 @@ export default function NavUserProfile({ locale = "ko" }: NavUserProfileProps) {
             <p className="text-xs text-dark-400 truncate">{user.email}</p>
             <div className="flex items-center gap-3 mt-2">
               <span className="text-xs text-accent-400">
-                🏆 {myRank}위
+                🏆 {myRank}{t.rank}
               </span>
               <span className="text-xs text-yellow-400">
-                ⭐ {user.total_score.toLocaleString()}점
+                ⭐ {user.total_score.toLocaleString()}{t.points}
               </span>
               <span className="text-xs text-green-400">
-                📅 {user.attendance_count}일
+                📅 {user.attendance_count}{auth.profile.days}
               </span>
             </div>
           </div>

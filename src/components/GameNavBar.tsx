@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { navTranslations } from "@/locales";
 
 // 언어 타입
 type Locale = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
@@ -46,6 +47,7 @@ export default function GameNavBar({
   const [loading, setLoading] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const t = navTranslations[locale];
 
   // 로그인 경로
   const loginPath = locale === "ko" ? "/login" : `/${locale}/login`;
@@ -251,7 +253,7 @@ export default function GameNavBar({
                   <div className="absolute right-0 mt-2 w-48 bg-dark-800 border border-dark-700 rounded-xl shadow-xl overflow-hidden z-50">
                     <div className="p-3 border-b border-dark-700">
                       <p className="text-white font-medium text-sm">{user.nickname}</p>
-                      <p className="text-dark-400 text-xs">{user.total_score.toLocaleString()} 점</p>
+                      <p className="text-dark-400 text-xs">{user.total_score.toLocaleString()} {t.points}</p>
                     </div>
                     <div className="p-2">
                       <a
@@ -259,14 +261,14 @@ export default function GameNavBar({
                         className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-white hover:bg-white/5 transition-all"
                       >
                         <span>👤</span>
-                        <span>내 프로필</span>
+                        <span>{t.myProfile}</span>
                       </a>
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-400 hover:bg-red-500/10 transition-all"
                       >
                         <span>🚪</span>
-                        <span>로그아웃</span>
+                        <span>{t.logout}</span>
                       </button>
                     </div>
                   </div>
@@ -280,7 +282,7 @@ export default function GameNavBar({
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
-                <span className="hidden sm:inline">로그인</span>
+                <span className="hidden sm:inline">{t.login}</span>
               </a>
             )}
 
