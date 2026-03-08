@@ -5,6 +5,7 @@ import FreeTools from "./FreeTools";
 import Apps from "./Apps";
 import RankingPreview from "./RankingPreview";
 import Contact from "./Contact";
+import AdBanner from "./AdBanner";
 import LanguageSelector from "./LanguageSelector";
 import NavUserProfile, { NavUserProfileMobile } from "./NavUserProfile";
 import type { Locale } from "@/locales";
@@ -44,8 +45,10 @@ export default function HomeContent({ locale = "ko" }: { locale?: Locale }) {
       <Navigation nav={nav} locale={locale} homeHref={homeHref} />
       <Hero locale={locale} />
       <FreeTools locale={locale} />
+      <AdBanner className="py-4" />
       <Apps locale={locale} />
       <RankingPreview locale={locale} />
+      <AdBanner className="py-4" />
       <Contact locale={locale} />
       <Footer footer={footer} />
     </main>

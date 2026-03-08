@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
+import AdBanner from "../AdBanner";
 import GameNavBar from "@/components/GameNavBar";
 
 import { Locale } from "@/locales";
@@ -1033,6 +1034,8 @@ export default function SudokuMulti({ locale }: Props) {
           )}
         </div>
       </div>
+
+      <AdBanner className="my-8" />
 
       {/* 랭킹 팝업 */}
       {showRankingPrompt && !showNicknameModal && !hasSubmitted && (

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import html2canvas from "html2canvas";
+import AdBanner from "../AdBanner";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
 
@@ -1368,6 +1369,7 @@ export default function CardMatchMulti({ locale }: Props) {
             </div>
           </div>
         </div>
+        <AdBanner className="my-8" />
       </main>
 
       {/* 랭킹 팝업 */}

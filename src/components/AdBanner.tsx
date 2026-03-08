@@ -9,19 +9,11 @@ declare global {
 }
 
 interface AdBannerProps {
-  // 광고 형식
   format?: "auto" | "fluid" | "rectangle" | "horizontal" | "vertical";
-  // 반응형 여부
   responsive?: boolean;
-  // 추가 클래스
   className?: string;
 }
 
-/**
- * Google AdSense 광고 배너 컴포넌트
- * SLOX 게임 페이지용 광고 배너
- * 슬롯 ID: 6733542611
- */
 export default function AdBanner({
   format = "auto",
   responsive = true,
@@ -31,11 +23,9 @@ export default function AdBanner({
   const isLoaded = useRef(false);
 
   useEffect(() => {
-    // 이미 로드된 경우 스킵
     if (isLoaded.current) return;
 
     try {
-      // adsbygoogle 초기화
       if (typeof window !== "undefined") {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
         isLoaded.current = true;
@@ -46,19 +36,17 @@ export default function AdBanner({
   }, []);
 
   return (
-    <div className={`ad-container ${className}`} ref={adRef}>
-      {/* SLOX-game-banner 광고 단위 */}
-      <ins
-        className="adsbygoogle"
-        style={{
-          display: "block",
-          width: "100%",
-        }}
-        data-ad-client="ca-pub-4738855756690019"
-        data-ad-slot="6733542611"
-        data-ad-format={format}
-        data-full-width-responsive={responsive ? "true" : "false"}
-      />
+    <div className={`max-w-5xl mx-auto px-6 ${className}`} ref={adRef}>
+      <div className="rounded-2xl border border-white/[0.04] bg-white/[0.01] overflow-hidden">
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block", width: "100%" }}
+          data-ad-client="ca-pub-4738855756690019"
+          data-ad-slot="6733542611"
+          data-ad-format={format}
+          data-full-width-responsive={responsive ? "true" : "false"}
+        />
+      </div>
     </div>
   );
 }

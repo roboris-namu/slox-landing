@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
+import AdBanner from "../AdBanner";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
@@ -1573,6 +1574,8 @@ export default function TypingMulti({ locale, battleMode = false, onBattleComple
               </Link>
             </div>
           </div>
+
+          <AdBanner className="my-8" />
 
           {/* SLOX 홍보 */}
           <div className="mt-12 text-center">

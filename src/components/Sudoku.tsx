@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import AdBanner from "./AdBanner";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
@@ -1174,6 +1175,8 @@ export default function Sudoku({ locale = "ko", battleMode = false, onBattleComp
               <Link href="/card-match" className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all">🃏 카드 짝 맞추기</Link>
             </div>
           </div>
+
+          <AdBanner className="my-8" />
 
           {/* SLOX 홍보 */}
           <div className="mt-12 text-center">
