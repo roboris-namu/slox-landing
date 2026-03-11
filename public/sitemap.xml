@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  <!-- 메인 페이지 -->
+
+  <!-- ===================== -->
+  <!-- 메인 페이지 (다국어)   -->
+  <!-- ===================== -->
   <url>
     <loc>https://www.slox.co.kr</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr"/>
@@ -15,187 +19,1552 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
   </url>
+  <url>
+    <loc>https://www.slox.co.kr/en</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+  </url>
 
-  <!-- 🎮 게임 (핵심 콘텐츠) -->
+  <!-- ================================ -->
+  <!-- 🎮 게임 - 핵심 콘텐츠 (다국어)   -->
+  <!-- ================================ -->
+
+  <!-- reaction -->
   <url>
     <loc>https://www.slox.co.kr/reaction</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/reaction"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/reaction"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/reaction"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/reaction"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/reaction"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
   </url>
   <url>
-    <loc>https://www.slox.co.kr/typing</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/cps</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/memory</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/aim</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/color</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/card-match</loc>
+    <loc>https://www.slox.co.kr/en/reaction</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/reaction"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/reaction"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/reaction"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/reaction"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/reaction"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
   </url>
   <url>
-    <loc>https://www.slox.co.kr/quiz</loc>
+    <loc>https://www.slox.co.kr/ja/reaction</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/reaction"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/reaction"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/reaction"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/reaction"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/reaction"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
   </url>
   <url>
-    <loc>https://www.slox.co.kr/iq</loc>
+    <loc>https://www.slox.co.kr/zh/reaction</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/reaction"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/reaction"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/reaction"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/reaction"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/reaction"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
   </url>
   <url>
-    <loc>https://www.slox.co.kr/sudoku</loc>
+    <loc>https://www.slox.co.kr/es/reaction</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/reaction"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/reaction"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/reaction"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/reaction"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/reaction"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/reaction</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/reaction"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/reaction"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/reaction"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/reaction"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/reaction"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/reaction</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/reaction"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/reaction"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/reaction"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/reaction"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/reaction"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/reaction</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/reaction"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/reaction"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/reaction"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/reaction"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/reaction"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
   </url>
 
-  <!-- 🛠️ 도구 -->
+  <!-- typing -->
+  <url>
+    <loc>https://www.slox.co.kr/typing</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/typing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/typing"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/typing"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/typing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/typing"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/typing</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/typing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/typing"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/typing"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/typing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/typing"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/typing</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/typing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/typing"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/typing"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/typing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/typing"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/typing</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/typing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/typing"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/typing"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/typing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/typing"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/typing</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/typing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/typing"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/typing"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/typing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/typing"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/typing</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/typing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/typing"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/typing"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/typing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/typing"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/typing</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/typing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/typing"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/typing"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/typing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/typing"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/typing</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/typing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/typing"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/typing"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/typing"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/typing"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+  </url>
+
+  <!-- cps -->
+  <url>
+    <loc>https://www.slox.co.kr/cps</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/cps</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/cps</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/cps</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/cps</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/cps</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/cps</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/cps</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/cps"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/cps"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/cps"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/cps"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/cps"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+  </url>
+
+  <!-- memory -->
+  <url>
+    <loc>https://www.slox.co.kr/memory</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/memory"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/memory"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/memory"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/memory"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/memory"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/memory</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/memory"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/memory"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/memory"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/memory"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/memory"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/memory</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/memory"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/memory"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/memory"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/memory"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/memory"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/memory</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/memory"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/memory"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/memory"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/memory"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/memory"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/memory</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/memory"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/memory"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/memory"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/memory"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/memory"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/memory</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/memory"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/memory"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/memory"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/memory"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/memory"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/memory</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/memory"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/memory"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/memory"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/memory"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/memory"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/memory</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/memory"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/memory"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/memory"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/memory"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/memory"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+  </url>
+
+  <!-- aim -->
+  <url>
+    <loc>https://www.slox.co.kr/aim</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/aim"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/aim"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/aim"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/aim"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/aim"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/aim</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/aim"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/aim"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/aim"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/aim"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/aim"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/aim</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/aim"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/aim"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/aim"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/aim"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/aim"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/aim</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/aim"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/aim"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/aim"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/aim"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/aim"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/aim</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/aim"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/aim"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/aim"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/aim"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/aim"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/aim</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/aim"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/aim"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/aim"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/aim"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/aim"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/aim</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/aim"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/aim"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/aim"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/aim"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/aim"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/aim</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/aim"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/aim"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/aim"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/aim"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/aim"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+  </url>
+
+  <!-- color -->
+  <url>
+    <loc>https://www.slox.co.kr/color</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/color"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/color"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/color"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/color"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/color"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/color</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/color"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/color"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/color"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/color"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/color"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/color</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/color"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/color"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/color"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/color"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/color"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/color</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/color"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/color"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/color"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/color"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/color"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/color</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/color"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/color"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/color"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/color"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/color"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/color</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/color"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/color"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/color"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/color"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/color"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/color</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/color"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/color"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/color"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/color"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/color"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/color</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/color"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/color"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/color"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/color"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/color"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+  </url>
+
+  <!-- card-match -->
+  <url>
+    <loc>https://www.slox.co.kr/card-match</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/card-match"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/card-match"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/card-match"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/card-match"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/card-match"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/card-match</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/card-match"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/card-match"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/card-match"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/card-match"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/card-match"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/card-match</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/card-match"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/card-match"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/card-match"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/card-match"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/card-match"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/card-match</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/card-match"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/card-match"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/card-match"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/card-match"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/card-match"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/card-match</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/card-match"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/card-match"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/card-match"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/card-match"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/card-match"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/card-match</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/card-match"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/card-match"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/card-match"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/card-match"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/card-match"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/card-match</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/card-match"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/card-match"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/card-match"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/card-match"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/card-match"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/card-match</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/card-match"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/card-match"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/card-match"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/card-match"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/card-match"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+  </url>
+
+  <!-- quiz -->
+  <url>
+    <loc>https://www.slox.co.kr/quiz</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/quiz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/quiz"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/quiz"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/quiz"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/quiz"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/quiz</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/quiz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/quiz"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/quiz"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/quiz"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/quiz"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/quiz</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/quiz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/quiz"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/quiz"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/quiz"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/quiz"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/quiz</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/quiz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/quiz"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/quiz"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/quiz"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/quiz"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/quiz</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/quiz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/quiz"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/quiz"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/quiz"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/quiz"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/quiz</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/quiz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/quiz"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/quiz"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/quiz"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/quiz"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/quiz</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/quiz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/quiz"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/quiz"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/quiz"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/quiz"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/quiz</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/quiz"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/quiz"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/quiz"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/quiz"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/quiz"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+  </url>
+
+  <!-- iq -->
+  <url>
+    <loc>https://www.slox.co.kr/iq</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/iq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/iq"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/iq"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/iq"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/iq"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/iq</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/iq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/iq"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/iq"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/iq"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/iq"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/iq</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/iq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/iq"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/iq"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/iq"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/iq"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/iq</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/iq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/iq"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/iq"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/iq"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/iq"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/iq</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/iq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/iq"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/iq"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/iq"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/iq"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/iq</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/iq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/iq"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/iq"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/iq"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/iq"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/iq</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/iq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/iq"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/iq"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/iq"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/iq"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/iq</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/iq"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/iq"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/iq"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/iq"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/iq"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+  </url>
+
+  <!-- sudoku -->
+  <url>
+    <loc>https://www.slox.co.kr/sudoku</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/sudoku</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/sudoku</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/sudoku</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/sudoku</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/sudoku</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/sudoku</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/sudoku</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+  </url>
+
+  <!-- ========================== -->
+  <!-- 🛠️ 도구 (다국어)           -->
+  <!-- ========================== -->
+
+  <!-- qr -->
   <url>
     <loc>https://www.slox.co.kr/qr</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/qr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/qr"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/qr"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/qr"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/qr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
   </url>
+  <url>
+    <loc>https://www.slox.co.kr/en/qr</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/qr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/qr"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/qr"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/qr"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/qr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/ja/qr</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/qr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/qr"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/qr"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/qr"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/qr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/zh/qr</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/qr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/qr"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/qr"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/qr"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/qr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/es/qr</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/qr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/qr"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/qr"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/qr"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/qr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/pt/qr</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/qr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/qr"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/qr"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/qr"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/qr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/de/qr</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/qr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/qr"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/qr"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/qr"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/qr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+  </url>
+  <url>
+    <loc>https://www.slox.co.kr/fr/qr</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/qr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/qr"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/qr"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/qr"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/qr"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+  </url>
+
+  <!-- password -->
   <url>
     <loc>https://www.slox.co.kr/password</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/password"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/password"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/password"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/password"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/password"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/password"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/password"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/password"/>
   </url>
+
+  <!-- random -->
   <url>
     <loc>https://www.slox.co.kr/random</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/random"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/random"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/random"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/random"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/random"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/random"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/random"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/random"/>
   </url>
+
+  <!-- percent -->
   <url>
     <loc>https://www.slox.co.kr/percent</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/percent"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/percent"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/percent"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/percent"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/percent"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/percent"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/percent"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/percent"/>
   </url>
+
+  <!-- bmi -->
   <url>
     <loc>https://www.slox.co.kr/bmi</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/bmi"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/bmi"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/bmi"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/bmi"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/bmi"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/bmi"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/bmi"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/bmi"/>
   </url>
+
+  <!-- dday -->
   <url>
     <loc>https://www.slox.co.kr/dday</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/dday"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/dday"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/dday"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/dday"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/dday"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/dday"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/dday"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/dday"/>
   </url>
+
+  <!-- age -->
   <url>
     <loc>https://www.slox.co.kr/age</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/age"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/age"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/age"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/age"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/age"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/age"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/age"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/age"/>
   </url>
+
+  <!-- character-count -->
   <url>
     <loc>https://www.slox.co.kr/character-count</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/character-count"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/character-count"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/character-count"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/character-count"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/character-count"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/character-count"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/character-count"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/character-count"/>
   </url>
+
+  <!-- slox-test -->
+  <url>
+    <loc>https://www.slox.co.kr/slox-test</loc>
+    <lastmod>2026-03-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/slox-test"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/slox-test"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/slox-test"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/slox-test"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/slox-test"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/slox-test"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/slox-test"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/slox-test"/>
+  </url>
+
+  <!-- ================================ -->
+  <!-- 🇰🇷 한국어 전용 페이지           -->
+  <!-- ================================ -->
   <url>
     <loc>https://www.slox.co.kr/lotto</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.slox.co.kr/loan</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.slox.co.kr/savings</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.slox.co.kr/salary</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://www.slox.co.kr/severance</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
-  <!-- 🎭 기타 -->
+  <!-- 🎭 기타 한국어 전용 -->
   <url>
     <loc>https://www.slox.co.kr/fortune</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://www.slox.co.kr/quote</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://www.slox.co.kr/slox-test</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://www.slox.co.kr/about</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.slox.co.kr/privacy</loc>
+    <lastmod>2026-03-11</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
-  </url>
-
-  <!-- 🌍 다국어 메인 페이지 -->
-  <url>
-    <loc>https://www.slox.co.kr/en</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/ja</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/zh</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/es</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/pt</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/de</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.slox.co.kr/fr</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
   </url>
 </urlset>
