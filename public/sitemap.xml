@@ -18,6 +18,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en</loc>
@@ -32,6 +34,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja</loc>
@@ -46,6 +50,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh</loc>
@@ -60,6 +66,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es</loc>
@@ -74,6 +82,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt</loc>
@@ -88,6 +98,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de</loc>
@@ -102,6 +114,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr</loc>
@@ -116,6 +130,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en"/>
   </url>
 
   <!-- ================================ -->
@@ -136,6 +152,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/reaction"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/reaction</loc>
@@ -150,6 +168,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/reaction"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/reaction</loc>
@@ -164,6 +184,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/reaction"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/reaction</loc>
@@ -178,6 +200,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/reaction"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/reaction</loc>
@@ -192,6 +216,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/reaction"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/reaction</loc>
@@ -206,6 +232,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/reaction"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/reaction</loc>
@@ -220,6 +248,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/reaction"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/reaction</loc>
@@ -234,6 +264,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/reaction"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/reaction"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/reaction"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/reaction"/>
   </url>
 
   <!-- typing -->
@@ -250,6 +282,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/typing"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/typing</loc>
@@ -264,6 +298,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/typing"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/typing</loc>
@@ -278,6 +314,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/typing"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/typing</loc>
@@ -292,6 +330,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/typing"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/typing</loc>
@@ -306,6 +346,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/typing"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/typing</loc>
@@ -320,6 +362,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/typing"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/typing</loc>
@@ -334,6 +378,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/typing"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/typing</loc>
@@ -348,6 +394,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/typing"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/typing"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/typing"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/typing"/>
   </url>
 
   <!-- cps -->
@@ -364,6 +412,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/cps"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/cps</loc>
@@ -378,6 +428,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/cps"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/cps</loc>
@@ -392,6 +444,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/cps"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/cps</loc>
@@ -406,6 +460,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/cps"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/cps</loc>
@@ -420,6 +476,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/cps"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/cps</loc>
@@ -434,6 +492,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/cps"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/cps</loc>
@@ -448,6 +508,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/cps"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/cps</loc>
@@ -462,6 +524,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/cps"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/cps"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/cps"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/cps"/>
   </url>
 
   <!-- memory -->
@@ -478,6 +542,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/memory"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/memory</loc>
@@ -492,6 +558,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/memory"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/memory</loc>
@@ -506,6 +574,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/memory"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/memory</loc>
@@ -520,6 +590,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/memory"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/memory</loc>
@@ -534,6 +606,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/memory"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/memory</loc>
@@ -548,6 +622,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/memory"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/memory</loc>
@@ -562,6 +638,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/memory"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/memory</loc>
@@ -576,6 +654,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/memory"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/memory"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/memory"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/memory"/>
   </url>
 
   <!-- aim -->
@@ -592,6 +672,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/aim"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/aim</loc>
@@ -606,6 +688,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/aim"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/aim</loc>
@@ -620,6 +704,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/aim"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/aim</loc>
@@ -634,6 +720,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/aim"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/aim</loc>
@@ -648,6 +736,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/aim"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/aim</loc>
@@ -662,6 +752,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/aim"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/aim</loc>
@@ -676,6 +768,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/aim"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/aim</loc>
@@ -690,6 +784,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/aim"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/aim"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/aim"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/aim"/>
   </url>
 
   <!-- color -->
@@ -706,6 +802,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/color"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/color</loc>
@@ -720,6 +818,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/color"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/color</loc>
@@ -734,6 +834,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/color"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/color</loc>
@@ -748,6 +850,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/color"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/color</loc>
@@ -762,6 +866,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/color"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/color</loc>
@@ -776,6 +882,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/color"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/color</loc>
@@ -790,6 +898,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/color"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/color</loc>
@@ -804,6 +914,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/color"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/color"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/color"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/color"/>
   </url>
 
   <!-- card-match -->
@@ -820,6 +932,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/card-match"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/card-match</loc>
@@ -834,6 +948,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/card-match"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/card-match</loc>
@@ -848,6 +964,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/card-match"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/card-match</loc>
@@ -862,6 +980,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/card-match"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/card-match</loc>
@@ -876,6 +996,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/card-match"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/card-match</loc>
@@ -890,6 +1012,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/card-match"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/card-match</loc>
@@ -904,6 +1028,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/card-match"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/card-match</loc>
@@ -918,6 +1044,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/card-match"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/card-match"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/card-match"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/card-match"/>
   </url>
 
   <!-- quiz -->
@@ -934,6 +1062,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/quiz"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/quiz</loc>
@@ -948,6 +1078,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/quiz"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/quiz</loc>
@@ -962,6 +1094,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/quiz"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/quiz</loc>
@@ -976,6 +1110,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/quiz"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/quiz</loc>
@@ -990,6 +1126,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/quiz"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/quiz</loc>
@@ -1004,6 +1142,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/quiz"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/quiz</loc>
@@ -1018,6 +1158,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/quiz"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/quiz</loc>
@@ -1032,6 +1174,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/quiz"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/quiz"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/quiz"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/quiz"/>
   </url>
 
   <!-- iq -->
@@ -1048,6 +1192,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/iq"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/iq</loc>
@@ -1062,6 +1208,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/iq"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/iq</loc>
@@ -1076,6 +1224,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/iq"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/iq</loc>
@@ -1090,6 +1240,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/iq"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/iq</loc>
@@ -1104,6 +1256,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/iq"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/iq</loc>
@@ -1118,6 +1272,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/iq"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/iq</loc>
@@ -1132,6 +1288,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/iq"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/iq</loc>
@@ -1146,6 +1304,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/iq"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/iq"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/iq"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/iq"/>
   </url>
 
   <!-- sudoku -->
@@ -1162,6 +1322,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/sudoku"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/sudoku</loc>
@@ -1176,6 +1338,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/sudoku"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/sudoku</loc>
@@ -1190,6 +1354,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/sudoku"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/sudoku</loc>
@@ -1204,6 +1370,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/sudoku"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/sudoku</loc>
@@ -1218,6 +1386,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/sudoku"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/sudoku</loc>
@@ -1232,6 +1402,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/sudoku"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/sudoku</loc>
@@ -1246,6 +1418,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/sudoku"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/sudoku</loc>
@@ -1260,6 +1434,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/sudoku"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/sudoku"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/sudoku"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/sudoku"/>
   </url>
 
   <!-- ========================== -->
@@ -1280,6 +1456,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/qr"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/en/qr</loc>
@@ -1294,6 +1472,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/qr"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/ja/qr</loc>
@@ -1308,6 +1488,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/qr"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/zh/qr</loc>
@@ -1322,6 +1504,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/qr"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/es/qr</loc>
@@ -1336,6 +1520,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/qr"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/pt/qr</loc>
@@ -1350,6 +1536,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/qr"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/de/qr</loc>
@@ -1364,6 +1552,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/qr"/>
   </url>
   <url>
     <loc>https://www.slox.co.kr/fr/qr</loc>
@@ -1378,6 +1568,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/qr"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/qr"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/qr"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/qr"/>
   </url>
 
   <!-- password -->
@@ -1394,6 +1586,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/password"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/password"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/password"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/password"/>
   </url>
 
   <!-- random -->
@@ -1410,6 +1604,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/random"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/random"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/random"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/random"/>
   </url>
 
   <!-- percent -->
@@ -1426,6 +1622,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/percent"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/percent"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/percent"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/percent"/>
   </url>
 
   <!-- bmi -->
@@ -1442,6 +1640,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/bmi"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/bmi"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/bmi"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/bmi"/>
   </url>
 
   <!-- dday -->
@@ -1458,6 +1658,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/dday"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/dday"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/dday"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/dday"/>
   </url>
 
   <!-- age -->
@@ -1474,6 +1676,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/age"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/age"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/age"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/age"/>
   </url>
 
   <!-- character-count -->
@@ -1490,6 +1694,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/character-count"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/character-count"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/character-count"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/character-count"/>
   </url>
 
   <!-- slox-test -->
@@ -1506,6 +1712,8 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/slox-test"/>
     <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/slox-test"/>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/slox-test"/>
+
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/slox-test"/>
   </url>
 
   <!-- ================================ -->
