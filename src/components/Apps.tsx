@@ -21,10 +21,10 @@ const appsData = [
   { emoji: "🧮", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/calculator-slox/id6757248766", android: "https://play.google.com/store/apps/details?id=com.slox.slox_calculator" },
   { emoji: "🫁", cat: "health" as Category, ios: "https://apps.apple.com/us/app/breathing-slox/id6757317781", android: "https://play.google.com/store/apps/details?id=com.slox.slox_breathing" },
   { emoji: "😴", cat: "health" as Category, ios: null, android: null },
-  { emoji: "🐾", cat: "fun" as Category, ios: null, android: "https://play.google.com/store/apps/details?id=com.slox.slox_animal_scan" },
-  { emoji: "💕", cat: "fun" as Category, ios: null, android: "https://play.google.com/store/apps/details?id=com.slox.slox_mbti_match" },
-  { emoji: "🔮", cat: "fun" as Category, ios: null, android: "https://play.google.com/store/apps/details?id=com.slox.slox_daily_fortune" },
-  { emoji: "🌙", cat: "fun" as Category, ios: null, android: "https://play.google.com/store/apps/details?id=com.slox.slox_dream" },
+  { emoji: "🐾", cat: "fun" as Category, ios: null, android: null },
+  { emoji: "💕", cat: "fun" as Category, ios: null, android: null },
+  { emoji: "🔮", cat: "fun" as Category, ios: null, android: null },
+  { emoji: "🌙", cat: "fun" as Category, ios: null, android: null },
 ];
 
 type AppText = { name: string; desc: string };
