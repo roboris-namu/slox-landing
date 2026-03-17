@@ -21,8 +21,10 @@ const appsData = [
   { emoji: "🧮", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/calculator-slox/id6757248766", android: "https://play.google.com/store/apps/details?id=com.slox.slox_calculator" },
   { emoji: "🫁", cat: "health" as Category, ios: "https://apps.apple.com/us/app/breathing-slox/id6757317781", android: "https://play.google.com/store/apps/details?id=com.slox.slox_breathing" },
   { emoji: "😴", cat: "health" as Category, ios: null, android: null },
-  { emoji: "🐾", cat: "fun" as Category, ios: null, android: null },
-  { emoji: "💕", cat: "fun" as Category, ios: null, android: null },
+  { emoji: "🐾", cat: "fun" as Category, ios: null, android: "https://play.google.com/store/apps/details?id=com.slox.slox_animal_scan" },
+  { emoji: "💕", cat: "fun" as Category, ios: null, android: "https://play.google.com/store/apps/details?id=com.slox.slox_mbti_match" },
+  { emoji: "🔮", cat: "fun" as Category, ios: null, android: "https://play.google.com/store/apps/details?id=com.slox.slox_daily_fortune" },
+  { emoji: "🌙", cat: "fun" as Category, ios: null, android: "https://play.google.com/store/apps/details?id=com.slox.slox_dream" },
 ];
 
 type AppText = { name: string; desc: string };
@@ -47,6 +49,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "수면 트래커", desc: "수면 기록·통계" },
     { name: "동물 스캔", desc: "닮은 동물 분석" },
     { name: "MBTI 궁합", desc: "MBTI 궁합 테스트" },
+    { name: "오늘의 운세", desc: "사주·궁합·운세" },
+    { name: "꿈해몽", desc: "꿈 해석·행운 점수" },
   ],
   en: [
     { name: "Sound Meter", desc: "Decibel meter" },
@@ -67,6 +71,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "Sleep Tracker", desc: "Sleep log & stats" },
     { name: "Animal Scan", desc: "Which animal do you look like?" },
     { name: "MBTI Match", desc: "MBTI compatibility test" },
+    { name: "Daily Fortune", desc: "Zodiac & fortune reading" },
+    { name: "Dream Interpreter", desc: "Dream meaning & lucky score" },
   ],
   ja: [
     { name: "騒音計", desc: "デシベル測定" },
@@ -87,6 +93,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "睡眠トラッカー", desc: "睡眠記録・統計" },
     { name: "アニマルスキャン", desc: "似ている動物は？" },
     { name: "MBTI相性", desc: "MBTI相性テスト" },
+    { name: "今日の運勢", desc: "星座・相性・運勢" },
+    { name: "夢占い", desc: "夢解釈・ラッキースコア" },
   ],
   zh: [
     { name: "噪音计", desc: "分贝测量" },
@@ -107,6 +115,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "睡眠追踪器", desc: "睡眠记录·统计" },
     { name: "动物扫描", desc: "你像哪种动物？" },
     { name: "MBTI配对", desc: "MBTI配对测试" },
+    { name: "今日运势", desc: "星座·配对·运势" },
+    { name: "解梦", desc: "梦境解析·幸运分数" },
   ],
 };
 
