@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-type Category = "all" | "utility" | "health" | "media";
+type Category = "all" | "utility" | "health" | "media" | "fun";
 
 const appsData = [
   { emoji: "🔊", cat: "media" as Category, ios: "https://apps.apple.com/us/app/sound-meter-decibel-db/id6756865763", android: "https://play.google.com/store/apps/details?id=com.slox.soundmeter" },
@@ -21,6 +21,8 @@ const appsData = [
   { emoji: "🧮", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/calculator-slox/id6757248766", android: "https://play.google.com/store/apps/details?id=com.slox.slox_calculator" },
   { emoji: "🫁", cat: "health" as Category, ios: "https://apps.apple.com/us/app/breathing-slox/id6757317781", android: "https://play.google.com/store/apps/details?id=com.slox.slox_breathing" },
   { emoji: "😴", cat: "health" as Category, ios: null, android: null },
+  { emoji: "🐾", cat: "fun" as Category, ios: null, android: null },
+  { emoji: "💕", cat: "fun" as Category, ios: null, android: null },
 ];
 
 type AppText = { name: string; desc: string };
@@ -43,6 +45,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "계산기", desc: "간편 계산기" },
     { name: "호흡", desc: "호흡 훈련" },
     { name: "수면 트래커", desc: "수면 기록·통계" },
+    { name: "동물 스캔", desc: "닮은 동물 분석" },
+    { name: "MBTI 궁합", desc: "MBTI 궁합 테스트" },
   ],
   en: [
     { name: "Sound Meter", desc: "Decibel meter" },
@@ -61,6 +65,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "Calculator", desc: "Simple calculator" },
     { name: "Breathing", desc: "Breathing exercise" },
     { name: "Sleep Tracker", desc: "Sleep log & stats" },
+    { name: "Animal Scan", desc: "Which animal do you look like?" },
+    { name: "MBTI Match", desc: "MBTI compatibility test" },
   ],
   ja: [
     { name: "騒音計", desc: "デシベル測定" },
@@ -79,6 +85,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "電卓", desc: "シンプル電卓" },
     { name: "呼吸", desc: "呼吸トレーニング" },
     { name: "睡眠トラッカー", desc: "睡眠記録・統計" },
+    { name: "アニマルスキャン", desc: "似ている動物は？" },
+    { name: "MBTI相性", desc: "MBTI相性テスト" },
   ],
   zh: [
     { name: "噪音计", desc: "分贝测量" },
@@ -97,18 +105,20 @@ const appTexts: Record<string, AppText[]> = {
     { name: "计算器", desc: "简易计算器" },
     { name: "呼吸", desc: "呼吸训练" },
     { name: "睡眠追踪器", desc: "睡眠记录·统计" },
+    { name: "动物扫描", desc: "你像哪种动物？" },
+    { name: "MBTI配对", desc: "MBTI配对测试" },
   ],
 };
 
 const categoryLabels: Record<string, Record<Category, string>> = {
-  ko: { all: "전체", utility: "유틸리티", health: "건강", media: "미디어" },
-  en: { all: "All", utility: "Utility", health: "Health", media: "Media" },
-  ja: { all: "すべて", utility: "ユーティリティ", health: "健康", media: "メディア" },
-  zh: { all: "全部", utility: "工具", health: "健康", media: "媒体" },
-  de: { all: "Alle", utility: "Werkzeuge", health: "Gesundheit", media: "Medien" },
-  fr: { all: "Tout", utility: "Utilitaire", health: "Santé", media: "Médias" },
-  es: { all: "Todo", utility: "Utilidad", health: "Salud", media: "Medios" },
-  pt: { all: "Todos", utility: "Utilidade", health: "Saúde", media: "Mídia" },
+  ko: { all: "전체", utility: "유틸리티", health: "건강", media: "미디어", fun: "엔터테인먼트" },
+  en: { all: "All", utility: "Utility", health: "Health", media: "Media", fun: "Entertainment" },
+  ja: { all: "すべて", utility: "ユーティリティ", health: "健康", media: "メディア", fun: "エンタメ" },
+  zh: { all: "全部", utility: "工具", health: "健康", media: "媒体", fun: "娱乐" },
+  de: { all: "Alle", utility: "Werkzeuge", health: "Gesundheit", media: "Medien", fun: "Unterhaltung" },
+  fr: { all: "Tout", utility: "Utilitaire", health: "Santé", media: "Médias", fun: "Divertissement" },
+  es: { all: "Todo", utility: "Utilidad", health: "Salud", media: "Medios", fun: "Entretenimiento" },
+  pt: { all: "Todos", utility: "Utilidade", health: "Saúde", media: "Mídia", fun: "Entretenimento" },
 };
 
 const categoryCounts: Record<Category, number> = {
@@ -116,6 +126,7 @@ const categoryCounts: Record<Category, number> = {
   utility: appsData.filter((a) => a.cat === "utility").length,
   health: appsData.filter((a) => a.cat === "health").length,
   media: appsData.filter((a) => a.cat === "media").length,
+  fun: appsData.filter((a) => a.cat === "fun").length,
 };
 
 const DESKTOP_COLS = 5;
@@ -183,7 +194,7 @@ export default function Apps({ locale = "ko" }: { locale?: string }) {
         </div>
 
         <div className="flex items-center justify-center gap-1.5 mb-8">
-          {(["all", "utility", "health", "media"] as Category[]).map((cat) => (
+          {(["all", "utility", "health", "media", "fun"] as Category[]).map((cat) => (
             <button
               key={cat}
               onClick={() => { setActiveCat(cat); setExpanded(false); }}
