@@ -20,9 +20,9 @@ const appsData = [
   { emoji: "🧭", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/compass-slox/id6757491317", android: "https://play.google.com/store/apps/details?id=com.slox.slox_compass" },
   { emoji: "🧮", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/calculator-slox/id6757248766", android: "https://play.google.com/store/apps/details?id=com.slox.slox_calculator" },
   { emoji: "🫁", cat: "health" as Category, ios: "https://apps.apple.com/us/app/breathing-slox/id6757317781", android: "https://play.google.com/store/apps/details?id=com.slox.slox_breathing" },
-  { emoji: "😴", cat: "health" as Category, ios: null, android: null },
-  { emoji: "🐾", cat: "fun" as Category, ios: null, android: null },
-  { emoji: "💕", cat: "fun" as Category, ios: null, android: null },
+  { emoji: "😴", cat: "health" as Category, ios: "https://apps.apple.com/app/id6760894127", android: null },
+  { emoji: "🐾", cat: "fun" as Category, ios: "https://apps.apple.com/app/id6760892680", android: null },
+  { emoji: "💕", cat: "fun" as Category, ios: "https://apps.apple.com/app/id6760887337", android: null },
   { emoji: "🔮", cat: "fun" as Category, ios: null, android: null },
   { emoji: "🌙", cat: "fun" as Category, ios: null, android: null },
 ];
