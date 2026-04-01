@@ -30,7 +30,7 @@ const ui: Record<Language, {
   questionLabel: string; ofLabel: string; analyzing: string; yourAnimal: string;
   keyTraits: string; funFact: string; similarAnimals: string;
   shareButton: string; retryButton: string; backToMain: string;
-  poweredBy: string; services: string; shareText: string; copied: string;
+  poweredBy: string; shareText: string; copied: string;
   otherTests: string; mbtiTest: string; reactionTest: string;
 }> = {
   ko: {
@@ -49,7 +49,6 @@ const ui: Record<Language, {
     retryButton: "🔄 다시 테스트",
     backToMain: "← 메인으로",
     poweredBy: "Powered by",
-    services: "홈페이지 · 앱 제작 · AI 챗봇 구축",
     shareText: "🐾 동물 성격 테스트 결과!",
     copied: "결과가 클립보드에 복사되었습니다!",
     otherTests: "다른 테스트도 해보세요!",
@@ -72,7 +71,6 @@ const ui: Record<Language, {
     retryButton: "🔄 Try Again",
     backToMain: "← Home",
     poweredBy: "Powered by",
-    services: "Web · App · AI Chatbot Development",
     shareText: "🐾 Animal Personality Quiz Result!",
     copied: "Result copied to clipboard!",
     otherTests: "Try other tests too!",
@@ -95,7 +93,6 @@ const ui: Record<Language, {
     retryButton: "🔄 もう一度",
     backToMain: "← ホーム",
     poweredBy: "Powered by",
-    services: "ウェブ · アプリ · AIチャットボット開発",
     shareText: "🐾 動物性格診断テスト結果！",
     copied: "結果がクリップボードにコピーされました！",
     otherTests: "他のテストも試してみよう！",
@@ -118,7 +115,6 @@ const ui: Record<Language, {
     retryButton: "🔄 重新测试",
     backToMain: "← 首页",
     poweredBy: "Powered by",
-    services: "网站 · 应用 · AI聊天机器人开发",
     shareText: "🐾 动物性格测试结果！",
     copied: "结果已复制到剪贴板！",
     otherTests: "试试其他测试吧！",
@@ -141,7 +137,6 @@ const ui: Record<Language, {
     retryButton: "🔄 Nochmal",
     backToMain: "← Startseite",
     poweredBy: "Powered by",
-    services: "Web · App · KI-Chatbot-Entwicklung",
     shareText: "🐾 Tier-Persönlichkeitsquiz Ergebnis!",
     copied: "Ergebnis in die Zwischenablage kopiert!",
     otherTests: "Probiere auch andere Tests!",
@@ -164,7 +159,6 @@ const ui: Record<Language, {
     retryButton: "🔄 Recommencer",
     backToMain: "← Accueil",
     poweredBy: "Powered by",
-    services: "Web · App · Développement de chatbot IA",
     shareText: "🐾 Résultat du quiz de personnalité animale !",
     copied: "Résultat copié dans le presse-papiers !",
     otherTests: "Essayez d'autres tests !",
@@ -187,7 +181,6 @@ const ui: Record<Language, {
     retryButton: "🔄 Intentar de nuevo",
     backToMain: "← Inicio",
     poweredBy: "Powered by",
-    services: "Web · App · Desarrollo de chatbot IA",
     shareText: "🐾 ¡Resultado del quiz de personalidad animal!",
     copied: "¡Resultado copiado al portapapeles!",
     otherTests: "¡Prueba otros tests también!",
@@ -210,7 +203,6 @@ const ui: Record<Language, {
     retryButton: "🔄 Tentar novamente",
     backToMain: "← Início",
     poweredBy: "Powered by",
-    services: "Web · App · Desenvolvimento de chatbot IA",
     shareText: "🐾 Resultado do quiz de personalidade animal!",
     copied: "Resultado copiado para a área de transferência!",
     otherTests: "Experimente outros testes também!",
@@ -753,7 +745,6 @@ export default function AnimalScan({ locale = "ko" }: { locale?: string }) {
             >
               SLOX
             </Link>
-            <p className="text-dark-500 text-xs mt-2">{t.services}</p>
           </div>
         </div>
       </main>

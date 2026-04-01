@@ -25,7 +25,7 @@ const translations: Record<Lang, {
   reactionTest: string;
   colorGame: string;
   poweredBy: string;
-  services: string;
+
   backToMain: string;
   shareText: string;
   copied: string;
@@ -59,7 +59,7 @@ const translations: Record<Lang, {
     reactionTest: "⚡ 반응속도 테스트",
     colorGame: "🎨 색상 찾기 게임",
     poweredBy: "Powered by",
-    services: "홈페이지 · 앱 제작 · AI 챗봇 구축",
+
     backToMain: "← 메인으로",
     shareText: "🐂 나와 닮은 황소 테스트 결과!",
     copied: "결과가 클립보드에 복사되었습니다!",
@@ -102,7 +102,7 @@ const translations: Record<Lang, {
     reactionTest: "⚡ Reaction Test",
     colorGame: "🎨 Color Finding Game",
     poweredBy: "Powered by",
-    services: "Web · App · AI Chatbot",
+
     backToMain: "← Back",
     shareText: "🐂 My Bull Character Test Result!",
     copied: "Result copied to clipboard!",
@@ -145,7 +145,7 @@ const translations: Record<Lang, {
     reactionTest: "⚡ 反応速度テスト",
     colorGame: "🎨 色探しゲーム",
     poweredBy: "Powered by",
-    services: "ウェブ・アプリ・AIチャットボット",
+
     backToMain: "← 戻る",
     shareText: "🐂 私に似た牛テストの結果！",
     copied: "結果がクリップボードにコピーされました！",
@@ -188,7 +188,7 @@ const translations: Record<Lang, {
     reactionTest: "⚡ 反应速度测试",
     colorGame: "🎨 找颜色游戏",
     poweredBy: "Powered by",
-    services: "网站·应用·AI聊天机器人",
+
     backToMain: "← 返回",
     shareText: "🐂 与我相似的牛测试结果！",
     copied: "结果已复制到剪贴板！",
@@ -231,7 +231,6 @@ const translations: Record<Lang, {
     reactionTest: "⚡ Test de Reacción",
     colorGame: "🎨 Juego de Colores",
     poweredBy: "Powered by",
-    services: "Web · App · Chatbot IA",
     backToMain: "← Volver",
     shareText: "🐂 ¡Mi resultado del test del toro!",
     copied: "¡Resultado copiado!",
@@ -274,7 +273,6 @@ const translations: Record<Lang, {
     reactionTest: "⚡ Teste de Reação",
     colorGame: "🎨 Jogo de Cores",
     poweredBy: "Powered by",
-    services: "Web · App · Chatbot IA",
     backToMain: "← Voltar",
     shareText: "🐂 Meu resultado do teste do touro!",
     copied: "Resultado copiado!",
@@ -317,7 +315,7 @@ const translations: Record<Lang, {
     reactionTest: "⚡ Reaktionstest",
     colorGame: "🎨 Farbspiel",
     poweredBy: "Powered by",
-    services: "Web · App · KI-Chatbot",
+
     backToMain: "← Zurück",
     shareText: "🐂 Mein Stier-Test Ergebnis!",
     copied: "Ergebnis kopiert!",
@@ -360,7 +358,6 @@ const translations: Record<Lang, {
     reactionTest: "⚡ Test de Réaction",
     colorGame: "🎨 Jeu de Couleurs",
     poweredBy: "Powered by",
-    services: "Web · App · Chatbot IA",
     backToMain: "← Retour",
     shareText: "🐂 Mon résultat du test du taureau!",
     copied: "Résultat copié!",
@@ -737,7 +734,7 @@ ${charT.description}
             <Link href="/" className="font-black text-sm text-white tracking-tight hover:opacity-80 transition-opacity">
               SLOX
             </Link>
-            <p className="text-dark-500 text-xs mt-2">{t.services}</p>
+
           </div>
         </div>
       </main>

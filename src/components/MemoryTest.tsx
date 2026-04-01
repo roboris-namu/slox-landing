@@ -50,7 +50,7 @@ const translations = {
     aimTest: "🎯 에임 트레이너",
     backToMain: "← 메인으로",
     poweredBy: "Powered by",
-    slogan: "홈페이지 · 앱 제작 · AI 챗봇 구축",
+
     adArea: "광고 영역 (Google AdSense)",
     shareText: "🧠 숫자 기억 게임 결과!",
     shareTestIt: "나도 테스트하기 👉",
@@ -105,7 +105,7 @@ const translations = {
     aimTest: "🎯 Aim Trainer",
     backToMain: "← Home",
     poweredBy: "Powered by",
-    slogan: "Web · App · AI Chatbot Development",
+
     adArea: "Ad Space (Google AdSense)",
     shareText: "🧠 Number Memory Result!",
     shareTestIt: "Try it yourself 👉",
@@ -160,7 +160,7 @@ const translations = {
     aimTest: "🎯 エイムトレーナー",
     backToMain: "← ホームへ",
     poweredBy: "Powered by",
-    slogan: "ウェブ・アプリ・AIチャットボット開発",
+
     adArea: "広告エリア (Google AdSense)",
     shareText: "🧠 数字記憶ゲーム結果！",
     shareTestIt: "あなたも挑戦 👉",
@@ -215,7 +215,7 @@ const translations = {
     aimTest: "🎯 瞄准训练",
     backToMain: "← 首页",
     poweredBy: "Powered by",
-    slogan: "网站·应用·AI聊天机器人开发",
+
     adArea: "广告区域 (Google AdSense)",
     shareText: "🧠 数字记忆游戏结果！",
     shareTestIt: "你也来试试 👉",
@@ -270,7 +270,7 @@ const translations = {
     aimTest: "🎯 Entrenador de Puntería",
     backToMain: "← Inicio",
     poweredBy: "Powered by",
-    slogan: "Desarrollo Web · Apps · Chatbots IA",
+
     adArea: "Espacio Publicitario",
     shareText: "🧠 ¡Resultado del Juego de Memoria!",
     shareTestIt: "¡Pruébalo tú también! 👉",
@@ -325,7 +325,7 @@ const translations = {
     aimTest: "🎯 Treinador de Mira",
     backToMain: "← Início",
     poweredBy: "Powered by",
-    slogan: "Desenvolvimento Web · Apps · Chatbots IA",
+
     adArea: "Espaço Publicitário",
     shareText: "🧠 Resultado do Jogo de Memória!",
     shareTestIt: "Experimente você também! 👉",
@@ -380,7 +380,7 @@ const translations = {
     aimTest: "🎯 Aim Trainer",
     backToMain: "← Startseite",
     poweredBy: "Powered by",
-    slogan: "Web · App · KI-Chatbot Entwicklung",
+
     adArea: "Werbefläche",
     shareText: "🧠 Zahlen-Gedächtnis Ergebnis!",
     shareTestIt: "Probiere es selbst! 👉",
@@ -435,7 +435,7 @@ const translations = {
     aimTest: "🎯 Entraîneur de Visée",
     backToMain: "← Accueil",
     poweredBy: "Powered by",
-    slogan: "Développement Web · Apps · Chatbots IA",
+
     adArea: "Espace Publicitaire",
     shareText: "🧠 Résultat du Jeu de Mémoire !",
     shareTestIt: "Essayez vous aussi ! 👉",
@@ -1429,7 +1429,7 @@ export default function MemoryTest({ locale, battleMode = false, onBattleComplet
             <Link href="/" className="font-black text-sm text-white tracking-tight hover:opacity-80 transition-opacity">
               SLOX
             </Link>
-            <p className="text-dark-500 text-xs mt-2">{t.slogan}</p>
+
           </div>
         </div>
       </main>

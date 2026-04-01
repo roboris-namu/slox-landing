@@ -58,7 +58,6 @@ const translations = {
     severanceCalc: "💼 퇴직금 계산기",
     backToMain: "← 메인으로",
     poweredBy: "Powered by",
-    slogan: "홈페이지 · 앱 제작 · AI 챗봇 구축",
     adArea: "광고 영역 (Google AdSense)",
     shareText: "⚡ 반응속도 테스트 결과!",
     shareTestIt: "나도 테스트하기 👉",
@@ -143,7 +142,6 @@ const translations = {
     severanceCalc: "💼 Severance Calculator",
     backToMain: "← Home",
     poweredBy: "Powered by",
-    slogan: "Web · App · AI Chatbot Development",
     adArea: "Ad Space (Google AdSense)",
     shareText: "⚡ Reaction Speed Test Result!",
     shareTestIt: "Try it yourself 👉",
@@ -227,7 +225,6 @@ const translations = {
     severanceCalc: "💼 退職金計算機",
     backToMain: "← ホームへ",
     poweredBy: "Powered by",
-    slogan: "ウェブ・アプリ・AIチャットボット開発",
     adArea: "広告エリア (Google AdSense)",
     shareText: "⚡ 反応速度テスト結果！",
     shareTestIt: "あなたも挑戦 👉",
@@ -311,7 +308,6 @@ const translations = {
     severanceCalc: "💼 遣散费计算器",
     backToMain: "← 首页",
     poweredBy: "Powered by",
-    slogan: "网站·应用·AI聊天机器人开发",
     adArea: "广告区域 (Google AdSense)",
     shareText: "⚡ 反应速度测试结果！",
     shareTestIt: "你也来试试 👉",
@@ -395,7 +391,6 @@ const translations = {
     severanceCalc: "💼 Calculadora de Indemnización",
     backToMain: "← Inicio",
     poweredBy: "Powered by",
-    slogan: "Desarrollo Web · Apps · Chatbots IA",
     adArea: "Espacio Publicitario (Google AdSense)",
     shareText: "⚡ ¡Resultado del Test de Reacción!",
     shareTestIt: "¡Pruébalo tú también! 👉",
@@ -479,7 +474,6 @@ const translations = {
     severanceCalc: "💼 Calculadora de Rescisão",
     backToMain: "← Início",
     poweredBy: "Powered by",
-    slogan: "Desenvolvimento Web · Apps · Chatbots IA",
     adArea: "Espaço Publicitário (Google AdSense)",
     shareText: "⚡ Resultado do Teste de Reação!",
     shareTestIt: "Experimente você também! 👉",
@@ -563,7 +557,6 @@ const translations = {
     severanceCalc: "💼 Abfindungsrechner",
     backToMain: "← Startseite",
     poweredBy: "Powered by",
-    slogan: "Web · App · KI-Chatbot Entwicklung",
     adArea: "Werbefläche (Google AdSense)",
     shareText: "⚡ Reaktionstest Ergebnis!",
     shareTestIt: "Probiere es selbst! 👉",
@@ -647,7 +640,6 @@ const translations = {
     severanceCalc: "💼 Calculateur d'Indemnité",
     backToMain: "← Accueil",
     poweredBy: "Powered by",
-    slogan: "Développement Web · Apps · Chatbots IA",
     adArea: "Espace Publicitaire (Google AdSense)",
     shareText: "⚡ Résultat du Test de Réaction !",
     shareTestIt: "Essayez vous aussi ! 👉",
@@ -2571,9 +2563,6 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
             <Link href="/" className="font-black text-sm text-white tracking-tight hover:opacity-80 transition-opacity">
               SLOX
             </Link>
-            <p className="text-dark-500 text-xs mt-2">
-              {t.slogan}
-            </p>
           </div>
         </div>
       </main>

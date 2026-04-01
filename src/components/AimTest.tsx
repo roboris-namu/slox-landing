@@ -87,7 +87,7 @@ const translations = {
     cpsTest: "🖱️ CPS 테스트",
     backToMain: "← 메인으로",
     poweredBy: "Powered by",
-    slogan: "홈페이지 · 앱 제작 · AI 챗봇 구축",
+
     adArea: "광고 영역 (Google AdSense)",
     shareText: "🎯 에임 테스트 결과!",
     shareTestIt: "나도 테스트하기 👉",
@@ -141,7 +141,7 @@ const translations = {
     cpsTest: "🖱️ CPS Test",
     backToMain: "← Home",
     poweredBy: "Powered by",
-    slogan: "Web · App · AI Chatbot Development",
+
     adArea: "Ad Space (Google AdSense)",
     shareText: "🎯 Aim Test Result!",
     shareTestIt: "Try it yourself 👉",
@@ -195,7 +195,7 @@ const translations = {
     cpsTest: "🖱️ CPSテスト",
     backToMain: "← ホームへ",
     poweredBy: "Powered by",
-    slogan: "ウェブ・アプリ・AIチャットボット開発",
+
     adArea: "広告エリア (Google AdSense)",
     shareText: "🎯 エイムテスト結果！",
     shareTestIt: "あなたも挑戦 👉",
@@ -249,7 +249,7 @@ const translations = {
     cpsTest: "🖱️ CPS测试",
     backToMain: "← 首页",
     poweredBy: "Powered by",
-    slogan: "网站·应用·AI聊天机器人开发",
+
     adArea: "广告区域 (Google AdSense)",
     shareText: "🎯 瞄准测试结果！",
     shareTestIt: "你也来试试 👉",
@@ -303,7 +303,7 @@ const translations = {
     cpsTest: "🖱️ Test CPS",
     backToMain: "← Inicio",
     poweredBy: "Powered by",
-    slogan: "Desarrollo Web · Apps · Chatbots IA",
+
     adArea: "Espacio Publicitario (Google AdSense)",
     shareText: "🎯 ¡Resultado del Test de Puntería!",
     shareTestIt: "¡Pruébalo tú también! 👉",
@@ -357,7 +357,7 @@ const translations = {
     cpsTest: "🖱️ Teste CPS",
     backToMain: "← Início",
     poweredBy: "Powered by",
-    slogan: "Desenvolvimento Web · Apps · Chatbots IA",
+
     adArea: "Espaço Publicitário (Google AdSense)",
     shareText: "🎯 Resultado do Teste de Mira!",
     shareTestIt: "Experimente você também! 👉",
@@ -411,7 +411,7 @@ const translations = {
     cpsTest: "🖱️ CPS Test",
     backToMain: "← Startseite",
     poweredBy: "Powered by",
-    slogan: "Web · App · KI-Chatbot Entwicklung",
+
     adArea: "Werbefläche (Google AdSense)",
     shareText: "🎯 Aim Test Ergebnis!",
     shareTestIt: "Probiere es selbst! 👉",
@@ -465,7 +465,7 @@ const translations = {
     cpsTest: "🖱️ Test CPS",
     backToMain: "← Accueil",
     poweredBy: "Powered by",
-    slogan: "Développement Web · Apps · Chatbots IA",
+
     adArea: "Espace Publicitaire (Google AdSense)",
     shareText: "🎯 Résultat du Test de Visée !",
     shareTestIt: "Essayez vous aussi ! 👉",
@@ -1837,7 +1837,7 @@ export default function AimTest({ locale, battleMode = false, onBattleComplete }
             <Link href="/" className="font-black text-sm text-white tracking-tight hover:opacity-80 transition-opacity">
               SLOX
             </Link>
-            <p className="text-dark-500 text-xs mt-2">{t.slogan}</p>
+
           </div>
         </div>
       </main>

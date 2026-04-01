@@ -51,7 +51,7 @@ const translations = {
     memoryTest: "🧠 숫자 기억 게임",
     backToMain: "← 메인으로",
     poweredBy: "Powered by",
-    slogan: "홈페이지 · 앱 제작 · AI 챗봇 구축",
+
     adArea: "광고 영역 (Google AdSense)",
     shareText: "👁️ 색상 찾기 게임 결과!",
     shareTestIt: "나도 테스트하기 👉",
@@ -104,7 +104,7 @@ const translations = {
     memoryTest: "🧠 Memory Game",
     backToMain: "← Home",
     poweredBy: "Powered by",
-    slogan: "Web · App · AI Chatbot Development",
+
     adArea: "Ad Space (Google AdSense)",
     shareText: "👁️ Color Vision Test Result!",
     shareTestIt: "Try it yourself 👉",
@@ -157,7 +157,7 @@ const translations = {
     memoryTest: "🧠 数字記憶ゲーム",
     backToMain: "← ホームへ",
     poweredBy: "Powered by",
-    slogan: "ウェブ・アプリ・AIチャットボット開発",
+
     adArea: "広告エリア",
     shareText: "👁️ 色探しゲーム結果！",
     shareTestIt: "あなたも挑戦 👉",
@@ -210,7 +210,7 @@ const translations = {
     memoryTest: "🧠 数字记忆游戏",
     backToMain: "← 首页",
     poweredBy: "Powered by",
-    slogan: "网站·应用·AI聊天机器人开发",
+
     adArea: "广告区域",
     shareText: "👁️ 找不同颜色结果！",
     shareTestIt: "你也来试试 👉",
@@ -263,7 +263,7 @@ const translations = {
     memoryTest: "🧠 Juego de Memoria",
     backToMain: "← Inicio",
     poweredBy: "Powered by",
-    slogan: "Desarrollo Web · Apps · Chatbots IA",
+
     adArea: "Espacio Publicitario",
     shareText: "👁️ ¡Resultado del Test de Color!",
     shareTestIt: "¡Pruébalo tú también! 👉",
@@ -316,7 +316,7 @@ const translations = {
     memoryTest: "🧠 Jogo de Memória",
     backToMain: "← Início",
     poweredBy: "Powered by",
-    slogan: "Desenvolvimento Web · Apps · Chatbots IA",
+
     adArea: "Espaço Publicitário",
     shareText: "👁️ Resultado do Teste de Cores!",
     shareTestIt: "Experimente você também! 👉",
@@ -369,7 +369,7 @@ const translations = {
     memoryTest: "🧠 Gedächtnisspiel",
     backToMain: "← Startseite",
     poweredBy: "Powered by",
-    slogan: "Web · App · KI-Chatbot Entwicklung",
+
     adArea: "Werbefläche",
     shareText: "👁️ Farbsehtest Ergebnis!",
     shareTestIt: "Probiere es selbst! 👉",
@@ -422,7 +422,7 @@ const translations = {
     memoryTest: "🧠 Jeu de Mémoire",
     backToMain: "← Accueil",
     poweredBy: "Powered by",
-    slogan: "Développement Web · Apps · Chatbots IA",
+
     adArea: "Espace Publicitaire",
     shareText: "👁️ Résultat du Test de Couleurs !",
     shareTestIt: "Essayez vous aussi ! 👉",
@@ -1386,7 +1386,7 @@ export default function ColorTest({ locale, battleMode = false, onBattleComplete
             <Link href="/" className="font-black text-sm text-white tracking-tight hover:opacity-80 transition-opacity">
               SLOX
             </Link>
-            <p className="text-dark-500 text-xs mt-2">{t.slogan}</p>
+
           </div>
         </div>
       </main>

@@ -46,7 +46,6 @@ const ui: Record<Language, {
   colorGame: string;
   backToMain: string;
   poweredBy: string;
-  services: string;
   shareText: string;
   copied: string;
 }> = {
@@ -69,7 +68,6 @@ const ui: Record<Language, {
     colorGame: "🎨 색상 찾기 게임",
     backToMain: "← 메인으로",
     poweredBy: "Powered by",
-    services: "홈페이지 · 앱 제작 · AI 챗봇 구축",
     shareText: "🧠 MBTI 성격유형 테스트 결과!",
     copied: "결과가 클립보드에 복사되었습니다!",
   },
@@ -92,7 +90,6 @@ const ui: Record<Language, {
     colorGame: "🎨 Color Find Game",
     backToMain: "← Home",
     poweredBy: "Powered by",
-    services: "Web · App · AI Chatbot Development",
     shareText: "🧠 MBTI Personality Test Result!",
     copied: "Result copied to clipboard!",
   },
@@ -115,7 +112,6 @@ const ui: Record<Language, {
     colorGame: "🎨 色探しゲーム",
     backToMain: "← ホーム",
     poweredBy: "Powered by",
-    services: "ウェブ · アプリ · AIチャットボット開発",
     shareText: "🧠 MBTI性格診断テスト結果！",
     copied: "結果がクリップボードにコピーされました！",
   },
@@ -138,7 +134,6 @@ const ui: Record<Language, {
     colorGame: "🎨 找颜色游戏",
     backToMain: "← 首页",
     poweredBy: "Powered by",
-    services: "网站 · 应用 · AI聊天机器人开发",
     shareText: "🧠 MBTI性格测试结果！",
     copied: "结果已复制到剪贴板！",
   },
@@ -161,7 +156,6 @@ const ui: Record<Language, {
     colorGame: "🎨 Farben-Suchspiel",
     backToMain: "← Startseite",
     poweredBy: "Powered by",
-    services: "Web · App · KI-Chatbot-Entwicklung",
     shareText: "🧠 MBTI Persönlichkeitstest Ergebnis!",
     copied: "Ergebnis in die Zwischenablage kopiert!",
   },
@@ -184,7 +178,6 @@ const ui: Record<Language, {
     colorGame: "🎨 Jeu de couleurs",
     backToMain: "← Accueil",
     poweredBy: "Powered by",
-    services: "Web · App · Développement de chatbot IA",
     shareText: "🧠 Résultat du test de personnalité MBTI !",
     copied: "Résultat copié dans le presse-papiers !",
   },
@@ -207,7 +200,6 @@ const ui: Record<Language, {
     colorGame: "🎨 Juego de encontrar colores",
     backToMain: "← Inicio",
     poweredBy: "Powered by",
-    services: "Web · App · Desarrollo de chatbot IA",
     shareText: "🧠 ¡Resultado del test de personalidad MBTI!",
     copied: "¡Resultado copiado al portapapeles!",
   },
@@ -230,7 +222,6 @@ const ui: Record<Language, {
     colorGame: "🎨 Jogo de encontrar cores",
     backToMain: "← Início",
     poweredBy: "Powered by",
-    services: "Web · App · Desenvolvimento de chatbot IA",
     shareText: "🧠 Resultado do teste de personalidade MBTI!",
     copied: "Resultado copiado para a área de transferência!",
   },
@@ -894,7 +885,6 @@ export default function MbtiTest({ locale = "ko" }: { locale?: string }) {
             >
               SLOX
             </Link>
-            <p className="text-dark-500 text-xs mt-2">{t.services}</p>
           </div>
         </div>
       </main>

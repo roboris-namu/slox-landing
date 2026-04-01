@@ -17,7 +17,7 @@ const ui: Record<Language, {
   selectPrompt: string; maxHint: string; selected: string; interpret: string;
   analyzing: string; luckyScore: string; meaning: string; advice: string;
   luckyItem: string; luckyColor: string; luckyNumber: string;
-  share: string; retry: string; back: string; poweredBy: string; services: string;
+  share: string; retry: string; back: string; poweredBy: string;
   shareText: string; copied: string; otherTests: string; reaction: string; mbti: string;
   catAll: string; catAnimals: string; catNature: string; catPeople: string;
   catObjects: string; catActions: string; catPlaces: string; catEmotions: string; catBody: string;
@@ -31,7 +31,7 @@ const ui: Record<Language, {
     meaning: "꿈의 해석", advice: "오늘의 조언",
     luckyItem: "행운의 아이템", luckyColor: "행운의 색상", luckyNumber: "행운의 숫자",
     share: "📤 결과 공유", retry: "🔄 다시 해석",
-    back: "← 메인으로", poweredBy: "Powered by", services: "홈페이지 · 앱 제작 · AI 챗봇 구축",
+    back: "← 메인으로", poweredBy: "Powered by",
     shareText: "🌙 꿈해몽 결과!", copied: "결과가 클립보드에 복사되었습니다!",
     otherTests: "다른 테스트도 해보세요!", reaction: "⚡ 반응속도 테스트", mbti: "🧠 MBTI 테스트",
     catAll: "✨ 전체", catAnimals: "🐾 동물", catNature: "🌿 자연", catPeople: "👤 사람",
@@ -47,7 +47,7 @@ const ui: Record<Language, {
     meaning: "Dream Interpretation", advice: "Today's Advice",
     luckyItem: "Lucky Item", luckyColor: "Lucky Color", luckyNumber: "Lucky Number",
     share: "📤 Share Result", retry: "🔄 Try Again",
-    back: "← Back", poweredBy: "Powered by", services: "Web · App · AI Chatbot",
+    back: "← Back", poweredBy: "Powered by",
     shareText: "🌙 Dream Interpretation Result!", copied: "Result copied to clipboard!",
     otherTests: "Try other tests!", reaction: "⚡ Reaction Test", mbti: "🧠 MBTI Test",
     catAll: "✨ All", catAnimals: "🐾 Animals", catNature: "🌿 Nature", catPeople: "👤 People",
@@ -63,7 +63,7 @@ const ui: Record<Language, {
     meaning: "夢の解釈", advice: "今日のアドバイス",
     luckyItem: "ラッキーアイテム", luckyColor: "ラッキーカラー", luckyNumber: "ラッキーナンバー",
     share: "📤 結果をシェア", retry: "🔄 もう一度",
-    back: "← 戻る", poweredBy: "Powered by", services: "ウェブ · アプリ · AIチャットボット",
+    back: "← 戻る", poweredBy: "Powered by",
     shareText: "🌙 夢占いの結果!", copied: "結果がクリップボードにコピーされました!",
     otherTests: "他のテストも試してみよう!", reaction: "⚡ 反応速度テスト", mbti: "🧠 MBTIテスト",
     catAll: "✨ すべて", catAnimals: "🐾 動物", catNature: "🌿 自然", catPeople: "👤 人物",
@@ -79,7 +79,7 @@ const ui: Record<Language, {
     meaning: "梦境解读", advice: "今日建议",
     luckyItem: "幸运物品", luckyColor: "幸运颜色", luckyNumber: "幸运数字",
     share: "📤 分享结果", retry: "🔄 再试一次",
-    back: "← 返回", poweredBy: "Powered by", services: "网站 · 应用 · AI聊天机器人",
+    back: "← 返回", poweredBy: "Powered by",
     shareText: "🌙 解梦结果!", copied: "结果已复制到剪贴板!",
     otherTests: "试试其他测试!", reaction: "⚡ 反应速度测试", mbti: "🧠 MBTI测试",
     catAll: "✨ 全部", catAnimals: "🐾 动物", catNature: "🌿 自然", catPeople: "👤 人物",
@@ -95,7 +95,7 @@ const ui: Record<Language, {
     meaning: "Traumdeutung", advice: "Heutiger Rat",
     luckyItem: "Glücksgegenstand", luckyColor: "Glücksfarbe", luckyNumber: "Glückszahl",
     share: "📤 Ergebnis teilen", retry: "🔄 Nochmal",
-    back: "← Zurück", poweredBy: "Powered by", services: "Web · App · KI-Chatbot",
+    back: "← Zurück", poweredBy: "Powered by",
     shareText: "🌙 Traumdeutung Ergebnis!", copied: "Ergebnis in die Zwischenablage kopiert!",
     otherTests: "Probieren Sie andere Tests!", reaction: "⚡ Reaktionstest", mbti: "🧠 MBTI-Test",
     catAll: "✨ Alle", catAnimals: "🐾 Tiere", catNature: "🌿 Natur", catPeople: "👤 Menschen",
@@ -111,7 +111,7 @@ const ui: Record<Language, {
     meaning: "Interprétation", advice: "Conseil du Jour",
     luckyItem: "Objet Porte-bonheur", luckyColor: "Couleur Porte-bonheur", luckyNumber: "Numéro Porte-bonheur",
     share: "📤 Partager", retry: "🔄 Recommencer",
-    back: "← Retour", poweredBy: "Powered by", services: "Web · App · Chatbot IA",
+    back: "← Retour", poweredBy: "Powered by",
     shareText: "🌙 Résultat de l'interprétation des rêves !", copied: "Résultat copié !",
     otherTests: "Essayez d'autres tests !", reaction: "⚡ Test de Réaction", mbti: "🧠 Test MBTI",
     catAll: "✨ Tous", catAnimals: "🐾 Animaux", catNature: "🌿 Nature", catPeople: "👤 Personnes",
@@ -127,7 +127,7 @@ const ui: Record<Language, {
     meaning: "Interpretación", advice: "Consejo del Día",
     luckyItem: "Objeto de Suerte", luckyColor: "Color de Suerte", luckyNumber: "Número de Suerte",
     share: "📤 Compartir", retry: "🔄 Intentar de Nuevo",
-    back: "← Volver", poweredBy: "Powered by", services: "Web · App · Chatbot IA",
+    back: "← Volver", poweredBy: "Powered by",
     shareText: "🌙 Resultado de Interpretación de Sueños!", copied: "¡Resultado copiado!",
     otherTests: "¡Prueba otros tests!", reaction: "⚡ Test de Reacción", mbti: "🧠 Test MBTI",
     catAll: "✨ Todos", catAnimals: "🐾 Animales", catNature: "🌿 Naturaleza", catPeople: "👤 Personas",
@@ -143,7 +143,7 @@ const ui: Record<Language, {
     meaning: "Interpretação", advice: "Conselho do Dia",
     luckyItem: "Item da Sorte", luckyColor: "Cor da Sorte", luckyNumber: "Número da Sorte",
     share: "📤 Compartilhar", retry: "🔄 Tentar Novamente",
-    back: "← Voltar", poweredBy: "Powered by", services: "Web · App · Chatbot IA",
+    back: "← Voltar", poweredBy: "Powered by",
     shareText: "🌙 Resultado da Interpretação dos Sonhos!", copied: "Resultado copiado!",
     otherTests: "Experimente outros testes!", reaction: "⚡ Teste de Reação", mbti: "🧠 Teste MBTI",
     catAll: "✨ Todos", catAnimals: "🐾 Animais", catNature: "🌿 Natureza", catPeople: "👤 Pessoas",
@@ -1215,7 +1215,6 @@ export default function DreamInterpreter({ locale = "ko" }: Props) {
         <div className="mt-12 text-center">
           <p className="text-dark-500 text-sm mb-2">{t.poweredBy}</p>
           <Link href="/" className="font-black text-sm text-white tracking-tight hover:opacity-80 transition-opacity">SLOX</Link>
-          <p className="text-dark-500 text-xs mt-2">{t.services}</p>
         </div>
       </main>
 

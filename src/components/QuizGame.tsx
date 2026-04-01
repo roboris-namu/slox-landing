@@ -1151,7 +1151,6 @@ export default function QuizGame({ locale: _propLocale, battleMode = false, onBa
             <Link href="/" className="font-black text-sm text-white tracking-tight hover:opacity-80 transition-opacity">
               SLOX
             </Link>
-            <p className="text-dark-500 text-xs mt-2">홈페이지 · 앱 제작 · AI 챗봇 구축</p>
           </div>
         </div>
       </main>
