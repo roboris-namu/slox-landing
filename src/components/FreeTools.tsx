@@ -14,6 +14,10 @@ const gameBase = [
   { href: "/card-match", emoji: "🃏", accent: "rose" },
   { href: "/aim", emoji: "🎯", accent: "red" },
   { href: "/memory", emoji: "🧠", accent: "indigo" },
+  { href: "/mbti-test", emoji: "🧬", accent: "orange" },
+  { href: "/mbti-match", emoji: "💕", accent: "fuchsia" },
+  { href: "/animal-scan", emoji: "🐾", accent: "emerald" },
+  { href: "/dream", emoji: "🌙", accent: "yellow" },
 ];
 
 const toolBase = [
@@ -48,6 +52,10 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "카드 맞추기", desc: "카드 기억력 게임" },
     { title: "에임 트레이너", desc: "정확도 훈련" },
     { title: "기억력 테스트", desc: "숫자 기억력" },
+    { title: "MBTI 테스트", desc: "나의 성격 유형은?" },
+    { title: "MBTI 궁합", desc: "우리의 궁합 점수" },
+    { title: "동물 분석", desc: "나와 닮은 동물은?" },
+    { title: "꿈해몽", desc: "꿈의 의미 해석" },
   ],
   en: [
     { title: "Reaction Test", desc: "How fast are you?" },
@@ -60,6 +68,10 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Card Match", desc: "Memory game" },
     { title: "Aim Trainer", desc: "Precision training" },
     { title: "Memory Test", desc: "Number memory" },
+    { title: "MBTI Test", desc: "What's your type?" },
+    { title: "MBTI Match", desc: "Compatibility score" },
+    { title: "Animal Scan", desc: "Which animal are you?" },
+    { title: "Dream Reading", desc: "Interpret your dreams" },
   ],
   ja: [
     { title: "反応速度テスト", desc: "あなたの反応速度は?" },
@@ -72,6 +84,10 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "カードマッチ", desc: "記憶力ゲーム" },
     { title: "エイムトレーナー", desc: "精度トレーニング" },
     { title: "記憶力テスト", desc: "数字記憶" },
+    { title: "MBTI診断", desc: "あなたの性格タイプは?" },
+    { title: "MBTI相性", desc: "相性スコア" },
+    { title: "動物診断", desc: "似ている動物は?" },
+    { title: "夢占い", desc: "夢の意味を解読" },
   ],
   zh: [
     { title: "反应速度测试", desc: "你的反应有多快?" },
@@ -84,6 +100,10 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "卡片配对", desc: "记忆力游戏" },
     { title: "瞄准训练", desc: "精准度训练" },
     { title: "记忆力测试", desc: "数字记忆" },
+    { title: "MBTI测试", desc: "你的性格类型?" },
+    { title: "MBTI配对", desc: "兼容度评分" },
+    { title: "动物分析", desc: "你像哪种动物?" },
+    { title: "解梦", desc: "解读梦的含义" },
   ],
   de: [
     { title: "Reaktionstest", desc: "Wie schnell bist du?" },
@@ -96,6 +116,10 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Kartenspiel", desc: "Gedächtnisspiel" },
     { title: "Zieltrainer", desc: "Präzisionstraining" },
     { title: "Gedächtnistest", desc: "Zahlengedächtnis" },
+    { title: "MBTI-Test", desc: "Welcher Typ bist du?" },
+    { title: "MBTI-Match", desc: "Kompatibilitätswert" },
+    { title: "Tier-Analyse", desc: "Welches Tier bist du?" },
+    { title: "Traumdeutung", desc: "Deine Träume deuten" },
   ],
   fr: [
     { title: "Test de Réaction", desc: "Quelle est votre vitesse ?" },
@@ -108,6 +132,10 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Memory", desc: "Jeu de mémoire" },
     { title: "Entraînement Visée", desc: "Entraînement de précision" },
     { title: "Test de Mémoire", desc: "Mémoire des chiffres" },
+    { title: "Test MBTI", desc: "Quel est votre type ?" },
+    { title: "Match MBTI", desc: "Score de compatibilité" },
+    { title: "Animal Spirit", desc: "Quel animal êtes-vous ?" },
+    { title: "Interprétation", desc: "Interpréter vos rêves" },
   ],
   es: [
     { title: "Test de Reacción", desc: "¿Qué tan rápido eres?" },
@@ -120,6 +148,10 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Memoria", desc: "Juego de memoria" },
     { title: "Puntería", desc: "Entrenamiento de precisión" },
     { title: "Test de Memoria", desc: "Memoria numérica" },
+    { title: "Test MBTI", desc: "¿Cuál es tu tipo?" },
+    { title: "Match MBTI", desc: "Puntuación de compatibilidad" },
+    { title: "Animal Spirit", desc: "¿Qué animal eres?" },
+    { title: "Sueños", desc: "Interpreta tus sueños" },
   ],
   pt: [
     { title: "Teste de Reação", desc: "Quão rápido você é?" },
@@ -132,6 +164,10 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Memória", desc: "Jogo de memória" },
     { title: "Mira", desc: "Treinamento de precisão" },
     { title: "Teste de Memória", desc: "Memória numérica" },
+    { title: "Teste MBTI", desc: "Qual é o seu tipo?" },
+    { title: "Match MBTI", desc: "Pontuação de compatibilidade" },
+    { title: "Animal Spirit", desc: "Qual animal você é?" },
+    { title: "Sonhos", desc: "Interprete seus sonhos" },
   ],
 };
 
@@ -216,6 +252,10 @@ const accentStyles: Record<string, string> = {
   rose: "hover:border-rose-500/30 hover:bg-rose-500/5",
   red: "hover:border-red-500/30 hover:bg-red-500/5",
   indigo: "hover:border-indigo-500/30 hover:bg-indigo-500/5",
+  orange: "hover:border-orange-500/30 hover:bg-orange-500/5",
+  fuchsia: "hover:border-fuchsia-500/30 hover:bg-fuchsia-500/5",
+  emerald: "hover:border-emerald-500/30 hover:bg-emerald-500/5",
+  yellow: "hover:border-yellow-500/30 hover:bg-yellow-500/5",
 };
 
 export default function FreeTools({ locale = "ko" }: { locale?: string }) {

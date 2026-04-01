@@ -72,6 +72,10 @@ const toolCategories: ToolCategory[] = [
     name: "🎭 심리 테스트",
     color: "pink",
     tools: [
+      { href: "/mbti-test", emoji: "🧬", label: "MBTI 테스트", isNew: true },
+      { href: "/mbti-match", emoji: "💕", label: "MBTI 궁합", isNew: true },
+      { href: "/animal-scan", emoji: "🐾", label: "동물 분석", isNew: true },
+      { href: "/dream", emoji: "🌙", label: "꿈해몽", isNew: true },
       { href: "/slox-test", emoji: "🐂", label: "나와 닮은 황소" },
       { href: "/fortune", emoji: "🔮", label: "오늘의 운세", isNew: true },
       { href: "/quote", emoji: "💬", label: "오늘의 명언", isNew: true },
