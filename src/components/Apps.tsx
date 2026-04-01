@@ -1608,63 +1608,113 @@ const categoryLabels: Record<string, Record<Category, string>> = {
   pt: { all: "Todos", utility: "Ferramentas", health: "Saúde", media: "Mídia", fun: "Diversão", edu: "Educação", life: "Vida" },
 };
 
-const categoryCounts: Record<Category, number> = {
-  all: appsData.length,
-  utility: appsData.filter((a) => a.cat === "utility").length,
-  health: appsData.filter((a) => a.cat === "health").length,
-  media: appsData.filter((a) => a.cat === "media").length,
-  fun: appsData.filter((a) => a.cat === "fun").length,
-  edu: appsData.filter((a) => a.cat === "edu").length,
-  life: appsData.filter((a) => a.cat === "life").length,
+const catColors: Record<string, string> = {
+  utility: "#3B82F6", health: "#10B981", media: "#8B5CF6",
+  fun: "#F43F5E", edu: "#F59E0B", life: "#14B8A6",
 };
 
-const DESKTOP_COLS = 5;
-const MAX_ROWS = 4;
-const DEFAULT_VISIBLE = DESKTOP_COLS * MAX_ROWS;
-
-const sectionT: Record<string, { title: string; desc: string; upcoming: string; more: string; less: string }> = {
-  ko: { title: "앱", desc: "527개의 앱을 만들어갑니다", upcoming: "출시 예정", more: "더보기", less: "접기" },
-  en: { title: "Apps", desc: "Building 527 apps for you", upcoming: "Coming soon", more: "Show more", less: "Show less" },
-  ja: { title: "アプリ", desc: "527個のアプリを開発中", upcoming: "近日公開", more: "もっと見る", less: "閉じる" },
-  zh: { title: "应用", desc: "正在打造527款应用", upcoming: "即将推出", more: "查看更多", less: "收起" },
-  de: { title: "Apps", desc: "527 Apps in Entwicklung", upcoming: "Demnächst", more: "Mehr anzeigen", less: "Weniger" },
-  fr: { title: "Apps", desc: "527 applications en développement", upcoming: "Bientôt", more: "Voir plus", less: "Réduire" },
-  es: { title: "Apps", desc: "Construyendo 527 apps", upcoming: "Próximamente", more: "Ver más", less: "Ver menos" },
-  pt: { title: "Apps", desc: "Construindo 527 apps", upcoming: "Em breve", more: "Ver mais", less: "Ver menos" },
+const sectionT: Record<string, { title: string; desc: string; upcoming: string; search: string; page: string; of: string }> = {
+  ko: { title: "앱", desc: "527개의 앱을 만들어갑니다", upcoming: "출시 예정", search: "앱 검색...", page: "페이지", of: "/" },
+  en: { title: "Apps", desc: "Building 527 apps for you", upcoming: "Coming soon", search: "Search apps...", page: "Page", of: "/" },
+  ja: { title: "アプリ", desc: "527個のアプリを開発中", upcoming: "近日公開", search: "アプリ検索...", page: "ページ", of: "/" },
+  zh: { title: "应用", desc: "正在打造527款应用", upcoming: "即将推出", search: "搜索应用...", page: "页", of: "/" },
+  de: { title: "Apps", desc: "527 Apps in Entwicklung", upcoming: "Demnächst", search: "Apps suchen...", page: "Seite", of: "/" },
+  fr: { title: "Apps", desc: "527 applications en développement", upcoming: "Bientôt", search: "Rechercher...", page: "Page", of: "/" },
+  es: { title: "Apps", desc: "Construyendo 527 apps", upcoming: "Próximamente", search: "Buscar apps...", page: "Página", of: "/" },
+  pt: { title: "Apps", desc: "Construindo 527 apps", upcoming: "Em breve", search: "Buscar apps...", page: "Página", of: "/" },
 };
+
+const PER_PAGE = 20;
+
+function isReleased(app: typeof appsData[0]) {
+  return app.ios !== null || app.android !== null;
+}
+
+function AppBadge({ emoji, name, cat, released }: { emoji: string; name: string; cat: string; released: boolean }) {
+  if (released) return <span className="text-2xl block mb-2">{emoji}</span>;
+  const color = catColors[cat] || "#6B7280";
+  const initial = name.charAt(0);
+  return (
+    <div
+      className="w-9 h-9 rounded-xl flex items-center justify-center mb-2 text-sm font-bold text-white/90"
+      style={{ backgroundColor: `${color}20`, color }}
+    >
+      {initial}
+    </div>
+  );
+}
+
+function getPageNumbers(current: number, total: number): (number | "...")[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages: (number | "...")[] = [1];
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+  if (start > 2) pages.push("...");
+  for (let i = start; i <= end; i++) pages.push(i);
+  if (end < total - 1) pages.push("...");
+  pages.push(total);
+  return pages;
+}
 
 export default function Apps({ locale = "ko" }: { locale?: string }) {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
   const sec = sectionT[locale] || sectionT.en;
   const texts = appTexts[locale] || appTexts.en;
   const catLabels = categoryLabels[locale] || categoryLabels.en;
   const [activeCat, setActiveCat] = useState<Category>("all");
-  const [expanded, setExpanded] = useState(false);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
   const filteredIndices = appsData
     .map((app, i) => ({ app, i }))
     .filter(({ app }) => activeCat === "all" || app.cat === activeCat)
+    .filter(({ i }) => {
+      if (!search.trim()) return true;
+      const q = search.toLowerCase();
+      const t = texts[i];
+      return t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q);
+    })
+    .sort((a, b) => {
+      const aR = isReleased(a.app) ? 0 : 1;
+      const bR = isReleased(b.app) ? 0 : 1;
+      return aR - bR;
+    })
     .map(({ i }) => i);
 
-  const needsTruncation = filteredIndices.length > DEFAULT_VISIBLE;
-  const visibleIndices = expanded ? filteredIndices : filteredIndices.slice(0, DEFAULT_VISIBLE);
-  const hiddenCount = filteredIndices.length - DEFAULT_VISIBLE;
+  const categoryCounts: Record<Category, number> = {
+    all: appsData.length,
+    utility: appsData.filter((a) => a.cat === "utility").length,
+    health: appsData.filter((a) => a.cat === "health").length,
+    media: appsData.filter((a) => a.cat === "media").length,
+    fun: appsData.filter((a) => a.cat === "fun").length,
+    edu: appsData.filter((a) => a.cat === "edu").length,
+    life: appsData.filter((a) => a.cat === "life").length,
+  };
+
+  const totalPages = Math.max(1, Math.ceil(filteredIndices.length / PER_PAGE));
+  const safePage = Math.min(page, totalPages);
+  const startIdx = (safePage - 1) * PER_PAGE;
+  const visibleIndices = filteredIndices.slice(startIdx, startIdx + PER_PAGE);
+
+  const scrollToGrid = () => {
+    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const goPage = (p: number) => {
+    setPage(p);
+    if (safePage !== p) scrollToGrid();
+  };
+
+  useEffect(() => { setPage(1); }, [activeCat, search]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-          }
-        });
-      },
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
       { threshold: 0.05 }
     );
-
-    const elements = sectionRef.current?.querySelectorAll(".animate-on-scroll");
-    elements?.forEach((el) => observer.observe(el));
-
+    const els = sectionRef.current?.querySelectorAll(".animate-on-scroll");
+    els?.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, []);
 
@@ -1673,7 +1723,7 @@ export default function Apps({ locale = "ko" }: { locale?: string }) {
       <div className="max-w-5xl mx-auto px-6">
         <div className="w-12 h-px bg-white/[0.08] mx-auto mb-10" />
 
-        <div className="text-center mb-8">
+        <div className="text-center mb-6">
           <h2 className="animate-on-scroll text-2xl md:text-3xl font-bold text-white mb-2">
             {sec.title}
           </h2>
@@ -1682,11 +1732,33 @@ export default function Apps({ locale = "ko" }: { locale?: string }) {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-1.5 mb-8">
+        <div className="max-w-xs mx-auto mb-6">
+          <div className="relative">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={sec.search}
+              className="w-full pl-9 pr-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.08] text-sm text-white placeholder-white/20 outline-none focus:border-white/[0.2] focus:bg-white/[0.06] transition-all"
+            />
+            {search && (
+              <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-1.5 mb-6">
           {(["all", "utility", "health", "media", "fun", "edu", "life"] as Category[]).map((cat) => (
             <button
               key={cat}
-              onClick={() => { setActiveCat(cat); setExpanded(false); }}
+              onClick={() => setActiveCat(cat)}
               className={`
                 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300
                 ${activeCat === cat
@@ -1703,76 +1775,104 @@ export default function Apps({ locale = "ko" }: { locale?: string }) {
           ))}
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          {visibleIndices.map((i, idx) => {
-            const app = appsData[i];
-            return (
-              <div
-                key={texts[i].name}
-                className="animate-on-scroll visible group relative rounded-2xl p-4 border border-white/[0.06] bg-white/[0.02] transition-all duration-300 hover:-translate-y-1 hover:border-white/[0.12] hover:bg-white/[0.04]"
-                style={{ animationDelay: `${0.03 * idx}s` }}
-              >
-                <span className="text-2xl block mb-2">{app.emoji}</span>
-                <h3 className="font-semibold text-white text-sm mb-0.5">{texts[i].name}</h3>
-                <p className="text-[11px] text-white/30 mb-3">{texts[i].desc}</p>
-
-                <div className="flex items-center gap-1.5">
-                  {app.ios ? (
-                    <a
-                      href={app.ios}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] transition-colors text-[10px] text-white/50 hover:text-white/80"
-                    >
-                      <AppleIcon />
-                      iOS
-                    </a>
-                  ) : (
-                    <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.03] text-[10px] text-white/15 cursor-default">
-                      <AppleIcon />
-                      {sec.upcoming}
-                    </span>
-                  )}
-                  {app.android ? (
-                    <a
-                      href={app.android}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] transition-colors text-[10px] text-white/50 hover:text-white/80"
-                    >
-                      <PlayIcon />
-                      Android
-                    </a>
-                  ) : (
-                    <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.03] text-[10px] text-white/15 cursor-default">
-                      <PlayIcon />
-                      {sec.upcoming}
-                    </span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {needsTruncation && (
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={() => setExpanded(!expanded)}
-              className="group flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.12] transition-all duration-300 text-xs text-white/40 hover:text-white/70"
-            >
-              {expanded ? sec.less : `${sec.more} (+${hiddenCount})`}
-              <svg
-                className={`w-3 h-3 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
+        {filteredIndices.length === 0 ? (
+          <div className="text-center py-16 text-white/20 text-sm">
+            {locale === "ko" ? "검색 결과가 없습니다" : "No results found"}
           </div>
+        ) : (
+          <>
+            <div ref={gridRef} className="scroll-mt-4" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              {visibleIndices.map((i, idx) => {
+                const app = appsData[i];
+                const released = isReleased(app);
+                return (
+                  <div
+                    key={`${i}-${texts[i].name}`}
+                    className={`group relative rounded-2xl p-4 border transition-all duration-300 hover:-translate-y-1 ${
+                      released
+                        ? "border-white/[0.06] bg-white/[0.02] hover:border-white/[0.12] hover:bg-white/[0.04]"
+                        : "border-white/[0.04] bg-white/[0.01] hover:border-white/[0.08] hover:bg-white/[0.03]"
+                    }`}
+                    style={{ animationDelay: `${0.02 * idx}s` }}
+                  >
+                    <AppBadge emoji={app.emoji} name={texts[i].name} cat={app.cat} released={released} />
+                    <h3 className={`font-semibold text-sm mb-0.5 ${released ? "text-white" : "text-white/60"}`}>{texts[i].name}</h3>
+                    <p className="text-[11px] text-white/30 mb-3">{texts[i].desc}</p>
+
+                    <div className="flex items-center gap-1.5">
+                      {app.ios ? (
+                        <a href={app.ios} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] transition-colors text-[10px] text-white/50 hover:text-white/80">
+                          <AppleIcon /> iOS
+                        </a>
+                      ) : (
+                        <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.03] text-[10px] text-white/15 cursor-default">
+                          <AppleIcon /> {sec.upcoming}
+                        </span>
+                      )}
+                      {app.android ? (
+                        <a href={app.android} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.06] hover:bg-white/[0.12] transition-colors text-[10px] text-white/50 hover:text-white/80">
+                          <PlayIcon /> Android
+                        </a>
+                      ) : (
+                        <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.03] text-[10px] text-white/15 cursor-default">
+                          <PlayIcon /> {sec.upcoming}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-1 mt-8">
+                <button
+                  onClick={() => { goPage(safePage - 1); }}
+                  disabled={safePage <= 1}
+                  className="p-2 rounded-lg text-white/30 hover:text-white/60 hover:bg-white/[0.06] disabled:opacity-20 disabled:cursor-default transition-all"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                {getPageNumbers(safePage, totalPages).map((p, idx) =>
+                  p === "..." ? (
+                    <span key={`dot-${idx}`} className="px-1 text-white/15 text-xs">···</span>
+                  ) : (
+                    <button
+                      key={p}
+                      onClick={() => goPage(p)}
+                      className={`min-w-[32px] h-8 rounded-lg text-xs font-medium transition-all duration-200 ${
+                        p === safePage
+                          ? "bg-white/[0.12] text-white border border-white/[0.15]"
+                          : "text-white/30 hover:text-white/60 hover:bg-white/[0.06]"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+
+                <button
+                  onClick={() => { goPage(safePage + 1); }}
+                  disabled={safePage >= totalPages}
+                  className="p-2 rounded-lg text-white/30 hover:text-white/60 hover:bg-white/[0.06] disabled:opacity-20 disabled:cursor-default transition-all"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+
+                <span className="ml-2 text-[11px] text-white/15">
+                  {safePage}{sec.of}{totalPages}
+                </span>
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>
