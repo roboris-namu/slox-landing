@@ -1270,8 +1270,8 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
       
       const reaction = Date.now() - startTime;
       
-      // 🛡️ 치팅 방지: 100ms 미만은 인간이 반응할 수 없는 시간
-      if (reaction < 100) {
+      // 🛡️ 치팅 방지: 50ms 미만은 인간이 반응할 수 없는 시간
+      if (reaction < 50) {
         console.warn(`⚠️ 비정상 반응 시간 감지: ${reaction}ms (치팅 의심)`);
         playSound("fail");
         setState("tooEarly");
@@ -1862,20 +1862,20 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
             <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 mb-4">
               <p className="text-blue-400 text-xs leading-relaxed">
                 {lang === "ko" 
-                  ? "⚡ 100ms 미만의 기록은 예측 샷 또는 버그로 간주되어 등록이 제한됩니다. 공정한 랭킹을 위해 순수 반응속도만 측정합니다."
+                  ? "⚡ 50ms 미만의 기록은 예측 샷 또는 버그로 간주되어 등록이 제한됩니다. 공정한 랭킹을 위해 순수 반응속도만 측정합니다."
                   : lang === "ja"
-                  ? "⚡ 100ms未満の記録は予測ショットまたはバグとみなされ、登録が制限されます。"
+                  ? "⚡ 50ms未満の記録は予測ショットまたはバグとみなされ、登録が制限されます。"
                   : lang === "zh"
-                  ? "⚡ 100ms以下的记录被视为预测或bug，将被限制注册。为了公平竞争，仅测量纯反应速度。"
+                  ? "⚡ 50ms以下的记录被视为预测或bug，将被限制注册。为了公平竞争，仅测量纯反应速度。"
                   : lang === "es"
-                  ? "⚡ Los registros menores a 100ms se consideran predicciones o bugs. Competencia justa."
+                  ? "⚡ Los registros menores a 50ms se consideran predicciones o bugs. Competencia justa."
                   : lang === "pt"
-                  ? "⚡ Registros abaixo de 100ms são considerados previsões ou bugs. Competição justa."
+                  ? "⚡ Registros abaixo de 50ms são considerados previsões ou bugs. Competição justa."
                   : lang === "de"
-                  ? "⚡ Rekorde unter 100ms gelten als Vorhersagen oder Bugs. Fairer Wettbewerb."
+                  ? "⚡ Rekorde unter 50ms gelten als Vorhersagen oder Bugs. Fairer Wettbewerb."
                   : lang === "fr"
-                  ? "⚡ Les records inférieurs à 100ms sont considérés comme des prédictions ou bugs. Compétition équitable."
-                  : "⚡ Records under 100ms are considered prediction shots or bugs. Fair competition."
+                  ? "⚡ Les records inférieurs à 50ms sont considérés comme des prédictions ou bugs. Compétition équitable."
+                  : "⚡ Records under 50ms are considered prediction shots or bugs. Fair competition."
                 }
               </p>
             </div>

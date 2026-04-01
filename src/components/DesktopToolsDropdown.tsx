@@ -77,6 +77,7 @@ const toolCategories: ToolCategory[] = [
       { path: "/mbti-match", emoji: "💕", labels: { ko: "MBTI 궁합", en: "MBTI Match", ja: "MBTI相性", zh: "MBTI配对", de: "MBTI-Match", fr: "Match MBTI", es: "Match MBTI", pt: "Match MBTI" }, isNew: true },
       { path: "/animal-scan", emoji: "🐾", labels: { ko: "동물 분석", en: "Animal Scan", ja: "動物診断", zh: "动物分析", de: "Tier-Analyse", fr: "Animal Spirit", es: "Animal Spirit", pt: "Animal Spirit" }, isNew: true },
       { path: "/dream", emoji: "🌙", labels: { ko: "꿈해몽", en: "Dream Reading", ja: "夢占い", zh: "解梦", de: "Traumdeutung", fr: "Interprétation", es: "Sueños", pt: "Sonhos" }, isNew: true },
+      { path: "/tarot", emoji: "🔮", labels: { ko: "타로 카드", en: "Tarot Cards", ja: "タロット", zh: "塔罗牌", de: "Tarot", fr: "Tarot", es: "Tarot", pt: "Tarô" }, isNew: true },
       { path: "/slox-test", emoji: "🐂", labels: { ko: "나와 닮은 황소", en: "Which Bull Are You?", ja: "あなたに似た牛", zh: "你像哪头牛", de: "Welcher Stier bist du?", fr: "Quel taureau êtes-vous?", es: "¿Qué toro eres?", pt: "Qual touro você é?" } },
       { path: "/fortune", emoji: "🔮", labels: { ko: "오늘의 운세", en: "Daily Fortune", ja: "今日の運勢", zh: "今日运势", de: "Tageshoroskop", fr: "Horoscope du jour", es: "Horóscopo del día", pt: "Horóscopo do dia" }, isNew: true },
       { path: "/quote", emoji: "💬", labels: { ko: "오늘의 명언", en: "Daily Quote", ja: "今日の名言", zh: "每日名言", de: "Zitat des Tages", fr: "Citation du jour", es: "Frase del día", pt: "Frase do dia" }, isNew: true },

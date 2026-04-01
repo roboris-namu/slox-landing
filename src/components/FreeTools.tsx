@@ -18,6 +18,7 @@ const gameBase = [
   { href: "/mbti-match", emoji: "💕", accent: "fuchsia" },
   { href: "/animal-scan", emoji: "🐾", accent: "emerald" },
   { href: "/dream", emoji: "🌙", accent: "yellow" },
+  { href: "/tarot", emoji: "🔮", accent: "violet" },
 ];
 
 const toolBase = [
@@ -56,6 +57,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "MBTI 궁합", desc: "우리의 궁합 점수" },
     { title: "동물 분석", desc: "나와 닮은 동물은?" },
     { title: "꿈해몽", desc: "꿈의 의미 해석" },
+    { title: "타로 카드", desc: "오늘의 운명은?" },
   ],
   en: [
     { title: "Reaction Test", desc: "How fast are you?" },
@@ -72,6 +74,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "MBTI Match", desc: "Compatibility score" },
     { title: "Animal Scan", desc: "Which animal are you?" },
     { title: "Dream Reading", desc: "Interpret your dreams" },
+    { title: "Tarot Cards", desc: "What does fate hold?" },
   ],
   ja: [
     { title: "反応速度テスト", desc: "あなたの反応速度は?" },
@@ -88,6 +91,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "MBTI相性", desc: "相性スコア" },
     { title: "動物診断", desc: "似ている動物は?" },
     { title: "夢占い", desc: "夢の意味を解読" },
+    { title: "タロット", desc: "運命のカードは?" },
   ],
   zh: [
     { title: "反应速度测试", desc: "你的反应有多快?" },
@@ -104,6 +108,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "MBTI配对", desc: "兼容度评分" },
     { title: "动物分析", desc: "你像哪种动物?" },
     { title: "解梦", desc: "解读梦的含义" },
+    { title: "塔罗牌", desc: "命运之牌" },
   ],
   de: [
     { title: "Reaktionstest", desc: "Wie schnell bist du?" },
@@ -120,6 +125,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "MBTI-Match", desc: "Kompatibilitätswert" },
     { title: "Tier-Analyse", desc: "Welches Tier bist du?" },
     { title: "Traumdeutung", desc: "Deine Träume deuten" },
+    { title: "Tarot", desc: "Was sagt das Schicksal?" },
   ],
   fr: [
     { title: "Test de Réaction", desc: "Quelle est votre vitesse ?" },
@@ -136,6 +142,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Match MBTI", desc: "Score de compatibilité" },
     { title: "Animal Spirit", desc: "Quel animal êtes-vous ?" },
     { title: "Interprétation", desc: "Interpréter vos rêves" },
+    { title: "Tarot", desc: "Que dit le destin ?" },
   ],
   es: [
     { title: "Test de Reacción", desc: "¿Qué tan rápido eres?" },
@@ -152,6 +159,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Match MBTI", desc: "Puntuación de compatibilidad" },
     { title: "Animal Spirit", desc: "¿Qué animal eres?" },
     { title: "Sueños", desc: "Interpreta tus sueños" },
+    { title: "Tarot", desc: "¿Qué dice el destino?" },
   ],
   pt: [
     { title: "Teste de Reação", desc: "Quão rápido você é?" },
@@ -168,6 +176,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Match MBTI", desc: "Pontuação de compatibilidade" },
     { title: "Animal Spirit", desc: "Qual animal você é?" },
     { title: "Sonhos", desc: "Interprete seus sonhos" },
+    { title: "Tarô", desc: "O que diz o destino?" },
   ],
 };
 
