@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
 
 type Language = "ko" | "en" | "ja" | "zh" | "de" | "fr" | "es" | "pt";
 type Screen = "intro" | "selecting" | "interpreting" | "result";
@@ -983,7 +984,8 @@ export default function DreamInterpreter({ locale = "ko" }: Props) {
     if (!result) return;
     const kws = selected.map((k) => `${kwMeta[k].emoji} ${kwName[k][lang]}`).join(", ");
     const mainInterp = kwInterp[selected[0]]?.[lang] ?? "";
-    const text = `${t.shareText}\n\n🔮 ${kws}\n\n✨ ${mainInterp}\n\n🍀 ${t.luckyScore}: ${result.score}/100\n💡 ${adviceText[lang][result.advice]}\n\nhttps://slox.co.kr`;
+    const shareUrl = lang === "ko" ? "https://www.slox.co.kr/dream" : `https://www.slox.co.kr/${lang}/dream`;
+    const text = `${t.shareText}\n\n🔮 ${kws}\n\n✨ ${mainInterp}\n\n🍀 ${t.luckyScore}: ${result.score}/100\n💡 ${adviceText[lang][result.advice]}\n\n${shareUrl}`;
     try {
       if (navigator.share) {
         await navigator.share({ title: t.shareText, text });
@@ -998,6 +1000,31 @@ export default function DreamInterpreter({ locale = "ko" }: Props) {
       setTimeout(() => setCopied(false), 2500);
     }
   }, [result, selected, lang, t]);
+
+  const handleImageShare = useCallback(async () => {
+    if (!resultRef.current) return;
+    try {
+      const canvas = await html2canvas(resultRef.current, {
+        backgroundColor: "#0a0a1a",
+        scale: 2,
+        useCORS: true,
+      });
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], "dream-result.png", { type: "image/png" });
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file] });
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "dream-result.png";
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      }, "image/png");
+    } catch { /* noop */ }
+  }, []);
 
   return (
     <div className="min-h-screen bg-dark-950 text-white">
@@ -1193,6 +1220,9 @@ export default function DreamInterpreter({ locale = "ko" }: Props) {
               <button onClick={shareResult}
                 className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-amber-500 text-white font-medium rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-transform"
               >{t.share}</button>
+              <button onClick={handleImageShare}
+                className="flex-1 py-3 bg-white/[0.06] border border-white/[0.1] text-white font-medium rounded-xl hover:bg-white/[0.1] transition-colors"
+              >📸 {lang === "ko" ? "이미지로 저장" : lang === "ja" ? "画像で保存" : lang === "zh" ? "保存为图片" : "Save as Image"}</button>
               <button onClick={restart}
                 className="flex-1 py-3 bg-dark-800 hover:bg-dark-700 text-white font-medium rounded-xl transition-colors"
               >{t.retry}</button>

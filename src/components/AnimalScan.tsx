@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
 
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
 type GameState = "intro" | "questions" | "analyzing" | "result";
@@ -464,6 +465,8 @@ export default function AnimalScan({ locale = "ko" }: { locale?: string }) {
   const t = ui[lang];
   const q = questions[lang];
 
+  const resultRef = useRef<HTMLDivElement>(null);
+
   const [state, setState] = useState<GameState>("intro");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<number[]>([]);
@@ -545,7 +548,7 @@ export default function AnimalScan({ locale = "ko" }: { locale?: string }) {
       "",
       `#${info.traits.join(" #")}`,
       "",
-      "slox.co.kr",
+      `${lang === "ko" ? "https://www.slox.co.kr/animal-scan" : `https://www.slox.co.kr/${lang}/animal-scan`}`,
     ].join("\n");
 
     if (navigator.share) {
@@ -557,6 +560,31 @@ export default function AnimalScan({ locale = "ko" }: { locale?: string }) {
       });
     }
   }, [resultAnimal, lang, t]);
+
+  const handleImageShare = useCallback(async () => {
+    if (!resultRef.current) return;
+    try {
+      const canvas = await html2canvas(resultRef.current, {
+        backgroundColor: "#0a0a1a",
+        scale: 2,
+        useCORS: true,
+      });
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], "animal-scan-result.png", { type: "image/png" });
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file] });
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "animal-scan-result.png";
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      }, "image/png");
+    } catch { /* noop */ }
+  }, []);
 
   return (
     <div className="min-h-screen bg-dark-950">
@@ -657,7 +685,7 @@ export default function AnimalScan({ locale = "ko" }: { locale?: string }) {
           )}
 
           {state === "result" && resultAnimal && (
-            <div className="text-center">
+            <div ref={resultRef} className="text-center">
               <div className="bg-gradient-to-br from-emerald-500/20 to-teal-500/20 p-[1px] rounded-3xl mb-6">
                 <div className="bg-dark-900 rounded-3xl p-6">
                   <p className="text-dark-400 text-sm mb-2">{t.yourAnimal}</p>
@@ -708,6 +736,12 @@ export default function AnimalScan({ locale = "ko" }: { locale?: string }) {
                   className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl hover:scale-105 transition-transform"
                 >
                   {t.shareButton}
+                </button>
+                <button
+                  onClick={handleImageShare}
+                  className="px-6 py-3 bg-white/[0.06] border border-white/[0.1] text-white font-medium rounded-xl hover:bg-white/[0.1] transition-colors"
+                >
+                  📸 {lang === "ko" ? "이미지로 저장" : lang === "ja" ? "画像で保存" : lang === "zh" ? "保存为图片" : "Save as Image"}
                 </button>
                 <button
                   onClick={restart}

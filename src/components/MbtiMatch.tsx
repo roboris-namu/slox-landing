@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
 
 type Language = "ko" | "en" | "ja" | "zh" | "es" | "pt" | "de" | "fr";
 type Step = "selectMine" | "selectPartner" | "result";
@@ -557,6 +558,7 @@ export default function MbtiMatch({ locale = "ko" }: MbtiMatchProps) {
   const lang: Language = (["ko", "en", "ja", "zh", "es", "pt", "de", "fr"] as Language[]).includes(locale) ? locale : "ko";
   const t = translations[lang];
 
+  const resultRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<Step>("selectMine");
   const [myType, setMyType] = useState<MbtiType | null>(null);
   const [partnerType, setPartnerType] = useState<MbtiType | null>(null);
@@ -639,7 +641,7 @@ export default function MbtiMatch({ locale = "ko" }: MbtiMatchProps) {
 
   const handleShare = useCallback(async () => {
     const text = myType && partnerType
-      ? `🔮 ${myType} ${TYPE_EMOJI[myType]} × ${partnerType} ${TYPE_EMOJI[partnerType]} = ${score}%\n${t[getScoreLevel(score) as keyof Translations]}\n\nhttps://slox.io`
+      ? `🔮 ${myType} ${TYPE_EMOJI[myType]} × ${partnerType} ${TYPE_EMOJI[partnerType]} = ${score}%\n${t[getScoreLevel(score) as keyof Translations]}\n\n${locale === "ko" ? "https://www.slox.co.kr/mbti-match" : `https://www.slox.co.kr/${locale}/mbti-match`}`
       : "";
     try {
       if (navigator.share) {
@@ -656,7 +658,32 @@ export default function MbtiMatch({ locale = "ko" }: MbtiMatchProps) {
         setTimeout(() => setShowCopied(false), 2000);
       } catch { /* noop */ }
     }
-  }, [myType, partnerType, score, t]);
+  }, [myType, partnerType, score, t, locale]);
+
+  const handleImageShare = useCallback(async () => {
+    if (!resultRef.current) return;
+    try {
+      const canvas = await html2canvas(resultRef.current, {
+        backgroundColor: "#0a0a1a",
+        scale: 2,
+        useCORS: true,
+      });
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], "mbti-match-result.png", { type: "image/png" });
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file] });
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "mbti-match-result.png";
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      }, "image/png");
+    } catch { /* noop */ }
+  }, []);
 
   const getPairDesc = (s: number): string => {
     if (s >= 90) return t.pairSoulmate;
@@ -782,6 +809,7 @@ export default function MbtiMatch({ locale = "ko" }: MbtiMatchProps) {
         {/* Result */}
         {step === "result" && myType && partnerType && (
           <div className={`transition-all duration-700 ${fadeIn ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}>
+            <div ref={resultRef}>
             {/* Score Card */}
             <div className="glass-card p-6 sm:p-8 rounded-2xl mb-4 text-center">
               <p className="text-dark-400 text-xs mb-4 tracking-wider uppercase">{t.compatibilityWith}</p>
@@ -881,6 +909,7 @@ export default function MbtiMatch({ locale = "ko" }: MbtiMatchProps) {
               </div>
             </div>
 
+            </div>
             {/* Action Buttons */}
             <div className="flex flex-col gap-3 mt-6">
               <button
@@ -888,6 +917,12 @@ export default function MbtiMatch({ locale = "ko" }: MbtiMatchProps) {
                 className="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-[#6C5CE7] to-[#FD79A8] hover:opacity-90 active:scale-[0.98] transition-all"
               >
                 {showCopied ? t.copied : t.share}
+              </button>
+              <button
+                onClick={handleImageShare}
+                className="w-full py-3.5 rounded-xl font-bold text-white bg-white/[0.08] border border-white/[0.1] hover:bg-white/[0.15] active:scale-[0.98] transition-all"
+              >
+                📸 {locale === "ko" ? "이미지로 저장" : locale === "ja" ? "画像で保存" : locale === "zh" ? "保存为图片" : locale === "de" ? "Als Bild speichern" : locale === "fr" ? "Sauvegarder l'image" : locale === "es" ? "Guardar imagen" : locale === "pt" ? "Salvar imagem" : "Save as Image"}
               </button>
               <button
                 onClick={handleReset}

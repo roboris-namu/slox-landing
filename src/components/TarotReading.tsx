@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+import html2canvas from "html2canvas";
 
 type Language = "ko" | "en" | "ja" | "zh" | "de" | "fr" | "es" | "pt";
 type Screen = "intro" | "selecting" | "result";
@@ -749,6 +750,7 @@ export default function TarotReading({ locale = "ko" }: Props) {
   const [canPick, setCanPick] = useState(true);
   const [resultVisible, setResultVisible] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
+  const resultRef = useRef<HTMLDivElement>(null);
   const [stars, setStars] = useState<
     { left: string; top: string; size: number; delay: string; duration: string }[]
   >([]);
@@ -815,7 +817,7 @@ export default function TarotReading({ locale = "ko" }: Props) {
         ]
       : "";
 
-  const handleShare = useCallback(() => {
+  const handleShare = useCallback(async () => {
     const lines = pickedCards
       .map(
         (card, i) =>
@@ -825,13 +827,49 @@ export default function TarotReading({ locale = "ko" }: Props) {
     const kws = pickedCards
       .map((card) => card.keywords[lang].join(", "))
       .join(" | ");
-    const url = typeof window !== "undefined" ? window.location.href : "";
+    const url = lang === "ko" ? "https://www.slox.co.kr/tarot" : `https://www.slox.co.kr/${lang}/tarot`;
     const text = `${t.shareText}\n\n${lines}\n\n${t.keywords}: ${kws}\n\n${url}`;
-    navigator.clipboard.writeText(text).then(() => {
-      setShowCopied(true);
-      setTimeout(() => setShowCopied(false), 2000);
-    });
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: t.shareText, text });
+      } else {
+        await navigator.clipboard.writeText(text);
+        setShowCopied(true);
+        setTimeout(() => setShowCopied(false), 2000);
+      }
+    } catch {
+      try {
+        await navigator.clipboard.writeText(text);
+        setShowCopied(true);
+        setTimeout(() => setShowCopied(false), 2000);
+      } catch { /* noop */ }
+    }
   }, [pickedCards, positions, lang, t]);
+
+  const handleImageShare = useCallback(async () => {
+    if (!resultRef.current) return;
+    try {
+      const canvas = await html2canvas(resultRef.current, {
+        backgroundColor: "#1a0a3e",
+        scale: 2,
+        useCORS: true,
+      });
+      canvas.toBlob(async (blob) => {
+        if (!blob) return;
+        const file = new File([blob], "tarot-result.png", { type: "image/png" });
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({ files: [file] });
+        } else {
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "tarot-result.png";
+          a.click();
+          URL.revokeObjectURL(url);
+        }
+      }, "image/png");
+    } catch { /* noop */ }
+  }, []);
 
   const drawAgain = useCallback(() => {
     const shuffled = shuffle(Array.from({ length: 22 }, (_, i) => i));
@@ -1016,6 +1054,7 @@ export default function TarotReading({ locale = "ko" }: Props) {
           <div
             className={`max-w-2xl mx-auto relative z-10 transition-all duration-700 ${resultVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"}`}
           >
+            <div ref={resultRef} className="pb-4">
             <h2 className="text-center text-2xl sm:text-3xl font-bold text-white mb-8">
               🔮{" "}
               <span className="text-[#FFD700]">{t.title}</span>
@@ -1095,6 +1134,7 @@ export default function TarotReading({ locale = "ko" }: Props) {
                 {luckyText}
               </p>
             </div>
+            </div>
 
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-8">
@@ -1103,6 +1143,12 @@ export default function TarotReading({ locale = "ko" }: Props) {
                 className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-white/[0.06] border border-white/[0.1] text-white font-medium text-sm hover:bg-white/[0.1] transition-colors"
               >
                 {t.share}
+              </button>
+              <button
+                onClick={handleImageShare}
+                className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-white/[0.06] border border-white/[0.1] text-white font-medium text-sm hover:bg-white/[0.1] transition-colors"
+              >
+                📸 {lang === "ko" ? "이미지로 저장" : lang === "ja" ? "画像で保存" : lang === "zh" ? "保存为图片" : "Save as Image"}
               </button>
               <button
                 onClick={drawAgain}
