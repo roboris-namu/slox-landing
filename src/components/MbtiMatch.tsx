@@ -45,10 +45,10 @@ const SHADOW_PAIRS: Record<string, string> = {
 };
 
 const NEAR_IDEAL_PAIRS = new Set([
-  "INTJ-INFJ", "INFJ-INTJ",
-  "ENTP-ENFP", "ENFP-ENTP",
-  "INTP-INFP", "INFP-INTP",
-  "ENTJ-ENFJ", "ENFJ-ENTJ",
+  "INTJ-ENFP", "ENFP-INTJ",
+  "INTP-INFJ", "INFJ-INTP",
+  "ENTJ-INFP", "INFP-ENTJ",
+  "ENTP-INFJ", "INFJ-ENTP",
   "ISTJ-ISFJ", "ISFJ-ISTJ",
   "ESTP-ESFP", "ESFP-ESTP",
   "ISTP-ISFP", "ISFP-ISTP",
