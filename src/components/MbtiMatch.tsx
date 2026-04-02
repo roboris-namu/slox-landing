@@ -830,7 +830,7 @@ export default function MbtiMatch({ locale = "ko" }: MbtiMatchProps) {
               </div>
 
               {/* Score */}
-              <div className="mb-3">
+              <div className="mb-5">
                 <span className={`text-6xl sm:text-7xl font-black tabular-nums ${getScoreColor(score)}`}>
                   {animatedScore}
                 </span>
@@ -838,7 +838,7 @@ export default function MbtiMatch({ locale = "ko" }: MbtiMatchProps) {
               </div>
 
               {/* Progress Bar */}
-              <div className="w-full h-3 bg-dark-800 rounded-full overflow-hidden mb-4">
+              <div className="w-full h-2.5 bg-dark-800 rounded-full overflow-hidden mb-6">
                 <div
                   className={`h-full rounded-full bg-gradient-to-r ${getBarColor(score)} transition-all duration-1000 ease-out`}
                   style={{ width: `${showResult ? score : 0}%` }}
@@ -846,8 +846,8 @@ export default function MbtiMatch({ locale = "ko" }: MbtiMatchProps) {
               </div>
 
               {/* Level Badge */}
-              <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#6C5CE7]/20 to-[#FD79A8]/20 border border-white/[0.1]">
-                <span className="text-base sm:text-lg font-bold">
+              <div className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-gradient-to-r from-[#6C5CE7]/20 to-[#FD79A8]/20 border border-white/[0.1]">
+                <span className="text-base sm:text-lg font-bold leading-none">
                   {t[getScoreLevel(score) as keyof Translations]}
                 </span>
               </div>
