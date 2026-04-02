@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
         .from("profiles")
         .select("id, nickname, total_score, attendance_count, avatar_url, country, game_scores")
         .order("total_score", { ascending: false })
-        .limit(100);
+        .limit(500);
 
       if (error) {
         console.error("❌ [API/rankings] Supabase 에러:", error);

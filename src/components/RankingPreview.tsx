@@ -55,7 +55,7 @@ const tabLabels: Record<string, Record<GameTab, string>> = {
   zh: { overall: "综合", reaction: "反应", cps: "CPS", typing: "打字", memory: "记忆", aim: "瞄准", color: "颜色", quiz: "问答", iq: "IQ", cardmatch: "卡牌", sudoku: "数独" },
 };
 
-const MAX_COUNT = 100;
+const MAX_COUNT = 500;
 
 const sectionT: Record<string, { title: string; desc: string; more: string; less: string; pts: string; noData: string }> = {
   ko: { title: "랭킹", desc: "전 세계 유저와 경쟁하세요", more: "더보기", less: "접기", pts: "점", noData: "아직 기록이 없습니다" },
