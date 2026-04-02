@@ -1,17 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-// 정적 캐시 완전 비활성화
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-// 서버 사이드 Supabase 클라이언트 (RLS 우회를 위해 service_role key 사용)
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://xtqpbyfgptuxwrevxxtm.supabase.co";
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh0cXBieWZncHR1eHdyZXZ4eHRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY2Mzc0NDAsImV4cCI6MjA3MjIxMzQ0MH0.Oz8WPZFCo9IjmK0NYDSJmizHETX9yY8aezYkLjQCbxQ";
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-// 게임별 테이블 및 설정
 const GAME_CONFIG: Record<string, { table: string; scoreField: string; orderAsc: boolean }> = {
   reaction: { table: "reaction_leaderboard", scoreField: "score", orderAsc: true },
   cps: { table: "cps_leaderboard", scoreField: "score", orderAsc: false },
@@ -25,17 +22,55 @@ const GAME_CONFIG: Record<string, { table: string; scoreField: string; orderAsc:
   typing: { table: "typing_leaderboard", scoreField: "wpm", orderAsc: false },
 };
 
+// ─── 인메모리 캐시 (15초 TTL) ───
+interface CacheEntry { data: unknown; ts: number }
+const cache = new Map<string, CacheEntry>();
+const CACHE_TTL = 15_000;
+
+function getCached<T>(key: string): T | null {
+  const entry = cache.get(key);
+  if (entry && Date.now() - entry.ts < CACHE_TTL) return entry.data as T;
+  return null;
+}
+function setCache(key: string, data: unknown) {
+  cache.set(key, { data, ts: Date.now() });
+}
+
+// 종합 순위 맵 (전체 프로필을 1번만 쿼리해서 위치 기반 순위 계산)
+async function getOverallRankMap(): Promise<Map<string, number>> {
+  const cached = getCached<Map<string, number>>("overallRankMap");
+  if (cached) return cached;
+
+  const { data: allProfiles } = await supabase
+    .from("profiles")
+    .select("id, total_score")
+    .order("total_score", { ascending: false });
+
+  const rankMap = new Map<string, number>();
+  if (allProfiles) {
+    let currentRank = 1;
+    for (let i = 0; i < allProfiles.length; i++) {
+      if (i > 0 && (allProfiles[i].total_score || 0) < (allProfiles[i - 1].total_score || 0)) {
+        currentRank = i + 1;
+      }
+      rankMap.set(allProfiles[i].id, currentRank);
+    }
+  }
+
+  setCache("overallRankMap", rankMap);
+  return rankMap;
+}
+
 /**
  * 🏆 범용 리더보드 조회 API
  * GET /api/leaderboard?game=reaction&limit=10&myScore=957
- * myScore 파라미터가 있으면 해당 점수의 정확한 순위도 반환
  */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const game = searchParams.get("game");
     const limit = parseInt(searchParams.get("limit") || "10");
-    const myScore = searchParams.get("myScore"); // 정확한 순위 계산용
+    const myScore = searchParams.get("myScore");
 
     if (!game || !GAME_CONFIG[game]) {
       return NextResponse.json(
@@ -45,90 +80,65 @@ export async function GET(request: NextRequest) {
     }
 
     const config = GAME_CONFIG[game];
+    const cacheKey = `lb:${game}:${limit}`;
 
-    // 리더보드 조회
-    const { data, error } = await supabase
-      .from(config.table)
-      .select("*")
-      .order(config.scoreField, { ascending: config.orderAsc })
-      .limit(limit);
-
-    // 전체 참가자 수
-    const { count } = await supabase
-      .from(config.table)
-      .select("*", { count: "exact", head: true });
-    
-    // 📊 myScore가 있으면 정확한 순위 계산
-    let myRank = null;
-    if (myScore) {
-      const scoreValue = parseFloat(myScore);
-      if (!isNaN(scoreValue)) {
-        // 나보다 좋은 점수를 가진 사람 수 + 1 = 내 순위
-        const compareOperator = config.orderAsc ? "lt" : "gt"; // 낮을수록 좋으면 lt, 높을수록 좋으면 gt
-        const { count: betterCount } = await supabase
-          .from(config.table)
-          .select("*", { count: "exact", head: true })
-          [compareOperator](config.scoreField, scoreValue);
-        
-        myRank = (betterCount || 0) + 1;
-      }
+    // 캐시 확인
+    const cached = getCached<{ data: unknown[]; totalCount: number }>(cacheKey);
+    if (cached && !myScore) {
+      return NextResponse.json({ ...cached, myRank: null }, {
+        headers: { "Cache-Control": "public, max-age=15, stale-while-revalidate=30" },
+      });
     }
+
+    // 리더보드 + 참가자 수를 병렬 조회
+    const [leaderboardResult, countResult, myRankResult] = await Promise.all([
+      supabase.from(config.table).select("*").order(config.scoreField, { ascending: config.orderAsc }).limit(limit),
+      supabase.from(config.table).select("*", { count: "exact", head: true }),
+      myScore && !isNaN(parseFloat(myScore))
+        ? supabase.from(config.table).select("*", { count: "exact", head: true })[config.orderAsc ? "lt" : "gt"](config.scoreField, parseFloat(myScore))
+        : Promise.resolve({ count: null }),
+    ]);
+
+    const { data, error } = leaderboardResult;
+    const totalCount = countResult.count || 0;
+    const myRank = myRankResult.count != null ? (myRankResult.count || 0) + 1 : null;
 
     if (error) {
       console.error(`❌ [API/leaderboard] ${game} 조회 에러:`, error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // 회원 닉네임 + 프로필사진 + 종합순위 동기화
+    // 회원 프로필 + 종합 순위 동기화 (N+1 제거: 1번의 정렬 쿼리로 전체 순위 계산)
     if (data && data.length > 0) {
       const userIds = data.filter((d) => d.user_id).map((d) => d.user_id);
       if (userIds.length > 0) {
-        // 프로필 정보 + total_score 가져오기
-        const { data: profiles } = await supabase
-          .from("profiles")
-          .select("id, nickname, avatar_url, total_score")
-          .in("id", userIds);
+        const [profilesResult, rankMap] = await Promise.all([
+          supabase.from("profiles").select("id, nickname, avatar_url").in("id", userIds),
+          getOverallRankMap(),
+        ]);
 
-        if (profiles) {
-          // 종합 순위 계산을 위해 각 회원의 total_score보다 높은 사람 수 계산
-          const profileMap = new Map<string, { nickname: string; avatar_url: string; overall_rank: number }>();
-          
-          for (const profile of profiles) {
-            // 해당 회원보다 높은 점수를 가진 사람 수 조회
-            const { count } = await supabase
-              .from("profiles")
-              .select("*", { count: "exact", head: true })
-              .gt("total_score", profile.total_score || 0);
-            
-            const overallRank = (count || 0) + 1;
-            profileMap.set(profile.id, {
-              nickname: profile.nickname,
-              avatar_url: profile.avatar_url,
-              overall_rank: overallRank,
-            });
-          }
-          
+        if (profilesResult.data) {
+          const profileMap = new Map(
+            profilesResult.data.map((p) => [p.id, { nickname: p.nickname, avatar_url: p.avatar_url }])
+          );
+
           data.forEach((entry) => {
             if (entry.user_id && profileMap.has(entry.user_id)) {
-              const profile = profileMap.get(entry.user_id);
-              entry.nickname = profile?.nickname || entry.nickname;
-              entry.avatar_url = profile?.avatar_url;
-              entry.overall_rank = profile?.overall_rank; // 종합 순위 추가
+              const profile = profileMap.get(entry.user_id)!;
+              entry.nickname = profile.nickname || entry.nickname;
+              entry.avatar_url = profile.avatar_url;
+              entry.overall_rank = rankMap.get(entry.user_id);
             }
           });
         }
       }
     }
 
-    // 캐시 비활성화 (실시간 데이터)
-    return NextResponse.json({
-      data: data || [],
-      totalCount: count || 0,
-      myRank, // 정확한 순위 (myScore 파라미터 사용 시)
-    }, {
-      headers: {
-        "Cache-Control": "no-cache, no-store, must-revalidate",
-      },
+    const responseData = { data: data || [], totalCount, myRank };
+    setCache(cacheKey, { data: data || [], totalCount });
+
+    return NextResponse.json(responseData, {
+      headers: { "Cache-Control": "public, max-age=15, stale-while-revalidate=30" },
     });
   } catch (err) {
     console.error("❌ [API/leaderboard] GET 에러:", err);
