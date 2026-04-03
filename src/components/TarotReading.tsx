@@ -1103,8 +1103,8 @@ export default function TarotReading({ locale = "ko" }: Props) {
                   {card.keywords[lang].map((kw, j) => (
                     <span
                       key={j}
-                      className="rounded-full bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/20"
-                      style={{ fontSize: 12, lineHeight: "12px", padding: "6px 10px", display: "inline-block" }}
+                      className="rounded-full bg-[#FFD700]/10 text-[#FFD700] border border-[#FFD700]/20 text-center"
+                      style={{ fontSize: 12, height: 24, lineHeight: "24px", padding: "0 10px", display: "inline-block", verticalAlign: "middle" }}
                     >
                       {kw}
                     </span>
