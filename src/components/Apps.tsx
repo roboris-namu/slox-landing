@@ -7,7 +7,7 @@ type Category = "all" | "utility" | "health" | "media" | "fun" | "edu" | "life";
 const appsData = [
   { emoji: "🔊", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/sound-meter-decibel-db/id6756865763", android: "https://play.google.com/store/apps/details?id=com.slox.soundmeter" },
   { emoji: "🌊", cat: "health" as Category, ios: "https://apps.apple.com/us/app/white-noise-slox/id6757315077", android: "https://play.google.com/store/apps/details?id=com.slox.slox_whitenoise" },
-  { emoji: "🎙️", cat: "media" as Category, ios: "https://apps.apple.com/us/app/voice-recorder-slox/id6756888591", android: null },
+  { emoji: "🎙️", cat: "media" as Category, ios: "https://apps.apple.com/us/app/voice-recorder-slox/id6756888591", android: "https://play.google.com/store/apps/details?id=com.slox.slox_voice_recorder" },
   { emoji: "📐", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/unit-converter-slox/id6756968552", android: "https://play.google.com/store/apps/details?id=com.slox.slox_unit_converter" },
   { emoji: "💵", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/tip-calculator-slox/id6757491942", android: "https://play.google.com/store/apps/details?id=com.slox.slox_tip_calculator" },
   { emoji: "⏱️", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/stopwatch-timer-slox/id6757244071", android: "https://play.google.com/store/apps/details?id=com.slox.slox_stopwatch" },
@@ -16,7 +16,7 @@ const appsData = [
   { emoji: "🪞", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/mirror-slox/id6757230732", android: null },
   { emoji: "🎵", cat: "media" as Category, ios: "https://apps.apple.com/us/app/metronome-slox/id6757317325", android: "https://play.google.com/store/apps/details?id=com.slox.slox_metronome" },
   { emoji: "🔍", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/magnifier-slox/id6757490033", android: "https://play.google.com/store/apps/details?id=com.slox.slox_magnifier" },
-  { emoji: "🔦", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/flashlight-slox/id6757238605", android: null },
+  { emoji: "🔦", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/flashlight-slox/id6757238605", android: "https://play.google.com/store/apps/details?id=com.slox.slox_flashlight" },
   { emoji: "🧭", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/compass-slox/id6757491317", android: "https://play.google.com/store/apps/details?id=com.slox.slox_compass" },
   { emoji: "🧮", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/calculator-slox/id6757248766", android: "https://play.google.com/store/apps/details?id=com.slox.slox_calculator" },
   { emoji: "🫁", cat: "health" as Category, ios: "https://apps.apple.com/us/app/breathing-slox/id6757317781", android: "https://play.google.com/store/apps/details?id=com.slox.slox_breathing" },
