@@ -13,7 +13,7 @@ const appsData = [
   { emoji: "⏱️", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/stopwatch-timer-slox/id6757244071", android: "https://play.google.com/store/apps/details?id=com.slox.slox_stopwatch" },
   { emoji: "📷", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/qr-scanner-slox/id6756880687", android: "https://play.google.com/store/apps/details?id=com.slox.slox_qr_scanner" },
   { emoji: "📄", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/pdf-scanner-slox/id6756884443", android: "https://play.google.com/store/apps/details?id=com.slox.slox_pdf_scanner" },
-  { emoji: "🪞", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/mirror-slox/id6757230732", android: null },
+  { emoji: "🪞", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/mirror-slox/id6757230732", android: "https://play.google.com/store/apps/details?id=com.slox.slox_mirror" },
   { emoji: "🎵", cat: "media" as Category, ios: "https://apps.apple.com/us/app/metronome-slox/id6757317325", android: "https://play.google.com/store/apps/details?id=com.slox.slox_metronome" },
   { emoji: "🔍", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/magnifier-slox/id6757490033", android: "https://play.google.com/store/apps/details?id=com.slox.slox_magnifier" },
   { emoji: "🔦", cat: "utility" as Category, ios: "https://apps.apple.com/us/app/flashlight-slox/id6757238605", android: "https://play.google.com/store/apps/details?id=com.slox.slox_flashlight" },
