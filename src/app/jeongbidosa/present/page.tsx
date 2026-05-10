@@ -166,6 +166,18 @@ function LoginGate({ onSuccess }: { onSuccess: () => void }) {
           {loading ? '확인 중...' : '입장하기'}
         </button>
 
+        {/* 비밀번호 힌트 — 팀원이 까먹었을 때 떠올리도록 앞 4자만 노출.
+            외부인이 페이지를 새로 발견해도 의미를 추론하기 어렵습니다. */}
+        <div className="mt-4 px-3 py-2.5 rounded-lg bg-white/5 border border-white/10">
+          <p className="text-[11px] text-white/50 leading-relaxed">
+            <span className="text-white/70 font-semibold">힌트</span> · 우리 팀명(영문 소문자) 뒤에 올해 연도. 시작 4자{' '}
+            <code className="px-1 py-0.5 rounded bg-dark-950/60 text-accent-300 font-mono text-[11px]">
+              ajou
+            </code>
+            <span className="text-white/30">…</span> (12자, 특수문자 없음)
+          </p>
+        </div>
+
         <p className="mt-4 text-[11px] text-white/30 text-center">
           팀 아주그냥 (AjouJust) · 인공지능 데이터 실무
         </p>

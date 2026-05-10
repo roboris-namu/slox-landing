@@ -199,6 +199,18 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
         >
           {loading ? '확인 중...' : '들어가기'}
         </button>
+
+        {/* 비밀번호 힌트 — 팀원이 까먹었을 때 떠올리도록 앞 4자만.
+            앱이름(영문 소문자) + 올해 연도 + 강조 부호로 끝납니다. */}
+        <div className="mt-4 px-3 py-2.5 rounded-lg bg-white/5 border border-white/10">
+          <p className="text-[11px] text-white/50 leading-relaxed">
+            <span className="text-white/70 font-semibold">힌트</span> · 앱이름(영문 소문자) 뒤에 올해 연도, 마지막에 강조 부호 1자. 시작 4자{' '}
+            <code className="px-1 py-0.5 rounded bg-dark-950/60 text-accent-300 font-mono text-[11px]">
+              jeon
+            </code>
+            <span className="text-white/30">…</span> (16자)
+          </p>
+        </div>
       </form>
     </main>
   );

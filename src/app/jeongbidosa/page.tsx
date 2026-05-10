@@ -262,6 +262,36 @@ export default function JeongbidosaPage() {
             isSupported={tts.isSupported}
           />
 
+          {/* 소개(발표 페이지)·관리(어드민) 진입 버튼.
+              · 모두 비밀번호 보호되어 있어 외부 노출 우려 없음
+              · 새 탭으로 열어 챗봇 사용 흐름을 끊지 않음 */}
+          <Link
+            href="/jeongbidosa/present"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-2 rounded-lg text-xs font-medium
+                       bg-dark-800/60 border border-white/10
+                       text-white/70 hover:text-white hover:border-accent-500/40
+                       transition-colors shrink-0"
+            aria-label="프로젝트 소개 페이지"
+            title="프로젝트 소개 (비밀번호 필요)"
+          >
+            소개
+          </Link>
+          <Link
+            href="/jeongbidosa/admin"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-2 rounded-lg text-xs font-medium
+                       bg-dark-800/60 border border-white/10
+                       text-white/70 hover:text-white hover:border-accent-500/40
+                       transition-colors shrink-0"
+            aria-label="지식 관리 페이지"
+            title="지식베이스 관리 (비밀번호 필요)"
+          >
+            관리
+          </Link>
+
           {/* 새 대화 */}
           {messages.length > 0 && (
             <button
