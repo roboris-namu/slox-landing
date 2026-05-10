@@ -16,7 +16,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import MicButton from '@/components/jeongbidosa/MicButton';
 import TTSToggle from '@/components/jeongbidosa/TTSToggle';
 import { useSpeechOutput } from '@/lib/jeongbidosa/useSpeechOutput';
@@ -557,6 +557,15 @@ function MessageBubble({
   );
 }
 
+/**
+ * 출처 카드 — 클릭하면 펼쳐져서 description/role/details 전체를 보여줍니다.
+ *
+ * 접힘: 80자 미리보기 + ▼ 아이콘 (호버 시 보더 강조)
+ * 펼침: 전체 description + 원인(role) + 점검 절차(details) + ▲ 아이콘
+ *
+ * 정비기사가 답변에 인용된 항목의 원본 매뉴얼을 그 자리에서 확인할 수 있도록
+ * 단순한 "출처 라벨"이 아니라 상세 카드로 격상했습니다.
+ */
 function SourceCard({
   source,
   index,
@@ -564,17 +573,31 @@ function SourceCard({
   source: JeongbidosaKnowledge;
   index: number;
 }) {
-  const preview =
-    source.description.length > 80
-      ? source.description.slice(0, 80) + '…'
-      : source.description;
+  const [expanded, setExpanded] = useState(false);
+
   const sim =
     typeof source.similarity === 'number'
       ? `${Math.round(source.similarity * 100)}%`
       : null;
 
+  // 80자 초과 시 미리보기에서만 자름. 펼친 상태에서는 전체 노출.
+  const isLong = source.description.length > 80;
+  const preview = isLong ? source.description.slice(0, 80) + '…' : source.description;
+
   return (
-    <div className="px-3 py-2.5 rounded-xl bg-dark-800/40 border border-white/5 hover:border-accent-500/30 transition">
+    <button
+      type="button"
+      onClick={() => setExpanded((v) => !v)}
+      aria-expanded={expanded}
+      className={[
+        'w-full text-left px-3 py-2.5 rounded-xl',
+        'bg-dark-800/40 border transition-all',
+        expanded
+          ? 'border-accent-500/40 shadow-glow-sm'
+          : 'border-white/5 hover:border-accent-500/30',
+      ].join(' ')}
+    >
+      {/* 헤더: [Sn] term ▼/▲ similarity */}
       <div className="flex items-baseline gap-2 mb-1">
         <span className="text-[10px] font-bold text-accent-400 shrink-0">
           [S{index}]
@@ -582,11 +605,53 @@ function SourceCard({
         <span className="text-xs font-semibold text-white/90 truncate">
           {source.term}
         </span>
-        {sim && (
-          <span className="ml-auto text-[10px] text-white/30 shrink-0">{sim}</span>
-        )}
+        <span className="ml-auto flex items-center gap-1.5 shrink-0">
+          {sim && <span className="text-[10px] text-white/30">{sim}</span>}
+          <span
+            className={[
+              'text-[10px] text-white/40 transition-transform inline-block',
+              expanded ? 'rotate-180' : '',
+            ].join(' ')}
+            aria-hidden
+          >
+            ▼
+          </span>
+        </span>
       </div>
-      <p className="text-[11px] text-white/50 leading-relaxed">{preview}</p>
+
+      {/* 미리보기 (접힘 상태) */}
+      {!expanded && (
+        <p className="text-[11px] text-white/50 leading-relaxed">{preview}</p>
+      )}
+
+      {/* 펼침 상태 - description 전체 + role + details */}
+      {expanded && (
+        <div className="mt-2 space-y-2.5 animate-fade-in">
+          <SourceField label="설명" value={source.description} />
+          {source.role && <SourceField label="원인" value={source.role} />}
+          {source.details && (
+            <SourceField label="점검 절차" value={source.details} />
+          )}
+        </div>
+      )}
+    </button>
+  );
+}
+
+/**
+ * 출처 카드 내부의 라벨+본문 필드.
+ * description은 길 수 있으므로 줄바꿈을 보존하고(whitespace-pre-wrap)
+ * 좌우 정렬은 라벨 폭을 고정해 시각 정렬을 깔끔하게 합니다.
+ */
+function SourceField({ label, value }: { label: string; value: string }): ReactNode {
+  return (
+    <div>
+      <p className="text-[10px] font-semibold text-accent-400/80 uppercase tracking-wider mb-0.5">
+        {label}
+      </p>
+      <p className="text-[11px] text-white/70 leading-relaxed whitespace-pre-wrap">
+        {value}
+      </p>
     </div>
   );
 }
