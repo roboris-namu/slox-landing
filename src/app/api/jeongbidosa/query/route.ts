@@ -39,7 +39,9 @@ export const maxDuration = 30;
 
 // 입력 검증 상수
 const MAX_QUESTION_LENGTH = 500; // 너무 긴 질문은 임베딩/LLM 비용·악용 방지 차원에서 차단
-const MATCH_THRESHOLD = 0.3; // 코사인 유사도 임계치 (RPC 기본은 0.5인데, 한국어 RAG는 좀 더 관대하게)
+// 코사인 유사도 임계치. 0.4 이하 매칭은 사실상 무관한 항목이라 컨텍스트에서 제외.
+// (이전 0.3은 너무 관대해서 약매칭이 들어가 모델이 어색한 짜깁기 답변을 만들었음)
+const MATCH_THRESHOLD = 0.4;
 const MATCH_COUNT = 5; // RAG 컨텍스트 상한
 
 /**

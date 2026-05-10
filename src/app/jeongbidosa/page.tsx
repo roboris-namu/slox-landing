@@ -19,6 +19,7 @@
 
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import type {
   ApiErrorResponse,
@@ -143,17 +144,48 @@ export default function JeongbidosaPage() {
     <main className="relative min-h-screen flex flex-col">
       {/* 헤더 */}
       <header className="sticky top-0 z-10 backdrop-blur-md bg-dark-950/70 border-b border-white/5">
-        <div className="max-w-2xl mx-auto px-4 py-4 flex items-center gap-3">
-          <div
-            className="w-10 h-10 rounded-xl bg-premium-gradient flex items-center justify-center text-xl shadow-glow-sm"
-            aria-hidden
+        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-3">
+          {/* 왼쪽: 메인 사이트로 돌아가는 로고/타이틀 */}
+          <Link
+            href="/"
+            className="flex items-center gap-3 flex-1 min-w-0 group"
+            aria-label="SLOX 메인으로 이동"
           >
-            🔧
-          </div>
-          <div className="flex-1">
-            <h1 className="text-lg font-bold tracking-tight">정비도사</h1>
-            <p className="text-xs text-white/50">AI 자동차 정비 챗봇</p>
-          </div>
+            <div
+              className="w-10 h-10 rounded-xl bg-premium-gradient flex items-center justify-center text-xl shadow-glow-sm group-hover:shadow-glow-md transition-shadow shrink-0"
+              aria-hidden
+            >
+              🔧
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-lg font-bold tracking-tight truncate">정비도사</h1>
+              <p className="text-xs text-white/50 truncate">AI 자동차 정비 챗봇</p>
+            </div>
+          </Link>
+
+          {/* 오른쪽: 대화 초기화 버튼 (대화가 있을 때만 노출) */}
+          {messages.length > 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                if (loading) return;
+                // 진행 중 응답이 없을 때만 초기화 허용 (race condition 방지)
+                setMessages([]);
+                setInput('');
+              }}
+              disabled={loading}
+              className="px-3 py-2 rounded-lg text-xs font-medium
+                         bg-dark-800/60 border border-white/10
+                         text-white/70 hover:text-white hover:border-accent-500/40
+                         disabled:opacity-40 disabled:cursor-not-allowed
+                         transition-colors shrink-0"
+              aria-label="새 대화 시작"
+              title="새 대화 시작"
+            >
+              <span aria-hidden>↻</span>
+              <span className="ml-1 hidden sm:inline">새 대화</span>
+            </button>
+          )}
         </div>
       </header>
 
