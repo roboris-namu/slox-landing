@@ -908,6 +908,20 @@ export default function TarotReading({ locale = "ko" }: Props) {
         }
       `}</style>
 
+      {/* 모든 단계(intro/selecting/result) 공통으로 보이는 좌측 상단 메인 링크.
+          기존에는 selecting 화면에서 메인으로 갈 수 있는 진입점이 없어
+          사용자가 갇히는 문제가 있었습니다 (intro와 result 단계에만 있었음). */}
+      <Link
+        href={homePath}
+        className="fixed top-3 left-3 sm:top-4 sm:left-4 z-30 px-3 py-1.5
+                   text-xs sm:text-sm text-white/60 hover:text-white
+                   bg-black/30 hover:bg-black/50 backdrop-blur-sm
+                   border border-white/10 hover:border-white/20
+                   rounded-full transition-colors"
+      >
+        {t.back}
+      </Link>
+
       {/* ─── Intro ─── */}
       {screen === "intro" && (
         <div className="min-h-screen bg-[#1a0a3e] flex flex-col items-center justify-center relative overflow-hidden px-4">

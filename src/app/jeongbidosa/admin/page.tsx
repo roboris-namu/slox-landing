@@ -20,6 +20,7 @@
 
 'use client';
 
+import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as XLSX from 'xlsx';
 
@@ -146,6 +147,18 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-dark-950 bg-mesh-gradient p-6">
+      {/* 로그인 전에도 메인 사이트로 빠져나갈 수 있는 좌측 상단 링크 */}
+      <Link
+        href="/"
+        className="fixed top-3 left-3 sm:top-4 sm:left-4 z-30 px-3 py-1.5
+                   text-xs sm:text-sm text-white/60 hover:text-white
+                   bg-black/30 hover:bg-black/50 backdrop-blur-sm
+                   border border-white/10 hover:border-white/20
+                   rounded-full transition-colors"
+      >
+        ← 메인으로
+      </Link>
+
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm bg-dark-900/70 backdrop-blur-md rounded-2xl border border-white/10 p-8 shadow-glass"
@@ -380,6 +393,15 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       {/* 상단 헤더 */}
       <header className="sticky top-0 z-20 bg-dark-950/80 backdrop-blur-md border-b border-white/10">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-2 flex-wrap">
+          {/* 슬록스 메인 사이트로 돌아가는 링크 — 항상 헤더 좌측 첫 자리 */}
+          <Link
+            href="/"
+            className="text-xs sm:text-sm text-white/50 hover:text-white
+                       border border-white/10 hover:border-white/30
+                       rounded-md px-2.5 py-1 transition-colors mr-1"
+          >
+            ← 메인
+          </Link>
           <div className="flex items-center gap-2 mr-auto">
             <div
               className="w-8 h-8 rounded-lg bg-premium-gradient flex items-center justify-center text-sm shadow-glow-sm"
