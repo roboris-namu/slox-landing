@@ -1,15 +1,18 @@
 /**
  * TTSToggle - 답변 자동 읽기 토글 버튼
  *
- * - ON 상태에서 AI 답변이 도착하면 자동으로 한국어 TTS 재생
- * - OFF 면 텍스트로만 표시 (조용한 환경 대응)
- * - localStorage 'jeongbidosa.tts.enabled' 키에 사용자 선택 저장
- *   → 다음 방문 시 동일 설정 유지
+ * 디자인 결정:
+ *   - OFF 표시에 X 사선을 쓰지 않습니다.
+ *     X 사선은 일반적으로 "차단/음소거/금지"를 의미해서, 사용자가
+ *     "정비도사 자체가 음소거됐다"고 오해할 수 있기 때문입니다.
+ *   - 대신 음파(파동선) 유무로 ON/OFF 를 구분합니다.
+ *   - sm 브레이크포인트 이상에서는 텍스트 라벨("자동읽기 ON/OFF") 동반.
+ *   - 색상 대비도 강하게 (ON=accent 글로우, OFF=회색).
  *
- * 디자인:
- *   - 헤더 우측에 들어갈 작은 아이콘 버튼
- *   - ON: 액센트 색상 + 스피커 아이콘
- *   - OFF: 회색 + 음소거 표시
+ * 동작:
+ *   - 클릭마다 enabled 토글
+ *   - 상위 페이지에서 localStorage 영속화
+ *   - TTS 미지원 환경에서는 아예 렌더링하지 않음
  */
 
 'use client';
@@ -32,11 +35,18 @@ export default function TTSToggle({
     <button
       type="button"
       onClick={() => onChange(!enabled)}
-      aria-label={enabled ? '음성 자동 읽기 끄기' : '음성 자동 읽기 켜기'}
+      aria-label={enabled ? '답변 자동 읽기 끄기' : '답변 자동 읽기 켜기'}
       aria-pressed={enabled}
-      title={enabled ? '음성 자동 읽기 ON' : '음성 자동 읽기 OFF'}
+      title={
+        enabled
+          ? '답변을 음성으로 읽어줍니다 (클릭 시 끄기)'
+          : '답변을 음성으로 읽지 않습니다 (클릭 시 켜기)'
+      }
       className={[
-        'shrink-0 w-10 h-10 rounded-lg flex items-center justify-center',
+        // 기본 형태 (아이콘만일 때 정사각, 텍스트 동반 시 가로로 늘어남)
+        'shrink-0 h-10 rounded-lg flex items-center justify-center gap-1.5',
+        'px-2.5 sm:px-3',
+        'text-xs font-medium',
         'transition-all duration-200',
         'focus:outline-none focus:ring-2 focus:ring-accent-500/40',
         enabled
@@ -44,6 +54,7 @@ export default function TTSToggle({
           : 'bg-dark-800/60 text-white/50 border border-white/10 hover:text-white/80',
       ].join(' ')}
     >
+      {/* 스피커 아이콘 */}
       <svg
         viewBox="0 0 24 24"
         fill="none"
@@ -51,25 +62,24 @@ export default function TTSToggle({
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="w-5 h-5"
+        className="w-4 h-4 shrink-0"
         aria-hidden
       >
         {/* 스피커 본체 (공통) */}
         <path d="M11 5L6 9H2v6h4l5 4V5z" />
-        {enabled ? (
-          // 음파 두 개 (ON)
+        {enabled && (
+          // ON 일 때만 음파 두 줄 표시. OFF 일 때는 본체만 (사선/음소거 X)
           <>
             <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
           </>
-        ) : (
-          // 사선 (OFF, 음소거)
-          <>
-            <line x1="22" y1="9" x2="16" y2="15" />
-            <line x1="16" y1="9" x2="22" y2="15" />
-          </>
         )}
       </svg>
+
+      {/* 데스크톱(sm 이상)에서 텍스트 라벨 - 의미 명확화 */}
+      <span className="hidden sm:inline whitespace-nowrap">
+        {enabled ? '자동읽기 ON' : '자동읽기 OFF'}
+      </span>
     </button>
   );
 }

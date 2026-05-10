@@ -395,7 +395,7 @@ function VoiceHintBanner({ onDismiss }: { onDismiss: () => void }) {
       <div className="flex-1 text-xs leading-relaxed text-white/80">
         <strong className="text-accent-300">마이크 버튼</strong>을 눌러 음성으로 질문할 수 있어요.
         <br />
-        현장에서 손이 자유롭지 않을 때 유용해요. 답변도 음성으로 들으려면 헤더의 스피커 아이콘을 켜주세요.
+        현장에서 손이 자유롭지 않을 때 유용해요. 답변도 음성으로 들으려면 우측 상단의 <strong className="text-accent-300">자동읽기</strong> 버튼을 켜주세요.
       </div>
       <button
         type="button"
