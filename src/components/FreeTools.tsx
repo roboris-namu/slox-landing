@@ -185,7 +185,7 @@ const toolTexts: Record<string, ToolText[]> = {
     { title: "연봉 계산기" }, { title: "BMI 계산기" }, { title: "QR 생성기" },
     { title: "비밀번호 생성" }, { title: "랜덤 뽑기" }, { title: "오늘의 운세" },
     { title: "디데이 계산기" }, { title: "글자수 세기" }, { title: "나이 계산기" },
-    { title: "퍼센트 계산" }, { title: "로또 번호 생성" }, { title: "오늘의 명언" },
+    { title: "정비도사" }, { title: "로또 번호 생성" }, { title: "오늘의 명언" },
     { title: "퇴직금 계산" }, { title: "적금 계산기" },
   ],
   en: [
@@ -275,6 +275,13 @@ export default function FreeTools({ locale = "ko" }: { locale?: string }) {
   const prefix = locale === "ko" ? "" : `/${locale}`;
 
   const filteredTools = toolBase
+    .map((tool) => {
+      // 한국어 환경에서만 퍼센트 계산 자리를 정비도사로 교체 (다른 언어는 퍼센트 유지)
+      if (locale === "ko" && tool.href === "/percent") {
+        return { ...tool, href: "/jeongbidosa", emoji: "🔧" };
+      }
+      return tool;
+    })
     .map((tool, i) => ({ ...tool, text: tTexts[i] }))
     .filter((tool) => locale === "ko" || !tool.koOnly);
 
