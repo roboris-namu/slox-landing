@@ -1,7 +1,7 @@
 /**
  * /jeongbidosa/admin
  *
- * 정비도사 지식베이스 관리 페이지 (김준수님 전용)
+ * 정비도사 지식베이스 관리 페이지
  *
  * 동작 흐름:
  *   - 진입 시 GET /api/jeongbidosa/admin/items 호출
@@ -15,7 +15,7 @@
  *   - 전체 데이터 엑셀 다운로드
  *   - 로그아웃
  *
- * UI는 의도적으로 단순하게 — Tailwind 만 사용, 외부 모달 라이브러리 X.
+ * 스타일: slox.co.kr 의 다크 톤(bg-dark-950 + premium-gradient)에 맞춤.
  */
 
 'use client';
@@ -53,6 +53,17 @@ const EMPTY_FORM: ItemFormState = {
 };
 
 // ----------------------------------------------------------------------------
+// 다크 톤 공용 클래스 (반복 제거)
+// ----------------------------------------------------------------------------
+
+/** input/textarea 공통 — 어두운 배경 + 흰 글씨 (가시성 확보) */
+const INPUT_BASE =
+  'w-full px-3 py-2.5 bg-dark-900/60 border border-white/10 rounded-lg ' +
+  'text-white placeholder:text-white/30 ' +
+  'focus:outline-none focus:ring-2 focus:ring-accent-500/40 focus:border-accent-500/40 ' +
+  'transition-colors';
+
+// ----------------------------------------------------------------------------
 // 메인 페이지 컴포넌트
 // ----------------------------------------------------------------------------
 
@@ -88,8 +99,8 @@ export default function JeongbidosaAdminPage() {
 
   if (authStatus === 'checking') {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-gray-50">
-        <p className="text-gray-500">잠시만요...</p>
+      <main className="min-h-screen flex items-center justify-center bg-dark-950 text-white/60">
+        <p>잠시만요...</p>
       </main>
     );
   }
@@ -134,33 +145,44 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+    <main className="min-h-screen flex items-center justify-center bg-dark-950 bg-mesh-gradient p-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-white rounded-2xl shadow-sm border border-gray-200 p-8"
+        className="w-full max-w-sm bg-dark-900/70 backdrop-blur-md rounded-2xl border border-white/10 p-8 shadow-glass"
       >
-        <div className="flex items-center gap-2 mb-6">
-          <span className="text-2xl">🔧</span>
-          <h1 className="text-xl font-bold text-gray-900">정비도사 어드민</h1>
+        <div className="flex items-center gap-3 mb-6">
+          <div
+            className="w-10 h-10 rounded-xl bg-premium-gradient flex items-center justify-center text-xl shadow-glow-sm"
+            aria-hidden
+          >
+            🔧
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-white">정비도사 어드민</h1>
+            <p className="text-xs text-white/50">지식베이스 관리</p>
+          </div>
         </div>
-        <p className="text-sm text-gray-500 mb-6">
-          김준수님 전용입니다. 비밀번호를 입력해주세요.
+        <p className="text-sm text-white/60 mb-5">
+          비밀번호를 입력해주세요.
         </p>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={INPUT_BASE}
           placeholder="비밀번호"
           autoFocus
         />
         {error && (
-          <p className="text-sm text-red-600 mt-3">{error}</p>
+          <p className="text-sm text-red-400 mt-3">{error}</p>
         )}
         <button
           type="submit"
           disabled={loading || !password}
-          className="w-full mt-5 py-3 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 disabled:bg-gray-400"
+          className="w-full mt-5 py-3 bg-premium-gradient text-white rounded-lg font-medium
+                     shadow-glow-sm hover:shadow-glow-md
+                     disabled:opacity-40 disabled:shadow-none disabled:cursor-not-allowed
+                     transition-all"
         >
           {loading ? '확인 중...' : '들어가기'}
         </button>
@@ -263,38 +285,50 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-dark-950 bg-mesh-gradient text-white">
       {/* 상단 헤더 */}
-      <header className="sticky top-0 z-20 bg-white border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3 flex-wrap">
+      <header className="sticky top-0 z-20 bg-dark-950/80 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-2 flex-wrap">
           <div className="flex items-center gap-2 mr-auto">
-            <span className="text-xl">🔧</span>
-            <h1 className="font-bold text-gray-900">정비도사 어드민</h1>
-            <span className="text-sm text-gray-500 ml-2">
+            <div
+              className="w-8 h-8 rounded-lg bg-premium-gradient flex items-center justify-center text-sm shadow-glow-sm"
+              aria-hidden
+            >
+              🔧
+            </div>
+            <h1 className="font-bold text-white">정비도사 어드민</h1>
+            <span className="text-sm text-white/40 ml-1">
               ({items.length}건)
             </span>
           </div>
           <button
             onClick={() => setShowCreate(true)}
-            className="px-3 py-2 bg-blue-600 text-white text-sm rounded-lg font-medium hover:bg-blue-700"
+            className="px-3 py-2 bg-premium-gradient text-white text-sm rounded-lg font-medium
+                       shadow-glow-sm hover:shadow-glow-md transition-all"
           >
             + 새 항목
           </button>
           <button
             onClick={() => setShowBulk(true)}
-            className="px-3 py-2 bg-emerald-600 text-white text-sm rounded-lg font-medium hover:bg-emerald-700"
+            className="px-3 py-2 bg-dark-800/80 text-white text-sm rounded-lg font-medium
+                       border border-white/10 hover:border-cyan-500/40 hover:text-cyan-300
+                       transition-colors"
           >
             엑셀 업로드
           </button>
           <button
             onClick={handleDownloadExcel}
-            className="px-3 py-2 bg-gray-700 text-white text-sm rounded-lg font-medium hover:bg-gray-800"
+            className="px-3 py-2 bg-dark-800/80 text-white text-sm rounded-lg font-medium
+                       border border-white/10 hover:border-white/30
+                       transition-colors"
           >
             엑셀 다운로드
           </button>
           <button
             onClick={handleLogout}
-            className="px-3 py-2 bg-white text-gray-700 text-sm rounded-lg font-medium border border-gray-300 hover:bg-gray-100"
+            className="px-3 py-2 bg-transparent text-white/60 text-sm rounded-lg
+                       border border-white/10 hover:text-white hover:border-white/30
+                       transition-colors"
           >
             로그아웃
           </button>
@@ -310,18 +344,18 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="검색 (제목·설명·원인·점검절차 어디든 매칭)"
-            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+            className={INPUT_BASE}
           />
         </div>
 
         {globalError && (
-          <p className="text-sm text-red-600 mb-4">⚠️ {globalError}</p>
+          <p className="text-sm text-red-400 mb-4">⚠️ {globalError}</p>
         )}
 
         {loading ? (
-          <p className="text-gray-500 text-center py-12">불러오는 중...</p>
+          <p className="text-white/40 text-center py-12">불러오는 중...</p>
         ) : filteredItems.length === 0 ? (
-          <p className="text-gray-500 text-center py-12">
+          <p className="text-white/40 text-center py-12">
             {search ? '검색 결과가 없습니다.' : '데이터가 없습니다.'}
           </p>
         ) : (
@@ -329,30 +363,31 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             {filteredItems.map((item) => (
               <li
                 key={item.id}
-                className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm"
+                className="bg-dark-900/60 backdrop-blur-sm border border-white/10 rounded-xl p-4
+                           hover:border-white/20 transition-colors"
               >
                 <div className="flex items-start gap-3">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs text-gray-400">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="text-xs text-white/30 font-mono">
                         #{item.id}
                       </span>
-                      <h3 className="font-semibold text-gray-900 text-base">
+                      <h3 className="font-semibold text-white text-base">
                         {item.term}
                       </h3>
                     </div>
-                    <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                    <p className="text-sm text-white/80 leading-relaxed mb-2">
                       {item.description}
                     </p>
                     {item.role && (
-                      <p className="text-xs text-gray-500 mb-1">
-                        <span className="font-semibold">원인 </span>
+                      <p className="text-xs text-white/50 mb-1">
+                        <span className="font-semibold text-accent-300">원인 </span>
                         {item.role}
                       </p>
                     )}
                     {item.details && (
-                      <p className="text-xs text-gray-500">
-                        <span className="font-semibold">점검절차 </span>
+                      <p className="text-xs text-white/50">
+                        <span className="font-semibold text-cyan-300">점검절차 </span>
                         {item.details}
                       </p>
                     )}
@@ -360,13 +395,15 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                   <div className="flex flex-col gap-1.5 shrink-0">
                     <button
                       onClick={() => setEditingItem(item)}
-                      className="px-2.5 py-1 text-xs bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                      className="px-2.5 py-1 text-xs bg-white/10 text-white/80 rounded
+                                 hover:bg-white/20 hover:text-white transition-colors"
                     >
                       수정
                     </button>
                     <button
                       onClick={() => handleDelete(item)}
-                      className="px-2.5 py-1 text-xs bg-red-50 text-red-600 rounded hover:bg-red-100"
+                      className="px-2.5 py-1 text-xs bg-red-500/15 text-red-300 rounded
+                                 border border-red-500/20 hover:bg-red-500/25 transition-colors"
                     >
                       ✕ 삭제
                     </button>
@@ -499,7 +536,7 @@ function ItemFormModal({
             type="text"
             value={form.term}
             onChange={(e) => setForm({ ...form, term: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={INPUT_BASE}
             placeholder="예: 타이밍 체인 늘어짐"
             maxLength={120}
           />
@@ -511,7 +548,7 @@ function ItemFormModal({
               setForm({ ...form, description: e.target.value })
             }
             rows={3}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={INPUT_BASE}
             placeholder="2~3문장으로 증상을 설명해주세요"
           />
         </FieldLabel>
@@ -520,7 +557,7 @@ function ItemFormModal({
             value={form.role}
             onChange={(e) => setForm({ ...form, role: e.target.value })}
             rows={2}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={INPUT_BASE}
             placeholder="왜 이런 증상이 생기는지"
           />
         </FieldLabel>
@@ -529,25 +566,29 @@ function ItemFormModal({
             value={form.details}
             onChange={(e) => setForm({ ...form, details: e.target.value })}
             rows={4}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={INPUT_BASE}
             placeholder="① ... ② ... ③ ..."
           />
         </FieldLabel>
 
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-red-400">{error}</p>}
 
         <div className="flex justify-end gap-2 pt-2">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-100"
+            className="px-4 py-2 border border-white/15 text-white/70 rounded-lg text-sm
+                       hover:text-white hover:border-white/30 transition-colors"
           >
             취소
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:bg-gray-400"
+            className="px-4 py-2 bg-premium-gradient text-white rounded-lg text-sm font-medium
+                       shadow-glow-sm hover:shadow-glow-md
+                       disabled:opacity-40 disabled:shadow-none disabled:cursor-not-allowed
+                       transition-all"
           >
             {saving ? '저장 중... (임베딩 생성)' : '저장'}
           </button>
@@ -566,7 +607,7 @@ function FieldLabel({
 }) {
   return (
     <label className="block">
-      <span className="block text-sm font-medium text-gray-700 mb-1.5">
+      <span className="block text-sm font-medium text-white/80 mb-1.5">
         {label}
       </span>
       {children}
@@ -635,8 +676,7 @@ function BulkUploadModal({
         return;
       }
       const ws = wb.Sheets[firstSheetName];
-      // header: 1 → 첫 행을 header로 인식하지 않고 배열로 받음
-      // raw: false → 모든 셀을 문자열로 강제 (숫자 인덱스 등 오인 방지)
+      // defval: '' 로 빈 셀을 빈 문자열로 통일 (undefined 방어)
       const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(ws, {
         defval: '',
       });
@@ -720,12 +760,12 @@ function BulkUploadModal({
   return (
     <ModalShell onClose={onClose} title="엑셀 일괄 업로드">
       {/* 주의사항 */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-900 mb-4 space-y-1">
-        <p className="font-semibold mb-1">⚠ 업로드 전 확인</p>
-        <ul className="list-disc list-inside space-y-0.5 text-amber-800">
+      <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4 text-sm text-amber-100 mb-4 space-y-1">
+        <p className="font-semibold mb-1 text-amber-200">⚠ 업로드 전 확인</p>
+        <ul className="list-disc list-inside space-y-0.5 text-amber-100/90">
           <li>
             첫 행은 반드시 헤더:{' '}
-            <code className="bg-amber-100 px-1 rounded">
+            <code className="bg-amber-500/20 px-1 rounded text-amber-100">
               term, description, role, details
             </code>{' '}
             (소문자, 영문)
@@ -739,15 +779,16 @@ function BulkUploadModal({
       </div>
 
       {/* 양식 다운로드 */}
-      <div className="mb-4">
+      <div className="mb-4 flex items-center gap-3 flex-wrap">
         <button
           onClick={handleDownloadTemplate}
           type="button"
-          className="px-3 py-2 bg-white border border-gray-300 text-sm rounded-lg hover:bg-gray-50"
+          className="px-3 py-2 bg-dark-900/60 border border-white/15 text-sm text-white/80 rounded-lg
+                     hover:border-white/30 hover:text-white transition-colors"
         >
           📄 빈 양식 엑셀 받기
         </button>
-        <span className="text-xs text-gray-500 ml-2">
+        <span className="text-xs text-white/40">
           (현재 데이터로 시작하려면 메인 화면의 [엑셀 다운로드] 사용)
         </span>
       </div>
@@ -759,34 +800,37 @@ function BulkUploadModal({
           type="file"
           accept=".xlsx,.xls"
           onChange={handleFileChange}
-          className="block w-full text-sm text-gray-700 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
+          className="block w-full text-sm text-white/80
+                     file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0
+                     file:bg-white/10 file:text-white hover:file:bg-white/20
+                     file:cursor-pointer"
         />
       </div>
 
       {parseError && (
-        <p className="text-sm text-red-600 mb-3">{parseError}</p>
+        <p className="text-sm text-red-400 mb-3">{parseError}</p>
       )}
 
       {parsedRows.length > 0 && !result && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-900 mb-4">
+        <div className="bg-cyan-500/10 border border-cyan-500/30 rounded-lg p-3 text-sm text-cyan-100 mb-4">
           <p className="font-semibold mb-1">
             업로드 준비 완료: {parsedRows.length}건
           </p>
-          <p className="text-xs text-blue-800">
-            첫 항목: <code>{parsedRows[0]?.term}</code>
+          <p className="text-xs text-cyan-200/80">
+            첫 항목: <code className="bg-white/10 px-1 rounded">{parsedRows[0]?.term}</code>
           </p>
         </div>
       )}
 
       {result && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3 text-sm text-emerald-900 mb-4">
+        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3 text-sm text-emerald-100 mb-4">
           <p className="font-semibold">업로드 완료</p>
           <p className="text-xs">
             추가됨: {result.inserted} / 건너뜀: {result.skipped} / 실패:{' '}
             {result.failures.length}
           </p>
           {result.failures.length > 0 && (
-            <ul className="text-xs mt-1 list-disc list-inside text-red-700">
+            <ul className="text-xs mt-1 list-disc list-inside text-red-300">
               {result.failures.slice(0, 3).map((f) => (
                 <li key={f.index}>
                   행 {f.index + 2}: {f.reason}
@@ -804,7 +848,8 @@ function BulkUploadModal({
         <button
           onClick={onClose}
           type="button"
-          className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-100"
+          className="px-4 py-2 border border-white/15 text-white/70 rounded-lg text-sm
+                     hover:text-white hover:border-white/30 transition-colors"
         >
           닫기
         </button>
@@ -813,7 +858,10 @@ function BulkUploadModal({
             onClick={handleUpload}
             type="button"
             disabled={uploading || parsedRows.length === 0}
-            className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 disabled:bg-gray-400"
+            className="px-4 py-2 bg-premium-gradient text-white rounded-lg text-sm font-medium
+                       shadow-glow-sm hover:shadow-glow-md
+                       disabled:opacity-40 disabled:shadow-none disabled:cursor-not-allowed
+                       transition-all"
           >
             {uploading
               ? `업로드 중... (${parsedRows.length}건 임베딩 생성)`
@@ -823,7 +871,8 @@ function BulkUploadModal({
           <button
             onClick={onCompleted}
             type="button"
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
+            className="px-4 py-2 bg-premium-gradient text-white rounded-lg text-sm font-medium
+                       shadow-glow-sm hover:shadow-glow-md transition-all"
           >
             확인 (목록 새로고침)
           </button>
@@ -861,13 +910,13 @@ function ModalShell({
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl my-auto">
-        <div className="flex items-center justify-between p-5 border-b border-gray-200">
-          <h2 className="font-semibold text-gray-900 truncate pr-4">{title}</h2>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 overflow-y-auto">
+      <div className="bg-dark-900/95 backdrop-blur-md rounded-2xl border border-white/10 shadow-glass-lg w-full max-w-2xl my-auto text-white">
+        <div className="flex items-center justify-between p-5 border-b border-white/10">
+          <h2 className="font-semibold text-white truncate pr-4">{title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+            className="text-white/40 hover:text-white text-2xl leading-none"
             aria-label="닫기"
           >
             ×
