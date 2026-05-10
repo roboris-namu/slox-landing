@@ -532,6 +532,7 @@ const appsData = [
   { emoji: "💊", cat: "health" as Category, ios: null, android: null },
   { emoji: "🚑", cat: "health" as Category, ios: null, android: null },
   { emoji: "📦", cat: "fun" as Category, ios: null, android: null },
+  { emoji: "🔧", cat: "utility" as Category, ios: null, android: null },
 ];
 
 type AppText = { name: string; desc: string };
@@ -1065,6 +1066,7 @@ const appTexts: Record<string, AppText[]> = {
     { name: "복약 일지", desc: "복용 약 기록 관리" },
     { name: "응급 정보", desc: "잠금화면 응급 의료정보" },
     { name: "SLOX 메가팩", desc: "527번째 앱. 인기 도구 모음 + 527th 뱃지" },
+    { name: "정비도사", desc: "AI 자동차 정비 도우미" },
   ],
   en: [
     { name: "Sound Meter", desc: "Decibel meter" },
@@ -1594,6 +1596,7 @@ const appTexts: Record<string, AppText[]> = {
     { name: "Med Journal", desc: "Medication journal" },
     { name: "Emergency Info", desc: "Emergency info" },
     { name: "SLOX Mega Pack", desc: "527th app mega pack" },
+    { name: "Jeongbidosa", desc: "AI car maintenance assistant" },
   ],
   ja: [
     { name: "Sound Meter", desc: "デシベル測定" },
@@ -2122,7 +2125,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "Blood Sugar Log", desc: "血糖値記録" },
     { name: "Med Journal", desc: "服薬記録" },
     { name: "Emergency Info", desc: "緊急医療情報" },
-    { name: "SLOX Mega Pack", desc: "527番目アプリ" }
+    { name: "SLOX Mega Pack", desc: "527番目アプリ" },
+    { name: "整備道士", desc: "AIカー整備アシスタント" }
   ],
   zh: [
     { name: "Sound Meter", desc: "分贝测量" },
@@ -2651,7 +2655,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "Blood Sugar Log", desc: "血糖记录" },
     { name: "Med Journal", desc: "用药记录" },
     { name: "Emergency Info", desc: "紧急医疗" },
-    { name: "SLOX Mega Pack", desc: "第527个应用" }
+    { name: "SLOX Mega Pack", desc: "第527个应用" },
+    { name: "汽车维修大师", desc: "AI汽车维修助手" }
   ],
   de: [
     { name: "Sound Meter", desc: "Decibel meter" },
@@ -3180,7 +3185,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "Blood Sugar Log", desc: "Blood sugar log" },
     { name: "Med Journal", desc: "Medication journal" },
     { name: "Emergency Info", desc: "Emergency info" },
-    { name: "SLOX Mega Pack", desc: "527th app mega pack" }
+    { name: "SLOX Mega Pack", desc: "527th app mega pack" },
+    { name: "Jeongbidosa", desc: "AI car maintenance assistant" }
   ],
   fr: [
     { name: "Sound Meter", desc: "Decibel meter" },
@@ -3709,7 +3715,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "Blood Sugar Log", desc: "Blood sugar log" },
     { name: "Med Journal", desc: "Medication journal" },
     { name: "Emergency Info", desc: "Emergency info" },
-    { name: "SLOX Mega Pack", desc: "527th app mega pack" }
+    { name: "SLOX Mega Pack", desc: "527th app mega pack" },
+    { name: "Jeongbidosa", desc: "AI car maintenance assistant" }
   ],
   es: [
     { name: "Sound Meter", desc: "Decibel meter" },
@@ -4238,7 +4245,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "Blood Sugar Log", desc: "Blood sugar log" },
     { name: "Med Journal", desc: "Medication journal" },
     { name: "Emergency Info", desc: "Emergency info" },
-    { name: "SLOX Mega Pack", desc: "527th app mega pack" }
+    { name: "SLOX Mega Pack", desc: "527th app mega pack" },
+    { name: "Jeongbidosa", desc: "AI car maintenance assistant" }
   ],
   pt: [
     { name: "Sound Meter", desc: "Decibel meter" },
@@ -4767,7 +4775,8 @@ const appTexts: Record<string, AppText[]> = {
     { name: "Blood Sugar Log", desc: "Blood sugar log" },
     { name: "Med Journal", desc: "Medication journal" },
     { name: "Emergency Info", desc: "Emergency info" },
-    { name: "SLOX Mega Pack", desc: "527th app mega pack" }
+    { name: "SLOX Mega Pack", desc: "527th app mega pack" },
+    { name: "Jeongbidosa", desc: "AI car maintenance assistant" }
   ],
 };
 
@@ -4784,14 +4793,14 @@ const categoryLabels: Record<string, Record<Category, string>> = {
 
 
 const sectionT: Record<string, { title: string; desc: string; upcoming: string; search: string; page: string; of: string; noResults: string }> = {
-  ko: { title: "앱", desc: "527개의 앱을 만들어갑니다", upcoming: "출시 예정", search: "앱 검색...", page: "페이지", of: "/", noResults: "검색 결과가 없습니다" },
-  en: { title: "Apps", desc: "Building 527 apps for you", upcoming: "Coming soon", search: "Search apps...", page: "Page", of: "/", noResults: "No results found" },
-  ja: { title: "アプリ", desc: "527個のアプリを開発中", upcoming: "近日公開", search: "アプリ検索...", page: "ページ", of: "/", noResults: "検索結果がありません" },
-  zh: { title: "应用", desc: "正在打造527款应用", upcoming: "即将推出", search: "搜索应用...", page: "页", of: "/", noResults: "未找到结果" },
-  de: { title: "Apps", desc: "527 Apps in Entwicklung", upcoming: "Demnächst", search: "Apps suchen...", page: "Seite", of: "/", noResults: "Keine Ergebnisse" },
-  fr: { title: "Apps", desc: "527 applications en développement", upcoming: "Bientôt", search: "Rechercher...", page: "Page", of: "/", noResults: "Aucun résultat" },
-  es: { title: "Apps", desc: "Construyendo 527 apps", upcoming: "Próximamente", search: "Buscar apps...", page: "Página", of: "/", noResults: "Sin resultados" },
-  pt: { title: "Apps", desc: "Construindo 527 apps", upcoming: "Em breve", search: "Buscar apps...", page: "Página", of: "/", noResults: "Nenhum resultado" },
+  ko: { title: "앱", desc: "528개의 앱을 만들어갑니다", upcoming: "출시 예정", search: "앱 검색...", page: "페이지", of: "/", noResults: "검색 결과가 없습니다" },
+  en: { title: "Apps", desc: "Building 528 apps for you", upcoming: "Coming soon", search: "Search apps...", page: "Page", of: "/", noResults: "No results found" },
+  ja: { title: "アプリ", desc: "528個のアプリを開発中", upcoming: "近日公開", search: "アプリ検索...", page: "ページ", of: "/", noResults: "検索結果がありません" },
+  zh: { title: "应用", desc: "正在打造528款应用", upcoming: "即将推出", search: "搜索应用...", page: "页", of: "/", noResults: "未找到结果" },
+  de: { title: "Apps", desc: "528 Apps in Entwicklung", upcoming: "Demnächst", search: "Apps suchen...", page: "Seite", of: "/", noResults: "Keine Ergebnisse" },
+  fr: { title: "Apps", desc: "528 applications en développement", upcoming: "Bientôt", search: "Rechercher...", page: "Page", of: "/", noResults: "Aucun résultat" },
+  es: { title: "Apps", desc: "Construyendo 528 apps", upcoming: "Próximamente", search: "Buscar apps...", page: "Página", of: "/", noResults: "Sin resultados" },
+  pt: { title: "Apps", desc: "Construindo 528 apps", upcoming: "Em breve", search: "Buscar apps...", page: "Página", of: "/", noResults: "Nenhum resultado" },
 };
 
 const PER_PAGE = 20;
