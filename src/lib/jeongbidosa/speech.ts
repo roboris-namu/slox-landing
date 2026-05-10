@@ -17,17 +17,8 @@
 // ----------------------------------------------------------------------------
 // TypeScript 타입 보강
 // ----------------------------------------------------------------------------
-//
-// lib.dom.d.ts 에는 SpeechRecognition 타입이 정의되어 있지만,
-// `window.webkitSpeechRecognition` 같은 vendor prefix는 누락되어 있습니다.
-// 여기서 그 부분만 보충합니다.
-
-declare global {
-  interface Window {
-    /** Safari/구버전 Chrome 호환용 vendor-prefixed 생성자 */
-    webkitSpeechRecognition?: typeof SpeechRecognition;
-  }
-}
+// SpeechRecognition / webkitSpeechRecognition 등 Web Speech API 타입은
+// src/types/web-speech-api.d.ts 에 ambient 로 정의되어 있어 별도 import 불필요.
 
 // ----------------------------------------------------------------------------
 // 호환성 체크
