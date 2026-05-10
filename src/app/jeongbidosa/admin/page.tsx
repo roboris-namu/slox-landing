@@ -766,6 +766,36 @@ function FieldLabel({
   );
 }
 
+/**
+ * 업로드 결과 통계 셀 한 칸 — 추가/중복/누락/실패 4종을 색상으로 구분.
+ * 큰 숫자 + 작은 라벨 형태로 한눈에 들어오게 합니다.
+ */
+function ResultStat({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: number;
+  tone: 'success' | 'info' | 'warn' | 'error';
+}) {
+  // 톤별 색상 매핑 — 다크 톤에 어울리는 채도 사용
+  const colorByTone: Record<typeof tone, string> = {
+    success: 'text-emerald-200 border-emerald-500/30 bg-emerald-500/10',
+    info: 'text-cyan-200 border-cyan-500/30 bg-cyan-500/10',
+    warn: 'text-amber-200 border-amber-500/30 bg-amber-500/10',
+    error: 'text-red-200 border-red-500/30 bg-red-500/10',
+  };
+  return (
+    <div
+      className={`rounded-lg border px-2.5 py-2 ${colorByTone[tone]}`}
+    >
+      <div className="text-base font-bold leading-none">{value}</div>
+      <div className="text-[10px] mt-1 opacity-80">{label}</div>
+    </div>
+  );
+}
+
 // ----------------------------------------------------------------------------
 // 미리보기 패널 (펼쳐졌을 때 보이는 시뮬레이션 영역)
 // ----------------------------------------------------------------------------
@@ -898,6 +928,7 @@ function BulkUploadModal({
   const [uploading, setUploading] = useState(false);
   const [result, setResult] = useState<{
     inserted: number;
+    duplicated: number;
     skipped: number;
     failures: Array<{ index: number; reason: string }>;
   } | null>(null);
@@ -997,6 +1028,7 @@ function BulkUploadModal({
       const j = (await res.json()) as {
         success?: boolean;
         inserted?: number;
+        duplicated?: number;
         skipped?: number;
         failures?: Array<{ index: number; reason: string }>;
         error?: string;
@@ -1007,6 +1039,7 @@ function BulkUploadModal({
       }
       setResult({
         inserted: j.inserted ?? 0,
+        duplicated: j.duplicated ?? 0,
         skipped: j.skipped ?? 0,
         failures: j.failures ?? [],
       });
@@ -1033,24 +1066,45 @@ function BulkUploadModal({
           <li>term, description 은 필수 (비어 있으면 자동 제외)</li>
           <li>role, details 는 선택 — 비워 두어도 됩니다</li>
           <li>한 번에 최대 100건까지 업로드 가능합니다</li>
-          <li>중복 검사를 하지 않으니, 같은 term 을 2번 올리면 2건이 들어갑니다</li>
+          <li>
+            <span className="text-emerald-300 font-semibold">중복 안전:</span>{' '}
+            같은 term 이 이미 DB 에 있으면 자동으로 건너뜁니다 (같은 파일을 두 번 올려도 2배 안 됨)
+          </li>
           <li>업로드 후 임베딩 자동 생성 — 30~50초 정도 걸립니다</li>
         </ul>
       </div>
 
-      {/* 양식 다운로드 */}
-      <div className="mb-4 flex items-center gap-3 flex-wrap">
-        <button
-          onClick={handleDownloadTemplate}
-          type="button"
-          className="px-3 py-2 bg-dark-900/60 border border-white/15 text-sm text-white/80 rounded-lg
-                     hover:border-white/30 hover:text-white transition-colors"
-        >
-          📄 빈 양식 엑셀 받기
-        </button>
-        <span className="text-xs text-white/40">
-          (현재 데이터로 시작하려면 메인 화면의 [엑셀 다운로드] 사용)
-        </span>
+      {/* 양식 다운로드 — 두 가지 시작 방식 명확히 분리 */}
+      <div className="mb-4 rounded-lg border border-white/10 bg-dark-950/40 p-3">
+        <p className="text-xs text-white/50 mb-2">
+          엑셀을 어떻게 시작하시겠어요?
+        </p>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <button
+            onClick={handleDownloadTemplate}
+            type="button"
+            className="flex-1 px-3 py-2 bg-dark-900/80 border border-white/15 text-sm text-white/80 rounded-lg
+                       hover:border-white/30 hover:text-white transition-colors text-left"
+          >
+            <div className="font-semibold">📄 빈 양식 받기</div>
+            <div className="text-[11px] text-white/40">
+              헤더만 있는 엑셀. 처음부터 작성용
+            </div>
+          </button>
+          <button
+            onClick={() => {
+              window.location.href = '/api/jeongbidosa/admin/export';
+            }}
+            type="button"
+            className="flex-1 px-3 py-2 bg-dark-900/80 border border-white/15 text-sm text-white/80 rounded-lg
+                       hover:border-cyan-500/40 hover:text-cyan-200 transition-colors text-left"
+          >
+            <div className="font-semibold">📥 현재 데이터로 받기</div>
+            <div className="text-[11px] text-white/40">
+              지금 DB 의 모든 행이 채워진 엑셀. 일부만 수정해 다시 올릴 때
+            </div>
+          </button>
+        </div>
       </div>
 
       {/* 파일 선택 */}
@@ -1084,13 +1138,40 @@ function BulkUploadModal({
 
       {result && (
         <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3 text-sm text-emerald-100 mb-4">
-          <p className="font-semibold">업로드 완료</p>
-          <p className="text-xs">
-            추가됨: {result.inserted} / 건너뜀: {result.skipped} / 실패:{' '}
-            {result.failures.length}
-          </p>
+          <p className="font-semibold mb-1.5">업로드 완료</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+            <ResultStat
+              label="추가됨"
+              value={result.inserted}
+              tone="success"
+            />
+            <ResultStat
+              label="중복 건너뜀"
+              value={result.duplicated}
+              tone="info"
+            />
+            <ResultStat
+              label="누락 건너뜀"
+              value={result.skipped}
+              tone="warn"
+            />
+            <ResultStat
+              label="실패"
+              value={result.failures.length}
+              tone="error"
+            />
+          </div>
+
+          {/* 사용자 의도 추정해서 친절한 메시지 */}
+          {result.inserted === 0 && result.duplicated > 0 && (
+            <p className="text-xs mt-2 text-emerald-200/90">
+              ✓ 모두 이미 있는 항목이라 새로 추가된 건 없습니다.
+              (같은 파일을 다시 올린 경우 정상 동작입니다)
+            </p>
+          )}
+
           {result.failures.length > 0 && (
-            <ul className="text-xs mt-1 list-disc list-inside text-red-300">
+            <ul className="text-xs mt-2 list-disc list-inside text-red-300">
               {result.failures.slice(0, 3).map((f) => (
                 <li key={f.index}>
                   행 {f.index + 2}: {f.reason}

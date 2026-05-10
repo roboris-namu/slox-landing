@@ -8,8 +8,9 @@
  * 응답:
  *   {
  *     success: boolean,
- *     inserted: number,
- *     skipped: number,
+ *     inserted: number,         // 새로 추가된 row 수
+ *     duplicated: number,       // term 중복으로 건너뛴 수
+ *     skipped: number,          // term/description 누락으로 건너뛴 수
  *     failures: { index: number, reason: string }[]
  *   }
  *
@@ -17,6 +18,10 @@
  *   - 한 번 호출에 최대 100건. 그 이상은 클라이언트에서 분할 호출하도록 가이드.
  *   - 한 row 실패가 전체 트랜잭션을 막지 않음 (partial success 허용).
  *   - term, description 필수 검증.
+ *   - **중복 정책**: 이미 DB에 같은 term 이 있으면 INSERT 하지 않고 건너뜁니다 (duplicated 카운트 증가).
+ *     같은 파일을 두 번 올려도 데이터가 두 배가 되지 않도록 안전장치.
+ *     · 단, 같은 업로드 배치 내에서 term 이 중복되면 첫 건만 INSERT 되고 나머지는 duplicated 처리.
+ *     · 비교는 trim 후 정확 일치 (대소문자/공백 차이는 다른 term 으로 봅니다).
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -73,8 +78,25 @@ export async function POST(req: NextRequest) {
 
   const supabase = getJeongbidosaServerClient();
 
+  // 중복 검사용 — 기존 DB 의 모든 term 을 한 번에 가져와 Set 으로 만듭니다.
+  // 50건 정도라 부담 없음. 큰 DB 라면 페이지네이션이 필요하지만 현재 규모에선 단순 SELECT 가 가장 빠름.
+  // trim 후 비교하므로, 클라이언트 검증과 동일한 normalize 가 적용됩니다.
+  const { data: existingTerms, error: fetchTermsError } = await supabase
+    .from('jeongbidosa_knowledge')
+    .select('term');
+  if (fetchTermsError) {
+    return NextResponse.json(
+      { error: '기존 데이터 조회 실패', detail: fetchTermsError.message },
+      { status: 500 },
+    );
+  }
+  const existingTermSet = new Set(
+    (existingTerms ?? []).map((r) => (r.term ?? '').trim()),
+  );
+
   let inserted = 0;
-  let skipped = 0;
+  let duplicated = 0; // 같은 term 이 이미 있어 건너뛴 수
+  let skipped = 0; // term/description 누락으로 건너뛴 수
   const failures: Array<{ index: number; reason: string }> = [];
 
   // 순차 처리: OpenAI rate limit / 메모리 안전 / 부분 성공 추적이 쉬움.
@@ -102,6 +124,12 @@ export async function POST(req: NextRequest) {
       continue;
     }
 
+    // 중복 체크: 기존 DB 또는 같은 배치 내 이미 처리된 term
+    if (existingTermSet.has(term)) {
+      duplicated += 1;
+      continue;
+    }
+
     try {
       const text = [term, description, role ?? '', details ?? '']
         .filter((s) => s && s.trim())
@@ -121,6 +149,8 @@ export async function POST(req: NextRequest) {
       }
 
       inserted += 1;
+      // 같은 배치 내에서 동일 term 이 또 들어오면 두 번째부터는 duplicated 로 처리되도록 set 에 추가
+      existingTermSet.add(term);
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       failures.push({ index: i, reason: msg });
@@ -130,6 +160,7 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({
     success: failures.length === 0,
     inserted,
+    duplicated,
     skipped,
     failures,
   });
