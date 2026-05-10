@@ -195,6 +195,15 @@ function LoginForm({ onSuccess }: { onSuccess: () => void }) {
 // 어드민 대시보드 (로그인 후)
 // ----------------------------------------------------------------------------
 
+/** 미리보기 캐시 한 건의 형태 */
+interface PreviewCacheEntry {
+  /** 'loading' | 'ready' | 'error' */
+  status: 'loading' | 'ready' | 'error';
+  question?: string;
+  answer?: string;
+  error?: string;
+}
+
 function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [items, setItems] = useState<AdminItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -205,6 +214,87 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [editingItem, setEditingItem] = useState<AdminItem | null>(null); // 수정 대상
   const [showCreate, setShowCreate] = useState(false); // 새 항목 추가 모달
   const [showBulk, setShowBulk] = useState(false); // 일괄 업로드 모달
+
+  // 펼쳐진 row id 집합 (드롭다운식 토글)
+  const [expandedIds, setExpandedIds] = useState<Set<number>>(new Set());
+
+  // 미리보기 결과 캐시 — id 별 최대 1회 호출 보장 (페이지 새로고침 전까지 유지)
+  // 같은 row를 여러 번 펼쳐도 OpenAI 호출은 단 1번만 발생합니다.
+  const [previewCache, setPreviewCache] = useState<
+    Record<number, PreviewCacheEntry>
+  >({});
+
+  /** 카드 펼침/접기 토글 — 처음 펼칠 때만 미리보기 fetch */
+  const togglePreview = useCallback(
+    async (id: number) => {
+      // 펼침 상태 토글
+      setExpandedIds((prev) => {
+        const next = new Set(prev);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          next.add(id);
+        }
+        return next;
+      });
+
+      // 이미 캐시(ready 또는 loading)가 있으면 호출하지 않음
+      const existing = previewCache[id];
+      if (existing && existing.status !== 'error') return;
+
+      // loading 상태로 즉시 표시
+      setPreviewCache((prev) => ({ ...prev, [id]: { status: 'loading' } }));
+
+      try {
+        const res = await fetch(`/api/jeongbidosa/admin/preview/${id}`, {
+          cache: 'no-store',
+        });
+        if (!res.ok) {
+          const j = (await res.json().catch(() => ({}))) as {
+            error?: string;
+          };
+          setPreviewCache((prev) => ({
+            ...prev,
+            [id]: {
+              status: 'error',
+              error: j.error ?? `HTTP ${res.status}`,
+            },
+          }));
+          return;
+        }
+        const j = (await res.json()) as { question: string; answer: string };
+        setPreviewCache((prev) => ({
+          ...prev,
+          [id]: { status: 'ready', question: j.question, answer: j.answer },
+        }));
+      } catch (err) {
+        setPreviewCache((prev) => ({
+          ...prev,
+          [id]: {
+            status: 'error',
+            error: err instanceof Error ? err.message : '네트워크 오류',
+          },
+        }));
+      }
+    },
+    [previewCache],
+  );
+
+  /** 특정 id 캐시를 무효화 (수정/삭제 시) */
+  const invalidatePreview = useCallback((id: number) => {
+    setPreviewCache((prev) => {
+      if (!(id in prev)) return prev;
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    setExpandedIds((prev) => {
+      if (!prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  }, []);
 
   // 데이터 로드
   const loadItems = useCallback(async () => {
@@ -264,6 +354,7 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       }
       // 낙관적 업데이트보다는 서버 진실 기준 — 로컬에서 빼기만 함.
       setItems((prev) => prev.filter((x) => x.id !== item.id));
+      invalidatePreview(item.id);
     } catch (err) {
       alert(`삭제 실패: ${err instanceof Error ? err.message : err}`);
     }
@@ -360,57 +451,93 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
           </p>
         ) : (
           <ul className="space-y-3">
-            {filteredItems.map((item) => (
-              <li
-                key={item.id}
-                className="bg-dark-900/60 backdrop-blur-sm border border-white/10 rounded-xl p-4
-                           hover:border-white/20 transition-colors"
-              >
-                <div className="flex items-start gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      <span className="text-xs text-white/30 font-mono">
-                        #{item.id}
-                      </span>
-                      <h3 className="font-semibold text-white text-base">
-                        {item.term}
-                      </h3>
+            {filteredItems.map((item) => {
+              const isExpanded = expandedIds.has(item.id);
+              const preview = previewCache[item.id];
+              return (
+                <li
+                  key={item.id}
+                  className="bg-dark-900/60 backdrop-blur-sm border border-white/10 rounded-xl p-4
+                             hover:border-white/20 transition-colors"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <span className="text-xs text-white/30 font-mono">
+                          #{item.id}
+                        </span>
+                        <h3 className="font-semibold text-white text-base">
+                          {item.term}
+                        </h3>
+                      </div>
+                      <p className="text-sm text-white/80 leading-relaxed mb-2">
+                        {item.description}
+                      </p>
+                      {item.role && (
+                        <p className="text-xs text-white/50 mb-1">
+                          <span className="font-semibold text-accent-300">
+                            원인{' '}
+                          </span>
+                          {item.role}
+                        </p>
+                      )}
+                      {item.details && (
+                        <p className="text-xs text-white/50">
+                          <span className="font-semibold text-cyan-300">
+                            점검절차{' '}
+                          </span>
+                          {item.details}
+                        </p>
+                      )}
                     </div>
-                    <p className="text-sm text-white/80 leading-relaxed mb-2">
-                      {item.description}
-                    </p>
-                    {item.role && (
-                      <p className="text-xs text-white/50 mb-1">
-                        <span className="font-semibold text-accent-300">원인 </span>
-                        {item.role}
-                      </p>
-                    )}
-                    {item.details && (
-                      <p className="text-xs text-white/50">
-                        <span className="font-semibold text-cyan-300">점검절차 </span>
-                        {item.details}
-                      </p>
-                    )}
+                    <div className="flex flex-col gap-1.5 shrink-0">
+                      <button
+                        onClick={() => setEditingItem(item)}
+                        className="px-2.5 py-1 text-xs bg-white/10 text-white/80 rounded
+                                   hover:bg-white/20 hover:text-white transition-colors"
+                      >
+                        수정
+                      </button>
+                      <button
+                        onClick={() => handleDelete(item)}
+                        className="px-2.5 py-1 text-xs bg-red-500/15 text-red-300 rounded
+                                   border border-red-500/20 hover:bg-red-500/25 transition-colors"
+                      >
+                        ✕ 삭제
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-1.5 shrink-0">
-                    <button
-                      onClick={() => setEditingItem(item)}
-                      className="px-2.5 py-1 text-xs bg-white/10 text-white/80 rounded
-                                 hover:bg-white/20 hover:text-white transition-colors"
-                    >
-                      수정
-                    </button>
-                    <button
-                      onClick={() => handleDelete(item)}
-                      className="px-2.5 py-1 text-xs bg-red-500/15 text-red-300 rounded
-                                 border border-red-500/20 hover:bg-red-500/25 transition-colors"
-                    >
-                      ✕ 삭제
-                    </button>
-                  </div>
-                </div>
-              </li>
-            ))}
+
+                  {/* 미리보기 토글 버튼 */}
+                  <button
+                    type="button"
+                    onClick={() => togglePreview(item.id)}
+                    className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 text-xs
+                               text-white/50 hover:text-cyan-300
+                               border border-white/10 hover:border-cyan-500/40
+                               rounded-md transition-colors"
+                  >
+                    <span aria-hidden>{isExpanded ? '▲' : '▼'}</span>
+                    <span>
+                      {isExpanded ? '미리보기 닫기' : 'AI 답변 미리보기'}
+                    </span>
+                    {!preview && (
+                      <span className="text-[10px] text-white/30 ml-1">
+                        (클릭 시 1회 호출)
+                      </span>
+                    )}
+                  </button>
+
+                  {/* 펼친 영역 */}
+                  {isExpanded && (
+                    <PreviewPane
+                      preview={preview}
+                      onRetry={() => togglePreview(item.id)}
+                    />
+                  )}
+                </li>
+              );
+            })}
           </ul>
         )}
       </section>
@@ -469,6 +596,8 @@ function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             setItems((prev) =>
               prev.map((x) => (x.id === editingItem.id ? j.item : x)),
             );
+            // 내용이 바뀌었으니 기존 미리보기는 더 이상 유효하지 않음
+            invalidatePreview(editingItem.id);
             setEditingItem(null);
           }}
         />
@@ -612,6 +741,115 @@ function FieldLabel({
       </span>
       {children}
     </label>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// 미리보기 패널 (펼쳐졌을 때 보이는 시뮬레이션 영역)
+// ----------------------------------------------------------------------------
+
+/**
+ * 정비도사 채팅 화면을 미니어처로 재현해 보여줍니다.
+ * - 사용자 말풍선 (인디고 그라디언트, 우측 정렬)
+ * - AI 말풍선 (다크 + 출처 칩, 좌측 정렬)
+ * - 우측 하단 [S1] 출처 칩: 이 데이터 자체임을 명시
+ *
+ * 호출 정책: 펼칠 때 1회만 호출 후 캐시. 같은 row 다시 펼쳐도 재호출 X.
+ */
+function PreviewPane({
+  preview,
+  onRetry,
+}: {
+  preview: PreviewCacheEntry | undefined;
+  onRetry: () => void;
+}) {
+  // 아직 fetch 시작 전이거나 진행 중
+  if (!preview || preview.status === 'loading') {
+    return (
+      <div className="mt-3 rounded-xl border border-white/10 bg-dark-950/60 p-4">
+        <p className="text-[11px] uppercase tracking-wider text-white/40 mb-3">
+          📱 사용자 채팅 시뮬레이션
+        </p>
+        <div className="flex flex-col gap-2.5">
+          {/* 사용자 말풍선 placeholder */}
+          <div className="self-end max-w-[75%] px-3 py-2 rounded-2xl rounded-tr-sm bg-white/5 border border-white/10 animate-pulse">
+            <div className="h-3 w-32 bg-white/10 rounded" />
+          </div>
+          {/* AI 말풍선 placeholder + typing dots */}
+          <div className="self-start max-w-[75%] px-3.5 py-2.5 rounded-2xl rounded-tl-sm bg-dark-800/80 border border-white/10">
+            <div className="flex items-center gap-1">
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce"
+                style={{ animationDelay: '0ms' }}
+              />
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce"
+                style={{ animationDelay: '150ms' }}
+              />
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce"
+                style={{ animationDelay: '300ms' }}
+              />
+              <span className="ml-2 text-xs text-white/40">
+                AI 답변 생성 중...
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 에러 상태 — 재시도 버튼 제공
+  if (preview.status === 'error') {
+    return (
+      <div className="mt-3 rounded-xl border border-red-500/30 bg-red-500/5 p-4">
+        <p className="text-sm text-red-300 mb-2">
+          ⚠️ 미리보기 생성 실패: {preview.error ?? '알 수 없는 오류'}
+        </p>
+        <button
+          type="button"
+          onClick={onRetry}
+          className="text-xs px-2.5 py-1 bg-red-500/15 text-red-200 rounded
+                     border border-red-500/30 hover:bg-red-500/25 transition-colors"
+        >
+          다시 시도
+        </button>
+      </div>
+    );
+  }
+
+  // 정상 응답 — 채팅 버블 형태로 렌더
+  const { question, answer } = preview;
+  return (
+    <div className="mt-3 rounded-xl border border-white/10 bg-dark-950/60 p-4 animate-fade-in">
+      <p className="text-[11px] uppercase tracking-wider text-white/40 mb-3 flex items-center gap-1.5">
+        📱 사용자 채팅 시뮬레이션
+        <span className="text-white/20">·</span>
+        <span className="text-cyan-300/70 normal-case tracking-normal">
+          이 데이터가 검색됐을 때의 예시 답변
+        </span>
+      </p>
+
+      <div className="flex flex-col gap-2.5">
+        {/* 사용자 말풍선 — 우측 정렬, 인디고 그라디언트 */}
+        <div className="self-end max-w-[80%] px-3.5 py-2 rounded-2xl rounded-tr-sm bg-premium-gradient text-white text-sm leading-relaxed shadow-soft">
+          {question}
+        </div>
+
+        {/* AI 말풍선 — 좌측 정렬, 다크 */}
+        <div className="self-start max-w-[85%] px-3.5 py-2.5 rounded-2xl rounded-tl-sm bg-dark-800/80 border border-white/10 text-white/90 text-sm leading-relaxed whitespace-pre-wrap">
+          {answer}
+        </div>
+
+        {/* 출처 칩 — 이 데이터 자체가 [S1]임을 명시 */}
+        <div className="self-start mt-1 flex items-center gap-1.5">
+          <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-200 font-mono">
+            [S1] 이 카드의 데이터
+          </span>
+        </div>
+      </div>
+    </div>
   );
 }
 
