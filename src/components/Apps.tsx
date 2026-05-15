@@ -532,7 +532,7 @@ const appsData = [
   { emoji: "💊", cat: "health" as Category, ios: null, android: null },
   { emoji: "🚑", cat: "health" as Category, ios: null, android: null },
   { emoji: "📦", cat: "fun" as Category, ios: null, android: null },
-  { emoji: "🔧", cat: "utility" as Category, ios: "https://apps.apple.com/kr/app/id6768004471", android: null },
+  { emoji: "🔧", cat: "utility" as Category, ios: "https://apps.apple.com/kr/app/id6768004471", android: null, pin: "last" as const },
 ];
 
 type AppText = { name: string; desc: string };
@@ -4845,6 +4845,12 @@ export default function Apps({ locale = "ko" }: { locale?: string }) {
       return t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q);
     })
     .sort((a, b) => {
+      // pin: "last" 인 앱은 출시 여부와 무관하게 항상 카탈로그의 마지막 자리.
+      // 정비도사처럼 "마무리" 슬롯으로 디자인된 앱을 위해 사용합니다.
+      const aPinLast = (a.app as { pin?: string }).pin === "last" ? 1 : 0;
+      const bPinLast = (b.app as { pin?: string }).pin === "last" ? 1 : 0;
+      if (aPinLast !== bPinLast) return aPinLast - bPinLast;
+
       const aR = isReleased(a.app) ? 0 : 1;
       const bR = isReleased(b.app) ? 0 : 1;
       return aR - bR;
