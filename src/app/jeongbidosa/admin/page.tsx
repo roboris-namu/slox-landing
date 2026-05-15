@@ -815,8 +815,11 @@ function ResultStat({
 /**
  * 정비도사 채팅 화면을 미니어처로 재현해 보여줍니다.
  * - 사용자 말풍선 (인디고 그라디언트, 우측 정렬)
- * - AI 말풍선 (다크 + 출처 칩, 좌측 정렬)
- * - 우측 하단 [S1] 출처 칩: 이 데이터 자체임을 명시
+ * - AI 말풍선 (다크, 좌측 정렬)
+ *
+ * 출처 마커([S1] 등)는 의도적으로 표시하지 않습니다.
+ * 미리보기는 컨텍스트가 1건뿐이라 마커가 항상 자기 자신을 가리켜 정보 가치가 없기 때문.
+ * (실제 사용자 챗봇 화면에서는 여러 출처가 의미를 가지므로 그대로 노출됩니다)
  *
  * 호출 정책: 펼칠 때 1회만 호출 후 캐시. 같은 row 다시 펼쳐도 재호출 X.
  */
@@ -906,12 +909,6 @@ function PreviewPane({
           {answer}
         </div>
 
-        {/* 출처 칩 — 이 데이터 자체가 [S1]임을 명시 */}
-        <div className="self-start mt-1 flex items-center gap-1.5">
-          <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-200 font-mono">
-            [S1] 이 카드의 데이터
-          </span>
-        </div>
       </div>
     </div>
   );
