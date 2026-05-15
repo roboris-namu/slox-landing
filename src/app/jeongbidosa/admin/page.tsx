@@ -1037,14 +1037,32 @@ function BulkUploadModal({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ rows: parsedRows }),
       });
-      const j = (await res.json()) as {
+
+      // 서버가 JSON 이 아닌 평문(예: Vercel 타임아웃 페이지)을 보낸 경우
+      // res.json() 이 'Unexpected token ...' 으로 throw 됩니다.
+      // 이 케이스를 분리해 사용자에게 의미 있는 안내를 표시합니다.
+      const text = await res.text();
+      let j: {
         success?: boolean;
         inserted?: number;
         duplicated?: number;
         skipped?: number;
         failures?: Array<{ index: number; reason: string }>;
         error?: string;
-      };
+      } = {};
+      try {
+        j = JSON.parse(text) as typeof j;
+      } catch {
+        const preview = text.slice(0, 120).replace(/\s+/g, ' ').trim();
+        setParseError(
+          `서버 응답을 해석할 수 없습니다 (HTTP ${res.status}). ` +
+            `보통 임베딩 처리 중 시간 초과가 났을 때 발생합니다. ` +
+            `한 번에 50건씩 잘라서 다시 시도해 주세요. ` +
+            (preview ? `[원문 일부: ${preview}…]` : ''),
+        );
+        return;
+      }
+
       if (!res.ok) {
         setParseError(j.error ?? `업로드 실패 (${res.status})`);
         return;
@@ -1082,7 +1100,7 @@ function BulkUploadModal({
             <span className="text-emerald-300 font-semibold">중복 안전:</span>{' '}
             같은 term 이 이미 DB 에 있으면 자동으로 건너뜁니다 (같은 파일을 두 번 올려도 2배 안 됨)
           </li>
-          <li>업로드 후 임베딩 자동 생성 — 30~50초 정도 걸립니다</li>
+          <li>업로드 후 임베딩 자동 생성 — 5~15초 정도 걸립니다 (배치 처리)</li>
         </ul>
       </div>
 
@@ -1217,7 +1235,7 @@ function BulkUploadModal({
                        transition-all"
           >
             {uploading
-              ? `업로드 중... (${parsedRows.length}건 임베딩 생성)`
+              ? `업로드 중... (${parsedRows.length}건 배치 임베딩, 5~15초)`
               : `${parsedRows.length}건 업로드`}
           </button>
         ) : (

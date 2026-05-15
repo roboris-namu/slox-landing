@@ -87,6 +87,72 @@ export async function getEmbedding(text: string): Promise<number[]> {
   return embedding;
 }
 
+/**
+ * 여러 텍스트를 한 번의 API 호출로 임베딩합니다.
+ *
+ * 사용처:
+ *   - 엑셀 일괄 업로드(admin/bulk): 100건을 1건씩 호출하면 50초 가까이 걸려
+ *     Vercel 타임아웃을 넘기므로, 한 요청에 배열로 묶어 보냅니다.
+ *
+ * OpenAI text-embedding-3-small 한도:
+ *   - 한 요청에 최대 2048개 입력
+ *   - 입력당 최대 8191 토큰
+ * 안전을 위해 호출 측에서 청크 사이즈(예: 50)로 잘라 호출하는 것을 권장합니다.
+ *
+ * @param texts 임베딩할 텍스트 배열 (빈 문자열은 호출 전에 걸러주세요)
+ * @returns 입력 순서를 보장하는 number[][] (각 길이 1536)
+ */
+export async function getEmbeddingsBatch(
+  texts: string[],
+): Promise<number[][]> {
+  if (texts.length === 0) return [];
+  // 사전 검증: 빈 문자열은 OpenAI 400 에러의 원인. 호출자에서 걸러야 하지만
+  // 안전망으로 한 번 더 확인.
+  if (texts.some((t) => !t || !t.trim())) {
+    throw new Error('빈 텍스트가 포함되어 있습니다. 호출 전에 필터링해주세요.');
+  }
+
+  const response = await fetch(`${OPENAI_BASE_URL}/embeddings`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${getApiKey()}`,
+    },
+    body: JSON.stringify({
+      model: EMBEDDING_MODEL,
+      input: texts,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `OpenAI 임베딩(배치) API 호출 실패 (HTTP ${response.status}): ${errorText}`,
+    );
+  }
+
+  // 응답 구조: { data: [{ embedding, index }], ... }
+  // 보통 index 순서대로 오지만, 명시적으로 index 기준 정렬해 안전 확보.
+  const json = (await response.json()) as {
+    data: Array<{ embedding: number[]; index: number }>;
+  };
+
+  if (!Array.isArray(json.data) || json.data.length !== texts.length) {
+    throw new Error(
+      `OpenAI 임베딩(배치) 응답 개수가 입력과 다릅니다. (입력: ${texts.length}, 응답: ${json.data?.length ?? 0})`,
+    );
+  }
+
+  const sorted = [...json.data].sort((a, b) => a.index - b.index);
+  const embeddings = sorted.map((d) => d.embedding);
+
+  if (embeddings.some((e) => !Array.isArray(e) || e.length !== 1536)) {
+    throw new Error('OpenAI 임베딩(배치) 응답 형식이 예상과 다릅니다.');
+  }
+
+  return embeddings;
+}
+
 // ----------------------------------------------------------------------------
 // 답변 생성 (RAG)
 // ----------------------------------------------------------------------------

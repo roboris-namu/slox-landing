@@ -14,33 +14,56 @@
  *     failures: { index: number, reason: string }[]
  *   }
  *
+ * 성능 노트:
+ *   - 과거에는 100건을 1건씩 임베딩 + insert 순차 처리해 ~50초가 걸려
+ *     Vercel maxDuration 60초를 초과하는 경우가 있었습니다.
+ *     (그때 Vercel은 "An error occurred with your deployment..." 평문 응답을 보내
+ *      클라이언트의 res.json() 가 "Unexpected token 'A'..." 로 실패)
+ *   - 현재 구현:
+ *      1) OpenAI 임베딩을 50건씩 청크로 묶어 배치 API 호출 (1~2회)
+ *      2) Supabase 는 마지막에 한 번 일괄 insert
+ *     → 100건이 5~10초 이내로 완료, 타임아웃 위험 사실상 제거.
+ *
  * 정책:
  *   - 한 번 호출에 최대 100건. 그 이상은 클라이언트에서 분할 호출하도록 가이드.
- *   - 한 row 실패가 전체 트랜잭션을 막지 않음 (partial success 허용).
+ *   - 한 row 실패가 전체를 막지 않음 (partial success 허용).
  *   - term, description 필수 검증.
- *   - **중복 정책**: 이미 DB에 같은 term 이 있으면 INSERT 하지 않고 건너뜁니다 (duplicated 카운트 증가).
- *     같은 파일을 두 번 올려도 데이터가 두 배가 되지 않도록 안전장치.
- *     · 단, 같은 업로드 배치 내에서 term 이 중복되면 첫 건만 INSERT 되고 나머지는 duplicated 처리.
+ *   - **중복 정책**: 이미 DB 에 같은 term 이 있으면 INSERT 하지 않고 건너뜁니다 (duplicated 카운트 증가).
+ *     · 같은 업로드 배치 내에서 term 이 중복되면 첫 건만 INSERT 되고 나머지는 duplicated 처리.
  *     · 비교는 trim 후 정확 일치 (대소문자/공백 차이는 다른 term 으로 봅니다).
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminAuthorized } from '@/lib/jeongbidosa/adminAuth';
-import { getEmbedding } from '@/lib/jeongbidosa/openai';
+import { getEmbeddingsBatch } from '@/lib/jeongbidosa/openai';
 import { getJeongbidosaServerClient } from '@/lib/jeongbidosa/supabaseServer';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
-// 100건까지 임베딩 + insert 하므로 한도까지 늘림 (Vercel Free 60s 한도)
+// 배치 임베딩으로 5~10초면 끝나지만, 안전 마진으로 60초 유지.
 export const maxDuration = 60;
 
 const MAX_BATCH = 100;
+// OpenAI 한 요청에 묶어 보낼 임베딩 입력 개수. 50이면 페이로드/토큰 모두 여유.
+const EMBED_CHUNK = 50;
 
 interface BulkRowInput {
   term?: unknown;
   description?: unknown;
   role?: unknown;
   details?: unknown;
+}
+
+/** 임베딩 입력 텍스트 만들기 — term/description/role/details 를 줄바꿈으로 합칩니다. */
+function composeEmbedText(row: {
+  term: string;
+  description: string;
+  role: string | null;
+  details: string | null;
+}): string {
+  return [row.term, row.description, row.role ?? '', row.details ?? '']
+    .filter((s) => s && s.trim())
+    .join('\n');
 }
 
 export async function POST(req: NextRequest) {
@@ -65,7 +88,7 @@ export async function POST(req: NextRequest) {
   const rows = body.rows as BulkRowInput[];
   if (rows.length === 0) {
     return NextResponse.json(
-      { error: '추가할 row가 없습니다.' },
+      { error: '추가할 row 가 없습니다.' },
       { status: 400 },
     );
   }
@@ -78,9 +101,7 @@ export async function POST(req: NextRequest) {
 
   const supabase = getJeongbidosaServerClient();
 
-  // 중복 검사용 — 기존 DB 의 모든 term 을 한 번에 가져와 Set 으로 만듭니다.
-  // 50건 정도라 부담 없음. 큰 DB 라면 페이지네이션이 필요하지만 현재 규모에선 단순 SELECT 가 가장 빠름.
-  // trim 후 비교하므로, 클라이언트 검증과 동일한 normalize 가 적용됩니다.
+  // 기존 term 전부 조회 (중복 검사용). 현재 규모에서는 단순 SELECT 가 가장 빠름.
   const { data: existingTerms, error: fetchTermsError } = await supabase
     .from('jeongbidosa_knowledge')
     .select('term');
@@ -94,13 +115,20 @@ export async function POST(req: NextRequest) {
     (existingTerms ?? []).map((r) => (r.term ?? '').trim()),
   );
 
-  let inserted = 0;
-  let duplicated = 0; // 같은 term 이 이미 있어 건너뛴 수
-  let skipped = 0; // term/description 누락으로 건너뛴 수
+  let duplicated = 0;
+  let skipped = 0;
   const failures: Array<{ index: number; reason: string }> = [];
 
-  // 순차 처리: OpenAI rate limit / 메모리 안전 / 부분 성공 추적이 쉬움.
-  // 100건 = 약 30~50초. maxDuration 60초 안에 들어옵니다.
+  // ── 1) 정규화 + 검증 + 중복 제거 → "임베딩 대상" 목록 만들기.
+  //     각 항목은 원본 row 의 index 도 함께 보관해 결과 추적 가능.
+  const normalized: Array<{
+    originIndex: number;
+    term: string;
+    description: string;
+    role: string | null;
+    details: string | null;
+  }> = [];
+
   for (let i = 0; i < rows.length; i += 1) {
     const raw = rows[i] ?? {};
     const term = typeof raw.term === 'string' ? raw.term.trim() : '';
@@ -124,37 +152,90 @@ export async function POST(req: NextRequest) {
       continue;
     }
 
-    // 중복 체크: 기존 DB 또는 같은 배치 내 이미 처리된 term
     if (existingTermSet.has(term)) {
       duplicated += 1;
       continue;
     }
 
+    // 같은 배치 내 중복도 차단 — 미리 set 에 추가해 두 번째부터 duplicated 처리.
+    existingTermSet.add(term);
+    normalized.push({ originIndex: i, term, description, role, details });
+  }
+
+  // 모두 중복/누락이면 임베딩 호출 없이 종료.
+  if (normalized.length === 0) {
+    return NextResponse.json({
+      success: failures.length === 0,
+      inserted: 0,
+      duplicated,
+      skipped,
+      failures,
+    });
+  }
+
+  // ── 2) OpenAI 임베딩 — 50개씩 묶어 배치 호출.
+  //     각 호출 결과를 normalized 의 인덱스에 매핑해서 embeddings[] 에 누적.
+  const embeddings: number[][] = new Array(normalized.length);
+
+  for (let start = 0; start < normalized.length; start += EMBED_CHUNK) {
+    const slice = normalized.slice(start, start + EMBED_CHUNK);
+    const inputs = slice.map(composeEmbedText);
     try {
-      const text = [term, description, role ?? '', details ?? '']
-        .filter((s) => s && s.trim())
-        .join('\n');
-      const embedding = await getEmbedding(text);
-
-      const { error: insertError } = await supabase
-        .from('jeongbidosa_knowledge')
-        .insert({ term, description, role, details, embedding });
-
-      if (insertError) {
-        failures.push({
-          index: i,
-          reason: `DB 저장 실패: ${insertError.message}`,
-        });
-        continue;
+      const result = await getEmbeddingsBatch(inputs);
+      for (let j = 0; j < slice.length; j += 1) {
+        embeddings[start + j] = result[j];
       }
-
-      inserted += 1;
-      // 같은 배치 내에서 동일 term 이 또 들어오면 두 번째부터는 duplicated 로 처리되도록 set 에 추가
-      existingTermSet.add(term);
     } catch (err) {
+      // 청크 단위 실패는 청크 내 모든 row 를 failures 로 기록하고 계속 진행
       const msg = err instanceof Error ? err.message : String(err);
-      failures.push({ index: i, reason: msg });
+      for (let j = 0; j < slice.length; j += 1) {
+        failures.push({
+          index: slice[j].originIndex,
+          reason: `임베딩 생성 실패: ${msg}`,
+        });
+      }
+      // 이 청크는 embeddings 가 비어 있으므로 insert 단계에서 자동 제외됨.
     }
+  }
+
+  // ── 3) Supabase 일괄 insert. 임베딩이 정상적으로 채워진 row 만 포함.
+  const insertRows = normalized
+    .map((r, idx) => ({ ...r, embedding: embeddings[idx] }))
+    .filter((r) => Array.isArray(r.embedding) && r.embedding.length === 1536)
+    .map((r) => ({
+      term: r.term,
+      description: r.description,
+      role: r.role,
+      details: r.details,
+      embedding: r.embedding,
+    }));
+
+  let inserted = 0;
+  if (insertRows.length > 0) {
+    const { data: insertedRows, error: insertError } = await supabase
+      .from('jeongbidosa_knowledge')
+      .insert(insertRows)
+      .select('id');
+
+    if (insertError) {
+      // 전체 insert 실패 — 임베딩까지는 성공했지만 DB 저장이 막힘.
+      // 원인 진단을 위해 클라이언트에 메시지를 그대로 노출.
+      return NextResponse.json(
+        {
+          success: false,
+          inserted: 0,
+          duplicated,
+          skipped,
+          failures: [
+            ...failures,
+            { index: -1, reason: `일괄 DB 저장 실패: ${insertError.message}` },
+          ],
+        },
+        { status: 500 },
+      );
+    }
+
+    inserted = insertedRows?.length ?? insertRows.length;
   }
 
   return NextResponse.json({
