@@ -532,7 +532,7 @@ const appsData = [
   { emoji: "💊", cat: "health" as Category, ios: null, android: null },
   { emoji: "🚑", cat: "health" as Category, ios: null, android: null },
   { emoji: "📦", cat: "fun" as Category, ios: null, android: null },
-  { emoji: "🔧", cat: "utility" as Category, ios: null, android: null },
+  { emoji: "🔧", cat: "utility" as Category, ios: "https://apps.apple.com/kr/app/id6768004471", android: null },
 ];
 
 type AppText = { name: string; desc: string };
