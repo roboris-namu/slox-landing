@@ -563,9 +563,22 @@ export default function RouletteMulti({ locale }: Props) {
 
         {/* 룰렛 휠 (waiting/predicting/spinning/result) */}
         {state !== "gameover" && (
-          <div className="relative flex items-center justify-center my-6">
-            {/* 포인터 (12시 방향) */}
-            <div className="absolute -top-1 left-1/2 -translate-x-1/2 z-10 text-3xl">▼</div>
+          <div className="relative flex items-center justify-center my-6 pt-4">
+            {/* 포인터 (12시 방향) — 휠 위쪽 바깥에 배치, 황금색 + 그림자 */}
+            <svg
+              className="absolute -top-1 left-1/2 -translate-x-1/2 z-20 drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
+              width="28" height="24" viewBox="0 0 28 24"
+              style={{ pointerEvents: "none" }}
+            >
+              <polygon
+                points="2,2 26,2 14,22"
+                fill="#FBBF24"
+                stroke="#000"
+                strokeWidth="2"
+                strokeLinejoin="round"
+              />
+              <polygon points="6,4 22,4 14,18" fill="#FFE066" />
+            </svg>
             {/* 휠 */}
             <div
               ref={wheelRef}
