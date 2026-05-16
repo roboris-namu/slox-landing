@@ -49,6 +49,7 @@ const translations: Record<string, {
       typing: { name: "타자속도", unit: "타/분" },
       memory: { name: "숫자기억", unit: "자리" },
       aim: { name: "에임", unit: "점" },
+      roulette: { name: "룰렛", unit: "점" },
     },
   },
   en: {
@@ -78,6 +79,7 @@ const translations: Record<string, {
       typing: { name: "Typing", unit: "WPM" },
       memory: { name: "Memory", unit: "digits" },
       aim: { name: "Aim", unit: "pts" },
+      roulette: { name: "Roulette", unit: "pts" },
     },
   },
   ja: {
@@ -107,6 +109,7 @@ const translations: Record<string, {
       typing: { name: "タイピング", unit: "WPM" },
       memory: { name: "記憶力", unit: "桁" },
       aim: { name: "エイム", unit: "点" },
+      roulette: { name: "ルーレット", unit: "点" },
     },
   },
   zh: {
@@ -136,6 +139,7 @@ const translations: Record<string, {
       typing: { name: "打字", unit: "WPM" },
       memory: { name: "记忆力", unit: "位" },
       aim: { name: "瞄准", unit: "分" },
+      roulette: { name: "轮盘", unit: "分" },
     },
   },
   de: {
@@ -165,6 +169,7 @@ const translations: Record<string, {
       typing: { name: "Tippen", unit: "WPM" },
       memory: { name: "Gedächtnis", unit: "Ziff" },
       aim: { name: "Zielen", unit: "Pkt" },
+      roulette: { name: "Roulette", unit: "Pkt" },
     },
   },
   fr: {
@@ -194,6 +199,7 @@ const translations: Record<string, {
       typing: { name: "Frappe", unit: "MPM" },
       memory: { name: "Mémoire", unit: "chif" },
       aim: { name: "Visée", unit: "pts" },
+      roulette: { name: "Roulette", unit: "pts" },
     },
   },
   es: {
@@ -223,6 +229,7 @@ const translations: Record<string, {
       typing: { name: "Mecanografía", unit: "PPM" },
       memory: { name: "Memoria", unit: "díg" },
       aim: { name: "Puntería", unit: "pts" },
+      roulette: { name: "Ruleta", unit: "pts" },
     },
   },
   pt: {
@@ -252,6 +259,7 @@ const translations: Record<string, {
       typing: { name: "Digitação", unit: "PPM" },
       memory: { name: "Memória", unit: "díg" },
       aim: { name: "Mira", unit: "pts" },
+      roulette: { name: "Roleta", unit: "pts" },
     },
   },
 };

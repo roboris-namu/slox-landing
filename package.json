@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/export-apps-json.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/export-apps-json.mjs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export:apps": "node scripts/export-apps-json.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.87.0",

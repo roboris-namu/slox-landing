@@ -3,7 +3,14 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 
-const gameBase = [
+type GameItem = {
+  href: string;
+  emoji: string;
+  accent: string;
+  badge?: "new" | "hot" | "new-hot";
+};
+
+const gameBase: GameItem[] = [
   { href: "/reaction", emoji: "⚡", accent: "amber" },
   { href: "/cps", emoji: "🖱️", accent: "blue" },
   { href: "/typing", emoji: "⌨️", accent: "purple" },
@@ -16,7 +23,7 @@ const gameBase = [
   { href: "/memory", emoji: "🧠", accent: "indigo" },
   { href: "/mbti-test", emoji: "🧬", accent: "orange" },
   { href: "/mbti-match", emoji: "💕", accent: "fuchsia" },
-  { href: "/animal-scan", emoji: "🐾", accent: "emerald" },
+  { href: "/roulette", emoji: "🎡", accent: "fuchsia", badge: "new" },
   { href: "/dream", emoji: "🌙", accent: "yellow" },
   { href: "/tarot", emoji: "🔮", accent: "violet" },
 ];
@@ -55,7 +62,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "기억력 테스트", desc: "숫자 기억력" },
     { title: "MBTI 테스트", desc: "나의 성격 유형은?" },
     { title: "MBTI 궁합", desc: "우리의 궁합 점수" },
-    { title: "동물 분석", desc: "나와 닮은 동물은?" },
+    { title: "룰렛", desc: "예측 + 콤보 게임" },
     { title: "꿈해몽", desc: "꿈의 의미 해석" },
     { title: "타로 카드", desc: "오늘의 운명은?" },
   ],
@@ -72,7 +79,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Memory Test", desc: "Number memory" },
     { title: "MBTI Test", desc: "What's your type?" },
     { title: "MBTI Match", desc: "Compatibility score" },
-    { title: "Animal Scan", desc: "Which animal are you?" },
+    { title: "Lucky Roulette", desc: "Predict & combo" },
     { title: "Dream Reading", desc: "Interpret your dreams" },
     { title: "Tarot Cards", desc: "What does fate hold?" },
   ],
@@ -89,7 +96,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "記憶力テスト", desc: "数字記憶" },
     { title: "MBTI診断", desc: "あなたの性格タイプは?" },
     { title: "MBTI相性", desc: "相性スコア" },
-    { title: "動物診断", desc: "似ている動物は?" },
+    { title: "ラッキールーレット", desc: "予測 + コンボ" },
     { title: "夢占い", desc: "夢の意味を解読" },
     { title: "タロット", desc: "運命のカードは?" },
   ],
@@ -106,7 +113,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "记忆力测试", desc: "数字记忆" },
     { title: "MBTI测试", desc: "你的性格类型?" },
     { title: "MBTI配对", desc: "兼容度评分" },
-    { title: "动物分析", desc: "你像哪种动物?" },
+    { title: "幸运轮盘", desc: "预测 + 连击" },
     { title: "解梦", desc: "解读梦的含义" },
     { title: "塔罗牌", desc: "命运之牌" },
   ],
@@ -123,7 +130,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Gedächtnistest", desc: "Zahlengedächtnis" },
     { title: "MBTI-Test", desc: "Welcher Typ bist du?" },
     { title: "MBTI-Match", desc: "Kompatibilitätswert" },
-    { title: "Tier-Analyse", desc: "Welches Tier bist du?" },
+    { title: "Glücksrad", desc: "Vorhersage + Combo" },
     { title: "Traumdeutung", desc: "Deine Träume deuten" },
     { title: "Tarot", desc: "Was sagt das Schicksal?" },
   ],
@@ -140,7 +147,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Test de Mémoire", desc: "Mémoire des chiffres" },
     { title: "Test MBTI", desc: "Quel est votre type ?" },
     { title: "Match MBTI", desc: "Score de compatibilité" },
-    { title: "Animal Spirit", desc: "Quel animal êtes-vous ?" },
+    { title: "Roulette", desc: "Prédiction + combo" },
     { title: "Interprétation", desc: "Interpréter vos rêves" },
     { title: "Tarot", desc: "Que dit le destin ?" },
   ],
@@ -157,7 +164,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Test de Memoria", desc: "Memoria numérica" },
     { title: "Test MBTI", desc: "¿Cuál es tu tipo?" },
     { title: "Match MBTI", desc: "Puntuación de compatibilidad" },
-    { title: "Animal Spirit", desc: "¿Qué animal eres?" },
+    { title: "Ruleta", desc: "Predicción + combo" },
     { title: "Sueños", desc: "Interpreta tus sueños" },
     { title: "Tarot", desc: "¿Qué dice el destino?" },
   ],
@@ -174,7 +181,7 @@ const gameTexts: Record<string, GameText[]> = {
     { title: "Teste de Memória", desc: "Memória numérica" },
     { title: "Teste MBTI", desc: "Qual é o seu tipo?" },
     { title: "Match MBTI", desc: "Pontuação de compatibilidade" },
-    { title: "Animal Spirit", desc: "Qual animal você é?" },
+    { title: "Roleta", desc: "Previsão + combo" },
     { title: "Sonhos", desc: "Interprete seus sonhos" },
     { title: "Tarô", desc: "O que diz o destino?" },
   ],
@@ -323,9 +330,14 @@ export default function FreeTools({ locale = "ko" }: { locale?: string }) {
               <Link
                 key={game.href}
                 href={`${prefix}${game.href}`}
-                className={`animate-on-scroll group relative rounded-2xl p-5 border border-white/[0.06] bg-white/[0.02] transition-all duration-300 hover:-translate-y-1 ${accentStyles[game.accent]}`}
+                className={`animate-on-scroll group relative rounded-2xl p-5 border bg-white/[0.02] transition-all duration-300 hover:-translate-y-1 ${
+                  game.badge === "new"
+                    ? "border-fuchsia-500/30 shadow-[0_0_0_1px_rgba(217,70,239,0.15)]"
+                    : "border-white/[0.06]"
+                } ${accentStyles[game.accent]}`}
                 style={{ animationDelay: `${0.04 * i}s` }}
               >
+                {game.badge === "new" && <NewBadge />}
                 <span className="text-3xl block mb-3">{game.emoji}</span>
                 <h3 className="font-semibold text-white text-sm mb-0.5">{gTexts[i].title}</h3>
                 <p className="text-[11px] text-white/30">{gTexts[i].desc}</p>
@@ -364,5 +376,35 @@ export default function FreeTools({ locale = "ko" }: { locale?: string }) {
 
       </div>
     </section>
+  );
+}
+
+/// 우상단에 깜빡이는 NEW 배지 — 핑크→오렌지 그라데이션 + glow pulse.
+function NewBadge() {
+  return (
+    <>
+      <span
+        className="absolute -top-1.5 -right-1.5 z-10 select-none px-2 py-0.5 rounded-full text-[9px] font-extrabold tracking-wider text-white shadow-lg pointer-events-none"
+        style={{
+          background: "linear-gradient(135deg, #ec4899 0%, #f97316 100%)",
+          boxShadow: "0 0 12px rgba(236, 72, 153, 0.55), 0 0 4px rgba(249, 115, 22, 0.35)",
+          animation: "sloxNewPulse 1.6s ease-in-out infinite",
+        }}
+      >
+        NEW
+      </span>
+      <style jsx>{`
+        @keyframes sloxNewPulse {
+          0%, 100% {
+            transform: scale(1);
+            filter: brightness(1);
+          }
+          50% {
+            transform: scale(1.08);
+            filter: brightness(1.2);
+          }
+        }
+      `}</style>
+    </>
   );
 }

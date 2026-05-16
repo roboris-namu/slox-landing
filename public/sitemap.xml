@@ -2379,4 +2379,21 @@
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
+
+  <!-- roulette -->
+  <url>
+    <loc>https://www.slox.co.kr/roulette</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://www.slox.co.kr/roulette"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.slox.co.kr/en/roulette"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://www.slox.co.kr/ja/roulette"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://www.slox.co.kr/zh/roulette"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.slox.co.kr/es/roulette"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://www.slox.co.kr/pt/roulette"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.slox.co.kr/de/roulette"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.slox.co.kr/fr/roulette"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.slox.co.kr/en/roulette"/>
+  </url>
 </urlset>

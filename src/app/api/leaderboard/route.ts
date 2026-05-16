@@ -20,6 +20,7 @@ const GAME_CONFIG: Record<string, { table: string; scoreField: string; orderAsc:
   iq: { table: "iq_leaderboard", scoreField: "iq_score", orderAsc: false },
   sudoku: { table: "sudoku_leaderboard", scoreField: "time_seconds", orderAsc: true },
   typing: { table: "typing_leaderboard", scoreField: "wpm", orderAsc: false },
+  roulette: { table: "roulette_leaderboard", scoreField: "score", orderAsc: false },
 };
 
 // ─── 인메모리 캐시 (15초 TTL) ───

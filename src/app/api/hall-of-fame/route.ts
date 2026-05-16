@@ -23,6 +23,7 @@ const gameConfigs = [
   { table: "typing_leaderboard", game: "typing", scoreField: "wpm", orderAsc: false },
   { table: "memory_leaderboard", game: "memory", scoreField: "score", orderAsc: false },
   { table: "aim_leaderboard", game: "aim", scoreField: "score", orderAsc: false },
+  { table: "roulette_leaderboard", game: "roulette", scoreField: "score", orderAsc: false },
 ];
 
 /**
