@@ -421,11 +421,13 @@ export default function RouletteMulti({ locale }: Props) {
     setLanded(result);
     setState("spinning");
 
-    // 휠 회전 각도 계산 — 결과 칸이 12시 방향(상단)으로 오도록
+    // 휠 회전 각도 계산 — 결과 칸의 "중심"이 12시 방향(화살표 아래)에 오도록
+    // 세그먼트 i 의 중심 = (i * per + per/2) 만큼 시계 회전된 위치
+    // → 휠을 -(i * per + per/2) 회전시키면 그 중심이 정확히 12시
     const resultIdx = WHEEL_ORDER.indexOf(result);
     const per = 360 / WHEEL_ORDER.length;
-    const targetDeg = -resultIdx * per; // 음수 = 반시계 (휠을 시계방향으로 회전)
-    // 5바퀴 + 결과
+    const targetDeg = -resultIdx * per - per / 2;
+    // 5바퀴 + 결과 중심
     const finalDeg = wheelDeg - (wheelDeg % 360) + 360 * 5 + targetDeg;
     setWheelDeg(finalDeg);
 
