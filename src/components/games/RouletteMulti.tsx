@@ -524,8 +524,6 @@ export default function RouletteMulti({ locale }: Props) {
     });
   }, []);
 
-  const t2 = t;
-
   // ───── 화면 렌더링 ─────────────────────────────────────
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950 text-white">
