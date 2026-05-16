@@ -32,7 +32,7 @@ const FLAGS: Record<string, string> = {
   VN: "🇻🇳", ID: "🇮🇩", PH: "🇵🇭", MY: "🇲🇾", SG: "🇸🇬", NZ: "🇳🇿",
 };
 
-type GameTab = "overall" | "reaction" | "cps" | "typing" | "memory" | "aim" | "color" | "quiz" | "iq" | "cardmatch" | "sudoku";
+type GameTab = "overall" | "reaction" | "cps" | "typing" | "memory" | "aim" | "color" | "quiz" | "iq" | "cardmatch" | "sudoku" | "roulette";
 
 const GAME_TABS: { key: GameTab; scoreField: string; unit: string; }[] = [
   { key: "overall", scoreField: "total_score", unit: "pts" },
@@ -46,13 +46,14 @@ const GAME_TABS: { key: GameTab; scoreField: string; unit: string; }[] = [
   { key: "iq", scoreField: "iq_score", unit: "" },
   { key: "cardmatch", scoreField: "score", unit: "" },
   { key: "sudoku", scoreField: "time_seconds", unit: "s" },
+  { key: "roulette", scoreField: "score", unit: "" },
 ];
 
 const tabLabels: Record<string, Record<GameTab, string>> = {
-  ko: { overall: "종합", reaction: "반응속도", cps: "CPS", typing: "타이핑", memory: "기억력", aim: "에임", color: "색깔찾기", quiz: "퀴즈", iq: "IQ", cardmatch: "카드", sudoku: "스도쿠" },
-  en: { overall: "Overall", reaction: "Reaction", cps: "CPS", typing: "Typing", memory: "Memory", aim: "Aim", color: "Color", quiz: "Quiz", iq: "IQ", cardmatch: "Cards", sudoku: "Sudoku" },
-  ja: { overall: "総合", reaction: "反応速度", cps: "CPS", typing: "タイピング", memory: "記憶力", aim: "エイム", color: "カラー", quiz: "クイズ", iq: "IQ", cardmatch: "カード", sudoku: "数独" },
-  zh: { overall: "综合", reaction: "反应", cps: "CPS", typing: "打字", memory: "记忆", aim: "瞄准", color: "颜色", quiz: "问答", iq: "IQ", cardmatch: "卡牌", sudoku: "数独" },
+  ko: { overall: "종합", reaction: "반응속도", cps: "CPS", typing: "타이핑", memory: "기억력", aim: "에임", color: "색깔찾기", quiz: "퀴즈", iq: "IQ", cardmatch: "카드", sudoku: "스도쿠", roulette: "룰렛" },
+  en: { overall: "Overall", reaction: "Reaction", cps: "CPS", typing: "Typing", memory: "Memory", aim: "Aim", color: "Color", quiz: "Quiz", iq: "IQ", cardmatch: "Cards", sudoku: "Sudoku", roulette: "Roulette" },
+  ja: { overall: "総合", reaction: "反応速度", cps: "CPS", typing: "タイピング", memory: "記憶力", aim: "エイム", color: "カラー", quiz: "クイズ", iq: "IQ", cardmatch: "カード", sudoku: "数独", roulette: "ルーレット" },
+  zh: { overall: "综合", reaction: "反应", cps: "CPS", typing: "打字", memory: "记忆", aim: "瞄准", color: "颜色", quiz: "问答", iq: "IQ", cardmatch: "卡牌", sudoku: "数独", roulette: "轮盘" },
 };
 
 const MAX_COUNT = 500;
