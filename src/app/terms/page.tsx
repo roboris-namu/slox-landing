@@ -155,7 +155,7 @@ export default function TermsPage() {
               If you have any questions about these Terms, please contact us at:
             </p>
             <p className="mt-2">
-              <strong>Email:</strong> contact@slox.co.kr
+              <strong>Email:</strong> namurobori@gmail.com
               <br />
               <strong>Website:</strong> https://www.slox.co.kr
             </p>
