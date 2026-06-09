@@ -1,5 +1,13 @@
 import MemoryTest from "@/components/MemoryTest";
-export default function MemoryPageZh() { return <MemoryTest locale="zh" />; }
+import AppDownloadBanner from "@/components/AppDownloadBanner";
+import AppDownloadCTA from "@/components/AppDownloadCTA";
+export default function MemoryPageZh() { return (
+    <>
+      <MemoryTest locale="zh" />
+      <AppDownloadCTA code="memory" lang="en" />
+      <AppDownloadBanner code="memory" lang="en" />
+    </>
+  ); }
 
 
 

@@ -1,5 +1,13 @@
 import AimTest from "@/components/AimTest";
-export default function AimPageDe() { return <AimTest locale="de" />; }
+import AppDownloadBanner from "@/components/AppDownloadBanner";
+import AppDownloadCTA from "@/components/AppDownloadCTA";
+export default function AimPageDe() { return (
+    <>
+      <AimTest locale="de" />
+      <AppDownloadCTA code="aim" lang="en" />
+      <AppDownloadBanner code="aim" lang="en" />
+    </>
+  ); }
 
 
 

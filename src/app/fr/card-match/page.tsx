@@ -1,11 +1,18 @@
 import CardMatchMulti from "@/components/games/CardMatchMulti";
-
+import AppDownloadBanner from "@/components/AppDownloadBanner";
+import AppDownloadCTA from "@/components/AppDownloadCTA";
 export const metadata = {
   title: "Jeu de Mémoire | SLOX",
   description: "Mémorisez les cartes et trouvez les paires! Testez votre mémoire.",
 };
 
 export default function FrCardMatchPage() {
-  return <CardMatchMulti locale="fr" />;
+  return (
+    <>
+      <CardMatchMulti locale="fr" />
+      <AppDownloadCTA code="card-match" lang="en" />
+      <AppDownloadBanner code="card-match" lang="en" />
+    </>
+  );
 }
 
