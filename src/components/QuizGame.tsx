@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import AdBanner from "./AdBanner";
+import AppDownloadCTA from "./AppDownloadCTA";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
@@ -1142,6 +1143,8 @@ export default function QuizGame({ locale: _propLocale, battleMode = false, onBa
               <Link href="/color" className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all">🎨 색상 찾기 게임</Link>
             </div>
           </div>
+
+          <AppDownloadCTA code="quiz" lang={locale === "ko" ? "ko" : "en"} />
 
           <AdBanner className="my-8" />
 

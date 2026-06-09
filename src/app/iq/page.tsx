@@ -1,6 +1,5 @@
 import IQTest from "@/components/IQTest";
 import AppDownloadBanner from "@/components/AppDownloadBanner";
-import AppDownloadCTA from "@/components/AppDownloadCTA";
 export const metadata = {
   other: {
     "apple-itunes-app": "app-id=6776782492",
@@ -13,7 +12,6 @@ export default function IQPage() {
   return (
     <>
       <IQTest />
-      <AppDownloadCTA code="iq" lang="ko" />
       <AppDownloadBanner code="iq" lang="ko" />
     </>
   );

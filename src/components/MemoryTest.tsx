@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
 import AdBanner from "./AdBanner";
+import AppDownloadCTA from "./AppDownloadCTA";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
@@ -1420,6 +1421,8 @@ export default function MemoryTest({ locale, battleMode = false, onBattleComplet
               </Link>
             </div>
           </div>
+
+          <AppDownloadCTA code="memory" lang={locale === "ko" ? "ko" : "en"} />
 
           <AdBanner className="my-8" />
 

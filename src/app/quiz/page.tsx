@@ -1,6 +1,5 @@
 import QuizGame from "@/components/QuizGame";
 import AppDownloadBanner from "@/components/AppDownloadBanner";
-import AppDownloadCTA from "@/components/AppDownloadCTA";
 export const metadata = {
   other: {
     "apple-itunes-app": "app-id=6776777393",
@@ -13,7 +12,6 @@ export default function QuizPage() {
   return (
     <>
       <QuizGame />
-      <AppDownloadCTA code="quiz" lang="ko" />
       <AppDownloadBanner code="quiz" lang="ko" />
     </>
   );

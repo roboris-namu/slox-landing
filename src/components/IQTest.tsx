@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import AdBanner from "./AdBanner";
+import AppDownloadCTA from "./AppDownloadCTA";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
@@ -1026,6 +1027,8 @@ export default function IQTest({ locale = "ko", battleMode = false, onBattleComp
               <Link href="/memory" className="px-4 py-2 bg-dark-800 hover:bg-dark-700 text-dark-300 hover:text-white rounded-lg text-sm transition-all">🧠 숫자 기억 게임</Link>
             </div>
           </div>
+
+          <AppDownloadCTA code="iq" lang={locale === "ko" ? "ko" : "en"} />
 
           <AdBanner className="my-8" />
 

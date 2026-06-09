@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import AdBanner from "../AdBanner";
+import AppDownloadCTA from "../AppDownloadCTA";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
 import { Locale } from "@/locales";
@@ -530,6 +531,7 @@ export default function RouletteMulti({ locale }: Props) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-dark-950 via-dark-900 to-dark-950 text-white">
       <GameNavBar locale={locale} backText={locale === "ko" ? "← 메인" : "← Main"} languageOptions={languageOptions} />
+      <AppDownloadCTA code="roulette" lang={locale === "ko" ? "ko" : "en"} />
       <AdBanner />
 
       <div className="max-w-3xl mx-auto px-4 py-6">

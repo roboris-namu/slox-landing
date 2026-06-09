@@ -6,6 +6,7 @@ import Apps from "./Apps";
 import RankingPreview from "./RankingPreview";
 import Contact from "./Contact";
 import AdBanner from "./AdBanner";
+import AppDownloadCTA from "./AppDownloadCTA";
 import LanguageSelector from "./LanguageSelector";
 import NavUserProfile, { NavUserProfileMobile } from "./NavUserProfile";
 import type { Locale } from "@/locales";
@@ -49,6 +50,9 @@ export default function HomeContent({ locale = "ko" }: { locale?: Locale }) {
       <Apps locale={locale} />
       <RankingPreview locale={locale} />
       <AdBanner className="py-4" />
+      <div className="px-4 sm:px-6">
+        <AppDownloadCTA code="hub" lang={locale === "ko" ? "ko" : "en"} />
+      </div>
       <Contact locale={locale} />
       <Footer footer={footer} />
     </main>
@@ -86,20 +90,13 @@ function Navigation({ nav, locale, homeHref }: { nav: NavLabels; locale: Locale;
   );
 }
 
-function Footer({ footer }: { footer: FooterLabels }) {
+function Footer(_: { footer: FooterLabels }) {
   return (
     <footer className="border-t border-white/[0.05] py-10">
       <div className="max-w-5xl mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-2">
-            <span className="font-black text-sm text-white tracking-tight">SLOX</span>
-            <span className="text-dark-500 text-xs">© {new Date().getFullYear()}</span>
-          </div>
-          <div className="flex items-center gap-5 text-xs text-dark-400">
-            <a href="/about" className="hover:text-white transition-colors">{footer.about}</a>
-            <a href="/privacy" className="hover:text-white transition-colors">{footer.privacy}</a>
-            <a href="/notice" className="hover:text-white transition-colors">{footer.notice}</a>
-          </div>
+        <div className="flex items-center justify-center gap-2">
+          <span className="font-black text-sm text-white tracking-tight">SLOX</span>
+          <span className="text-dark-500 text-xs">© {new Date().getFullYear()}</span>
         </div>
       </div>
     </footer>

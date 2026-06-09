@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import AdBanner from "./AdBanner";
+import AppDownloadCTA from "./AppDownloadCTA";
 import html2canvas from "html2canvas";
 
 import { supabase, LeaderboardEntry } from "@/lib/supabase";
@@ -2554,6 +2555,8 @@ export default function ReactionTest({ locale, battleMode = false, onBattleCompl
               </Link>
             </div>
           </div>
+
+          <AppDownloadCTA code="reaction" lang={locale === "ko" ? "ko" : "en"} />
 
           <AdBanner className="my-8" />
 

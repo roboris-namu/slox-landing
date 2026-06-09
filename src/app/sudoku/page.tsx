@@ -1,6 +1,5 @@
 import Sudoku from "@/components/Sudoku";
 import AppDownloadBanner from "@/components/AppDownloadBanner";
-import AppDownloadCTA from "@/components/AppDownloadCTA";
 export const metadata = {
   other: {
     "apple-itunes-app": "app-id=6776790512",
@@ -13,7 +12,6 @@ export default function SudokuPage() {
   return (
     <>
       <Sudoku />
-      <AppDownloadCTA code="sudoku" lang="ko" />
       <AppDownloadBanner code="sudoku" lang="ko" />
     </>
   );

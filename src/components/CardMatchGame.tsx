@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import AdBanner from "./AdBanner";
+import AppDownloadCTA from "./AppDownloadCTA";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
@@ -1523,6 +1524,8 @@ export default function CardMatchGame({ locale = "ko", battleMode = false, onBat
               </Link>
             </div>
           </div>
+
+          <AppDownloadCTA code="card-match" lang={locale === "ko" ? "ko" : "en"} />
 
           <AdBanner className="my-8" />
 

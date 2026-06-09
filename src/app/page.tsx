@@ -1,5 +1,4 @@
 import HomeContent from "@/components/HomeContent";
-import AppDownloadBanner from "@/components/AppDownloadBanner";
 
 export const metadata = {
   other: {
@@ -8,10 +7,5 @@ export const metadata = {
 };
 
 export default function Home() {
-  return (
-    <>
-      <HomeContent locale="ko" />
-      <AppDownloadBanner code="hub" lang="ko" />
-    </>
-  );
+  return <HomeContent locale="ko" />;
 }

@@ -1,6 +1,5 @@
 import TypingMulti from "@/components/games/TypingMulti";
 import AppDownloadBanner from "@/components/AppDownloadBanner";
-import AppDownloadCTA from "@/components/AppDownloadCTA";
 export const metadata = {
   other: {
     "apple-itunes-app": "app-id=6776772068",
@@ -13,7 +12,6 @@ export default function TypingPageKO() {
   return (
     <>
       <TypingMulti locale="ko" />
-      <AppDownloadCTA code="typing" lang="ko" />
       <AppDownloadBanner code="typing" lang="ko" />
     </>
   );

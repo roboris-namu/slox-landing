@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import AdBanner from "./AdBanner";
+import AppDownloadCTA from "./AppDownloadCTA";
 import html2canvas from "html2canvas";
 import { supabase } from "@/lib/supabase";
 import GameNavBar from "@/components/GameNavBar";
@@ -1638,6 +1639,8 @@ export default function CpsTest({ locale, battleMode = false, onBattleComplete }
               </Link>
             </div>
           </div>
+
+          <AppDownloadCTA code="cps" lang={locale === "ko" ? "ko" : "en"} />
 
           <AdBanner className="my-8" />
 
