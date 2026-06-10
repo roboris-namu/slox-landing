@@ -12,7 +12,6 @@ import NavUserProfile, { NavUserProfileMobile } from "./NavUserProfile";
 import type { Locale } from "@/locales";
 
 type NavLabels = { games: string; tools: string; apps: string; contact: string };
-type FooterLabels = { about: string; privacy: string; notice: string };
 
 const navLabels: Record<string, NavLabels> = {
   ko: { games: "게임", tools: "도구", apps: "앱", contact: "문의" },
@@ -25,20 +24,8 @@ const navLabels: Record<string, NavLabels> = {
   pt: { games: "Jogos", tools: "Ferramentas", apps: "Apps", contact: "Contato" },
 };
 
-const footerLabels: Record<string, FooterLabels> = {
-  ko: { about: "소개", privacy: "개인정보처리방침", notice: "공지사항" },
-  en: { about: "About", privacy: "Privacy", notice: "Notice" },
-  ja: { about: "概要", privacy: "プライバシー", notice: "お知らせ" },
-  zh: { about: "关于", privacy: "隐私政策", notice: "公告" },
-  de: { about: "Über uns", privacy: "Datenschutz", notice: "Hinweise" },
-  fr: { about: "À propos", privacy: "Confidentialité", notice: "Avis" },
-  es: { about: "Acerca de", privacy: "Privacidad", notice: "Avisos" },
-  pt: { about: "Sobre", privacy: "Privacidade", notice: "Avisos" },
-};
-
 export default function HomeContent({ locale = "ko" }: { locale?: Locale }) {
   const nav = navLabels[locale] || navLabels.en;
-  const footer = footerLabels[locale] || footerLabels.en;
   const homeHref = locale === "ko" ? "/" : `/${locale}`;
 
   return (
@@ -54,7 +41,7 @@ export default function HomeContent({ locale = "ko" }: { locale?: Locale }) {
         <AppDownloadCTA code="hub" lang={locale === "ko" ? "ko" : "en"} />
       </div>
       <Contact locale={locale} />
-      <Footer footer={footer} />
+      <Footer />
     </main>
   );
 }
@@ -90,7 +77,7 @@ function Navigation({ nav, locale, homeHref }: { nav: NavLabels; locale: Locale;
   );
 }
 
-function Footer(_: { footer: FooterLabels }) {
+function Footer() {
   return (
     <footer className="border-t border-white/[0.05] py-10">
       <div className="max-w-5xl mx-auto px-6">
