@@ -4845,15 +4845,11 @@ export default function Apps({ locale = "ko" }: { locale?: string }) {
       return t.name.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q);
     })
     .sort((a, b) => {
-      // pin: "last" 인 앱은 출시 여부와 무관하게 항상 카탈로그의 마지막 자리.
-      // 정비도사처럼 "마무리" 슬롯으로 디자인된 앱을 위해 사용합니다.
+      // pin: "last" 인 앱(정비도사)만 항상 맨 끝. 나머지는 엑셀 # 순서(배열 인덱스) 유지.
       const aPinLast = (a.app as { pin?: string }).pin === "last" ? 1 : 0;
       const bPinLast = (b.app as { pin?: string }).pin === "last" ? 1 : 0;
       if (aPinLast !== bPinLast) return aPinLast - bPinLast;
-
-      const aR = isReleased(a.app) ? 0 : 1;
-      const bR = isReleased(b.app) ? 0 : 1;
-      return aR - bR;
+      return a.i - b.i;
     })
     .map(({ i }) => i);
 
