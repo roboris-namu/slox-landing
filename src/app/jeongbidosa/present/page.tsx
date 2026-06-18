@@ -50,11 +50,94 @@ const SECTIONS: SectionDef[] = [
   { id: 'vision', navLabel: '확장 전략', title: '확장 전략 — 글로벌 아카이브', kicker: '11 · STRATEGY' },
   { id: 'team', navLabel: '팀', title: '팀 아주그냥 (AjouJust)', kicker: '12 · TEAM' },
   { id: 'roadmap', navLabel: '로드맵', title: '앞으로의 로드맵', kicker: '13 · ROADMAP' },
-  { id: 'cta', navLabel: '데모', title: '직접 사용해 보세요', kicker: 'TRY IT' },
+  { id: 'cta', navLabel: '체험', title: '직접 사용해 보세요', kicker: 'TRY IT' },
 ];
 
 /** id 로 섹션 정의를 찾는다 (인덱스 변동에 강하도록) */
 const sec = (id: string): SectionDef => SECTIONS.find((s) => s.id === id)!;
+
+/** 정비도사 앱 스토어 링크 (slox.co.kr 앱 카탈로그와 동일) */
+const STORE_LINKS = {
+  ios: 'https://apps.apple.com/kr/app/id6768004471',
+  android:
+    'https://play.google.com/store/apps/details?id=com.slox.slox_jeongbidosa',
+};
+
+/** 애플 로고 (단색) */
+function AppleGlyph({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 384 512"
+      className={className}
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
+    </svg>
+  );
+}
+
+/** 구글 플레이 로고 (컬러 삼각형) */
+function GooglePlayGlyph({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 256 283"
+      className={className}
+      preserveAspectRatio="xMidYMid"
+      aria-hidden="true"
+    >
+      <path
+        d="M119.553 134.214 4.85 256.054a32.587 32.587 0 0 0 47.99 19.654l129.116-74.46-62.403-67.034Z"
+        fill="#EA4335"
+      />
+      <path
+        d="m235.586 113.452-55.84-32.302-62.857 55.962 63.119 63.106 55.418-32.012a32.13 32.13 0 0 0 .16-54.754Z"
+        fill="#FBBC04"
+      />
+      <path
+        d="M4.85 26.875A31.928 31.928 0 0 0 4 35.16v211.737a32 32 0 0 0 .85 8.276l118.642-117.605L4.85 26.875Z"
+        fill="#4285F4"
+      />
+      <path
+        d="m120.398 141.516 59.348-58.366L50.629 8.378A32.604 32.604 0 0 0 4.85 26.87l115.548 114.646Z"
+        fill="#34A853"
+      />
+    </svg>
+  );
+}
+
+/** 스토어 다운로드 배지 버튼 (App Store / Google Play 공용) */
+function StoreBadge({
+  store,
+  href,
+}: {
+  store: 'ios' | 'android';
+  href: string;
+}) {
+  const isIos = store === 'ios';
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group inline-flex items-center gap-3 rounded-xl border border-white/15 bg-black px-5 py-3 hover:border-white/35 hover:bg-black/80 transition-all shadow-lg min-w-[180px]"
+    >
+      {isIos ? (
+        <AppleGlyph className="h-7 w-7 text-white shrink-0" />
+      ) : (
+        <GooglePlayGlyph className="h-6 w-6 shrink-0" />
+      )}
+      <span className="text-left leading-tight">
+        <span className="block text-[10px] text-white/55">
+          {isIos ? 'Download on the' : 'GET IT ON'}
+        </span>
+        <span className="block text-base font-semibold text-white -mt-0.5">
+          {isIos ? 'App Store' : 'Google Play'}
+        </span>
+      </span>
+    </a>
+  );
+}
 
 // ----------------------------------------------------------------------------
 // 메인 페이지 컴포넌트
@@ -1106,6 +1189,7 @@ function LaunchSection() {
           icon="🍎"
           name="App Store (iOS)"
           status="배포 완료"
+          href={STORE_LINKS.ios}
           rows={[
             ['Bundle ID', 'com.slox.slox_jeongbidosa'],
             ['최소 OS', 'iOS 14.0+'],
@@ -1116,6 +1200,7 @@ function LaunchSection() {
           icon="🤖"
           name="Google Play (Android)"
           status="배포 완료"
+          href={STORE_LINKS.android}
           rows={[
             ['Package', 'com.slox.slox_jeongbidosa'],
             ['최소 OS', 'Android 8.0+ (API 26)'],
@@ -1150,14 +1235,16 @@ function StoreCard({
   name,
   status,
   rows,
+  href,
 }: {
   icon: string;
   name: string;
   status: string;
   rows: [string, string][];
+  href?: string;
 }) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-dark-900/40 p-5">
+  const inner = (
+    <>
       <div className="flex items-center justify-between mb-4">
         <p className="text-base font-semibold flex items-center gap-2">
           <span className="text-xl">{icon}</span>
@@ -1175,6 +1262,31 @@ function StoreCard({
           </div>
         ))}
       </dl>
+      {href && (
+        <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-accent-300 group-hover:text-accent-200 transition-colors">
+          스토어에서 열기
+          <span className="transition-transform group-hover:translate-x-0.5">→</span>
+        </span>
+      )}
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group block rounded-2xl border border-white/10 bg-dark-900/40 p-5 hover:border-accent-400/40 hover:bg-dark-900/70 transition-all"
+      >
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-dark-900/40 p-5">
+      {inner}
     </div>
   );
 }
@@ -1488,9 +1600,17 @@ function CtaSection() {
             바로 써보면 가장 빠릅니다
           </h3>
           <p className="text-white/65 max-w-xl mx-auto mb-7 leading-relaxed">
-            발표 동안 직접 질문해 보세요. “엔진에서 딸깍 소리가 나요” 같은 한 문장이면
+            App Store · Google Play 에 정식 출시되어 있습니다. 지금 바로 설치하거나,
+            설치 없이 웹에서 질문해 보세요. “엔진에서 딸깍 소리가 나요” 한 문장이면
             충분합니다.
           </p>
+
+          {/* 스토어 다운로드 배지 — 클릭 시 각 스토어로 이동 */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-4">
+            <StoreBadge store="ios" href={STORE_LINKS.ios} />
+            <StoreBadge store="android" href={STORE_LINKS.android} />
+          </div>
+
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
               href="/jeongbidosa"
