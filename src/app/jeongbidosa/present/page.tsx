@@ -357,7 +357,7 @@ function HeroSection() {
   const stats = [
     { label: '평균 응답', value: '1.5s', sub: 'p50 latency' },
     { label: '환각률', value: '<2%', sub: '근거 없는 답변' },
-    { label: '지식 항목', value: '50+', sub: '확장 가능' },
+    { label: '지식 항목', value: '267', sub: '엄선·검수 데이터' },
     { label: '플랫폼', value: '3', sub: 'iOS · Android · Web' },
   ];
 
@@ -415,7 +415,7 @@ function WhySection() {
         일반 ChatGPT 에게 정비 질문을 하면 답은 “그럴듯하지만” 출처가 없습니다.
         실제 운전자에게는 위험할 수 있어요. 우리는{' '}
         <span className="text-white font-semibold">
-          엄선된 50건의 정비 지식만을 근거로 답하도록
+          엄선된 267건의 정비 지식만을 근거로 답하도록
         </span>{' '}
         강제해 환각을 구조적으로 막습니다.
       </p>
@@ -435,7 +435,7 @@ function WhySection() {
           tone="good"
           title="정비도사 (RAG)"
           bullets={[
-            '엄선된 50건 지식만 근거로 사용',
+            '엄선된 267건 지식만 근거로 사용',
             '답변마다 [S1][S2] 출처 표시',
             '관련 없는 질문은 정중히 거절',
             '운영자가 즉시 데이터 추가/수정',
@@ -624,7 +624,7 @@ const RAG_STEPS = [
     title: '벡터 검색',
     short: 'pgvector 로 가장 유사한 지식 찾기',
     detail:
-      'Supabase 의 pgvector + HNSW 인덱스로 코사인 유사도 기준 상위 K개를 가져옵니다. 50건 규모에서는 수 ms 내에 응답.',
+      'Supabase 의 pgvector + HNSW 인덱스로 코사인 유사도 기준 상위 K개를 가져옵니다. 267건 규모에서는 수 ms 내에 응답.',
   },
   {
     n: 4,
@@ -781,7 +781,7 @@ function DataSection() {
         <MiniBlock
           icon="🔍"
           title="검색 인덱스"
-          body="HNSW(cosine) 인덱스 + LIMIT K. 50건 규모에서 수 ms"
+          body="HNSW(cosine) 인덱스 + LIMIT K. 267건 규모에서 수 ms"
         />
         <MiniBlock
           icon="🛠"
@@ -1031,7 +1031,7 @@ function AISection() {
     {
       area: '데이터 시드',
       ratio: '~80%',
-      detail: '50건 정비 지식의 초안을 LLM 으로 생성 후 정비 현업 출신 팀원이 검수.',
+      detail: '267건 정비 지식의 초안을 LLM 으로 생성 후 정비 현업 출신 팀원이 검수.',
     },
     {
       area: '문서화',
@@ -1078,22 +1078,33 @@ function TeamSection() {
   const section = SECTIONS[9];
   const members = [
     {
-      name: '팀장',
-      sub: 'PM · Architecture · Backend',
+      name: '양석원',
+      enName: 'YANG SEOKWON',
+      lead: true,
+      sub: 'Team Lead · Full-Stack · Architecture · Release',
       emoji: '🎯',
-      role: '전체 기획·아키텍처 설계, RAG 파이프라인 구현, 인프라 운영, 앱 배포 총괄',
+      role: 'Next.js + Flutter 풀스택 구현, 시스템 아키텍처 설계, App Store / Google Play 출시, slox.co.kr 운영 총괄',
     },
     {
       name: '김준수',
-      sub: '도메인 · 데이터 큐레이션',
+      enName: 'KIM JUNSU',
+      sub: 'Domain Expert · Automotive Knowledge · QA',
       emoji: '🔧',
-      role: '정비 현업 지식을 바탕으로 50건 지식베이스 검수 및 어드민 운영',
+      role: '자동차 정비 지식 검수, 증상-원인-조치 데이터 정확성 보증, 도메인 용어 일관성 가이드',
     },
     {
       name: '구호림',
-      sub: 'Frontend · UX',
-      emoji: '🎨',
-      role: '웹/앱 UI 디자인, 사용자 흐름 설계, 음성 UX 검증',
+      enName: 'KOO HORIM',
+      sub: 'Data Curator · Knowledge Base · Categorization',
+      emoji: '🗂️',
+      role: '267건 RAG 지식베이스 정리, 카테고리 분류 체계 설계, 엑셀 일괄 업로드 형식 정립',
+    },
+    {
+      name: '김헌수',
+      enName: 'KIM HEONSU',
+      sub: 'Strategy & Vision · Expansion · B2B Direction',
+      emoji: '🧭',
+      role: '차종·연식별 분류 컨셉, 군/산업기기 확장성 기획, B2B 사업화 방향 제시',
     },
   ];
   return (
@@ -1102,21 +1113,38 @@ function TeamSection() {
         <p className="text-[11px] font-mono text-white/50 mb-1">TEAM NAME</p>
         <p className="text-2xl font-bold">아주그냥 (AjouJust)</p>
         <p className="text-sm text-white/60 mt-2 leading-relaxed">
-          “아주” 대학교 + “그냥” 해보자는 정신.
+          개발 · 도메인 · 데이터 · 전략 — 네 시선이 하나의 RAG 아카이브로.
           <br />
-          어렵게만 보이던 RAG 와 앱 배포를 — 그냥, 끝까지 해낸 팀.
+          “같은 코드를 짜는 4명보다, 다른 곳을 보는 4명이 더 멀리 간다.”
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-3 gap-3">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {members.map((m) => (
           <div
             key={m.name}
-            className="rounded-2xl border border-white/10 bg-white/5 p-5"
+            className={`rounded-2xl border p-5 ${
+              m.lead
+                ? 'border-accent-400/40 bg-accent-500/10 ring-1 ring-accent-400/20'
+                : 'border-white/10 bg-white/5'
+            }`}
           >
-            <div className="text-3xl mb-3">{m.emoji}</div>
-            <p className="text-base font-semibold">{m.name}</p>
-            <p className="text-[11px] text-accent-300 font-mono mt-0.5">
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-3xl">{m.emoji}</div>
+              {m.lead && (
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-accent-400/20 text-accent-200 border border-accent-400/30">
+                  팀장
+                </span>
+              )}
+            </div>
+            <p className="text-base font-semibold">
+              {m.name}
+              {m.lead && <span className="text-white/50 font-normal"> (팀장)</span>}
+            </p>
+            <p className="text-[10px] text-white/35 font-mono tracking-wide mt-0.5">
+              {m.enName}
+            </p>
+            <p className="text-[11px] text-accent-300 font-mono mt-2 leading-snug">
               {m.sub}
             </p>
             <p className="text-xs text-white/55 mt-3 leading-relaxed">
@@ -1127,7 +1155,7 @@ function TeamSection() {
       </div>
 
       <p className="text-[11px] text-white/30 mt-5 text-center">
-        Operations & Hosting Sponsored by SLOX
+        담당교수 임성열 · 아주대학교 인공지능 데이터 실무 · Operations & Hosting by SLOX
       </p>
     </Section>
   );
@@ -1144,13 +1172,13 @@ function RoadmapSection() {
       tag: 'NOW',
       tone: 'emerald',
       title: 'v1.0 — 검증',
-      items: ['50건 지식 시드', 'iOS·Android 출시', 'AdMob 수익화'],
+      items: ['267건 지식 시드 (한국 자동차)', 'iOS·Android 출시', 'AdMob 수익화'],
     },
     {
       tag: 'NEXT',
       tone: 'sky',
       title: 'v1.5 — 확장',
-      items: ['지식 200건 확충', '대화 컨텍스트 유지', '운영 대시보드 지표'],
+      items: ['차종·연식별 카테고리 분류', '대화 컨텍스트 유지', '운영 대시보드 지표'],
     },
     {
       tag: 'LATER',
