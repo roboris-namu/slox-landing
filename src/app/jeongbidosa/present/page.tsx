@@ -37,18 +37,24 @@ interface SectionDef {
 
 const SECTIONS: SectionDef[] = [
   { id: 'hero', navLabel: '한눈에', title: '정비도사 — 한눈에 보기', kicker: 'OVERVIEW' },
-  { id: 'why', navLabel: '왜 RAG?', title: '왜 RAG 인가', kicker: '01 · MOTIVATION' },
-  { id: 'arch', navLabel: '시스템', title: '시스템 아키텍처', kicker: '02 · ARCHITECTURE' },
-  { id: 'rag', navLabel: 'RAG 6단계', title: 'RAG 동작 원리', kicker: '03 · PIPELINE' },
-  { id: 'data', navLabel: '데이터', title: '지식베이스 & 임베딩', kicker: '04 · DATA' },
-  { id: 'infra', navLabel: '인프라', title: '인프라 & 호스팅', kicker: '05 · INFRA' },
-  { id: 'stack', navLabel: '스택', title: '기술 스택', kicker: '06 · STACK' },
-  { id: 'launch', navLabel: '상용화', title: '앱 스토어 & 수익화', kicker: '07 · LAUNCH' },
-  { id: 'ai', navLabel: 'AI 활용', title: 'AI 도구 활용 사례', kicker: '08 · AI USAGE' },
-  { id: 'team', navLabel: '팀', title: '팀 아주그냥 (AjouJust)', kicker: '09 · TEAM' },
-  { id: 'roadmap', navLabel: '로드맵', title: '앞으로의 로드맵', kicker: '10 · ROADMAP' },
+  { id: 'what', navLabel: '뭐예요?', title: '정비도사가 뭐예요?', kicker: '01 · AT A GLANCE' },
+  { id: 'who', navLabel: '누구를 위해', title: '누구의 문제를 푸나', kicker: '02 · PAIN → SOLUTION' },
+  { id: 'why', navLabel: '왜 RAG?', title: '왜 RAG 인가', kicker: '03 · MOTIVATION' },
+  { id: 'arch', navLabel: '시스템', title: '시스템 아키텍처', kicker: '04 · ARCHITECTURE' },
+  { id: 'rag', navLabel: 'RAG 6단계', title: 'RAG 동작 원리', kicker: '05 · PIPELINE' },
+  { id: 'data', navLabel: '데이터', title: '지식베이스 & 임베딩', kicker: '06 · DATA' },
+  { id: 'infra', navLabel: '인프라', title: '인프라 & 호스팅', kicker: '07 · INFRA' },
+  { id: 'stack', navLabel: '스택', title: '기술 스택', kicker: '08 · STACK' },
+  { id: 'launch', navLabel: '상용화', title: '앱 스토어 & 수익화', kicker: '09 · LAUNCH' },
+  { id: 'ai', navLabel: 'AI 활용', title: 'AI 도구 활용 사례', kicker: '10 · AI USAGE' },
+  { id: 'vision', navLabel: '확장 전략', title: '확장 전략 — 글로벌 아카이브', kicker: '11 · STRATEGY' },
+  { id: 'team', navLabel: '팀', title: '팀 아주그냥 (AjouJust)', kicker: '12 · TEAM' },
+  { id: 'roadmap', navLabel: '로드맵', title: '앞으로의 로드맵', kicker: '13 · ROADMAP' },
   { id: 'cta', navLabel: '데모', title: '직접 사용해 보세요', kicker: 'TRY IT' },
 ];
+
+/** id 로 섹션 정의를 찾는다 (인덱스 변동에 강하도록) */
+const sec = (id: string): SectionDef => SECTIONS.find((s) => s.id === id)!;
 
 // ----------------------------------------------------------------------------
 // 메인 페이지 컴포넌트
@@ -296,6 +302,8 @@ function PresentBody() {
         {/* 본문 섹션 스택 */}
         <div className="space-y-24 lg:space-y-32">
           <HeroSection />
+          <WhatSection />
+          <WhoSection />
           <WhySection />
           <ArchitectureSection />
           <RagSection />
@@ -304,6 +312,7 @@ function PresentBody() {
           <StackSection />
           <LaunchSection />
           <AISection />
+          <VisionSection />
           <TeamSection />
           <RoadmapSection />
           <CtaSection />
@@ -353,7 +362,7 @@ function Section({ section, children }: { section: SectionDef; children: React.R
 // ----------------------------------------------------------------------------
 
 function HeroSection() {
-  const section = SECTIONS[0];
+  const section = sec('hero');
   const stats = [
     { label: '평균 응답', value: '1.5s', sub: 'p50 latency' },
     { label: '환각률', value: '<2%', sub: '근거 없는 답변' },
@@ -404,11 +413,165 @@ function HeroSection() {
 }
 
 // ----------------------------------------------------------------------------
+// 1-A. 정비도사가 뭐예요? (At a Glance — 30초 직관 설명)
+// ----------------------------------------------------------------------------
+
+function WhatSection() {
+  const section = sec('what');
+  const flow = [
+    {
+      step: '①',
+      title: '질문',
+      body: '음성이나 텍스트로 정비 질문 — “엔진오일 언제 갈아요?”',
+      emoji: '🎙️',
+    },
+    {
+      step: '②',
+      title: '답변',
+      body: 'RAG 가 검증된 정비 지식만으로 답변 — [S1][S2] 출처 마커 부착',
+      emoji: '✅',
+    },
+    {
+      step: '③',
+      title: '누적',
+      body: '질문·답변이 다시 아카이브로 쌓여 — 정비 지식이 자산이 됩니다',
+      emoji: '📚',
+    },
+  ];
+  return (
+    <Section section={section}>
+      <p className="text-white/65 max-w-3xl mb-6 leading-relaxed">
+        처음 보셔도 30초면 이해할 수 있어요.{' '}
+        <span className="text-white font-semibold">
+          정비 경력 수십 년 베테랑이, 검증된 정비 매뉴얼만 펴 놓고 답해주는 AI
+        </span>{' '}
+        — 그게 정비도사입니다.
+      </p>
+
+      {/* WHAT — 한 문장 정의 */}
+      <div className="rounded-2xl border border-accent-400/30 bg-accent-500/10 p-6 mb-5">
+        <p className="text-[11px] font-mono text-accent-300 uppercase tracking-widest mb-2">
+          What · 한 문장으로
+        </p>
+        <p className="text-lg sm:text-xl font-semibold leading-relaxed">
+          “한국 자동차 정비 RAG 챗봇 —{' '}
+          <span className="text-accent-200">MVP 는 자동차</span>, 확장은{' '}
+          <span className="text-accent-200">글로벌 기계 정비 아카이브</span>”
+        </p>
+      </div>
+
+      {/* 3단계 직관 플로우 */}
+      <div className="grid sm:grid-cols-3 gap-3">
+        {flow.map((f) => (
+          <div
+            key={f.title}
+            className="rounded-2xl border border-white/10 bg-white/5 p-5"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-2xl">{f.emoji}</span>
+              <span className="text-accent-300 font-mono text-lg">{f.step}</span>
+              <span className="text-base font-semibold">{f.title}</span>
+            </div>
+            <p className="text-xs text-white/60 leading-relaxed">{f.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-5 rounded-xl border border-white/10 bg-dark-900/40 p-4">
+        <p className="text-xs text-white/55 leading-relaxed">
+          <span className="text-white/80 font-semibold">ⓘ MVP</span> = Minimum
+          Viable Product · 가치 검증용 최소 핵심 기능. 정비도사(한국 자동차)로 RAG
+          구조를 검증한 뒤, <span className="text-white/80">데이터만 교체</span>해
+          트랙터·산업기기·군 무기체계로 확장합니다.
+        </p>
+      </div>
+    </Section>
+  );
+}
+
+// ----------------------------------------------------------------------------
+// 1-B. 누구의 문제를 푸나 (Pain → Solution)
+// ----------------------------------------------------------------------------
+
+function WhoSection() {
+  const section = sec('who');
+  const pairs = [
+    {
+      who: '자가정비 운전자',
+      icon: '🚗',
+      pain: '증상은 느끼는데 원인을 모르고, 정비소 견적이 적정한지 판단 못 함',
+      solution: '한국어 음성+텍스트 즉답 — 1.5초 내 사전 진단',
+    },
+    {
+      who: '신입 정비기사',
+      icon: '🔧',
+      pain: '매뉴얼이 분산되어 있고 선배 의존도가 높아 온보딩 비용이 큼',
+      solution: '출처 마커 [S1][S2] 로 검증 가능한 매뉴얼 기반 응답',
+    },
+    {
+      who: '일반 소비자',
+      icon: '🧾',
+      pain: '견적의 정당성을 판단 못 해 바가지에 노출, 구매 전 점검 정보 부족',
+      solution: '검증된 데이터만으로 답하는 RAG 6단계 파이프라인',
+    },
+    {
+      who: '정비소 운영자',
+      icon: '🏭',
+      pain: '신입 교육 비용·표준 절차 미비로 사고·재작업 손실',
+      solution: '검색 패턴을 세그먼트별로 누적 — 운영 자산화(admin)',
+    },
+    {
+      who: '글로벌 OEM·딜러',
+      icon: '🌐',
+      pain: '북미 자가정비 시장 대응 채널 부재, 정비 노하우 디지털화 수단 없음',
+      solution: '데이터셋만 교체하면 다국어·도메인 확장 가능한 구조',
+    },
+  ];
+  return (
+    <Section section={section}>
+      <p className="text-white/65 max-w-3xl mb-6 leading-relaxed">
+        “누구에게 왜 필요한가?”를 5개 이해관계자 그룹의 실제 문제(Pain)와 해결책
+        (Solution)으로 1:1 매핑했습니다.
+      </p>
+
+      <div className="space-y-3">
+        {pairs.map((p, i) => (
+          <div
+            key={p.who}
+            className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 grid sm:grid-cols-[180px_1fr_1fr] gap-3 sm:gap-4 items-center"
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">{p.icon}</span>
+              <div>
+                <p className="text-[10px] font-mono text-white/35">
+                  P{i + 1} → S{i + 1}
+                </p>
+                <p className="text-sm font-semibold">{p.who}</p>
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-red-300/70 text-sm">⚠️</span>
+              <p className="text-xs text-white/60 leading-relaxed">{p.pain}</p>
+            </div>
+            <div className="flex gap-2">
+              <span className="text-emerald-300/80 text-sm">→</span>
+              <p className="text-xs text-white/80 leading-relaxed">
+                {p.solution}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
+// ----------------------------------------------------------------------------
 // 2. Why RAG (문제 → 해결)
 // ----------------------------------------------------------------------------
 
 function WhySection() {
-  const section = SECTIONS[1];
+  const section = sec('why');
   return (
     <Section section={section}>
       <p className="text-white/65 max-w-3xl mb-8 leading-relaxed">
@@ -490,7 +653,7 @@ function ProblemCard({
 // ----------------------------------------------------------------------------
 
 function ArchitectureSection() {
-  const section = SECTIONS[2];
+  const section = sec('arch');
   return (
     <Section section={section}>
       <p className="text-white/65 max-w-3xl mb-6 leading-relaxed">
@@ -650,7 +813,7 @@ const RAG_STEPS = [
 ];
 
 function RagSection() {
-  const section = SECTIONS[3];
+  const section = sec('rag');
   const [active, setActive] = useState(1);
   const current = RAG_STEPS.find((s) => s.n === active)!;
 
@@ -720,7 +883,7 @@ function RagSection() {
 // ----------------------------------------------------------------------------
 
 function DataSection() {
-  const section = SECTIONS[4];
+  const section = sec('data');
   return (
     <Section section={section}>
       <p className="text-white/65 max-w-3xl mb-6 leading-relaxed">
@@ -822,7 +985,7 @@ function SchemaRow({
 // ----------------------------------------------------------------------------
 
 function InfraSection() {
-  const section = SECTIONS[5];
+  const section = sec('infra');
   return (
     <Section section={section}>
       <p className="text-white/65 max-w-3xl mb-6 leading-relaxed">
@@ -869,7 +1032,7 @@ function InfraCard({
 // ----------------------------------------------------------------------------
 
 function StackSection() {
-  const section = SECTIONS[6];
+  const section = sec('stack');
   const groups = [
     {
       title: '프론트엔드',
@@ -930,7 +1093,7 @@ function StackSection() {
 // ----------------------------------------------------------------------------
 
 function LaunchSection() {
-  const section = SECTIONS[7];
+  const section = sec('launch');
   return (
     <Section section={section}>
       <p className="text-white/65 max-w-3xl mb-6 leading-relaxed">
@@ -1021,7 +1184,7 @@ function StoreCard({
 // ----------------------------------------------------------------------------
 
 function AISection() {
-  const section = SECTIONS[8];
+  const section = sec('ai');
   const cases = [
     {
       area: '코드 생성',
@@ -1071,11 +1234,95 @@ function AISection() {
 }
 
 // ----------------------------------------------------------------------------
+// 9-B. 확장 전략 (글로벌 아카이브)
+// ----------------------------------------------------------------------------
+
+function VisionSection() {
+  const section = sec('vision');
+  const horizons = [
+    {
+      icon: '🧩',
+      tag: 'DOMAIN',
+      title: '도메인 확장',
+      lead: '한국 자동차 → 트랙터 · 산업기기 · 군 무기체계',
+      body: 'RAG 아키텍처는 그대로 두고 데이터셋만 교체하면 전혀 다른 정비 영역으로 즉시 확장됩니다.',
+      tone: 'from-emerald-500/15 to-teal-500/5 border-emerald-400/25',
+    },
+    {
+      icon: '🌐',
+      tag: 'GLOBAL',
+      title: '글로벌 · 다국어',
+      lead: '영문 우선 다국어 빌드 → 북미 자가정비(DIY) 시장',
+      body: '셀프 정비 문화가 큰 북미를 첫 타깃으로, 동일 백엔드에 언어만 얹어 글로벌 사용자에게 확장합니다.',
+      tone: 'from-sky-500/15 to-blue-500/5 border-sky-400/25',
+    },
+    {
+      icon: '🤝',
+      tag: 'B2B',
+      title: 'B2B 사업화',
+      lead: 'OEM · 딜러 채널 + 정비 노하우 디지털 자산화',
+      body: '현대차·KIA 등 OEM 영업 채널 컨택을 검토. 차종별 정비 노하우를 디지털 아카이브 자산으로 제공합니다.',
+      tone: 'from-purple-500/15 to-pink-500/5 border-purple-400/25',
+    },
+  ];
+  return (
+    <Section section={section}>
+      <p className="text-white/65 max-w-3xl mb-6 leading-relaxed">
+        정비도사의 진짜 가치는 “자동차 챗봇” 하나가 아니라{' '}
+        <span className="text-white font-semibold">확장 가능한 구조</span>{' '}
+        그 자체입니다.
+      </p>
+
+      {/* 핵심 명제 배너 */}
+      <div className="rounded-2xl border border-accent-400/30 bg-gradient-to-br from-accent-500/15 via-dark-950/40 to-purple-500/15 p-6 mb-5">
+        <p className="text-[11px] font-mono text-accent-300 uppercase tracking-widest mb-2">
+          Core Thesis
+        </p>
+        <p className="text-lg sm:text-xl font-semibold leading-relaxed">
+          같은 RAG 파이프라인 ·{' '}
+          <span className="text-accent-200">데이터만 교체</span> → 어떤 정비
+          도메인이든 확장. <br className="hidden sm:block" />
+          누적된 답변은 다시{' '}
+          <span className="text-accent-200">글로벌 기계 정비 아카이브</span>로
+          자산화됩니다.
+        </p>
+      </div>
+
+      {/* 3개 확장 축 */}
+      <div className="grid md:grid-cols-3 gap-3">
+        {horizons.map((h) => (
+          <div
+            key={h.tag}
+            className={`rounded-2xl border bg-gradient-to-br ${h.tone} p-5`}
+          >
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-2xl">{h.icon}</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 text-white/70 border border-white/15">
+                {h.tag}
+              </span>
+            </div>
+            <p className="text-base font-semibold mb-1">{h.title}</p>
+            <p className="text-[11px] text-accent-200 font-mono mb-3 leading-snug">
+              {h.lead}
+            </p>
+            <p className="text-xs text-white/60 leading-relaxed">{h.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <p className="text-sm text-white/45 mt-5 text-center italic">
+        “MVP 는 자동차. 목적지는 전 세계 기계 정비 지식이 모이는 아카이브.”
+      </p>
+    </Section>
+  );
+}
+
+// ----------------------------------------------------------------------------
 // 10. 팀
 // ----------------------------------------------------------------------------
 
 function TeamSection() {
-  const section = SECTIONS[9];
+  const section = sec('team');
   const members = [
     {
       name: '양석원',
@@ -1166,7 +1413,7 @@ function TeamSection() {
 // ----------------------------------------------------------------------------
 
 function RoadmapSection() {
-  const section = SECTIONS[10];
+  const section = sec('roadmap');
   const phases = [
     {
       tag: 'NOW',
@@ -1228,7 +1475,7 @@ function RoadmapSection() {
 // ----------------------------------------------------------------------------
 
 function CtaSection() {
-  const section = SECTIONS[11];
+  const section = sec('cta');
   return (
     <Section section={section}>
       <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-accent-500/15 via-dark-950/40 to-purple-500/15 p-8 sm:p-12 text-center relative overflow-hidden">
